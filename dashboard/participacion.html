@@ -346,6 +346,59 @@ td.center{text-align:center;}
     </div>
   </div>
 
+  <div class="card" style="border-left:4px solid #1565c0;">
+    <div class="card-title">📋 Importar lista de estudiantes (Reporte Academusoft)</div>
+    <p style="font-size:.85rem;color:#555;margin-bottom:1rem">
+      Carga los estudiantes desde el reporte PDF de Academusoft. Funciona con el reporte estándar de IUB.<br>
+      <strong>Opción A:</strong> sube el PDF directamente. <strong>Opción B:</strong> abre el PDF, selecciona todo el texto (Ctrl+A), cópialo (Ctrl+C) y pégalo abajo.
+    </p>
+
+    <div style="margin-bottom:1rem">
+      <label style="font-size:.82rem;font-weight:700;color:#444;display:block;margin-bottom:.4rem">📎 Opción A — Subir archivo PDF</label>
+      <input type="file" id="pdf-upload" accept=".pdf" onchange="handlePDFUpload(event)" style="font-size:.82rem">
+      <div id="pdf-status" style="font-size:.78rem;color:#888;margin-top:.4rem"></div>
+    </div>
+
+    <div style="margin-bottom:1rem">
+      <label style="font-size:.82rem;font-weight:700;color:#444;display:block;margin-bottom:.4rem">📋 Opción B — Pegar texto copiado del PDF</label>
+      <textarea id="pdf-text" rows="5"
+        style="width:100%;font-size:.78rem;font-family:monospace;border:2px solid var(--border);border-radius:6px;padding:.5rem;resize:vertical"
+        placeholder="Pega aquí el texto del reporte (Ctrl+A en el PDF → Ctrl+C → Ctrl+V aquí)…"></textarea>
+      <button class="btn btn-sm" style="margin-top:.4rem;background:#e3f2fd;color:#0d47a1;border:1px solid #90caf9"
+              onclick="parsePastedText()">🔍 Analizar y detectar estudiantes</button>
+    </div>
+
+    <div id="import-preview" style="display:none;border-top:1px solid var(--border);padding-top:.8rem">
+      <div style="font-size:.84rem;font-weight:700;color:#0d47a1;margin-bottom:.4rem">
+        👀 Vista previa — <span id="preview-count">0</span> estudiantes detectados
+      </div>
+      <div id="group-info-preview"
+           style="font-size:.78rem;color:#555;background:#e3f2fd;border-radius:6px;padding:.5rem .8rem;margin-bottom:.6rem"></div>
+      <div style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:6px;margin-bottom:.8rem">
+        <table style="width:100%;font-size:.78rem;border-collapse:collapse">
+          <thead>
+            <tr style="background:var(--navy);color:#fff">
+              <th style="padding:.35rem .6rem">#</th>
+              <th style="padding:.35rem .6rem">Nombre</th>
+              <th style="padding:.35rem .6rem">Cédula</th>
+            </tr>
+          </thead>
+          <tbody id="preview-tbody"></tbody>
+        </table>
+      </div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="btn btn-navy btn-sm" onclick="confirmImport()">
+          ✅ Cargar <span id="confirm-count">0</span> estudiantes
+        </button>
+        <button class="btn btn-sm" style="background:#fff3e0;color:#e65100;border:1px solid #ffcc80"
+                onclick="cancelImport()">❌ Cancelar</button>
+      </div>
+    </div>
+
+    <div id="current-students-info"
+         style="margin-top:.8rem;font-size:.78rem;color:#888;border-top:1px solid var(--border);padding-top:.6rem"></div>
+  </div>
+
   <div class="card" style="border-left:4px solid var(--red);">
     <div class="card-title">🗑️ Zona de peligro</div>
     <p style="font-size:.85rem;color:#555;margin-bottom:.8rem">Estas acciones son permanentes y no se pueden deshacer.</p>
@@ -368,8 +421,8 @@ td.center{text-align:center;}
 <div id="toast"></div>
 
 <script>
-// ── STUDENTS (hardcoded from Reporte_Estudiantes-TGA05-ejemplo.pdf) ─────────
-const STUDENTS = [
+// ── STUDENTS (default list — will be replaced if imported from PDF) ──────────
+let STUDENTS = [
   { id:1,  name:'ARIZA DE LA CRUZ YORYELIS PATRICIA',     cc:'1043158867' },
   { id:2,  name:'BERRIO JULIO BLEIDYS',                    cc:'SIN_DOC_2'  },
   { id:3,  name:'BOTELLO CACERES ALBERTO MARIO',           cc:'1042455285' },
@@ -402,8 +455,10 @@ const STUDENTS = [
 ];
 
 // ── CONFIG & STORAGE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'tga05_participacion_v1';
-const PIN_KEY   = 'tga05_prof_pin';
+const STORE_KEY    = 'tga05_participacion_v1';
+const PIN_KEY      = 'tga05_prof_pin';
+const STUDENTS_KEY = 'tga05_students_v1';
+const GROUP_KEY    = 'tga05_group_info_v1';
 
 let data = { config: { max_pts:50, thresh_exon:40, thresh_ayuda:30, semana_actual:1, peso:10 }, events: [] };
 let selectedStudentId = null;
@@ -462,6 +517,8 @@ function checkPin() {
 
 // ── INIT ─────────────────────────────────────────────────────────────────────
 function initApp() {
+  loadStudentsFromStorage();
+  loadGroupInfoFromStorage();
   loadData();
   loadConfig();
   renderStats();
@@ -469,6 +526,7 @@ function initApp() {
   renderStudentListUI();
   renderSessionLog();
   updateRewardTable();
+  updateCurrentStudentsInfo();
 }
 
 function loadConfig() {
@@ -733,6 +791,193 @@ function savePublicSnapshot() {
     }))
   };
   localStorage.setItem('tga05_participacion_pub', JSON.stringify(snap));
+}
+
+// ── PDF IMPORT ────────────────────────────────────────────────────────────────
+let importPreview = [];
+
+function loadStudentsFromStorage() {
+  const raw = localStorage.getItem(STUDENTS_KEY);
+  if (!raw) return false;
+  try {
+    const saved = JSON.parse(raw);
+    if (Array.isArray(saved) && saved.length > 0) {
+      STUDENTS.length = 0;
+      saved.forEach(s => STUDENTS.push(s));
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+function loadGroupInfoFromStorage() {
+  const raw = localStorage.getItem(GROUP_KEY);
+  if (!raw) return;
+  try {
+    const gi = JSON.parse(raw);
+    const subtitle = document.querySelector('.hdr-title p');
+    if (subtitle && gi.grupo) {
+      subtitle.textContent = `Grupo ${gi.grupo}${gi.horario ? ' · ' + gi.horario : ''}`;
+    }
+  } catch(e) {}
+}
+
+function updateCurrentStudentsInfo() {
+  const el = document.getElementById('current-students-info');
+  if (!el) return;
+  const fromStorage = localStorage.getItem(STUDENTS_KEY);
+  if (fromStorage) {
+    try {
+      const saved = JSON.parse(fromStorage);
+      el.innerHTML = `Lista activa: <strong>${saved.length} estudiantes importados</strong> (guardados en este dispositivo) &nbsp;·&nbsp;
+        <button onclick="clearStudentList()"
+          style="font-size:.76rem;background:none;border:none;color:var(--red);cursor:pointer;text-decoration:underline;padding:0">
+          Volver a lista por defecto
+        </button>`;
+      return;
+    } catch(e) {}
+  }
+  el.innerHTML = `Lista activa: <strong>${STUDENTS.length} estudiantes</strong> (lista por defecto integrada en el código)`;
+}
+
+function clearStudentList() {
+  if (!confirm('¿Volver a la lista por defecto del código? Se perderá la lista importada (los eventos de participación NO se borran).')) return;
+  localStorage.removeItem(STUDENTS_KEY);
+  localStorage.removeItem(GROUP_KEY);
+  location.reload();
+}
+
+async function handlePDFUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const status = document.getElementById('pdf-status');
+  status.textContent = '⏳ Extrayendo texto del PDF…';
+  try {
+    if (typeof pdfjsLib === 'undefined') {
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let fullText = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const tc   = await page.getTextContent();
+      fullText  += tc.items.map(item => item.str + (item.hasEOL ? '\n' : ' ')).join('') + '\n';
+    }
+    document.getElementById('pdf-text').value = fullText;
+    status.textContent = `✅ Texto extraído (${pdf.numPages} página${pdf.numPages > 1 ? 's' : ''}) — revisa la vista previa abajo`;
+    parsePastedText();
+  } catch(e) {
+    status.textContent = `❌ Error al leer el PDF: ${e.message} — Intenta con la Opción B (pegar texto).`;
+    console.error(e);
+  }
+}
+
+function loadScript(src) {
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
+function parsePastedText() {
+  const text = document.getElementById('pdf-text').value;
+  if (!text.trim()) { toast('⚠️ Primero pega el texto del PDF'); return; }
+  importPreview = parseStudentText(text);
+  const gi = parseGroupInfo(text);
+  if (importPreview.length === 0) {
+    toast('⚠️ No se detectaron estudiantes — verifica que el texto sea del reporte Academusoft');
+    return;
+  }
+  document.getElementById('preview-count').textContent   = importPreview.length;
+  document.getElementById('confirm-count').textContent   = importPreview.length;
+  const giEl = document.getElementById('group-info-preview');
+  const parts = [];
+  if (gi.grupo)      parts.push(`Grupo: <strong>${gi.grupo}</strong>`);
+  if (gi.horario)    parts.push(`Horario: <strong>${gi.horario}</strong>`);
+  if (gi.salon)      parts.push(`Salón: <strong>${gi.salon}</strong>`);
+  if (gi.asignatura) parts.push(`Asignatura: <strong>${gi.asignatura}</strong>`);
+  giEl.innerHTML = parts.length
+    ? parts.join(' &nbsp;|&nbsp; ')
+    : '⚠️ Metadatos del grupo no detectados — puedes continuar de todas formas.';
+  document.getElementById('preview-tbody').innerHTML = importPreview.map(s =>
+    `<tr>
+      <td style="padding:.3rem .6rem;border-bottom:1px solid #f0f0f0">${s.id}</td>
+      <td style="padding:.3rem .6rem;border-bottom:1px solid #f0f0f0">${esc(s.name)}</td>
+      <td style="padding:.3rem .6rem;border-bottom:1px solid #f0f0f0;color:${s.cc.startsWith('SIN_') ? '#aaa' : '#333'}">${s.cc}</td>
+    </tr>`
+  ).join('');
+  document.getElementById('import-preview').style.display = 'block';
+}
+
+function parseStudentText(rawText) {
+  const students = [];
+  const seen = new Set();
+  const lines = rawText.replace(/\r\n/g, '\n').replace(/\r/g, '\n')
+    .split('\n').map(l => l.trim()).filter(l => l.length > 3);
+  for (const line of lines) {
+    // "1 NOMBRE COMPLETO 1234567890"  or  "1. NOMBRE COMPLETO 1234567890"
+    const m1 = line.match(/^(\d{1,3})[.\s]\s*([A-ZÁÉÍÓÚÑÜ][A-ZÁÉÍÓÚÑÜ\s]{4,}?)\s{2,}(\d{7,12})\s*$/);
+    if (m1 && !seen.has(m1[1])) {
+      seen.add(m1[1]);
+      students.push({ id: parseInt(m1[1]), name: m1[2].trim(), cc: m1[3] });
+      continue;
+    }
+    // "1 NOMBRE COMPLETO" (CC on the next token or missing)
+    const m2 = line.match(/^(\d{1,3})[.\s]\s*([A-ZÁÉÍÓÚÑÜ][A-ZÁÉÍÓÚÑÜ\s]{8,})\s*$/);
+    if (m2 && !seen.has(m2[1])) {
+      seen.add(m2[1]);
+      students.push({ id: parseInt(m2[1]), name: m2[2].trim(), cc: `SIN_DOC_${m2[1]}` });
+    }
+  }
+  // Fallback: PDF text extraction may concatenate columns — try broader pattern
+  if (students.length < 2) {
+    const matches = rawText.match(/\b(\d{1,3})\s+([A-ZÁÉÍÓÚÑÜ]{2,}(?:\s+[A-ZÁÉÍÓÚÑÜ]{2,}){1,4})\s+(\d{7,12})\b/g) || [];
+    for (const chunk of matches) {
+      const m = chunk.match(/^(\d{1,3})\s+([A-ZÁÉÍÓÚÑÜ\s]+?)\s+(\d{7,12})$/);
+      if (m && !seen.has(m[1])) {
+        seen.add(m[1]);
+        students.push({ id: parseInt(m[1]), name: m[2].trim(), cc: m[3] });
+      }
+    }
+  }
+  return students.sort((a, b) => a.id - b.id);
+}
+
+function parseGroupInfo(text) {
+  return {
+    grupo:      ((text.match(/GRUPO[:\s]+([A-Z0-9_.\-]+)/i) || [])[1] || '').trim(),
+    horario:    ((text.match(/HORARIO[:\s]+([A-Za-záéíóúñÁÉÍÓÚÑ]+\s+[\d:]+\s*[-–]\s*[\d:]+)/i) || [])[1] || '').trim(),
+    salon:      ((text.match(/SAL[ÓO]N[:\s]+([A-Z0-9\s\-]+)/i) || [])[1] || '').trim(),
+    asignatura: ((text.match(/ASIGNATURA[:\s]+(.+)/i) || [])[1] || '').split('\n')[0].trim()
+  };
+}
+
+function confirmImport() {
+  if (!importPreview.length) return;
+  STUDENTS.length = 0;
+  importPreview.forEach(s => STUDENTS.push(s));
+  localStorage.setItem(STUDENTS_KEY, JSON.stringify(importPreview));
+  const gi = parseGroupInfo(document.getElementById('pdf-text').value);
+  localStorage.setItem(GROUP_KEY, JSON.stringify(gi));
+  loadGroupInfoFromStorage();
+  cancelImport();
+  renderStats();
+  renderTable();
+  renderStudentListUI();
+  updateCurrentStudentsInfo();
+  toast(`✅ ${importPreview.length} estudiantes cargados${gi.grupo ? ' — Grupo ' + gi.grupo : ''}`, 3000);
+  importPreview = [];
+}
+
+function cancelImport() {
+  document.getElementById('import-preview').style.display = 'none';
+  document.getElementById('pdf-text').value = '';
+  document.getElementById('pdf-status').textContent = '';
+  importPreview = [];
 }
 </script>
 </body>

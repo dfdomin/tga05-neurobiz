@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mapa Visual del Proyecto — TGA05</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ─────────────────────────────────────────────────────────────────── */
+:root{
+  --navy:#1E2843; --yellow:#FFDF2D; --bg:#F4F6FB; --white:#FFFFFF;
+  --c-content:#1565c0;   --c-content-bg:#e3f2fd;
+  --c-assess:#2e7d32;    --c-assess-bg:#e8f5e9;
+  --c-partic:#7b1fa2;    --c-partic-bg:#f3e5f5;
+  --c-tools:#e65100;     --c-tools-bg:#fff3e0;
+  --c-infra:#00695c;     --c-infra-bg:#e0f2f1;
+  --c-game:#c62828;      --c-game-bg:#ffebee;
+  --border:#DEDFE4; --shadow:0 2px 16px rgba(30,40,67,.09);
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Open Sans',sans-serif;background:var(--bg);color:#1a1a2e;line-height:1.5;}
+
+/* ── HERO ─────────────────────────────────────────────────────────────────── */
+.hero{background:linear-gradient(135deg,var(--navy) 60%,#3949ab);color:#fff;padding:3rem 2rem 2.5rem;text-align:center;}
+.hero .badge{display:inline-block;background:var(--yellow);color:var(--navy);font-weight:800;font-size:.78rem;padding:.3rem .9rem;border-radius:20px;margin-bottom:1rem;letter-spacing:.05em;}
+.hero h1{font-size:2.2rem;font-weight:800;line-height:1.2;margin-bottom:.8rem;}
+.hero h1 span{color:var(--yellow);}
+.hero p{font-size:1rem;opacity:.85;max-width:620px;margin:0 auto 1.8rem;}
+
+/* KPI row */
+.kpi-row{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;}
+.kpi{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:.9rem 1.4rem;text-align:center;min-width:100px;}
+.kpi .n{font-size:2rem;font-weight:800;color:var(--yellow);line-height:1;}
+.kpi .l{font-size:.72rem;opacity:.8;margin-top:.2rem;}
+
+/* ── NAV TABS ─────────────────────────────────────────────────────────────── */
+.nav{background:#fff;border-bottom:2px solid var(--border);position:sticky;top:0;z-index:100;display:flex;overflow-x:auto;gap:0;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.nav-item{padding:.75rem 1.3rem;font-size:.82rem;font-weight:700;color:#777;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.15s;text-decoration:none;display:block;}
+.nav-item:hover,.nav-item.active{color:var(--navy);border-bottom-color:var(--navy);}
+
+/* ── LAYOUT ─────────────────────────────────────────────────────────────────── */
+.container{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
+section{margin-bottom:3rem;}
+.section-header{display:flex;align-items:center;gap:.7rem;margin-bottom:1.2rem;}
+.section-header h2{font-size:1.3rem;font-weight:800;color:var(--navy);}
+.section-header .icon{font-size:1.6rem;}
+.section-sub{font-size:.83rem;color:#888;margin-top:-.5rem;margin-bottom:1.2rem;}
+
+/* ── CARDS ─────────────────────────────────────────────────────────────────── */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem;box-shadow:var(--shadow);}
+.card-grid{display:grid;gap:1rem;}
+.card-grid.cols-2{grid-template-columns:repeat(2,1fr);}
+.card-grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.card-grid.cols-4{grid-template-columns:repeat(4,1fr);}
+@media(max-width:900px){.card-grid.cols-4{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:700px){.card-grid.cols-3,.card-grid.cols-2{grid-template-columns:1fr;}}
+@media(max-width:500px){.card-grid.cols-4{grid-template-columns:1fr;}}
+
+/* ── FEATURE CARDS ─────────────────────────────────────────────────────────── */
+.feature-card{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:#fff;box-shadow:var(--shadow);}
+.feature-header{padding:.8rem 1.1rem;display:flex;align-items:center;gap:.6rem;}
+.feature-header .f-icon{font-size:1.4rem;}
+.feature-header h3{font-size:.95rem;font-weight:800;}
+.feature-header .status{margin-left:auto;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:10px;background:#e8f5e9;color:#1b5e20;}
+.feature-body{padding:1rem 1.1rem;border-top:1px solid #f0f0f0;}
+.feature-tldr{font-size:.82rem;font-weight:700;color:#555;margin-bottom:.8rem;padding:.4rem .6rem;background:#f8f9ff;border-radius:6px;border-left:3px solid var(--navy);}
+
+/* BDD scenarios */
+.scenario{margin-top:.6rem;}
+.scenario-title{font-size:.78rem;font-weight:700;color:#777;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.bdd-line{display:flex;gap:.4rem;font-size:.78rem;padding:.2rem 0;align-items:flex-start;}
+.bdd-kw{font-weight:700;min-width:42px;font-size:.72rem;}
+.bdd-kw.given{color:var(--c-content);}
+.bdd-kw.when{color:var(--c-partic);}
+.bdd-kw.then{color:var(--c-assess);}
+.bdd-text{color:#444;line-height:1.4;}
+
+/* ── DOMAIN COLORS ─────────────────────────────────────────────────────────── */
+.dom-content  .feature-header{background:var(--c-content-bg);}
+.dom-content  .feature-header h3{color:var(--c-content);}
+.dom-assess   .feature-header{background:var(--c-assess-bg);}
+.dom-assess   .feature-header h3{color:var(--c-assess);}
+.dom-partic   .feature-header{background:var(--c-partic-bg);}
+.dom-partic   .feature-header h3{color:var(--c-partic);}
+.dom-tools    .feature-header{background:var(--c-tools-bg);}
+.dom-tools    .feature-header h3{color:var(--c-tools);}
+.dom-infra    .feature-header{background:var(--c-infra-bg);}
+.dom-infra    .feature-header h3{color:var(--c-infra);}
+.dom-game     .feature-header{background:var(--c-game-bg);}
+.dom-game     .feature-header h3{color:var(--c-game);}
+
+/* ── ARCHITECTURE MAP ──────────────────────────────────────────────────────── */
+.arch-map{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.8rem;box-shadow:var(--shadow);}
+.arch-zones{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.6rem;align-items:center;}
+@media(max-width:900px){.arch-zones{grid-template-columns:1fr;}}
+.arch-zone{background:#f8f9ff;border:2px solid var(--border);border-radius:10px;padding:1rem;text-align:center;}
+.arch-zone h4{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.7rem;opacity:.6;}
+.arch-node{padding:.4rem .7rem;border-radius:7px;font-size:.75rem;font-weight:600;margin:.25rem auto;cursor:default;display:block;text-decoration:none;transition:.12s;}
+.arch-node:hover{opacity:.8;transform:scale(1.02);}
+.arch-arrow{text-align:center;font-size:1.5rem;color:#bbb;font-weight:300;}
+.arch-node.blue{background:var(--c-content-bg);color:var(--c-content);border:1px solid #90caf9;}
+.arch-node.green{background:var(--c-assess-bg);color:var(--c-assess);border:1px solid #a5d6a7;}
+.arch-node.purple{background:var(--c-partic-bg);color:var(--c-partic);border:1px solid #ce93d8;}
+.arch-node.orange{background:var(--c-tools-bg);color:var(--c-tools);border:1px solid #ffcc80;}
+.arch-node.teal{background:var(--c-infra-bg);color:var(--c-infra);border:1px solid #80cbc4;}
+.arch-node.red{background:var(--c-game-bg);color:var(--c-game);border:1px solid #ef9a9a;}
+.arch-node.navy{background:#e8eaf6;color:var(--navy);border:1px solid #9fa8da;}
+
+/* ── FILE TREE ─────────────────────────────────────────────────────────────── */
+.file-tree{font-family:'Open Sans',monospace;font-size:.8rem;line-height:1.8;}
+.ft-folder{font-weight:700;color:var(--navy);margin-top:.4rem;}
+.ft-file{padding-left:1.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.ft-name{color:#333;}
+.ft-desc{color:#aaa;font-size:.72rem;}
+.ft-tag{font-size:.65rem;font-weight:700;padding:.1rem .4rem;border-radius:8px;margin-left:.2rem;}
+.ft-new{background:#e8f5e9;color:#1b5e20;}
+.ft-mod{background:#fff8e1;color:#e65100;}
+.ft-base{background:#e8eaf6;color:#3949ab;}
+
+/* ── TIMELINE ─────────────────────────────────────────────────────────────── */
+.timeline{position:relative;padding-left:2rem;}
+.timeline::before{content:'';position:absolute;left:.6rem;top:0;bottom:0;width:2px;background:var(--border);}
+.tl-item{position:relative;margin-bottom:1.4rem;}
+.tl-dot{position:absolute;left:-1.65rem;top:.2rem;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px var(--border);}
+.tl-item h3{font-size:.88rem;font-weight:800;color:var(--navy);margin-bottom:.2rem;}
+.tl-item p{font-size:.78rem;color:#666;}
+.tl-chips{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem;}
+.tl-chip{font-size:.7rem;font-weight:600;padding:.15rem .5rem;border-radius:8px;}
+
+/* ── LEGEND ─────────────────────────────────────────────────────────────────── */
+.legend{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem;}
+.leg-item{display:flex;align-items:center;gap:.3rem;font-size:.75rem;font-weight:600;}
+.leg-dot{width:10px;height:10px;border-radius:3px;}
+
+/* ── COLLAPSIBLE ─────────────────────────────────────────────────────────────── */
+details{border:1px solid var(--border);border-radius:8px;margin-bottom:.5rem;overflow:hidden;}
+details summary{padding:.65rem 1rem;cursor:pointer;font-weight:700;font-size:.85rem;background:#f8f9ff;list-style:none;display:flex;align-items:center;gap:.5rem;}
+details summary::after{content:'›';margin-left:auto;font-size:1rem;transition:.2s;}
+details[open] summary::after{transform:rotate(90deg);}
+details .inner{padding:1rem;}
+
+/* ── PENDING / DONE ─────────────────────────────────────────────────────────── */
+.done-list,.pending-list{list-style:none;display:flex;flex-direction:column;gap:.35rem;}
+.done-list li,.pending-list li{display:flex;align-items:flex-start;gap:.5rem;font-size:.83rem;line-height:1.4;}
+.done-list li::before{content:'✅';font-size:.9rem;flex-shrink:0;}
+.pending-list li::before{content:'⏳';font-size:.9rem;flex-shrink:0;}
+
+/* ── PROGRESS BAR ─────────────────────────────────────────────────────────── */
+.prog-row{margin-bottom:.8rem;}
+.prog-label{display:flex;justify-content:space-between;font-size:.78rem;font-weight:600;margin-bottom:.3rem;}
+.prog-bar{background:#e0e0e0;border-radius:20px;height:8px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:20px;}
+
+/* ── LINK GRID ─────────────────────────────────────────────────────────────── */
+.link-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.5rem;}
+.link-card{display:flex;flex-direction:column;align-items:center;text-align:center;padding:.9rem .7rem;background:#fff;border:1px solid var(--border);border-radius:10px;text-decoration:none;color:inherit;transition:.15s;box-shadow:var(--shadow);}
+.link-card:hover{border-color:var(--navy);background:#e8eaf6;transform:translateY(-1px);}
+.link-card .icon{font-size:1.8rem;margin-bottom:.3rem;}
+.link-card .name{font-size:.75rem;font-weight:700;color:var(--navy);}
+.link-card .path{font-size:.68rem;color:#aaa;margin-top:.15rem;}
+
+/* ── CALLOUT ─────────────────────────────────────────────────────────────── */
+.callout{border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem;display:flex;gap:.7rem;align-items:flex-start;font-size:.85rem;}
+.callout.info{background:#e3f2fd;border-left:4px solid #1565c0;}
+.callout.tip{background:#e8f5e9;border-left:4px solid #2e7d32;}
+.callout.warn{background:#fff8e1;border-left:4px solid #f9a825;}
+.callout .cico{font-size:1.2rem;flex-shrink:0;}
+
+/* Print */
+@media print{.nav{display:none;}.hero{padding:1rem;}}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══════════════════════════════════════════════════════════════════ -->
+<div class="hero">
+  <div class="badge">TGA05 · IUB · 2026-1 · NeuroBiz S.A.S.</div>
+  <h1>Mapa Visual del <span>Ecosistema Digital</span><br>construido para tu curso</h1>
+  <p>Todo lo que logramos juntos: desde cero hasta un sistema completo de enseñanza, gamificación y gestión docente.</p>
+  <div class="kpi-row">
+    <div class="kpi"><div class="n">28</div><div class="l">Archivos HTML</div></div>
+    <div class="kpi"><div class="n">14</div><div class="l">Semanas de material</div></div>
+    <div class="kpi"><div class="n">29</div><div class="l">Estudiantes cargados</div></div>
+    <div class="kpi"><div class="n">6</div><div class="l">Herramientas docente</div></div>
+    <div class="kpi"><div class="n">1</div><div class="l">BD cloud (Supabase)</div></div>
+    <div class="kpi"><div class="n">100%</div><div class="l">Listo para clase</div></div>
+  </div>
+</div>
+
+<!-- ══ NAV ══════════════════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <a class="nav-item active" href="#arquitectura">🗺️ Arquitectura</a>
+  <a class="nav-item" href="#features">✨ Features (BDD)</a>
+  <a class="nav-item" href="#archivos">📁 Archivos</a>
+  <a class="nav-item" href="#acceso">🔗 Acceso rápido</a>
+  <a class="nav-item" href="#progreso">📊 Progreso</a>
+  <a class="nav-item" href="#pendiente">⏳ Pendiente</a>
+</nav>
+
+<div class="container">
+
+<!-- ══ ARQUITECTURA ════════════════════════════════════════════════════════ -->
+<section id="arquitectura">
+  <div class="section-header">
+    <span class="icon">🗺️</span>
+    <h2>Arquitectura del Sistema</h2>
+  </div>
+  <p class="section-sub">Cómo fluye la información entre los actores y los módulos</p>
+
+  <div class="arch-map">
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot" style="background:var(--c-content)"></div> Contenido</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--c-assess)"></div> Evaluación</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--c-partic)"></div> Participación</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--c-infra)"></div> Infraestructura</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--c-game)"></div> Juego</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--navy)"></div> Docente</div>
+    </div>
+
+    <div class="arch-zones">
+      <!-- COLUMNA 1: Estudiante -->
+      <div class="arch-zone">
+        <h4>👨‍🎓 Estudiante</h4>
+        <a class="arch-node blue" href="semana1/index.html">📖 Semana 1–14<br><small>Material + Quiz + XP</small></a>
+        <a class="arch-node purple" href="dashboard/mis_puntos.html">🎯 Mis Puntos</a>
+        <a class="arch-node blue" href="dashboard/index.html">📊 Mi Progreso</a>
+        <a class="arch-node red" href="JuegoDelAhorcado/index.html">🎮 Ahorcado</a>
+      </div>
+
+      <!-- ARROW -->
+      <div class="arch-arrow">⇄</div>
+
+      <!-- COLUMNA 2: Infraestructura -->
+      <div class="arch-zone">
+        <h4>☁️ Infraestructura</h4>
+        <a class="arch-node teal" href="#">Supabase DB<br><small>student_progress</small></a>
+        <a class="arch-node teal" href="#">GitHub Pages<br><small>hosting estático</small></a>
+        <a class="arch-node navy" href="js/supabase-config.js">⚙️ supabase-config.js</a>
+        <a class="arch-node teal" href="#">localStorage<br><small>participación/parciales</small></a>
+      </div>
+
+      <!-- ARROW -->
+      <div class="arch-arrow">⇄</div>
+
+      <!-- COLUMNA 3: Docente -->
+      <div class="arch-zone">
+        <h4>🏫 Docente</h4>
+        <a class="arch-node navy" href="dashboard/profesor.html">📊 Dashboard</a>
+        <a class="arch-node green" href="dashboard/notas.html">📋 Consolidar Notas</a>
+        <a class="arch-node green" href="dashboard/revision.html">📋 Revisar Estudiantes</a>
+        <a class="arch-node purple" href="dashboard/participacion.html">🎯 Participación</a>
+        <a class="arch-node red" href="JuegoDelAhorcado/index.html">🎮 Jugar Ahorcado</a>
+        <a class="arch-node orange" href="setup/GUIA_GIT_MOODLE.html">🚀 Desplegar</a>
+      </div>
+    </div>
+
+    <div style="margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border);display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center">
+      <a class="arch-node navy" href="KNOWLEDGE_BASE.html" style="display:inline-block">📚 KNOWLEDGE_BASE — Handoff para replicar en otros módulos</a>
+      <a class="arch-node orange" href="setup/CONFIGURAR_SUPABASE.html" style="display:inline-block">⚙️ CONFIGURAR_SUPABASE</a>
+      <a class="arch-node navy" href="RESUMEN_PROYECTO.html" style="display:inline-block">📑 Resumen del Proyecto</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURES BDD ══════════════════════════════════════════════════════════ -->
+<section id="features">
+  <div class="section-header">
+    <span class="icon">✨</span>
+    <h2>Features — Historias de Usuario (BDD)</h2>
+  </div>
+  <p class="section-sub">Cada feature describe quién la usa, por qué importa, y cómo funciona paso a paso</p>
+
+  <div class="card-grid cols-2">
+
+    <!-- F1: Material semanal -->
+    <div class="feature-card dom-content">
+      <div class="feature-header">
+        <span class="f-icon">📖</span>
+        <h3>Material de Estudio Semanal (×14)</h3>
+        <span class="status">✅ Completo</span>
+      </div>
+      <div class="feature-body">
+        <div class="feature-tldr">14 semanas × 2 archivos = 28 páginas interactivas de contenido</div>
+        <div class="scenario">
+          <div class="scenario-title">Escenario: Estudiante abre la semana en clase</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el estudiante accede al enlace de Moodle</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">abre el material de su semana</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">ve contenido con el caso NeuroBiz, quiz interactivo, y gana XP automáticamente</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">su progreso queda guardado en Supabase</span></div>
+        </div>
+        <div class="scenario" style="margin-top:.7rem">
+          <div class="scenario-title">Escenario: Docente revisa las notas del profesor</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el docente va a preparar la clase</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">abre el archivo notas_profesor.html de esa semana</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">encuentra: objetivos, estrategia pedagógica, alertas de contenido desactualizado 🟡🔴, y timing de clase</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F2: Gamificación XP -->
+    <div class="feature-card dom-game">
+      <div class="feature-header">
+        <span class="f-icon">🏆</span>
+        <h3>Sistema de Gamificación XP</h3>
+        <span class="status">✅ Completo</span>
+      </div>
+      <div class="feature-body">
+        <div class="feature-tldr">XP + badges + niveles, guardados en Supabase, visibles en el Dashboard del estudiante</div>
+        <div class="scenario">
+          <div class="scenario-title">Escenario: Estudiante completa un quiz</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el estudiante responde el quiz lateral</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">acierta una respuesta</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">recibe feedback inmediato + XP + badge si supera umbral</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">el docente lo ve en el Dashboard con el XP acumulado</span></div>
+        </div>
+        <div class="scenario" style="margin-top:.7rem">
+          <div class="scenario-title">Escenario: Etiquetas de vigencia del contenido</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">un tema está desactualizado en el currículo</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">aparece etiqueta 🟡 Evolucionado o 🔴 Histórico con explicación de qué lo reemplaza</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F3: Dashboard Docente -->
+    <div class="feature-card dom-tools">
+      <div class="feature-header">
+        <span class="f-icon">📊</span>
+        <h3>Dashboard Docente</h3>
+        <span class="status">✅ Completo</span>
+      </div>
+      <div class="feature-body">
+        <div class="feature-tldr">Vista general de los 29 estudiantes: XP, avance, actividad reciente, detección de riesgo</div>
+        <div class="scenario">
+          <div class="scenario-title">Escenario: Identificar estudiantes en riesgo</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el docente entra al Dashboard con su PIN</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">carga los datos de Supabase</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">ve tarjetas de todos los estudiantes ordenadas por XP</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">los estudiantes con &lt;30% de avance aparecen marcados en rojo ⚠️</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">puede exportar CSV con un clic</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F4: Consolidación de Notas -->
+    <div class="feature-card dom-assess">
+      <div class="feature-header">
+        <span class="f-icon">📋</span>
+        <h3>Consolidación de Notas + XLSX</h3>
+        <span class="status">✅ Completo</span>
+      </div>
+      <div class="feature-body">
+        <div class="feature-tldr">Fórmula automática: Quiz 50% + Actividades 30% + Visitas 20% = Nota Formativa → + Parcial = Nota Corte</div>
+        <div class="scenario">
+          <div class="scenario-title">Escenario: Docente sube notas a Academusoft</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">terminó el corte 1</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">ingresa la nota del parcial en la tabla</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">el sistema calcula nota_corte automáticamente</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">descarga el XLSX listo para subir a Academusoft</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">también ve la nota de Participación del estudiante en la misma tabla</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F5: Revisión Neurodivergente -->
+    <div class="feature-card dom-tools">
+      <div class="feature-header">
+        <span class="f-icon">🧠</span>
+        <h3>Rutina de Revisión (TDAH/AACC-friendly)</h3>
+        <span class="status">✅ Completo</span>
+      </div>
+      <div class="feature-body">
+        <div class="feature-tldr">15 min · un estudiante a la vez · estudiantes en riesgo primero · daily reset · +XP por revisar</div>
+        <div class="scenario">
+          <div class="scenario-title">Escenario: Revisión semanal de estudiantes</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">es martes post-clase (15 min disponibles)</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">el docente abre revision.html</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">ve solo los estudiantes en riesgo, ordenados por prioridad</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">el timer de 15 min arranca solo, una tarea a la vez</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">al terminar aparece celebración animada + 20 XP bonus</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">al día siguiente el estado se reinicia (cero deuda cognitiva)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F6: Participación -->
+    <div class="feature-card dom-partic">
+      <div class="feature-header">
+        <span class="f-icon">🎯</span>
+        <h3>Sistema de Participación (reemplaza ClassDojo)</h3>
+        <span class="status">✅ Completo</span>
+      </div>
+      <div class="feature-body">
+        <div class="feature-tldr">Puntos durante clase → Nota 0-5 → Recompensas: exoneración parcial o ayudas en exámenes</div>
+        <div class="scenario">
+          <div class="scenario-title">Escenario: Docente da puntos en clase</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el docente tiene participacion.html abierto en clase</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">un estudiante da una respuesta excelente</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">toca "+3 Excepcional" → puntos guardados en localStorage instantáneamente</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">puede deshacer con ↩ si se equivocó</span></div>
+        </div>
+        <div class="scenario" style="margin-top:.7rem">
+          <div class="scenario-title">Escenario: Estudiante consulta sus puntos</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el docente compartió el enlace de mis_puntos.html</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">el estudiante busca su nombre</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">ve sus puntos, nota equivalente, posición en clase, y recompensas disponibles</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">ve el mensaje: "Lo importante no es la nota, sino lo que aprendiste"</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F7: Juego Ahorcado -->
+    <div class="feature-card dom-game">
+      <div class="feature-header">
+        <span class="f-icon">🎮</span>
+        <h3>Juego del Ahorcado + Vocabulario del Curso</h3>
+        <span class="status">✅ Completo</span>
+      </div>
+      <div class="feature-body">
+        <div class="feature-tldr">5 categorías de vocabulario TGA05 · botón 🎲 aleatorio · branding IUB integrado</div>
+        <div class="scenario">
+          <div class="scenario-title">Escenario: Repaso de vocabulario en clase</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el docente quiere hacer un repaso dinámico</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">abre el Ahorcado y hace clic en "📚 Banco"</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">elige categoría (Estructuras de Datos, Python, NeuroBiz, Algoritmos, POO)</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">el juego carga una palabra aleatoria del curso sin revelarla</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">el grupo adivina tocando las letras en pantalla</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F8: Infraestructura cloud -->
+    <div class="feature-card dom-infra">
+      <div class="feature-header">
+        <span class="f-icon">☁️</span>
+        <h3>Infraestructura Cloud (Supabase + GitHub Pages)</h3>
+        <span class="status">✅ Completo</span>
+      </div>
+      <div class="feature-body">
+        <div class="feature-tldr">BD gratuita en la nube · hosting gratuito en GitHub Pages · zero backend · zero costo</div>
+        <div class="scenario">
+          <div class="scenario-title">Escenario: Persistencia del progreso del estudiante</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el estudiante abre el material desde su celular en casa</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">completa el quiz</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">los datos se guardan en Supabase (tabla student_progress)</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">el docente lo ve en el Dashboard al día siguiente</span></div>
+        </div>
+        <div class="scenario" style="margin-top:.7rem">
+          <div class="scenario-title">Escenario: Publicación en Moodle</div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">el docente sigue la GUIA_GIT_MOODLE.html paso a paso</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">el material aparece en el aula virtual como "Recurso URL"</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F9: KNOWLEDGE_BASE -->
+    <div class="feature-card dom-tools">
+      <div class="feature-header">
+        <span class="f-icon">📚</span>
+        <h3>KNOWLEDGE_BASE — Replicación a otros módulos</h3>
+        <span class="status">✅ Completo</span>
+      </div>
+      <div class="feature-body">
+        <div class="feature-tldr">17 secciones · prompt compacto para nueva IA · guía completa para replicar en Cálculo, Física, etc.</div>
+        <div class="scenario">
+          <div class="scenario-title">Escenario: Crear material para otro módulo</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el docente quiere replicar esto para "Cálculo Empresarial"</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">copia el Prompt Compacto (Sección 15) y lo pega a una nueva sesión de IA</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">la IA entiende todo el contexto del sistema y puede crear el mismo ecosistema para el nuevo módulo</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F10: Autocalificación -->
+    <div class="feature-card dom-assess">
+      <div class="feature-header">
+        <span class="f-icon">🤖</span>
+        <h3>Diseño de Actividades Autocalificables</h3>
+        <span class="status">⏳ Parcial</span>
+      </div>
+      <div class="feature-body">
+        <div class="feature-tldr">Guía lista en KB Sección 16 · quiz widget ✅ ya funciona · quiz principal aún hover-reveal ⚠️</div>
+        <div class="scenario">
+          <div class="scenario-title">Lo que ya funciona</div>
+          <div class="bdd-line"><span class="bdd-kw then">✅</span><span class="bdd-text">Widget lateral: clic → respuesta correcta/incorrecta → XP inmediato</span></div>
+          <div class="bdd-line"><span class="bdd-then">⏳</span><span class="bdd-text">Quizzes principales (14 archivos): necesitan script de actualización a botones clicables</span></div>
+          <div class="bdd-line"><span class="bdd-then">📋</span><span class="bdd-text">Actividades Colab: externas, requieren revisión manual del docente</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /card-grid -->
+</section>
+
+<!-- ══ ARCHIVOS ══════════════════════════════════════════════════════════════ -->
+<section id="archivos">
+  <div class="section-header">
+    <span class="icon">📁</span>
+    <h2>Inventario de Archivos</h2>
+  </div>
+  <p class="section-sub">
+    <span style="background:#e8f5e9;color:#1b5e20;padding:.1rem .5rem;border-radius:6px;font-weight:700;font-size:.75rem">🆕 Nuevo</span>&nbsp;
+    <span style="background:#fff8e1;color:#e65100;padding:.1rem .5rem;border-radius:6px;font-weight:700;font-size:.75rem">✏️ Modificado</span>&nbsp;
+    <span style="background:#e8eaf6;color:#3949ab;padding:.1rem .5rem;border-radius:6px;font-weight:700;font-size:.75rem">📦 Base</span>
+  </p>
+
+  <div class="card">
+    <div class="file-tree">
+
+      <details open>
+        <summary>📂 EstructuraDatos/ &nbsp;(raíz)</summary>
+        <div class="inner">
+          <div class="ft-file"><span class="ft-name">index.html</span><span class="ft-tag ft-base">📦 Base</span><span class="ft-desc">Portada del curso (estudiante)</span></div>
+          <div class="ft-file"><span class="ft-name">KNOWLEDGE_BASE.html</span><span class="ft-tag ft-new">🆕 Sesión 3</span><span class="ft-desc">17 secciones · handoff completo · prompt IA · guía de replicación</span></div>
+          <div class="ft-file"><span class="ft-name">RESUMEN_PROYECTO.html</span><span class="ft-tag ft-new">🆕</span><span class="ft-desc">Resumen ejecutivo del proyecto</span></div>
+          <div class="ft-file"><span class="ft-name">PROPUESTA_VICERRECTOR.html</span><span class="ft-tag ft-new">🆕</span><span class="ft-desc">Propuesta de automatización de notas</span></div>
+        </div>
+      </details>
+
+      <details open>
+        <summary>📂 semana1–14/ &nbsp;(×14 carpetas)</summary>
+        <div class="inner">
+          <div class="ft-file"><span class="ft-name">index.html</span><span class="ft-tag ft-new">🆕 Sesión 1</span><span class="ft-desc">Material de estudio · caso NeuroBiz · quiz gamificado · XP · Supabase sync</span></div>
+          <div class="ft-file"><span class="ft-name">notas_profesor.html</span><span class="ft-tag ft-new">🆕 Sesión 1</span><span class="ft-desc">Guía docente · objetivos · timing · alertas 🟢🟡🔴 de vigencia</span></div>
+        </div>
+      </details>
+
+      <details open>
+        <summary>📂 dashboard/</summary>
+        <div class="inner">
+          <div class="ft-file"><span class="ft-name">index.html</span><span class="ft-tag ft-base">📦 Base</span><span class="ft-desc">Dashboard del estudiante: mi XP, semanas, actividades</span></div>
+          <div class="ft-file"><span class="ft-name">profesor.html</span><span class="ft-tag ft-mod">✏️ +botón participación</span><span class="ft-desc">Dashboard docente · todos los estudiantes · CSV export · PIN</span></div>
+          <div class="ft-file"><span class="ft-name">notas.html</span><span class="ft-tag ft-mod">✏️ +columna participación</span><span class="ft-desc">Consolidación de notas · fórmula configurable · XLSX export</span></div>
+          <div class="ft-file"><span class="ft-name">revision.html</span><span class="ft-tag ft-new">🆕 Sesión 4</span><span class="ft-desc">Revisión TDAH-friendly · timer 15min · un estudiante a la vez · XP</span></div>
+          <div class="ft-file"><span class="ft-name">participacion.html</span><span class="ft-tag ft-new">🆕 Esta sesión</span><span class="ft-desc">Reemplazo ClassDojo · puntos en clase · botones rápidos · ↩ deshacer</span></div>
+          <div class="ft-file"><span class="ft-name">mis_puntos.html</span><span class="ft-tag ft-new">🆕 Esta sesión</span><span class="ft-desc">Vista estudiante · busca su nombre · ve puntos + recompensa + historial</span></div>
+        </div>
+      </details>
+
+      <details>
+        <summary>📂 setup/</summary>
+        <div class="inner">
+          <div class="ft-file"><span class="ft-name">CONFIGURAR_SUPABASE.html</span><span class="ft-tag ft-new">🆕</span><span class="ft-desc">Formulario para guardar URL + key · botón de prueba de conexión</span></div>
+          <div class="ft-file"><span class="ft-name">GUIA_GIT_MOODLE.html</span><span class="ft-tag ft-new">🆕</span><span class="ft-desc">Checklist interactiva: SQL → Git → GitHub Pages → Moodle</span></div>
+          <div class="ft-file"><span class="ft-name">CONFIGURAR_PROGRESO.html</span><span class="ft-tag ft-new">🆕</span><span class="ft-desc">Configurar progreso / estado del curso</span></div>
+          <div class="ft-file"><span class="ft-name">supabase_schema.sql</span><span class="ft-tag ft-new">🆕</span><span class="ft-desc">Tabla student_progress · RLS policies · trigger · vista resumen_docente</span></div>
+        </div>
+      </details>
+
+      <details>
+        <summary>📂 JuegoDelAhorcado/</summary>
+        <div class="inner">
+          <div class="ft-file"><span class="ft-name">index.html</span><span class="ft-tag ft-mod">✏️ +IUB branding +Banco palabras</span><span class="ft-desc">Juego del ahorcado · pantalla completa · para usar en clase</span></div>
+          <div class="ft-file"><span class="ft-name">app.js</span><span class="ft-tag ft-mod">✏️ +WORD_BANK +loadRandomWord</span><span class="ft-desc">5 categorías de vocabulario TGA05 · 70+ términos</span></div>
+          <div class="ft-file"><span class="ft-name">styles.css</span><span class="ft-tag ft-base">📦 Sin cambios</span><span class="ft-desc">Estilos originales del juego</span></div>
+        </div>
+      </details>
+
+      <details>
+        <summary>📂 js/</summary>
+        <div class="inner">
+          <div class="ft-file"><span class="ft-name">supabase-config.js</span><span class="ft-tag ft-mod">✏️ Configurado</span><span class="ft-desc">URL + key Supabase ya cargados · formato sb_publishable_* (2025+)</span></div>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ ACCESO RÁPIDO ══════════════════════════════════════════════════════════ -->
+<section id="acceso">
+  <div class="section-header">
+    <span class="icon">🔗</span>
+    <h2>Acceso Rápido — Todos los archivos de un vistazo</h2>
+  </div>
+  <p class="section-sub">Clic para abrir directamente en el navegador</p>
+
+  <div class="callout tip">
+    <span class="cico">💡</span>
+    <span><strong>Tip TDAH:</strong> Guarda esta página como marcador. Desde aquí puedes abrir cualquier herramienta del sistema con un solo clic sin tener que recordar paths.</span>
+  </div>
+
+  <h3 style="font-size:.85rem;font-weight:700;color:var(--navy);margin:.8rem 0 .5rem;text-transform:uppercase;letter-spacing:.04em">🏫 Herramientas Docente</h3>
+  <div class="link-grid">
+    <a class="link-card" href="dashboard/profesor.html"><div class="icon">📊</div><div class="name">Dashboard</div><div class="path">dashboard/profesor.html</div></a>
+    <a class="link-card" href="dashboard/notas.html"><div class="icon">📋</div><div class="name">Consolidar Notas</div><div class="path">dashboard/notas.html</div></a>
+    <a class="link-card" href="dashboard/revision.html"><div class="icon">🧠</div><div class="name">Revisar Estudiantes</div><div class="path">dashboard/revision.html</div></a>
+    <a class="link-card" href="dashboard/participacion.html"><div class="icon">🎯</div><div class="name">Participación</div><div class="path">dashboard/participacion.html</div></a>
+    <a class="link-card" href="JuegoDelAhorcado/index.html"><div class="icon">🎮</div><div class="name">Ahorcado</div><div class="path">JuegoDelAhorcado/index.html</div></a>
+  </div>
+
+  <h3 style="font-size:.85rem;font-weight:700;color:var(--navy);margin:1.2rem 0 .5rem;text-transform:uppercase;letter-spacing:.04em">👨‍🎓 Vista Estudiante</h3>
+  <div class="link-grid">
+    <a class="link-card" href="index.html"><div class="icon">🏠</div><div class="name">Portada del Curso</div><div class="path">index.html</div></a>
+    <a class="link-card" href="dashboard/index.html"><div class="icon">📈</div><div class="name">Mi Progreso</div><div class="path">dashboard/index.html</div></a>
+    <a class="link-card" href="dashboard/mis_puntos.html"><div class="icon">🎯</div><div class="name">Mis Puntos</div><div class="path">dashboard/mis_puntos.html</div></a>
+    <a class="link-card" href="semana1/index.html"><div class="icon">📖</div><div class="name">Semana 1</div><div class="path">semana1/index.html</div></a>
+  </div>
+
+  <h3 style="font-size:.85rem;font-weight:700;color:var(--navy);margin:1.2rem 0 .5rem;text-transform:uppercase;letter-spacing:.04em">⚙️ Setup & Documentación</h3>
+  <div class="link-grid">
+    <a class="link-card" href="setup/GUIA_GIT_MOODLE.html"><div class="icon">🚀</div><div class="name">Guía Git + Moodle</div><div class="path">setup/GUIA_GIT_MOODLE.html</div></a>
+    <a class="link-card" href="setup/CONFIGURAR_SUPABASE.html"><div class="icon">⚙️</div><div class="name">Configurar Supabase</div><div class="path">setup/CONFIGURAR_SUPABASE.html</div></a>
+    <a class="link-card" href="KNOWLEDGE_BASE.html"><div class="icon">📚</div><div class="name">Knowledge Base</div><div class="path">KNOWLEDGE_BASE.html</div></a>
+  </div>
+</section>
+
+<!-- ══ PROGRESO ══════════════════════════════════════════════════════════════ -->
+<section id="progreso">
+  <div class="section-header">
+    <span class="icon">📊</span>
+    <h2>Estado de Completitud por Área</h2>
+  </div>
+
+  <div class="card-grid cols-2">
+    <div class="card">
+      <h3 style="font-size:.9rem;font-weight:800;color:var(--navy);margin-bottom:1rem">📐 Áreas del sistema</h3>
+      <div class="prog-row">
+        <div class="prog-label"><span>📖 Contenido semanal (14 semanas)</span><span>100%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:100%;background:var(--c-content)"></div></div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-label"><span>🏆 Gamificación XP + Badges</span><span>100%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:100%;background:var(--c-game)"></div></div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-label"><span>☁️ Supabase + GitHub Pages</span><span>90%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:90%;background:var(--c-infra)"></div></div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-label"><span>📊 Dashboard docente</span><span>100%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:100%;background:var(--c-tools)"></div></div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-label"><span>📋 Consolidación de notas</span><span>100%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:100%;background:var(--c-assess)"></div></div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-label"><span>🎯 Sistema de participación</span><span>100%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:100%;background:var(--c-partic)"></div></div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-label"><span>🤖 Quizzes autocalificables</span><span>30%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:30%;background:#bdbdbd"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:.9rem;font-weight:800;color:var(--navy);margin-bottom:1rem">✅ Checklist de sesiones</h3>
+      <ul class="done-list">
+        <li><strong>Sesión 1:</strong> 14 semanas de material HTML · notas_profesor · gamificación básica</li>
+        <li><strong>Sesión 2:</strong> Supabase schema · CONFIGURAR_SUPABASE · GUIA_GIT_MOODLE · GitHub Pages</li>
+        <li><strong>Sesión 3:</strong> KNOWLEDGE_BASE (17 secciones) · IUB branding · consolidación notas XLSX</li>
+        <li><strong>Sesión 4:</strong> revision.html (TDAH-friendly) · Sección 16 actividades autocalificables · Sección 17 rutina docente</li>
+        <li><strong>Esta sesión:</strong> participacion.html · mis_puntos.html · Ahorcado word bank · columna participación en notas</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PENDIENTE ══════════════════════════════════════════════════════════════ -->
+<section id="pendiente">
+  <div class="section-header">
+    <span class="icon">⏳</span>
+    <h2>Próximos pasos</h2>
+  </div>
+
+  <div class="callout warn">
+    <span class="cico">⚡</span>
+    <span><strong>Acción del docente requerida:</strong> Publicar en GitHub Pages y agregar los URLs en Moodle. Todo lo demás está listo.</span>
+  </div>
+
+  <div class="card-grid cols-2">
+    <div class="card">
+      <h3 style="font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:.8rem">🔧 Técnico (puede hacer la IA)</h3>
+      <ul class="pending-list">
+        <li>Script Python para actualizar los 14 quizzes principales de hover-reveal a botones clicables con XP</li>
+        <li>Supabase tabla <code>participation_events</code> para backup cloud de los puntos (actualmente en localStorage)</li>
+        <li>Conectar Ahorcado: cuando el grupo gana, sumar XP al estudiante que inició la ronda</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:.8rem">🏫 Docente (tú lo haces)</h3>
+      <ul class="pending-list">
+        <li>Abrir GUIA_GIT_MOODLE.html y completar pasos Git → GitHub Pages → Moodle URL resources</li>
+        <li>Compartir el link de <code>mis_puntos.html</code> con los estudiantes para que vean sus puntos</li>
+        <li>Al final de cada clase: exportar .tsv de participación como respaldo</li>
+        <li>Para replicar en otro módulo: copiar prompt compacto de KNOWLEDGE_BASE Sección 15</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout info" style="margin-top:1rem">
+    <span class="cico">🔁</span>
+    <span><strong>Para replicar en otro módulo:</strong> Abre <a href="KNOWLEDGE_BASE.html"><strong>KNOWLEDGE_BASE.html → Sección 15</strong></a>, copia el prompt compacto, ábrelo en una nueva sesión de IA y dile el nombre del nuevo módulo. En ~1 hora tienes el mismo ecosistema completo.</span>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<footer style="background:var(--navy);color:#fff;text-align:center;padding:1.2rem;font-size:.78rem;opacity:.8;margin-top:2rem">
+  TGA05 · Estructura de Datos para los Negocios · IUB · Grupo 7_GA_G1 · Generado con GitHub Copilot IA
+</footer>
+
+<script>
+// Smooth scroll for nav links
+document.querySelectorAll('.nav-item').forEach(a => {
+  a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      e.preventDefault();
+      document.querySelector(href)?.scrollIntoView({ behavior:'smooth', block:'start' });
+      document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+    }
+  });
+});
+
+// Highlight active nav on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-item[href^="#"]');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

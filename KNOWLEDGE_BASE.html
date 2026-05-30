@@ -129,7 +129,7 @@
       </div>
     </div>
     <div style="text-align:right;color:rgba(255,255,255,.6);font-size:.8rem">
-      Última actualización<br><strong style="color:#fff">30 mayo 2026</strong>
+      Última actualización<br><strong style="color:#fff">30 mayo 2026 — v18</strong>
     </div>
   </div>
 </header>
@@ -156,6 +156,7 @@
   <a href="#s13" onclick="setActive(this)">13 · Moodle</a>
   <a href="#s14" onclick="setActive(this)">14 · Replicar módulo</a>
   <a href="#s17" onclick="setActive(this)">17 · Rutina docente</a>
+  <a href="#s18" onclick="setActive(this)">18 · Importar desde PDF</a>
   <h3>IA</h3>
   <a href="#s15" onclick="setActive(this)">15 · Prompt nueva sesión</a>
 </aside>
@@ -577,7 +578,7 @@ nota_corte = nota_formativa × 0.70 + nota_parcial × 0.30
   <div class="sec-title"><div class="sec-num">12</div><h2>Git → GitHub Pages</h2></div>
   <div class="card">
     <h3>Primera publicación (ejecutar una sola vez)</h3>
-    <pre id="c-git1"><button class="copy-btn" onclick="cp('c-git1',this)">Copiar</button><code><span class="cmd">cd</span> "...OneDrive.../copilot/EstructuraDatos"
+    <pre id="c-git1"><button class="copy-btn" onclick="cp('c-git1',this)">Copiar</button><code><span class="cmd">cd</span> "...OneDrive.../copilot2/EstructuraDatos"
 <span class="cmd">git init</span>
 <span class="cmd">git add .</span>
 <span class="cmd">git commit -m</span> <span class="hi">"TGA05 NeuroBiz - Material completo IUB"</span>
@@ -989,6 +990,103 @@ Enfócate en comprender el concepto, no en memorizarlo para producción.</code><
   <div class="alert alert-success">
     <span>💡</span>
     <div><strong>Para replicar en otro módulo:</strong> <span class="inline-code">dashboard/revision.html</span> es reutilizable sin cambios. Solo necesita <span class="inline-code">supabase-config.js</span> configurado.</div>
+  </div>
+</section>
+
+<!-- ════════════════════ S18 IMPORTAR PDF ══ -->
+<section id="s18">
+  <div class="sec-title"><div class="sec-num">18</div><h2>Importar lista de estudiantes desde PDF Academusoft</h2></div>
+
+  <div class="card card-navy">
+    <h3>🎯 Por qué existe esta función</h3>
+    <p>El módulo se reutiliza cada cuatrimestre y con grupos distintos. En lugar de editar el código fuente para cambiar la lista de estudiantes, el sistema detecta automáticamente la lista a partir del reporte PDF estándar que genera Academusoft (IUB). Una vez importado, el listado queda guardado en <span style="color:var(--yellow)">localStorage</span> y persiste entre sesiones.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>📋 Dónde está la función</h3>
+      <ul>
+        <li>Archivo: <span class="inline-code">dashboard/participacion.html</span></li>
+        <li>Acceso: Tab <strong>⚙️ Configuración</strong> → tarjeta <em>"📋 Importar lista de estudiantes"</em></li>
+        <li>PIN de docente requerido para acceder</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🗄️ Storage keys</h3>
+      <table class="info">
+        <tr><th>Key localStorage</th><th>Contenido</th></tr>
+        <tr><td><code>tga05_students_v1</code></td><td>Array JSON con los estudiantes importados</td></tr>
+        <tr><td><code>tga05_group_info_v1</code></td><td>Metadata del grupo: grupo, horario, salón, asignatura</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>⚙️ Dos formas de importar</h3>
+    <table class="info">
+      <tr><th>Opción</th><th>Pasos</th><th>Cuándo usar</th></tr>
+      <tr>
+        <td><strong>A — PDF directo</strong></td>
+        <td>Configuración → subir PDF → esperar extracción automática con PDF.js</td>
+        <td>Cuando tienes el archivo PDF del reporte descargado</td>
+      </tr>
+      <tr>
+        <td><strong>B — Pegar texto</strong></td>
+        <td>Abrir PDF en cualquier visor → Ctrl+A → Ctrl+C → pegar en el campo → Analizar</td>
+        <td>Cuando el PDF está en el navegador o PDF.js falla por protección del archivo</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>📄 Formato del reporte Academusoft esperado</h3>
+    <p style="font-size:.86rem;margin-bottom:.6rem">El parser detecta automáticamente líneas con este patrón:</p>
+    <pre><code><span class="cmt"># Número + nombre en mayúsculas + cédula (7-12 dígitos)</span>
+1    ARIZA DE LA CRUZ YORYELIS PATRICIA      1043158867
+2    BERRIO JULIO BLEIDYS                    1001234567
+...
+<span class="cmt"># También detecta metadatos del encabezado:</span>
+GRUPO: 7_GA_G1
+HORARIO: Viernes 07:00 - 10:59
+SALÓN: CENH P1-7
+ASIGNATURA: ESTRUCTURA DE DATOS PARA LOS NEGOCIOS</code></pre>
+    <div class="alert alert-warn">
+      <span>⚠️</span>
+      <div>Si el PDF extrae texto con columnas desordenadas (nombre y cédula en líneas separadas), el parser intentará un modo de recuperación más amplio. En caso de fallo, el estudiante aparecerá con CC = <code>SIN_DOC_N</code> — esto es editable manualmente en el código.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔁 Flujo completo para nuevo cuatrimestre / nuevo grupo</h3>
+    <ol style="font-size:.87rem;line-height:2">
+      <li>Descargar el reporte de estudiantes desde Academusoft (PDF)</li>
+      <li>Abrir <span class="inline-code">dashboard/participacion.html</span> → ingresar PIN</li>
+      <li>Ir a tab ⚙️ <strong>Configuración</strong> → tarjeta <em>Importar lista</em></li>
+      <li>Subir el PDF (Opción A) o pegar texto (Opción B)</li>
+      <li>Revisar la vista previa — verificar nombres y cédulas</li>
+      <li>Clic <strong>✅ Cargar N estudiantes</strong></li>
+      <li>El encabezado se actualiza automáticamente con el nombre del grupo</li>
+      <li>Listo — la lista persiste en este dispositivo para todas las clases del cuatrimestre</li>
+    </ol>
+    <div class="alert alert-info">
+      <span>💡</span>
+      <div><strong>Los datos de participación NO se borran</strong> al cambiar de lista. Si empiezas un nuevo cuatrimestre, borra primero los eventos desde <em>Zona de peligro</em> → "Borrar todos los datos de participación".</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🛠️ Para replicar en otro módulo</h3>
+    <p style="font-size:.87rem">El importador es completamente portable. Para usarlo en otro módulo:</p>
+    <ol style="font-size:.87rem;line-height:2">
+      <li>Copiar <span class="inline-code">dashboard/participacion.html</span> al nuevo módulo</li>
+      <li>Cambiar el prefijo del storage key (<span class="inline-code">tga05_</span>) por el código del nuevo módulo (ej: <span class="inline-code">tga03_</span>) para evitar conflictos entre módulos en el mismo navegador</li>
+      <li>La lista por defecto (hardcoded) puede quedar vacía o con estudiantes de ejemplo — siempre se puede sobrescribir por importación</li>
+      <li>Asegurarse de que el nuevo módulo tenga el mismo <span class="inline-code">STORE_KEY</span> en <span class="inline-code">dashboard/notas.html</span></li>
+    </ol>
+    <div class="alert alert-success">
+      <span>✅</span>
+      <div>El sistema fue diseñado exactamente para este uso recurrente: <strong>un módulo diferente cada cuatrimestre, grupos distintos, sin tocar código</strong>. El importador es la pieza clave que lo hace posible.</div>
+    </div>
   </div>
 </section>
 
