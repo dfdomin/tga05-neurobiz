@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Docente — TGA05 NeuroBiz</title>
+  <script src="../js/supabase-config.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary:   #1E2843; --accent:    #2d3a5e; --gold:      #FFDF2D;
+      --green: #2e7d32; --red: #c62828; --border:    #DEDFE4;
+      --light:     #FAFAFA; --radius: 14px;
+    }
+    body { font-family: 'Open Sans', Arial, sans-serif;
+      background:var(--light); color:#212121; line-height:1.7; }
+
+    /* PIN GATE */
+    #pin-gate { position:fixed; inset:0; background:linear-gradient(135deg, #1E2843, #2d3a5e);
+      display:flex; align-items:center; justify-content:center; z-index:9999; }
+    #pin-box { background:rgba(255,255,255,.1); backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,.25); border-radius:20px;
+      padding:2.5rem 2rem; width:min(92vw,380px); text-align:center; color:#fff; }
+    #pin-box h2 { font-size:1.4rem; margin-bottom:.4rem; }
+    #pin-box p  { opacity:.75; font-size:.88rem; margin-bottom:1.5rem; }
+    #pin-input { width:100%; background:rgba(255,255,255,.15); border:1.5px solid rgba(255,255,255,.3);
+      border-radius:10px; padding:.65rem 1rem; color:#fff; font-size:1rem;
+      text-align:center; letter-spacing:.2em; outline:none; }
+    #pin-input::placeholder { color:rgba(255,255,255,.4); letter-spacing:0; }
+    #pin-input:focus { border-color:var(--gold); }
+    #pin-btn { width:100%; margin-top:.9rem; padding:.7rem; background:var(--gold);
+      color:#1E2843; border:none; border-radius:12px; font-weight:900;
+      font-size:1rem; cursor:pointer; }
+    #pin-btn:hover { opacity:.9; }
+    #pin-err { color:#ff8a80; font-size:.82rem; margin-top:.5rem; min-height:1em; }
+    #pin-hint { font-size:.75rem; opacity:.5; margin-top:1rem; }
+
+    /* HEADER */
+    header { background:linear-gradient(135deg, #1E2843, #2d3a5e);
+      color:#fff; padding:2rem 1.5rem 2.5rem; position:relative; overflow:hidden; }
+    header::after { content:''; position:absolute; bottom:-1px; left:0; right:0;
+      height:32px; background:var(--light); clip-path:ellipse(55% 100% at 50% 100%); }
+    .hdr-inner { max-width:1100px; margin:0 auto; display:flex;
+      justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; }
+    .hdr-title h1 { font-size:1.7rem; font-weight:900; }
+    .hdr-title p  { opacity:.8; font-size:.9rem; margin-top:.3rem; }
+    .hdr-actions { display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; }
+    .hdr-btn { background:rgba(255,255,255,.15); border:1.5px solid rgba(255,255,255,.35);
+      color:#fff; border-radius:10px; padding:.45rem .9rem; font-size:.82rem;
+      font-weight:700; cursor:pointer; }
+    .hdr-btn:hover { background:rgba(255,255,255,.25); }
+    .hdr-btn.primary { background:var(--gold); color:#1E2843; border-color:var(--gold); }
+
+    main { max-width:1100px; margin:2rem auto; padding:0 1rem 4rem; }
+
+    /* STATS GRID */
+    .stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.5rem; }
+    .stat-card { background:#fff; border-radius:var(--radius); border:1px solid var(--border);
+      padding:1.2rem 1rem; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+    .stat-card .n { font-size:2.2rem; font-weight:900; color:var(--primary); line-height:1; }
+    .stat-card .l { font-size:.72rem; color:#607d8b; margin-top:.4rem;
+      text-transform:uppercase; letter-spacing:.04em; font-weight:700; }
+
+    /* SECTION */
+    .sec-title { font-size:1.1rem; font-weight:800; color:var(--primary);
+      border-left:5px solid var(--gold); padding-left:.8rem; margin:2rem 0 1rem; }
+
+    /* FILTERS */
+    .filters { display:flex; gap:.7rem; flex-wrap:wrap; margin-bottom:1rem; }
+    .filters input, .filters select {
+      padding:.5rem .9rem; border:2px solid var(--border); border-radius:8px;
+      font-size:.85rem; outline:none; }
+    .filters input:focus, .filters select:focus { border-color:var(--accent); }
+
+    /* STUDENTS TABLE */
+    .tbl-wrap { background:#fff; border-radius:var(--radius); border:1px solid var(--border);
+      overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.04); overflow-x:auto; }
+    table.st { width:100%; border-collapse:collapse; font-size:.86rem; }
+    table.st th { background:var(--primary); color:#fff; padding:.6rem .9rem;
+      text-align:left; white-space:nowrap; cursor:pointer; user-select:none; }
+    table.st th:hover { background:var(--accent); }
+    table.st td { padding:.55rem .9rem; border-bottom:1px solid var(--border); vertical-align:middle; }
+    table.st tr:last-child td { border-bottom:none; }
+    table.st tr:hover td { background:#f0f3ff; }
+    .prog-bar { background:#E9EAED; border-radius:20px; height:8px; overflow:hidden;
+      min-width:80px; }
+    .prog-fill { height:100%; border-radius:20px;
+      background:linear-gradient(90deg,#2d3a5e,#7986cb); }
+    .pill { display:inline-block; padding:.12rem .55rem; border-radius:12px;
+      font-size:.72rem; font-weight:700; }
+    .pill.high { background:#e8f5e9; color:#2e7d32; }
+    .pill.mid  { background:#fff8e1; color:#e65100; }
+    .pill.low  { background:#fce4ec; color:#c62828; }
+
+    /* HEATMAP */
+    .heatmap-wrap { background:#fff; border-radius:var(--radius); border:1px solid var(--border);
+      padding:1.4rem; overflow-x:auto; }
+    .heatmap { display:flex; gap:4px; align-items:flex-end; }
+    .hm-col { display:flex; flex-direction:column; align-items:center; gap:3px; }
+    .hm-cell { width:28px; height:28px; border-radius:5px; display:flex;
+      align-items:center; justify-content:center; font-size:.65rem; font-weight:700;
+      color:#fff; }
+    .hm-lbl { font-size:.62rem; color:#78909c; margin-top:2px; }
+
+    /* MESSAGES */
+    #status-msg { text-align:center; padding:3rem; color:#607d8b; }
+    #error-msg  { background:#fce4ec; border-left:4px solid #e53935; border-radius:10px;
+      padding:.9rem; font-size:.88rem; color:#b71c1c; margin-bottom:1rem; display:none; }
+
+    /* EXPORT */
+    .export-btn { background:#fff; border:2px solid var(--border); border-radius:8px;
+      padding:.45rem .9rem; font-size:.82rem; font-weight:700; cursor:pointer;
+      color:var(--primary); }
+    .export-btn:hover { background:var(--light); }
+
+    footer { text-align:center; padding:2rem; font-size:.78rem; color:#78909c;
+      border-top:1px solid var(--border); margin-top:2rem; }
+
+    @media(max-width:700px){
+      .stat-grid{ grid-template-columns:repeat(2,1fr); }
+      .hdr-inner{ flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── PIN GATE ─────────────────────────────────── -->
+<div id="pin-gate">
+  <div id="pin-box">
+    <div style="font-size:2.5rem;margin-bottom:.8rem">🔐</div>
+    <h2>Dashboard Docente</h2>
+    <p>TGA05 · NeuroBiz S.A.S. · UIB</p>
+    <input id="pin-input" type="password" placeholder="PIN del docente"
+      maxlength="20" onkeydown="if(event.key==='Enter')checkPin()" />
+    <button id="pin-btn" onclick="checkPin()">Ingresar</button>
+    <div id="pin-err"></div>
+    <p id="pin-hint">Primera vez: el PIN es <strong>tga05</strong><br>
+      Puedes cambiarlo desde el dashboard.</p>
+  </div>
+</div>
+
+<!-- ── HEADER ────────────────────────────────────── -->
+<header>
+  <div class="hdr-inner">
+    <div class="hdr-title">
+      <h1>📊 Dashboard Docente</h1>
+      <p>TGA05 · Estructura de Datos para los Negocios · NeuroBiz S.A.S.</p>
+    </div>
+    <div class="hdr-actions">
+      <button class="hdr-btn" onclick="loadData()">🔄 Actualizar</button>
+      <button class="hdr-btn" onclick="exportCSV()">⬇️ Exportar CSV</button>
+      <a href="notas.html" class="hdr-btn" style="background:rgba(255,223,45,.2);color:#FFDF2D;font-weight:700">📊 Consolidar Notas</a>
+      <a href="revision.html" class="hdr-btn" style="background:rgba(46,125,50,.3);color:#a5d6a7;font-weight:700">📋 Revisar Estudiantes</a>
+      <a href="participacion.html" class="hdr-btn" style="background:rgba(156,39,176,.3);color:#ce93d8;font-weight:700">🎯 Participación</a>
+      <button class="hdr-btn" onclick="changePin()">🔑 Cambiar PIN</button>
+      <a href="index.html" class="hdr-btn">👤 Mi progreso</a>
+      <button class="hdr-btn" onclick="logout()" style="background:rgba(198,40,40,.3)">🚪 Salir</button>
+    </div>
+  </div>
+</header>
+
+<main id="dashboard-main" style="display:none">
+
+  <!-- STATS -->
+  <div class="stat-grid">
+    <div class="stat-card"><div class="n" id="st-total">—</div><div class="l">Estudiantes</div></div>
+    <div class="stat-card"><div class="n" id="st-xp">—</div><div class="l">XP Promedio</div></div>
+    <div class="stat-card"><div class="n" id="st-avance">—</div><div class="l">% Avance Prom.</div></div>
+    <div class="stat-card"><div class="n" id="st-activos">—</div><div class="l">Activos (7 días)</div></div>
+  </div>
+
+  <div id="error-msg"></div>
+  <div id="status-msg">⏳ Cargando datos…</div>
+
+  <!-- FILTERS -->
+  <div class="sec-title" id="tbl-title" style="display:none">
+    🎓 Todos los estudiantes
+  </div>
+  <div class="filters" id="filters-row" style="display:none">
+    <input type="text" id="filter-name" placeholder="🔍 Buscar estudiante…"
+      oninput="renderTable()" style="flex:1;min-width:180px" />
+    <select id="filter-semana" onchange="renderTable()">
+      <option value="">Todas las semanas</option>
+      ${Array.from({length:14},(_,i)=>`<option value="${i+1}">Semana ${i+1}</option>`).join("")}
+    </select>
+    <select id="filter-sort" onchange="renderTable()">
+      <option value="xp">Ordenar: XP Total</option>
+      <option value="avance">Ordenar: % Avance</option>
+      <option value="nombre">Ordenar: Nombre</option>
+      <option value="ultima">Ordenar: Última actividad</option>
+    </select>
+  </div>
+
+  <!-- TABLE -->
+  <div class="tbl-wrap" id="tbl-wrap" style="display:none">
+    <table class="st" id="students-table">
+      <thead>
+        <tr>
+          <th onclick="sortBy('nombre')">Estudiante ↕</th>
+          <th onclick="sortBy('grupo')">Grupo</th>
+          <th onclick="sortBy('semanas')">Semanas ↕</th>
+          <th>Avance</th>
+          <th onclick="sortBy('xp')">XP Total ↕</th>
+          <th>Quiz ✓</th>
+          <th onclick="sortBy('ultima')">Última act. ↕</th>
+        </tr>
+      </thead>
+      <tbody id="students-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- HEATMAP semanas -->
+  <div id="heatmap-section" style="display:none">
+    <div class="sec-title">🔥 Actividad por semana (estudiantes que visitaron)</div>
+    <div class="heatmap-wrap">
+      <div class="heatmap" id="heatmap"></div>
+    </div>
+  </div>
+
+</main>
+
+<footer>TGA05 · NeuroBiz S.A.S. · UIB · Dashboard Docente</footer>
+
+<script>
+// ── PIN AUTH ─────────────────────────────────────────────────
+const PIN_KEY = "tga05_prof_pin";
+
+function checkPin() {
+  const input = document.getElementById("pin-input").value.trim();
+  const stored = localStorage.getItem(PIN_KEY) || "tga05";
+  if (input === stored) {
+    document.getElementById("pin-gate").style.display = "none";
+    document.getElementById("dashboard-main").style.display = "block";
+    loadData();
+  } else {
+    document.getElementById("pin-err").textContent = "PIN incorrecto.";
+    document.getElementById("pin-input").value = "";
+    document.getElementById("pin-input").focus();
+  }
+}
+
+function changePin() {
+  const np = prompt("Nuevo PIN (mínimo 4 caracteres):");
+  if (!np || np.length < 4) { alert("PIN demasiado corto."); return; }
+  localStorage.setItem(PIN_KEY, np);
+  alert("✅ PIN actualizado.");
+}
+
+function logout() {
+  document.getElementById("dashboard-main").style.display = "none";
+  document.getElementById("pin-gate").style.display = "flex";
+  document.getElementById("pin-input").value = "";
+}
+
+// ── DATA ─────────────────────────────────────────────────────
+let allRows = [];    // raw rows from Supabase
+let summary = [];    // per-student summary
+
+async function loadData() {
+  const sbUrl = localStorage.getItem("tga05_supabase_url");
+  const sbKey = localStorage.getItem("tga05_supabase_key");
+
+  document.getElementById("status-msg").style.display = "block";
+  document.getElementById("status-msg").textContent   = "⏳ Cargando desde Supabase…";
+
+  if (!sbUrl || !sbKey) {
+    showError("Supabase no configurado. Abre setup/CONFIGURAR_SUPABASE.html.");
+    return;
+  }
+
+  try {
+    // Fetch all rows (paginated at 1000)
+    const res = await fetch(
+      `${sbUrl}/rest/v1/student_progress?order=student_name.asc,semana.asc&limit=1000`,
+      { headers: { "apikey": sbKey, "Authorization": "Bearer " + sbKey } }
+    );
+    if (!res.ok) throw new Error("Supabase " + res.status);
+    allRows = await res.json();
+
+    summary = buildSummary(allRows);
+    renderStats();
+    renderTable();
+    renderHeatmap();
+
+    document.getElementById("status-msg").style.display = "none";
+    document.getElementById("tbl-title").style.display  = "block";
+    document.getElementById("filters-row").style.display = "flex";
+    document.getElementById("tbl-wrap").style.display   = "block";
+    document.getElementById("heatmap-section").style.display = "block";
+
+  } catch(e) {
+    showError("Error: " + e.message);
+    document.getElementById("status-msg").style.display = "none";
+  }
+}
+
+function buildSummary(rows) {
+  const map = {};
+  for (const r of rows) {
+    const id = r.student_id || r.student_name;
+    if (!map[id]) map[id] = {
+      id, nombre: r.student_name, grupo: "",
+      semanas: new Set(), xp: 0, quiz: 0, ultima: null
+    };
+    const s = map[id];
+    s.semanas.add(r.semana);
+    s.xp    += r.xp || 0;
+    s.quiz  += r.quiz_score || 0;
+    if (!s.ultima || (r.updated_at && r.updated_at > s.ultima)) s.ultima = r.updated_at;
+  }
+  return Object.values(map).map(s => ({
+    ...s,
+    semanas_n: s.semanas.size,
+    pct: Math.round(s.semanas.size / 14 * 100)
+  }));
+}
+
+// ── RENDER STATS ─────────────────────────────────────────────
+function renderStats() {
+  const total = summary.length;
+  const avgXP = total ? Math.round(summary.reduce((s,r)=>s+r.xp,0)/total) : 0;
+  const avgPct= total ? Math.round(summary.reduce((s,r)=>s+r.pct,0)/total) : 0;
+  const week  = new Date(); week.setDate(week.getDate()-7);
+  const activos = summary.filter(s => s.ultima && new Date(s.ultima) > week).length;
+
+  document.getElementById("st-total").textContent  = total;
+  document.getElementById("st-xp").textContent     = avgXP;
+  document.getElementById("st-avance").textContent = avgPct + "%";
+  document.getElementById("st-activos").textContent= activos;
+}
+
+// ── RENDER TABLE ─────────────────────────────────────────────
+let sortField = "xp", sortAsc = false;
+
+function sortBy(field) {
+  sortAsc = (sortField === field) ? !sortAsc : false;
+  sortField = field;
+  renderTable();
+}
+
+function renderTable() {
+  const nameQ  = document.getElementById("filter-name")?.value.toLowerCase() || "";
+  const semQ   = parseInt(document.getElementById("filter-semana")?.value || "0");
+  const sortQ  = document.getElementById("filter-sort")?.value || "xp";
+
+  let data = [...summary];
+
+  if (nameQ) data = data.filter(s => s.nombre.toLowerCase().includes(nameQ));
+  if (semQ)  data = data.filter(s => s.semanas.has(semQ));
+
+  // Sort
+  const field = sortField || sortQ;
+  data.sort((a,b) => {
+    let va, vb;
+    if (field === "nombre") { va = a.nombre; vb = b.nombre; }
+    else if (field === "semanas") { va = a.semanas_n; vb = b.semanas_n; }
+    else if (field === "xp") { va = a.xp; vb = b.xp; }
+    else if (field === "avance") { va = a.pct; vb = b.pct; }
+    else if (field === "ultima") { va = a.ultima||""; vb = b.ultima||""; }
+    else { va = a.xp; vb = b.xp; }
+    if (typeof va === "string") return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+    return sortAsc ? va - vb : vb - va;
+  });
+
+  const tbody = document.getElementById("students-tbody");
+  tbody.innerHTML = "";
+
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:#9e9e9e">Sin datos para mostrar.</td></tr>';
+    return;
+  }
+
+  for (const s of data) {
+    const pctClass = s.pct >= 70 ? "high" : s.pct >= 40 ? "mid" : "low";
+    const fechaStr = s.ultima
+      ? new Date(s.ultima).toLocaleDateString("es-CO",{day:"2-digit",month:"short",year:"2-digit"})
+      : "—";
+
+    tbody.innerHTML += `
+      <tr>
+        <td><strong>${s.nombre}</strong></td>
+        <td>${s.grupo || "—"}</td>
+        <td>${s.semanas_n}<small style="color:#9e9e9e">/14</small></td>
+        <td>
+          <div class="prog-bar" style="margin-bottom:3px">
+            <div class="prog-fill" style="width:${s.pct}%"></div>
+          </div>
+          <span class="pill ${pctClass}">${s.pct}%</span>
+        </td>
+        <td><strong>${s.xp}</strong> XP</td>
+        <td>${s.quiz}</td>
+        <td style="font-size:.78rem;color:#607d8b">${fechaStr}</td>
+      </tr>`;
+  }
+}
+
+// ── HEATMAP ─────────────────────────────────────────────────
+function renderHeatmap() {
+  const countBySemana = {};
+  for (let i=1;i<=14;i++) countBySemana[i]=0;
+  for (const r of allRows) {
+    if (countBySemana[r.semana] !== undefined) countBySemana[r.semana]++;
+  }
+  const maxC = Math.max(...Object.values(countBySemana), 1);
+  const hm   = document.getElementById("heatmap");
+  hm.innerHTML = "";
+
+  for (let i=1; i<=14; i++) {
+    const c   = countBySemana[i];
+    const pct = c / maxC;
+    const r   = Math.round(26 + pct * 57);  // #1E2843 → #2d3a5e
+    const g   = Math.round(35 + pct * 73);
+    const b   = Math.round(126 + pct * 49);
+    const col = document.createElement("div");
+    col.className = "hm-col";
+    col.innerHTML = `
+      <div class="hm-cell" style="background:rgb(${r},${g},${b})" title="${c} estudiantes en S${i}">${c||""}</div>
+      <div class="hm-lbl">S${i}</div>`;
+    hm.appendChild(col);
+  }
+}
+
+// ── EXPORT CSV ───────────────────────────────────────────────
+function exportCSV() {
+  const hdr = ["Estudiante","Semanas","% Avance","XP Total","Quiz Correctas","Última actividad"];
+  const rows = summary.map(s => [
+    `"${s.nombre}"`, s.semanas_n, s.pct + "%", s.xp, s.quiz,
+    s.ultima ? new Date(s.ultima).toLocaleDateString("es-CO") : "—"
+  ]);
+  const csv = [hdr, ...rows].map(r => r.join(",")).join("\n");
+  const a   = document.createElement("a");
+  a.href    = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+  a.download = "tga05_progreso_" + new Date().toISOString().slice(0,10) + ".csv";
+  a.click();
+}
+
+function showError(msg) {
+  const el = document.getElementById("error-msg");
+  el.textContent = "⚠️ " + msg;
+  el.style.display = "block";
+}
+</script>
+</body>
+</html>

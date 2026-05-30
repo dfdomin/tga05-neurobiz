@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía: Git + GitHub Pages + Moodle — TGA05</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:   #1E2843;
+      --navy2:  #2d3a5e;
+      --yellow: #FFDF2D;
+      --bg:     #FAFAFA;
+      --border: #DEDFE4;
+      --gray:   #E9EAED;
+      --green:  #2e7d32;
+      --red:    #c62828;
+      --text:   #212121;
+      --muted:  #546e7a;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+      color: #fff;
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+    }
+    header h1 { font-size: 1.8rem; font-weight: 800; }
+    header p { opacity: .85; margin-top: .4rem; font-size: .95rem; }
+    .badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: .78rem;
+      padding: .2rem .7rem;
+      border-radius: 20px;
+      margin-top: .8rem;
+    }
+
+    /* NAV TABS */
+    .tabs {
+      display: flex;
+      gap: 0;
+      background: var(--navy);
+      overflow-x: auto;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,.7);
+      padding: .85rem 1.5rem;
+      font-family: inherit;
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+    .tab-btn:hover { color: #fff; background: rgba(255,255,255,.08); }
+    .tab-btn.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+
+    /* CONTENT */
+    .container { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* CARDS */
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .card h2 { font-size: 1.15rem; color: var(--navy); margin-bottom: .8rem; display: flex; align-items: center; gap: .5rem; }
+    .card p, .card li { color: #444; margin-bottom: .4rem; }
+    .card ul, .card ol { padding-left: 1.4rem; margin: .5rem 0; }
+    .card li { margin-bottom: .3rem; }
+
+    /* CODE BLOCKS */
+    pre {
+      background: var(--navy);
+      color: #cdd6f4;
+      border-radius: 10px;
+      padding: 1.2rem 1.5rem;
+      overflow-x: auto;
+      font-size: .88rem;
+      line-height: 1.6;
+      margin: .8rem 0;
+      position: relative;
+    }
+    code { font-family: 'Courier New', monospace; }
+    .cmd { color: var(--yellow); }
+    .comment { color: #6c7086; font-style: italic; }
+    .highlight { color: #a6e3a1; }
+
+    /* COPY BUTTON */
+    .copy-btn {
+      position: absolute;
+      top: .6rem;
+      right: .8rem;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      color: #fff;
+      border-radius: 6px;
+      padding: .25rem .7rem;
+      font-size: .75rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .2s;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,.2); }
+    .copy-btn.copied { background: var(--green); border-color: var(--green); }
+
+    /* STEPS */
+    .steps { counter-reset: step; }
+    .step {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+      align-items: flex-start;
+    }
+    .step-num {
+      counter-increment: step;
+      min-width: 2rem;
+      height: 2rem;
+      background: var(--navy);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: .85rem;
+      margin-top: .15rem;
+    }
+    .step-content { flex: 1; }
+    .step-content strong { color: var(--navy); }
+
+    /* COMPARISON TABLE */
+    .compare-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .9rem; }
+    .compare-table th {
+      background: var(--navy);
+      color: #fff;
+      padding: .7rem 1rem;
+      text-align: left;
+    }
+    .compare-table td {
+      padding: .65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .compare-table tr:nth-child(even) td { background: var(--gray); }
+    .compare-table tr.recommended td { background: #e8f5e9; }
+    .tag-rec { background: var(--green); color: #fff; font-size: .72rem; font-weight: 700; padding: .15rem .5rem; border-radius: 10px; margin-left: .4rem; }
+    .tag-no  { background: var(--red);   color: #fff; font-size: .72rem; font-weight: 700; padding: .15rem .5rem; border-radius: 10px; margin-left: .4rem; }
+    .tag-opt { background: #e65100;      color: #fff; font-size: .72rem; font-weight: 700; padding: .15rem .5rem; border-radius: 10px; margin-left: .4rem; }
+
+    /* ALERT BOXES */
+    .alert {
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      margin: .8rem 0;
+      display: flex;
+      gap: .7rem;
+      align-items: flex-start;
+      font-size: .92rem;
+    }
+    .alert-info    { background: #e3f2fd; border-left: 4px solid #1565c0; }
+    .alert-success { background: #e8f5e9; border-left: 4px solid var(--green); }
+    .alert-warn    { background: #fff8e1; border-left: 4px solid #f9a825; }
+    .alert-icon { font-size: 1.2rem; margin-top: .1rem; }
+
+    /* COURSE STRUCTURE */
+    .tab-diagram {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    .tab-pill {
+      background: var(--navy);
+      color: #fff;
+      padding: .5rem 1rem;
+      border-radius: 8px;
+      font-size: .85rem;
+      font-weight: 600;
+      position: relative;
+    }
+    .tab-pill.special { background: var(--yellow); color: var(--navy); }
+    .tab-pill .ra-tag {
+      display: block;
+      font-size: .7rem;
+      opacity: .7;
+      font-weight: 400;
+      margin-top: .1rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,.7);
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .85rem;
+      margin-top: 3rem;
+    }
+    footer strong { color: var(--yellow); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📘 Guía Técnica — TGA05 NeuroBiz</h1>
+  <p>Git · GitHub Pages · Moodle · Estructura del Aula Virtual</p>
+  <span class="badge">Institución Universitaria de Barranquilla — IUB</span>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" onclick="showTab('git')">🔀 Git & GitHub</button>
+  <button class="tab-btn" onclick="showTab('moodle')">🎓 Compartir en Moodle</button>
+  <button class="tab-btn" onclick="showTab('estructura')">🗂 Estructura del Aula</button>
+  <button class="tab-btn" onclick="showTab('checklist')">✅ Checklist Final</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════ GIT ══ -->
+<div id="tab-git" class="tab-panel active">
+<div class="container">
+
+  <div class="card">
+    <h2>🔀 Publicar en GitHub Pages por primera vez</h2>
+    <p>Ejecuta estos comandos <strong>una sola vez</strong> desde la carpeta <code>EstructuraDatos/</code>.</p>
+
+    <p style="margin-top:.8rem;font-weight:700;color:var(--navy)">Paso 1 — Preparar el repositorio local</p>
+    <pre id="code-init"><button class="copy-btn" onclick="copyCode('code-init')">Copiar</button><code><span class="comment"># Ir a la carpeta del proyecto</span>
+<span class="cmd">cd</span> "/Users/diegodomingueztapia/Library/CloudStorage/OneDrive-Unibarranquilla/DiegoIcloud/2026/copilot/EstructuraDatos"
+
+<span class="comment"># Inicializar git (solo la primera vez)</span>
+<span class="cmd">git init</span>
+
+<span class="comment"># Agregar todos los archivos</span>
+<span class="cmd">git add .</span>
+
+<span class="comment"># Primer commit</span>
+<span class="cmd">git commit -m</span> <span class="highlight">"TGA05 NeuroBiz - Material completo con identidad IUB"</span></code></pre>
+
+    <p style="margin-top:1rem;font-weight:700;color:var(--navy)">Paso 2 — Crear repositorio en GitHub y conectar</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">Ve a <a href="https://github.com/new" target="_blank">github.com/new</a> y crea un repositorio llamado <code>tga05-neurobiz</code> (sin README, sin .gitignore)</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">Copia la URL del repositorio: <code>https://github.com/TU_USUARIO/tga05-neurobiz.git</code></div>
+      </div>
+    </div>
+
+    <pre id="code-remote"><button class="copy-btn" onclick="copyCode('code-remote')">Copiar</button><code><span class="comment"># Conectar con GitHub (reemplaza TU_USUARIO)</span>
+<span class="cmd">git remote add origin</span> https://github.com/<span class="highlight">TU_USUARIO</span>/tga05-neurobiz.git
+
+<span class="comment"># Subir al repositorio</span>
+<span class="cmd">git push -u origin main</span></code></pre>
+
+    <p style="margin-top:1rem;font-weight:700;color:var(--navy)">Paso 3 — Activar GitHub Pages</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">En GitHub: <strong>Settings</strong> → <strong>Pages</strong></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">Source: <strong>Deploy from a branch</strong> → Branch: <strong>main</strong> → Folder: <strong>/ (root)</strong> → <strong>Save</strong></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">En ~2 minutos tu sitio estará en: <code>https://TU_USUARIO.github.io/tga05-neurobiz/</code></div>
+      </div>
+    </div>
+
+    <div class="alert alert-warn">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>Antes de subir:</strong> edita <code>js/supabase-config.js</code> con tu URL y clave anon de Supabase (Project Settings → API en supabase.com). La clave anon es pública y segura con RLS activado.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔄 Actualizar el sitio (próximas veces)</h2>
+    <p>Cada vez que modifiques archivos, usa solo esto:</p>
+    <pre id="code-update"><button class="copy-btn" onclick="copyCode('code-update')">Copiar</button><code><span class="cmd">cd</span> "/Users/diegodomingueztapia/Library/CloudStorage/OneDrive-Unibarranquilla/DiegoIcloud/2026/copilot/EstructuraDatos"
+<span class="cmd">git add .</span>
+<span class="cmd">git commit -m</span> <span class="highlight">"Descripción del cambio"</span>
+<span class="cmd">git push</span></code></pre>
+    <div class="alert alert-success">
+      <span class="alert-icon">✅</span>
+      <div>GitHub Pages actualiza automáticamente en ~1 minuto después del push.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Comandos útiles de referencia</h2>
+    <pre id="code-ref"><button class="copy-btn" onclick="copyCode('code-ref')">Copiar</button><code><span class="comment"># Ver estado de archivos modificados</span>
+<span class="cmd">git status</span>
+
+<span class="comment"># Ver historial de commits</span>
+<span class="cmd">git log --oneline</span>
+
+<span class="comment"># Ver qué cambió en un archivo</span>
+<span class="cmd">git diff</span> semana1/index.html
+
+<span class="comment"># Si cometiste un error en el último commit (antes de push)</span>
+<span class="cmd">git commit --amend -m</span> <span class="highlight">"Mensaje corregido"</span></code></pre>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ MOODLE ══ -->
+<div id="tab-moodle" class="tab-panel">
+<div class="container">
+
+  <div class="card">
+    <h2>🎯 ¿Qué opción usar para compartir el material?</h2>
+    <table class="compare-table">
+      <tr>
+        <th>Opción Moodle</th>
+        <th>Resultado</th>
+        <th>Gamificación</th>
+        <th>Progreso en Supabase</th>
+        <th>Veredicto</th>
+      </tr>
+      <tr>
+        <td><strong>📎 File</strong><br><small>Subir el HTML directamente</small></td>
+        <td>Moodle sirve el HTML sin los JS externos. Chart.js, Supabase y Google Fonts se rompen.</td>
+        <td>❌ Se rompe</td>
+        <td>❌ No funciona</td>
+        <td><span class="tag-no">NO</span></td>
+      </tr>
+      <tr class="recommended">
+        <td><strong>🔗 URL</strong><br><small>Enlace a GitHub Pages</small></td>
+        <td>Abre el material completo en el navegador del estudiante con todo funcionando.</td>
+        <td>✅ Completa</td>
+        <td>✅ Funciona</td>
+        <td><span class="tag-rec">RECOMENDADO</span></td>
+      </tr>
+      <tr>
+        <td><strong>⚙️ Activity (SCORM)</strong><br><small>Empaquetado especial</small></td>
+        <td>Permite rastreo nativo en Moodle, pero requiere empaquetar todo en formato SCORM 1.2/2004.</td>
+        <td>✅ Completa</td>
+        <td>⚠️ Redundante con SCORM tracking</td>
+        <td><span class="tag-opt">FUTURO</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>📌 Cómo agregar cada semana como URL en Moodle</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">En tu curso Moodle → <strong>Activar edición</strong> (botón arriba a la derecha)</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">En la pestaña/semana correspondiente → <strong>"Añadir actividad o recurso"</strong></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">Selecciona <strong>URL</strong> en la lista de recursos</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          Configura así:<br>
+          • <strong>Nombre:</strong> <code>📘 Semana 1 – Introducción a Estructuras de Datos</code><br>
+          • <strong>URL externa:</strong> <code>https://TU_USUARIO.github.io/tga05-neurobiz/semana1/</code><br>
+          • <strong>Apariencia → Mostrar:</strong> <em>En nueva ventana</em> (evita problemas con iframe de Moodle)
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">Guardar y repetir para las 14 semanas</div>
+      </div>
+    </div>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">💡</span>
+      <div><strong>Tip:</strong> Usa el mismo ícono en el nombre para diferenciar tipo de contenido: 📘 Material de estudio · 📝 Notas del profesor · 📊 Dashboard.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🗂 URLs completas del proyecto</h2>
+    <p>Una vez en GitHub Pages, tus URLs serán:</p>
+    <pre id="code-urls"><button class="copy-btn" onclick="copyCode('code-urls')">Copiar</button><code><span class="comment"># Landing principal</span>
+https://TU_USUARIO.github.io/tga05-neurobiz/
+
+<span class="comment"># Materiales de estudio (semana 1 a 14)</span>
+https://TU_USUARIO.github.io/tga05-neurobiz/semana1/
+https://TU_USUARIO.github.io/tga05-neurobiz/semana2/
+<span class="comment">... hasta semana14/</span>
+
+<span class="comment"># Dashboard del estudiante (compartir con alumnos)</span>
+https://TU_USUARIO.github.io/tga05-neurobiz/dashboard/
+
+<span class="comment"># Dashboard del docente (solo para ti - PIN: tga05)</span>
+https://TU_USUARIO.github.io/tga05-neurobiz/dashboard/profesor.html</code></pre>
+  </div>
+
+  <div class="card">
+    <h2>✉️ Mensaje sugerido para estudiantes</h2>
+    <div style="background:var(--gray);border-radius:8px;padding:1.2rem;font-size:.9rem;border-left:4px solid var(--navy)">
+      <p>Hola a todos 👋</p><br>
+      <p>El material de estudio de <strong>TGA05 – Estructura de Datos para los Negocios</strong> está disponible en línea. Cada semana encontrarán el enlace aquí en el aula.</p><br>
+      <p>🔑 <strong>Primer ingreso:</strong> Al abrir el material por primera vez, se les pedirá su nombre completo. Esto guarda su progreso automáticamente en la nube (Supabase), así nunca perderán sus puntos de XP ni sus respuestas en quiz.</p><br>
+      <p>📊 <strong>Su dashboard personal:</strong> <a href="#">[URL dashboard]</a> — pueden ver su progreso, XP y badges en cualquier momento.</p><br>
+      <p>¡Mucho éxito! 🚀</p>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ ESTRUCTURA ══ -->
+<div id="tab-estructura" class="tab-panel">
+<div class="container">
+
+  <div class="card">
+    <h2>🗂 Estructura del Aula Virtual — TGA05</h2>
+    <p>El aula está organizada en <strong>modo pestaña</strong>. Cada pestaña representa un Resultado de Aprendizaje (RA). Estructura detectada:</p>
+
+    <div class="tab-diagram">
+      <div class="tab-pill special">🏠 Presentación<span class="ra-tag">Docente + Info del curso</span></div>
+      <div class="tab-pill">📗 RA 1<span class="ra-tag">Semanas 1-3</span></div>
+      <div class="tab-pill">📘 RA 2<span class="ra-tag">Semanas 4-6</span></div>
+      <div class="tab-pill">📙 RA 3<span class="ra-tag">Semanas 7-9</span></div>
+      <div class="tab-pill">📕 RA 4<span class="ra-tag">Semanas 10-12</span></div>
+      <div class="tab-pill">📓 RA 5<span class="ra-tag">Semanas 13-14</span></div>
+    </div>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">ℹ️</span>
+      <div>Esta estructura es inferida. Para confirmar los RAs exactos y cuántas pestañas tienes, comparte el acceso al aula o describe los nombres de cada pestaña.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📐 Cómo alinear los materiales con las pestañas del aula</h2>
+    <p>La estructura del proyecto TGA05 ya está alineada con los 5 RAs del módulo:</p>
+    <table class="compare-table">
+      <tr><th>Pestaña Moodle</th><th>RA</th><th>Semanas del material</th><th>URL en GitHub Pages</th></tr>
+      <tr><td>Presentación</td><td>—</td><td>Landing + Dashboard</td><td><code>/</code> y <code>/dashboard/</code></td></tr>
+      <tr><td>RA 1</td><td>Fundamentos de datos</td><td>Semanas 1, 2, 3</td><td><code>/semana1/</code> – <code>/semana3/</code></td></tr>
+      <tr><td>RA 2</td><td>Estructuras lineales</td><td>Semanas 4, 5, 6</td><td><code>/semana4/</code> – <code>/semana6/</code></td></tr>
+      <tr><td>RA 3</td><td>Estructuras jerárquicas</td><td>Semanas 7, 8, 9</td><td><code>/semana7/</code> – <code>/semana9/</code></td></tr>
+      <tr><td>RA 4</td><td>Análisis con Python/BI</td><td>Semanas 10, 11, 12</td><td><code>/semana10/</code> – <code>/semana12/</code></td></tr>
+      <tr><td>RA 5</td><td>Proyecto NeuroBiz</td><td>Semanas 13, 14</td><td><code>/semana13/</code> – <code>/semana14/</code></td></tr>
+    </table>
+    <div class="alert alert-warn">
+      <span class="alert-icon">📝</span>
+      <div>Si los nombres de las pestañas de tu aula son diferentes, indícamelo para actualizar esta tabla y ajustar los nombres de los materiales HTML.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔐 Para revisar el aula virtual (próxima sesión)</h2>
+    <p>Para que pueda analizar directamente la estructura de tu curso Moodle en <code>aulavirtual.unibarranquilla.edu.co</code>, tienes estas opciones:</p>
+    <ol style="padding-left:1.4rem;margin-top:.5rem">
+      <li style="margin-bottom:.5rem"><strong>Token de API Moodle</strong> (más seguro) — Ve a: Perfil → Preferencias → Seguridad → Tokens de servicios web. Si no aparece esta opción, el administrador debe habilitarla.</li>
+      <li style="margin-bottom:.5rem"><strong>Usuario temporal</strong> — Crea un usuario de prueba con rol Estudiante en el curso.</li>
+      <li style="margin-bottom:.5rem"><strong>Descripción manual</strong> — Comparte capturas o el nombre exacto de cada pestaña/sección.</li>
+    </ol>
+    <div class="alert alert-success">
+      <span class="alert-icon">✅</span>
+      <div>El API REST de Moodle en IUB <strong>sí está activo</strong> (verificado). Con un token puedo leer la estructura completa del curso sin modificar nada.</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════ CHECKLIST ══ -->
+<div id="tab-checklist" class="tab-panel">
+<div class="container">
+
+  <div class="card">
+    <h2>✅ Checklist antes de publicar</h2>
+    <div id="checklist-container"></div>
+  </div>
+
+  <div class="card">
+    <h2>📁 Archivos del proyecto</h2>
+    <pre style="font-size:.82rem"><code>EstructuraDatos/
+├── index.html                    ← Landing GitHub Pages
+├── js/
+│   └── supabase-config.js        ← ⚠️ Llenar URL + clave Supabase
+├── semana1/ → semana14/
+│   ├── index.html                ← Material de estudio (colores IUB ✅)
+│   └── notas_profesor.html       ← Guía docente (colores IUB ✅)
+├── dashboard/
+│   ├── index.html                ← Dashboard estudiante
+│   └── profesor.html             ← Dashboard docente (PIN: tga05)
+└── setup/
+    ├── supabase_schema.sql        ← Ejecutar en Supabase SQL Editor
+    ├── CONFIGURAR_SUPABASE.html   ← Guía visual de configuración
+    └── apply_iub_colors.py        ← Script de colores IUB (ya ejecutado)</code></pre>
+  </div>
+
+</div>
+</div>
+
+<footer>
+  <strong>TGA05 — Estructura de Datos para los Negocios</strong><br>
+  Institución Universitaria de Barranquilla (IUB) · Framework GAME · NeuroBiz S.A.S.
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  function copyCode(id) {
+    const pre = document.getElementById(id);
+    const text = pre.querySelector('code').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = pre.querySelector('.copy-btn');
+      btn.textContent = '✓ Copiado';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  // Checklist dinámica
+  const checkItems = [
+    { group: '⚙️ Supabase', items: [
+      { text: 'Ejecutar <code>setup/supabase_schema.sql</code> en Supabase SQL Editor', id: 'sq1' },
+      { text: 'Llenar <code>js/supabase-config.js</code> con SUPABASE_URL y SUPABASE_KEY', id: 'sq2' },
+      { text: 'Probar conexión desde <code>setup/CONFIGURAR_SUPABASE.html</code>', id: 'sq3' },
+    ]},
+    { group: '🔀 Git & GitHub Pages', items: [
+      { text: 'Crear repositorio en github.com (público, sin README)', id: 'g1' },
+      { text: 'Ejecutar <code>git init && git add . && git commit</code>', id: 'g2' },
+      { text: 'Ejecutar <code>git remote add origin</code> con la URL del repo', id: 'g3' },
+      { text: 'Ejecutar <code>git push -u origin main</code>', id: 'g4' },
+      { text: 'Activar GitHub Pages: Settings → Pages → main → Save', id: 'g5' },
+      { text: 'Verificar que el sitio carga en <code>TU_USUARIO.github.io/tga05-neurobiz/</code>', id: 'g6' },
+    ]},
+    { group: '🎓 Moodle', items: [
+      { text: 'Agregar URL de cada semana como recurso tipo "URL" en la pestaña correspondiente', id: 'm1' },
+      { text: 'Configurar "Abrir en nueva ventana" en cada URL', id: 'm2' },
+      { text: 'Agregar URL del dashboard del estudiante en la pestaña de Presentación', id: 'm3' },
+      { text: 'Probar un enlace como estudiante (modo incógnito)', id: 'm4' },
+    ]},
+    { group: '🔐 Seguridad', items: [
+      { text: 'Cambiar PIN del dashboard de docente (default: <code>tga05</code>)', id: 's1' },
+      { text: 'Verificar que RLS de Supabase esté activo', id: 's2' },
+    ]},
+  ];
+
+  const container = document.getElementById('checklist-container');
+  let html = '';
+  checkItems.forEach(group => {
+    html += `<p style="font-weight:700;color:var(--navy);margin:1rem 0 .5rem;font-size:.95rem">${group.group}</p>`;
+    group.items.forEach(item => {
+      html += `<label style="display:flex;gap:.7rem;align-items:flex-start;margin-bottom:.5rem;cursor:pointer;padding:.4rem .6rem;border-radius:6px;transition:background .15s" onmouseenter="this.style.background='var(--gray)'" onmouseleave="this.style.background='transparent'">
+        <input type="checkbox" id="${item.id}" style="margin-top:.25rem;accent-color:var(--navy);width:16px;height:16px;flex-shrink:0" onchange="updateCheck(this)">
+        <span id="lbl-${item.id}" style="font-size:.9rem">${item.text}</span>
+      </label>`;
+    });
+  });
+  container.innerHTML = html;
+
+  function updateCheck(cb) {
+    const lbl = document.getElementById('lbl-' + cb.id);
+    lbl.style.textDecoration = cb.checked ? 'line-through' : 'none';
+    lbl.style.opacity = cb.checked ? '.5' : '1';
+    // Guardar en localStorage
+    const state = {};
+    document.querySelectorAll('#checklist-container input[type=checkbox]').forEach(i => state[i.id] = i.checked);
+    localStorage.setItem('tga05_checklist', JSON.stringify(state));
+  }
+
+  // Restaurar estado del checklist
+  const saved = JSON.parse(localStorage.getItem('tga05_checklist') || '{}');
+  Object.entries(saved).forEach(([id, checked]) => {
+    const cb = document.getElementById(id);
+    if (cb && checked) { cb.checked = true; updateCheck(cb); }
+  });
+</script>
+</body>
+</html>

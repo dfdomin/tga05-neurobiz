@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Notas del profesor Semana 13 - Árbol Binario de Búsqueda (BST)</title>
+<style>
+:root{
+    --primary:#1b5e20;
+    --secondary:#2e7d32;
+    --gold:      #FFDF2D;
+    --bg:#f3f8f4;
+    --card:#ffffff;
+    --text:#17301a;
+    --muted:#4f6b54;
+    --surface:#eef7ef;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;line-height:1.62;background:linear-gradient(180deg,#eef7ef 0%,#f8fbf8 40%,#edf7ef 100%);color:var(--text)}
+header.hero{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:30px 20px 20px;box-shadow:0 12px 28px rgba(27,94,32,.24)}
+.header-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.4fr .8fr;gap:24px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);padding:8px 14px;border-radius:999px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.hero h1{margin:14px 0 8px;font-size:clamp(1.9rem,4vw,2.8rem)}
+.hero p{margin:0;color:#e8f5e9}
+.hero-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:18px;border-radius:18px}
+.hero-box strong{display:block;font-size:1.08rem;margin-bottom:8px}
+nav.sticky{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);box-shadow:0 8px 18px rgba(15,23,42,.08)}
+nav.sticky .nav-wrap{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;gap:10px;flex-wrap:wrap}
+nav.sticky a{text-decoration:none;color:#1b5e20;font-weight:800;padding:10px 14px;background:#eef7ef;border-radius:999px;border:1px solid #c8e6c9}
+main{max-width:1180px;margin:24px auto;padding:0 20px 48px}
+.card{background:var(--card);border-radius:22px;padding:26px;border-left:7px solid var(--gold);box-shadow:0 18px 38px rgba(15,23,42,.07);margin-bottom:24px}
+.card h2{margin-top:0;color:#1b5e20}
+.card h3{color:#2e7d32}
+.alert{display:inline-block;background:#c8e6c9;color:#1b5e20;padding:10px 16px;border-radius:999px;font-weight:900;margin:10px 0 4px}
+.two-col,.three-col{display:grid;gap:18px}
+.two-col{grid-template-columns:repeat(2,minmax(0,1fr))}
+.three-col{grid-template-columns:repeat(3,minmax(0,1fr))}
+.subcard{background:#f8fbf8;border:1px solid #dcedc8;border-radius:18px;padding:18px}
+.meta-table,.dojo-table,.rubric-table{width:100%;border-collapse:collapse;margin-top:16px;border-radius:16px;overflow:hidden}
+.meta-table th,.meta-table td,.dojo-table th,.dojo-table td,.rubric-table th,.rubric-table td{padding:12px 14px;border:1px solid #dcedc8;vertical-align:top}
+.meta-table th,.dojo-table th,.rubric-table th{background:#e8f5e9;color:#1b5e20;text-align:left}
+.check-list li,.observer-list li{margin-bottom:8px}
+.timeline{display:grid;gap:18px;margin-top:16px}
+.timeline-item{display:grid;grid-template-columns:150px 1fr;gap:14px}
+.timeline-time{background:#e8f5e9;border-radius:16px;padding:14px;font-weight:900;text-align:center;color:#1b5e20}
+.timeline-content{background:#f8fbf8;border:1px solid #dcedc8;border-radius:18px;padding:16px}
+.script{background:#fff8e1;border:1px solid #ffe082;border-radius:14px;padding:14px;margin-top:12px}
+.contingency{background:#fff;border:1px solid #dcedc8;border-radius:18px;padding:18px}
+.quiz-answer{background:#f1f8e9;border:1px solid #aed581;border-radius:14px;padding:12px;margin-top:12px}
+.tag{display:inline-block;background:#e8f5e9;color:#1b5e20;border-radius:999px;padding:6px 10px;font-weight:800;margin:0 8px 8px 0}
+@media (max-width:1024px){.header-grid,.two-col,.three-col,.timeline-item{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class='hero'>
+  <div class='header-grid'>
+    <div class='hero'>
+      <span class='badge'>🟢 USO EXCLUSIVO DOCENTE</span>
+      <h1>Semana 13 · Árbol Binario de Búsqueda (BST)</h1>
+      <p>Escalabilidad para buscar pacientes por ID en NeuroBiz.</p>
+      <div class='alert'>Uso exclusivo docente</div>
+    </div>
+    <aside class='hero-box'>
+      <strong>Meta rápida</strong>
+      <p>Sesión de 240 minutos con secuencia completa GAME, Bloom explícito, puntos ClassDojo, quiz de cierre y articulación permanente con KPI NeuroBiz.</p>
+      <p><strong>Entorno sugerido:</strong> Google Colab o Replit + tablero + equipos de 3 estudiantes.</p>
+    </aside>
+  </div>
+</header>
+<nav class='sticky'>
+  <div class='nav-wrap'>
+    <a href='#meta'>Meta</a>
+    <a href='#checklist'>Checklist</a>
+    <a href='#secuencia'>Secuencia</a>
+    <a href='#dojo'>ClassDojo</a>
+    <a href='#quiz'>Quiz</a>
+    <a href='#hti'>Decisión HTI</a>
+    <a href='#contingencias'>Contingencias</a>
+    <a href='#cierre'>Cierre</a>
+  </div>
+</nav>
+<main>
+  <section id='meta' class='card'>
+    <h2>🎯 Meta de sesión (RA + CE + Bloom)</h2>
+    <table class='meta-table'>
+      <tr><th>Resultado de aprendizaje</th><td>RA3 · Analiza y evalúa estructuras eficientes para búsqueda y escalabilidad.</td></tr>
+      <tr><th>Criterios de evaluación</th><td><span class="tag">CE1: implementa BST funcional</span><span class="tag">CE2: compara eficiencia con evidencia</span><span class="tag">CE3: evalúa balance y escalabilidad</span></td></tr>
+      <tr><th>Nivel Bloom</th><td>Analizar → Evaluar</td></tr>
+      <tr><th>Meta observable</th><td>Al finalizar, el estudiante implementa un BST para pacientes, compara pasos de búsqueda con una lista lineal y evalúa si la estructura está en condiciones de escalar en NeuroBiz.</td></tr>
+    </table>
+  </section>
+
+  <section id='checklist' class='card'>
+    <h2>✅ Checklist pre-clase</h2>
+    <div class='three-col'><div class='subcard'><h3>Pedagógico</h3><ul class='check-list'><li>Preparar analogía entre lista lineal y catálogo creciente.</li><li>Definir ejemplo de 10.000 pacientes para dar sentido al O(log n).</li><li>Planificar pregunta evaluativa sobre balance.</li></ul></div><div class='subcard'><h3>Tecnológico</h3><ul class='check-list'><li>Notebook con clase BST esqueleto.</li><li>Datos de pacientes simulados con ID.</li><li>Tablero o diapositiva para el conteo de pasos.</li></ul></div><div class='subcard'><h3>Materiales</h3><ul class='check-list'><li>Tarjetas con IDs para construir el árbol físico.</li><li>Plantilla de comparación BST vs lista.</li><li>Rúbrica breve de argumentación con evidencia.</li></ul></div></div>
+  </section>
+
+  <section id='secuencia' class='card'>
+    <h2>⏱️ Secuencia minuto a minuto (240 min)</h2>
+    <div class='timeline'><article class='timeline-item'><div class='timeline-time'>0–20</div><div class='timeline-content'><h3>Problema de crecimiento</h3><p>Presentar el escenario de 10.000 pacientes y preguntar cuánto tarda una búsqueda lineal en el peor caso.</p><div class='script'><strong>Guion sugerido:</strong> “La pregunta de hoy es gerencial: cuando NeuroBiz crezca, ¿seguirá sirviendo la misma estructura?”</div></div></article><article class='timeline-item'><div class='timeline-time'>20–45</div><div class='timeline-content'><h3>Construcción física del BST</h3><p>Usar tarjetas con IDs para ubicar menores a la izquierda y mayores a la derecha.</p><div class='script'><strong>Guion sugerido:</strong> “Cada estudiante decide su lugar solo con una pregunta: ¿soy menor o mayor que la raíz?”</div></div></article><article class='timeline-item'><div class='timeline-time'>45–75</div><div class='timeline-content'><h3>Formalización</h3><p>Explicar insertar y buscar. Mostrar cómo una comparación descarta subárboles completos.</p><div class='script'><strong>Guion sugerido:</strong> “El poder del BST está en lo que ya no necesito revisar”.</div></div></article><article class='timeline-item'><div class='timeline-time'>75–110</div><div class='timeline-content'><h3>Codificación guiada</h3><p>Programar insertar y buscar con conteo de pasos. Hacer visible la evidencia en consola.</p><div class='script'><strong>Guion sugerido:</strong> “Si no contamos pasos, no podemos hablar seriamente de eficiencia”.</div></div></article><article class='timeline-item'><div class='timeline-time'>110–125</div><div class='timeline-content'><h3>Pausa y chequeo</h3><p>Break corto mientras el docente revisa si los equipos mantienen la propiedad del BST.</p><div class='script'><strong>Guion sugerido:</strong> “A la vuelta quiero ver cada árbol con orden correcto, no solo código que corre”.</div></div></article><article class='timeline-item'><div class='timeline-time'>125–170</div><div class='timeline-content'><h3>Laboratorio completo</h3><p>Cada equipo implementa inorden y eliminación. Luego ejecuta búsquedas comparativas.</p><div class='script'><strong>Guion sugerido:</strong> “El objetivo no es solo encontrar el paciente; es demostrar por qué esta estructura lo encuentra mejor”.</div></div></article><article class='timeline-item'><div class='timeline-time'>170–200</div><div class='timeline-content'><h3>Evaluación del balance</h3><p>Invitar a observar si el orden de inserción afectó la altura y discutir riesgos del sesgo.</p><div class='script'><strong>Guion sugerido:</strong> “Un BST puede ser bueno en teoría y mediocre en práctica si lo dejamos crecer mal”.</div></div></article><article class='timeline-item'><div class='timeline-time'>200–225</div><div class='timeline-content'><h3>Quizizz y defensa</h3><p>Aplicar quiz y pedir una defensa breve de la estructura ante la junta directiva ficticia.</p><div class='script'><strong>Guion sugerido:</strong> “Hablen como analistas: mencionen pasos, escalabilidad y decisión estratégica”.</div></div></article><article class='timeline-item'><div class='timeline-time'>225–240</div><div class='timeline-content'><h3>Orientación HTI</h3><p>Asignar A a equipos que ya comparan rendimiento y B a quienes siguen consolidando la inserción.</p><div class='script'><strong>Guion sugerido:</strong> “Escenario B es visual, útil y NO BLOQUEA la siguiente clase; no es un castigo, es una ruta de consolidación”.</div></div></article></div>
+  </section>
+
+  <section id='dojo' class='card'>
+    <h2>🏅 Tabla ClassDojo</h2>
+    <table class='dojo-table'>
+      <thead><tr><th>Momento</th><th>Acción observable</th><th>Criterio</th><th>Puntos</th></tr></thead>
+      <tbody><tr><td>Inicio</td><td>Dimensiona el problema de crecimiento</td><td>Comprensión estratégica</td><td>+2</td></tr><tr><td>Modelado</td><td>Respeta orden del BST</td><td>Precisión estructural</td><td>+2</td></tr><tr><td>Laboratorio</td><td>Cuenta pasos y documenta evidencia</td><td>Rigor analítico</td><td>+3</td></tr><tr><td>Evaluación</td><td>Argumenta sobre balance</td><td>Juicio crítico</td><td>+3</td></tr><tr><td>Cierre</td><td>Defiende la estructura ante un caso de negocio</td><td>Comunicación profesional</td><td>+2</td></tr></tbody>
+    </table>
+  </section>
+
+  <section id='quiz' class='card'>
+    <h2>❓ Quiz con respuestas correctas marcadas</h2>
+    <div class='two-col'><div class='subcard'><h3>Pregunta 1</h3><p><strong>¿Qué propiedad define a un BST?</strong></p><ol type='A'><li>Todos los nodos tienen dos hijos.</li><li>A la izquierda quedan claves menores y a la derecha mayores.</li><li>Solo almacena texto.</li><li>Siempre está balanceado.</li></ol><div class='quiz-answer'>✅ Correcta: B. A la izquierda quedan claves menores y a la derecha mayores.<br>Esa regla sostiene la búsqueda eficiente.</div></div><div class='subcard'><h3>Pregunta 2</h3><p><strong>¿Por qué un BST balanceado puede buscar en O(log n)?</strong></p><ol type='A'><li>Porque elimina todos los nodos.</li><li>Porque en cada comparación descarta gran parte del árbol.</li><li>Porque usa una cola oculta.</li><li>Porque evita usar IDs.</li></ol><div class='quiz-answer'>✅ Correcta: B. Porque en cada comparación descarta gran parte del árbol.<br>La búsqueda avanza por una sola rama y reduce espacio de exploración.</div></div><div class='subcard'><h3>Pregunta 3</h3><p><strong>El recorrido inorden en un BST produce…</strong></p><ol type='A'><li>Valores ordenados.</li><li>Valores aleatorios.</li><li>Solo hojas.</li><li>Solo la raíz.</li></ol><div class='quiz-answer'>✅ Correcta: A. Valores ordenados.<br>Visita el subárbol izquierdo, luego la raíz y luego el derecho.</div></div><div class='subcard'><h3>Pregunta 4</h3><p><strong>Si el árbol se sesga demasiado, el riesgo es…</strong></p><ol type='A'><li>Que mejore mágicamente.</li><li>Perder eficiencia y acercarse al comportamiento lineal.</li><li>Que deje de tener nodos.</li><li>Que cambie a pila.</li></ol><div class='quiz-answer'>✅ Correcta: B. Perder eficiencia y acercarse al comportamiento lineal.<br>El desbalance rompe la ventaja esperada de la estructura.</div></div><div class='subcard'><h3>Pregunta 5</h3><p><strong>¿Qué evidencia convence mejor a la junta de NeuroBiz?</strong></p><ol type='A'><li>Solo una definición teórica.</li><li>Una comparación de pasos BST vs lista lineal con datos.</li><li>Un dibujo sin explicación.</li><li>Cambiar el nombre de los nodos.</li></ol><div class='quiz-answer'>✅ Correcta: B. Una comparación de pasos BST vs lista lineal con datos.<br>La decisión gerencial requiere evidencia cuantitativa.</div></div></div>
+  </section>
+
+  <section id='hti' class='card'>
+    <h2>🏠 Cómo elegir Escenario A vs B</h2>
+    <p>Use Escenario A cuando el estudiante ya maneja inserción y búsqueda y está listo para pensar balance. Use Escenario B cuando todavía necesita consolidar el criterio “menor a la izquierda / mayor a la derecha”. Reitere que el Escenario B NO BLOQUEA la clase siguiente.</p>
+  </section>
+
+  <section class='card'>
+    <h2>🎮 Protocolo docente GAME para esta sesión</h2>
+    <div class='two-col'>
+      <div class='subcard'>
+        <h3>Guiar + Articular</h3>
+        <p>Abra la clase recordando que la estructura de datos no es un fin, sino una herramienta para tomar decisiones con impacto operativo. Durante la explicación, verbalice siempre la relación entre la estructura, la operación dominante y un KPI de NeuroBiz. Ese puente explícito ayuda a que el estudiantado no vea el contenido como programación aislada, sino como analítica aplicada a gestión administrativa.</p>
+        <p>Mientras circula por el aula, pida que los equipos nombren la estructura con vocabulario técnico y luego la traduzcan a lenguaje de negocio. Esta doble verbalización fortalece la articulación entre teoría, caso y evidencia observable.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Motivar + Evaluar</h3>
+        <p>Use ClassDojo como retroalimentación visible y no solo como premio final. Entregue puntos en momentos concretos: cuando el equipo detecta un error conceptual, cuando justifica una decisión estructural con evidencia o cuando apoya a otra mesa sin resolverle la tarea. Así la gamificación se convierte en una práctica de cultura académica.</p>
+        <p>En la evaluación de cierre, privilegie la explicación del porqué sobre la repetición mecánica del cómo. Un estudiante que argumenta con claridad la elección de la estructura y la conecta con KPI y proceso de negocio está mostrando un desempeño más sólido que quien solo ejecuta código sin justificarlo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>🧭 Preguntas de andamiaje y errores frecuentes</h2>
+    <div class='two-col'>
+      <div class='subcard'>
+        <h3>Preguntas de andamiaje</h3>
+        <ol class='check-list'><li>¿Qué problema de escalabilidad aparece cuando la base de pacientes crece y seguimos buscando linealmente?</li><li>¿Cómo explicarías a la junta directiva la regla “izquierda menor, derecha mayor” sin usar jerga innecesaria?</li><li>¿Qué evidencia cuantitativa necesitas para afirmar que el BST supera a una lista lineal en este caso?</li><li>Si el orden de inserción sesga el árbol, ¿qué pasa con la promesa de O(log n) y cómo se nota en la práctica?</li><li>¿Por qué el recorrido inorden resulta útil cuando se quiere listar pacientes en orden?</li><li>¿Qué harías en NeuroBiz cuando detectas que el BST ya no está balanceado y empieza a perder eficiencia?</li></ol>
+      </div>
+      <div class='subcard'>
+        <h3>Errores frecuentes a vigilar</h3>
+        <ul class='check-list'><li>Insertar sin respetar la regla de orden y luego intentar corregir el error con búsquedas manuales posteriores.</li><li>Hablar de O(log n) de forma abstracta sin contar pasos reales de búsqueda en ejemplos concretos.</li><li>Asumir que todo BST está balanceado por definición, ignorando el efecto del orden de inserción.</li><li>Confundir el recorrido inorden con la operación de búsqueda y perder el sentido de cada procedimiento.</li><li>Eliminar nodos con dos hijos sin comprender la función del sucesor, generando árboles inconsistentes.</li><li>Quedarse solo en la eficiencia técnica sin traducirla a tiempos de servicio y experiencia del usuario.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>📍 Cortes de evidencia y microintervenciones</h2>
+    <div class='three-col'><div class='subcard'><h3>Min 45</h3><p><strong>Evidencia esperada:</strong> La regla del BST ya puede explicarse con palabras propias y con ejemplo físico de tarjetas.</p><p><strong>Movimiento docente:</strong> Si los estudiantes repiten sin comprender, use un caso con tres valores y pida ubicar cada uno en voz alta.</p></div><div class='subcard'><h3>Min 100</h3><p><strong>Evidencia esperada:</strong> Insertar y buscar funcionan, y el grupo registra cuántos pasos tomó encontrar un paciente.</p><p><strong>Movimiento docente:</strong> Si el conteo de pasos no aparece, detenga la práctica y haga visible que sin medida no hay argumento de eficiencia.</p></div><div class='subcard'><h3>Min 175</h3><p><strong>Evidencia esperada:</strong> Los equipos comparan BST vs lista lineal y ya intuyen si el árbol está sesgado o balanceado.</p><p><strong>Movimiento docente:</strong> Si la comparación es débil, entregue una búsqueda objetivo fija para todos y compare públicamente los pasos.</p></div><div class='subcard'><h3>Min 230</h3><p><strong>Evidencia esperada:</strong> Cada equipo sabe si va a HTI A por balance o HTI B por consolidación de inserción.</p><p><strong>Movimiento docente:</strong> Si percibe frustración, recuerde que la ruta B no bloquea la clase final y sirve para afianzar la lógica básica.</p></div></div>
+    <div class='two-col' style='margin-top:18px;'>
+      <div class='subcard'>
+        <h3>Microintervenciones rápidas</h3>
+        <ul class='check-list'><li><strong>Cuando la regla se rompe:</strong> Pida reconstruir el recorrido de inserción desde la raíz antes de añadir más líneas de código.</li><li><strong>Cuando hablan de eficiencia sin evidencia:</strong> Solicite números concretos: cuántos pasos tomó BST y cuántos la lista en el mismo objetivo.</li><li><strong>Cuando el árbol queda sesgado:</strong> Convierta el problema en oportunidad: muestre que la estructura correcta también necesita buena estrategia de crecimiento.</li><li><strong>Cuando el equipo va muy bien:</strong> Invítelo a justificar una política de rebalanceo para una base mayor a 10.000 pacientes.</li></ul>
+      </div>
+      <div class='subcard'>
+        <h3>Preguntas frecuentes del estudiantado</h3>
+        <ul class='check-list'><li><strong>“¿Siempre voy a encontrar en pocos pasos?”</strong> Solo si el árbol mantiene un balance razonable; si se sesga, la ventaja puede disminuir mucho.</li><li><strong>“¿Por qué listar pacientes ordenados importa?”</strong> Porque facilita reportes, revisión administrativa y control del catálogo sin ordenamientos adicionales.</li><li><strong>“¿El balance hace parte de la evaluación?”</strong> Sí, porque no basta con implementar el BST; también hay que evaluar si sigue siendo eficiente en la práctica.</li><li><strong>“¿Qué convence más a la junta?”</strong> Una demostración con conteo de pasos y una lectura clara del impacto en tiempos de servicio.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>📝 Matriz rápida de observación docente</h2>
+    <table class='rubric-table'>
+      <thead><tr><th>Aspecto</th><th>Evidencia a recoger</th><th>Si no aparece, intervención sugerida</th></tr></thead>
+      <tbody><tr><td>Regla de orden</td><td>Cada inserción respeta menor a la izquierda y mayor a la derecha.</td><td>Volver a una simulación física con pocos valores antes de continuar el código.</td></tr><tr><td>Evidencia de búsqueda</td><td>El estudiante cuenta pasos y compara con una lista lineal.</td><td>Pedir una tabla mínima de dos columnas: BST y lista.</td></tr><tr><td>Comprensión de inorden</td><td>Sabe explicar por qué la salida queda ordenada.</td><td>Hacer leer el recorrido desde el dibujo antes de ejecutar.</td></tr><tr><td>Balance</td><td>Reconoce cuándo el árbol se sesga y qué consecuencia tiene.</td><td>Mostrar un ejemplo extremo de inserción ordenada y discutirlo.</td></tr><tr><td>Transferencia gerencial</td><td>Traduce eficiencia a impacto en escalabilidad y servicio.</td><td>Formular la pregunta: “¿qué cambia para NeuroBiz si esto pasa de 100 a 10.000 pacientes?”</td></tr></tbody>
+    </table>
+  </section>
+ 
+  <section class='card'>
+    <h2>📚 Registro posclase y transferencia docente</h2>
+    <div class='three-col'>
+      <div class='subcard'>
+        <h3>Qué registrar al terminar</h3>
+        <p>Anote tres datos mínimos: qué estructura quedó consolidada, qué error persistente apareció y qué evidencia mostró transferencia al caso NeuroBiz. Ese registro breve ayuda a decidir si la siguiente sesión debe abrir con reactivación conceptual, con práctica guiada o con análisis de resultados. Evite registrar solo “les fue bien / mal”; documente qué operación concreta dominan y cuál aún requiere andamiaje.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Qué comunicar al grupo</h3>
+        <p>Cierre devolviendo una fortaleza observable y una mejora alcanzable. La retroalimentación más útil no es genérica, sino situada: “su estructura funciona, pero aún no está argumentada con KPI” o “la idea es correcta, pero deben verbalizar mejor la decisión de negocio”. Así la evaluación mantiene foco formativo y orienta el siguiente paso.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Cómo transferir al programa</h3>
+        <p>Conecte la sesión con escenarios de gestión administrativa: trazabilidad de procesos, asignación de recursos, consulta eficiente de registros, organización de historiales y soporte a decisiones. Esta explicitación final evita que el módulo se perciba como ajeno al campo profesional y fortalece la pertinencia curricular del TGA05.</p>
+      </div>
+    </div>
+    <div class='subcard' style='margin-top:18px;'>
+      <h3>Bibliografía docente de apoyo</h3>
+      <p>Use estas referencias para sostener explicaciones, ejemplos y justificaciones pedagógicas durante el módulo.</p>
+      <p>Recomendación operativa: al terminar la clase, marque en su planeador qué decisión curricular tomará la semana siguiente con base en la evidencia recogida: reactivar, profundizar, diferenciar o cerrar. Esa nota de transición fortalece la continuidad del módulo y evita que cada sesión se perciba como un evento aislado.</p>
+      <ol><li>Cairó Battistutti, O. & Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li><li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill. ISBN: 9786071508188.</li><li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li><li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li><li>Google Colaboratory. (2024). https://colab.research.google.com</li><li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial. ISBN: 9788499640884.</li></ol>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>🧠 Nota neurodivergencia (máx. 1 min)</h2>
+    <p>Verbalice siempre la regla del BST con frases cortas y repetibles. La consistencia verbal ayuda a fijar la lógica de decisión y evita sobrecarga por instrucciones largas.</p>
+  </section>
+
+  <section id='contingencias' class='card'>
+    <h2>🚨 Contingencias</h2>
+    <div class='three-col'><article class='contingency'><h3>Árbol muy sesgado en todos los equipos</h3><p>Aproveche el error como caso didáctico para mostrar por qué el balance importa.</p></article><article class='contingency'><h3>Poco tiempo para eliminación</h3><p>Mantenga eliminación como demostración docente y concentre evidencia estudiantil en insertar, buscar e inorden.</p></article><article class='contingency'><h3>Dificultad con O(log n)</h3><p>Use tabla simple de comparaciones estimadas para 10, 100 y 10.000 registros.</p></article></div>
+  </section>
+
+  <section id='cierre' class='card'>
+    <h2>📌 Indicadores de observación + cierre</h2>
+    <div class='two-col'>
+      <div class='subcard'><h3>Indicadores</h3><ul class='observer-list'><li>Mantiene la propiedad del BST.</li><li>Cuenta pasos de búsqueda con rigor.</li><li>Compara con lista lineal usando evidencia.</li><li>Evalúa el balance como factor de calidad.</li></ul></div>
+      <div class='subcard'><h3>Orientación de cierre</h3><p>Cierre con una pregunta de transferencia: “si NeuroBiz triplica su base de pacientes, ¿qué pasaría si seguimos buscando linealmente?”. Espere una respuesta que hable de pasos, tiempos y escalabilidad.</p></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

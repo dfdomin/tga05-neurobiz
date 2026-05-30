@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Notas del profesor Semana 10 - Listas Enlazadas Circulares</title>
+<style>
+:root{
+    --primary:#1b5e20;
+    --secondary:#2e7d32;
+    --gold:      #FFDF2D;
+    --bg:#f3f8f4;
+    --card:#ffffff;
+    --text:#17301a;
+    --muted:#4f6b54;
+    --surface:#eef7ef;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;line-height:1.62;background:linear-gradient(180deg,#eef7ef 0%,#f8fbf8 40%,#edf7ef 100%);color:var(--text)}
+header.hero{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:30px 20px 20px;box-shadow:0 12px 28px rgba(27,94,32,.24)}
+.header-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.4fr .8fr;gap:24px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);padding:8px 14px;border-radius:999px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.hero h1{margin:14px 0 8px;font-size:clamp(1.9rem,4vw,2.8rem)}
+.hero p{margin:0;color:#e8f5e9}
+.hero-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:18px;border-radius:18px}
+.hero-box strong{display:block;font-size:1.08rem;margin-bottom:8px}
+nav.sticky{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);box-shadow:0 8px 18px rgba(15,23,42,.08)}
+nav.sticky .nav-wrap{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;gap:10px;flex-wrap:wrap}
+nav.sticky a{text-decoration:none;color:#1b5e20;font-weight:800;padding:10px 14px;background:#eef7ef;border-radius:999px;border:1px solid #c8e6c9}
+main{max-width:1180px;margin:24px auto;padding:0 20px 48px}
+.card{background:var(--card);border-radius:22px;padding:26px;border-left:7px solid var(--gold);box-shadow:0 18px 38px rgba(15,23,42,.07);margin-bottom:24px}
+.card h2{margin-top:0;color:#1b5e20}
+.card h3{color:#2e7d32}
+.alert{display:inline-block;background:#c8e6c9;color:#1b5e20;padding:10px 16px;border-radius:999px;font-weight:900;margin:10px 0 4px}
+.two-col,.three-col{display:grid;gap:18px}
+.two-col{grid-template-columns:repeat(2,minmax(0,1fr))}
+.three-col{grid-template-columns:repeat(3,minmax(0,1fr))}
+.subcard{background:#f8fbf8;border:1px solid #dcedc8;border-radius:18px;padding:18px}
+.meta-table,.dojo-table,.rubric-table{width:100%;border-collapse:collapse;margin-top:16px;border-radius:16px;overflow:hidden}
+.meta-table th,.meta-table td,.dojo-table th,.dojo-table td,.rubric-table th,.rubric-table td{padding:12px 14px;border:1px solid #dcedc8;vertical-align:top}
+.meta-table th,.dojo-table th,.rubric-table th{background:#e8f5e9;color:#1b5e20;text-align:left}
+.check-list li,.observer-list li{margin-bottom:8px}
+.timeline{display:grid;gap:18px;margin-top:16px}
+.timeline-item{display:grid;grid-template-columns:150px 1fr;gap:14px}
+.timeline-time{background:#e8f5e9;border-radius:16px;padding:14px;font-weight:900;text-align:center;color:#1b5e20}
+.timeline-content{background:#f8fbf8;border:1px solid #dcedc8;border-radius:18px;padding:16px}
+.script{background:#fff8e1;border:1px solid #ffe082;border-radius:14px;padding:14px;margin-top:12px}
+.contingency{background:#fff;border:1px solid #dcedc8;border-radius:18px;padding:18px}
+.quiz-answer{background:#f1f8e9;border:1px solid #aed581;border-radius:14px;padding:12px;margin-top:12px}
+.tag{display:inline-block;background:#e8f5e9;color:#1b5e20;border-radius:999px;padding:6px 10px;font-weight:800;margin:0 8px 8px 0}
+@media (max-width:1024px){.header-grid,.two-col,.three-col,.timeline-item{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class='hero'>
+  <div class='header-grid'>
+    <div class='hero'>
+      <span class='badge'>🟢 USO EXCLUSIVO DOCENTE</span>
+      <h1>Semana 10 · Listas Enlazadas Circulares</h1>
+      <p>Round Robin justo para la rotación de terapeutas disponibles en NeuroBiz.</p>
+      <div class='alert'>Uso exclusivo docente</div>
+    </div>
+    <aside class='hero-box'>
+      <strong>Meta rápida</strong>
+      <p>Sesión de 240 minutos con secuencia completa GAME, Bloom explícito, puntos ClassDojo, quiz de cierre y articulación permanente con KPI NeuroBiz.</p>
+      <p><strong>Entorno sugerido:</strong> Google Colab o Replit + tablero + equipos de 3 estudiantes.</p>
+    </aside>
+  </div>
+</header>
+<nav class='sticky'>
+  <div class='nav-wrap'>
+    <a href='#meta'>Meta</a>
+    <a href='#checklist'>Checklist</a>
+    <a href='#secuencia'>Secuencia</a>
+    <a href='#dojo'>ClassDojo</a>
+    <a href='#quiz'>Quiz</a>
+    <a href='#hti'>Decisión HTI</a>
+    <a href='#contingencias'>Contingencias</a>
+    <a href='#cierre'>Cierre</a>
+  </div>
+</nav>
+<main>
+  <section id='meta' class='card'>
+    <h2>🎯 Meta de sesión (RA + CE + Bloom)</h2>
+    <table class='meta-table'>
+      <tr><th>Resultado de aprendizaje</th><td>RA2 · Implementa y justifica estructuras lineales según el flujo del dato.</td></tr>
+      <tr><th>Criterios de evaluación</th><td><span class="tag">CE1: implementa una lista circular funcional</span><span class="tag">CE2: analiza equidad de asignación</span><span class="tag">CE3: comunica evidencia con KPI</span></td></tr>
+      <tr><th>Nivel Bloom</th><td>Aplicar → Analizar</td></tr>
+      <tr><th>Meta observable</th><td>Al finalizar, cada equipo implementa un Round Robin funcional, demuestra inserción/eliminación/recorrido y analiza si la distribución de terapeutas es equitativa para la operación de NeuroBiz.</td></tr>
+    </table>
+  </section>
+
+  <section id='checklist' class='card'>
+    <h2>✅ Checklist pre-clase</h2>
+    <div class='three-col'><div class='subcard'><h3>Pedagógico</h3><ul class='check-list'><li>Llevar ejemplo inicial de sobrecarga de agenda en NeuroBiz.</li><li>Preparar pregunta detonadora: ¿qué pasa después del último terapeuta?</li><li>Definir verbalmente el verbo Bloom visible: implementar y analizar.</li></ul></div><div class='subcard'><h3>Tecnológico</h3><ul class='check-list'><li>Tener abierto Colab/Replit con un notebook base.</li><li>Verificar proyector, internet y batería de al menos un equipo por mesa.</li><li>Disponer de archivo o diapositiva con los seis KPI del caso.</li></ul></div><div class='subcard'><h3>Materiales</h3><ul class='check-list'><li>Tarjetas para dibujar nodos y flechas.</li><li>Marcadores de dos colores para distinguir cabeza y actual.</li><li>Rúbrica corta de observación del laboratorio.</li></ul></div></div>
+  </section>
+
+  <section id='secuencia' class='card'>
+    <h2>⏱️ Secuencia minuto a minuto (240 min)</h2>
+    <div class='timeline'><article class='timeline-item'><div class='timeline-time'>0–15</div><div class='timeline-content'><h3>Apertura de misión</h3><p>Presentar el problema de sobrecarga y mostrar cómo la continuidad de la agenda impacta sesiones_fallidas y tasa_retencion.</p><div class='script'><strong>Guion sugerido:</strong> “Hoy no programamos por programar: vamos a diseñar una rotación justa para que ningún terapeuta cargue más pacientes que otro sin razón clínica”.</div></div></article><article class='timeline-item'><div class='timeline-time'>15–35</div><div class='timeline-content'><h3>Activación diagnóstica</h3><p>En tablero, dibujar una lista simple y pedir al grupo que explique qué ocurre al llegar al último terapeuta.</p><div class='script'><strong>Guion sugerido:</strong> “Si el último nodo queda en nulo, ¿quién atiende al siguiente paciente? Quiero la respuesta en lenguaje de negocio y luego en lenguaje de estructura”.</div></div></article><article class='timeline-item'><div class='timeline-time'>35–60</div><div class='timeline-content'><h3>Modelado guiado</h3><p>Construir la idea de circularidad, explicar cabeza, puntero actual y condición de parada por retorno al inicio.</p><div class='script'><strong>Guion sugerido:</strong> “Repitan conmigo: en una lista circular no paro en nulo, paro cuando vuelvo a la cabeza”.</div></div></article><article class='timeline-item'><div class='timeline-time'>60–90</div><div class='timeline-content'><h3>Microdemostración docente</h3><p>Codificar insertar y recorrer. Detenerse en el caso especial de la primera inserción y pedir predicción del resultado.</p><div class='script'><strong>Guion sugerido:</strong> “Antes de ejecutar, levanten la mano: ¿quién cree que el nuevo nodo debe apuntarse a sí mismo en el arranque?”</div></div></article><article class='timeline-item'><div class='timeline-time'>90–105</div><div class='timeline-content'><h3>Pausa activa breve</h3><p>Descanso corto con verificación de avances por mesas y microfeedback individual.</p><div class='script'><strong>Guion sugerido:</strong> “Pausa de 5 minutos; al volver necesito ver en cada equipo el diagrama de cabeza y retorno”.</div></div></article><article class='timeline-item'><div class='timeline-time'>105–150</div><div class='timeline-content'><h3>Laboratorio de equipos</h3><p>Cada grupo implementa asignar_turno y simula 8 pacientes. El docente circula corrigiendo errores de recorrido infinito.</p><div class='script'><strong>Guion sugerido:</strong> “Si el programa no termina, no borren todo: busquen primero la condición de salida del ciclo”.</div></div></article><article class='timeline-item'><div class='timeline-time'>150–185</div><div class='timeline-content'><h3>Análisis de desproporción</h3><p>Solicitar el conteo por terapeuta y conectar el resultado con reconocimiento_patrones.</p><div class='script'><strong>Guion sugerido:</strong> “No me digan solo el resultado; díganme qué decisión tomaría la coordinación clínica con ese conteo”.</div></div></article><article class='timeline-item'><div class='timeline-time'>185–220</div><div class='timeline-content'><h3>Socialización y Quizizz</h3><p>Dos equipos muestran su solución. Luego todo el curso responde las 5 preguntas formativas.</p><div class='script'><strong>Guion sugerido:</strong> “Escuchen la demo del otro equipo y detecten una fortaleza de estructura y una alerta de negocio”.</div></div></article><article class='timeline-item'><div class='timeline-time'>220–240</div><div class='timeline-content'><h3>Cierre y HTI</h3><p>Asignar Escenario A o B según desempeño y disponibilidad. Reforzar que el escenario B no bloquea la clase siguiente.</p><div class='script'><strong>Guion sugerido:</strong> “Si ya implementaste y analizaste, vas a Escenario A. Si aún consolidas el concepto, Escenario B te ayuda sin bloquear tu continuidad”.</div></div></article></div>
+  </section>
+
+  <section id='dojo' class='card'>
+    <h2>🏅 Tabla ClassDojo</h2>
+    <table class='dojo-table'>
+      <thead><tr><th>Momento</th><th>Acción observable</th><th>Criterio</th><th>Puntos</th></tr></thead>
+      <tbody><tr><td>Inicio</td><td>Relaciona el problema de agenda con la necesidad de circularidad</td><td>Comprensión del contexto</td><td>+2</td></tr><tr><td>Conceptualización</td><td>Explica correctamente cabeza/retorno al inicio</td><td>Precisión conceptual</td><td>+2</td></tr><tr><td>Laboratorio</td><td>Implementa funciones sin romper la estructura</td><td>Dominio procedimental</td><td>+3</td></tr><tr><td>Análisis</td><td>Detecta inequidad con evidencia</td><td>Pensamiento analítico</td><td>+3</td></tr><tr><td>Cierre</td><td>Comunica una mejora operativa viable</td><td>Transferencia al negocio</td><td>+2</td></tr></tbody>
+    </table>
+  </section>
+
+  <section id='quiz' class='card'>
+    <h2>❓ Quiz con respuestas correctas marcadas</h2>
+    <div class='two-col'><div class='subcard'><h3>Pregunta 1</h3><p><strong>¿Qué diferencia estructural define a una lista enlazada circular?</strong></p><ol type='A'><li>El nodo inicial no tiene dato.</li><li>El último nodo apunta nuevamente al primero.</li><li>Cada nodo tiene dos punteros.</li><li>Todos los nodos guardan índices numéricos.</li></ol><div class='quiz-answer'>✅ Correcta: B. El último nodo apunta nuevamente al primero.<br>Ese enlace cierra el ciclo y elimina el final nulo.</div></div><div class='subcard'><h3>Pregunta 2</h3><p><strong>En NeuroBiz, ¿por qué una lista circular encaja con Round Robin?</strong></p><ol type='A'><li>Porque ordena por tamaño de archivo.</li><li>Porque permite recorrer terapeutas en secuencia continua y volver al primero automáticamente.</li><li>Porque garantiza búsquedas binarias.</li><li>Porque reemplaza el uso de KPI.</li></ol><div class='quiz-answer'>✅ Correcta: B. Porque permite recorrer terapeutas en secuencia continua y volver al primero automáticamente.<br>La continuidad del ciclo es la base de la asignación equitativa.</div></div><div class='subcard'><h3>Pregunta 3</h3><p><strong>¿Cuál es el riesgo principal al programar el recorrido de una lista circular?</strong></p><ol type='A'><li>Olvidar crear la clase.</li><li>Usar una tupla.</li><li>Entrar en un ciclo infinito si no se define bien la condición de parada.</li><li>No poder insertar datos.</li></ol><div class='quiz-answer'>✅ Correcta: C. Entrar en un ciclo infinito si no se define bien la condición de parada.<br>La parada correcta ocurre al volver a la cabeza.</div></div><div class='subcard'><h3>Pregunta 4</h3><p><strong>Si un terapeuta recibe 5 pacientes y otro 2 en el mismo lote, el analista debería…</strong></p><ol type='A'><li>Ignorarlo porque la estructura circular siempre es perfecta.</li><li>Reportar una posible desproporción y revisar reglas de asignación.</li><li>Eliminar la lista circular.</li><li>Cambiar los KPI por texto libre.</li></ol><div class='quiz-answer'>✅ Correcta: B. Reportar una posible desproporción y revisar reglas de asignación.<br>La estructura apoya la decisión, pero la operación debe auditarse con evidencia.</div></div><div class='subcard'><h3>Pregunta 5</h3><p><strong>Bloom en esta semana pasa de aplicar a analizar porque el estudiante…</strong></p><ol type='A'><li>Solo copia código.</li><li>Implementa y luego interpreta el comportamiento de la asignación.</li><li>Evita usar datos.</li><li>Memoriza definiciones sin ejemplos.</li></ol><div class='quiz-answer'>✅ Correcta: B. Implementa y luego interpreta el comportamiento de la asignación.<br>La segunda parte exige lectura crítica del resultado.</div></div></div>
+  </section>
+
+  <section id='hti' class='card'>
+    <h2>🏠 Cómo elegir Escenario A vs B</h2>
+    <p>Asigne Escenario A a estudiantes que terminaron la simulación y ya argumentan con KPI. Use Escenario B cuando aún requieren consolidar visualmente la circularidad o cuando la carga externa del estudiante sugiera una tarea breve. Recuérdeles que el Escenario B NO BLOQUEA la clase siguiente.</p>
+  </section>
+
+  <section class='card'>
+    <h2>🎮 Protocolo docente GAME para esta sesión</h2>
+    <div class='two-col'>
+      <div class='subcard'>
+        <h3>Guiar + Articular</h3>
+        <p>Abra la clase recordando que la estructura de datos no es un fin, sino una herramienta para tomar decisiones con impacto operativo. Durante la explicación, verbalice siempre la relación entre la estructura, la operación dominante y un KPI de NeuroBiz. Ese puente explícito ayuda a que el estudiantado no vea el contenido como programación aislada, sino como analítica aplicada a gestión administrativa.</p>
+        <p>Mientras circula por el aula, pida que los equipos nombren la estructura con vocabulario técnico y luego la traduzcan a lenguaje de negocio. Esta doble verbalización fortalece la articulación entre teoría, caso y evidencia observable.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Motivar + Evaluar</h3>
+        <p>Use ClassDojo como retroalimentación visible y no solo como premio final. Entregue puntos en momentos concretos: cuando el equipo detecta un error conceptual, cuando justifica una decisión estructural con evidencia o cuando apoya a otra mesa sin resolverle la tarea. Así la gamificación se convierte en una práctica de cultura académica.</p>
+        <p>En la evaluación de cierre, privilegie la explicación del porqué sobre la repetición mecánica del cómo. Un estudiante que argumenta con claridad la elección de la estructura y la conecta con KPI y proceso de negocio está mostrando un desempeño más sólido que quien solo ejecuta código sin justificarlo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>🧭 Preguntas de andamiaje y errores frecuentes</h2>
+    <div class='two-col'>
+      <div class='subcard'>
+        <h3>Preguntas de andamiaje</h3>
+        <ol class='check-list'><li>¿Qué problema real de agenda se resuelve cuando el último terapeuta vuelve a enlazar con el primero y cómo se vería ese beneficio en sesiones_fallidas?</li><li>¿En qué momento exacto debe detenerse el recorrido circular para no duplicar la asignación y qué evidencia les confirma que lo hicieron bien?</li><li>Si hoy un terapeuta sale de la rotación por incapacidad, ¿qué enlace deben ajustar y qué impacto operativo tendría no hacerlo correctamente?</li><li>¿Cómo demostrarían a coordinación clínica que la distribución fue equitativa sin limitarse a decir “el programa corrió bien”?</li><li>¿Qué diferencia conceptual existe entre reiniciar manualmente una lista simple y dejar que la estructura circular modele el proceso continuo por sí misma?</li><li>¿Qué KPI del caso usarían primero para argumentar que el Round Robin está aportando valor al servicio y por qué ese indicador resulta convincente?</li></ol>
+      </div>
+      <div class='subcard'>
+        <h3>Errores frecuentes a vigilar</h3>
+        <ul class='check-list'><li>Confundir lista circular con lista simple y dejar el último nodo en None, lo que rompe la continuidad y obliga a reinicios manuales fuera de la estructura.</li><li>Recorrer con while actual is not None, provocando ciclos infinitos porque en una lista circular la condición de parada no es nulo sino el retorno a cabeza.</li><li>Eliminar la cabeza sin actualizar el enlace del último nodo, lo que genera una estructura inconsistente y asignaciones fantasma.</li><li>Interpretar equidad solo desde la intuición sin contar asignaciones por terapeuta y sin contrastarlas con un criterio observable.</li><li>Pensar que cualquier diferencia de carga invalida la estructura, sin considerar ausencias, filtros clínicos o reglas de negocio excepcionales.</li><li>Reducir la actividad a sintaxis Python y olvidar que el objetivo es justificar una decisión operativa para NeuroBiz.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>📍 Cortes de evidencia y microintervenciones</h2>
+    <div class='three-col'><div class='subcard'><h3>Min 45</h3><p><strong>Evidencia esperada:</strong> Cada equipo dibujó la circularidad, identificó cabeza y formuló verbalmente la condición de parada.</p><p><strong>Movimiento docente:</strong> Si el dibujo todavía termina en nulo, detenga al equipo y reconstruya la idea de retorno al inicio antes de abrir Colab.</p></div><div class='subcard'><h3>Min 95</h3><p><strong>Evidencia esperada:</strong> La clase ListaCircular ya inserta y recorre sin error visible; al menos un estudiante puede explicar el caso especial del primer nodo.</p><p><strong>Movimiento docente:</strong> Si solo una persona entiende la lógica, pida que otro integrante explique el mismo fragmento antes de continuar.</p></div><div class='subcard'><h3>Min 160</h3><p><strong>Evidencia esperada:</strong> Existe un conteo preliminar de asignaciones por terapeuta y una interpretación asociada a equidad o sobrecarga.</p><p><strong>Movimiento docente:</strong> Si hay conteo pero no lectura, haga la pregunta puente: “¿qué decisión tomaría la coordinación con este dato?”.</p></div><div class='subcard'><h3>Min 230</h3><p><strong>Evidencia esperada:</strong> El grupo sabe qué HTI le corresponde y puede explicar por qué la actividad B no bloquea la continuidad académica.</p><p><strong>Movimiento docente:</strong> Si persiste confusión, cierre con una instrucción única visible en tablero y una confirmación oral por mesas.</p></div></div>
+    <div class='two-col' style='margin-top:18px;'>
+      <div class='subcard'>
+        <h3>Microintervenciones rápidas</h3>
+        <ul class='check-list'><li><strong>Cuando detecta el ciclo infinito:</strong> No corrija de inmediato la línea exacta; primero pida al equipo que verbalice dónde esperaba detenerse el recorrido y por qué no ocurrió.</li><li><strong>Cuando la solución funciona:</strong> Solicite una segunda capa de evidencia: cuántos pacientes atendió cada terapeuta y qué implicación tiene para la distribución de carga.</li><li><strong>Cuando hay sobrecarga en un terapeuta:</strong> Oriente la lectura hacia reglas del negocio: ausencia, exclusión clínica, error de inserción o mala actualización del puntero actual.</li><li><strong>Cuando el equipo termina temprano:</strong> Pídales extender el caso con un terapeuta ausente o con una lista de espera más grande para comprobar robustez.</li></ul>
+      </div>
+      <div class='subcard'>
+        <h3>Preguntas frecuentes del estudiantado</h3>
+        <ul class='check-list'><li><strong>“¿Profe, por qué no basta con volver a empezar la lista manualmente?”</strong> Porque esa lógica queda fuera de la estructura y aumenta el riesgo de errores; la circularidad incorpora la continuidad como parte del modelo.</li><li><strong>“¿Cómo sé si el recorrido está bien hecho?”</strong> Si cada terapeuta aparece una sola vez en un ciclo completo y el algoritmo se detiene justo al regresar a cabeza, la lógica básica está controlada.</li><li><strong>“¿La equidad siempre significa el mismo número exacto?”</strong> No necesariamente; en operaciones reales puede haber restricciones clínicas, pero la diferencia debe ser explicable y auditable.</li><li><strong>“¿Qué valora más en la evidencia?”</strong> Que el equipo conecte estructura, salida de Python y decisión operativa; no solo que entregue código largo o adornado.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>📝 Matriz rápida de observación docente</h2>
+    <table class='rubric-table'>
+      <thead><tr><th>Aspecto</th><th>Evidencia a recoger</th><th>Si no aparece, intervención sugerida</th></tr></thead>
+      <tbody><tr><td>Comprensión de circularidad</td><td>Dibujo o explicación donde el último nodo enlaza con la cabeza y el grupo sabe explicarlo en lenguaje técnico y de negocio.</td><td>Volver a un ejemplo físico con tarjetas y pedir que nombren el siguiente terapeuta después del último sin usar todavía código.</td></tr><tr><td>Dominio de operaciones</td><td>Inserción, eliminación y recorrido funcionan al menos en un caso de prueba sencillo.</td><td>Reducir el problema a dos o tres nodos y reconstruir la operación antes de reescalar al caso completo.</td></tr><tr><td>Lectura de datos</td><td>El equipo produce un conteo por terapeuta y lo interpreta como evidencia de equidad o alerta.</td><td>Entregar una plantilla corta de conteo y pedir una frase de decisión con un KPI explícito.</td></tr><tr><td>Trabajo colaborativo</td><td>Más de un integrante puede explicar el algoritmo y cada rol participa activamente.</td><td>Rotar roles durante 5 minutos: narrador, digitador, verificador del KPI.</td></tr><tr><td>Transferencia al caso</td><td>La solución se argumenta como respuesta a la agenda de NeuroBiz y no como ejercicio abstracto.</td><td>Cerrar con la pregunta: “¿qué problema del servicio resuelve esto mañana mismo?”</td></tr></tbody>
+    </table>
+  </section>
+ 
+  <section class='card'>
+    <h2>📚 Registro posclase y transferencia docente</h2>
+    <div class='three-col'>
+      <div class='subcard'>
+        <h3>Qué registrar al terminar</h3>
+        <p>Anote tres datos mínimos: qué estructura quedó consolidada, qué error persistente apareció y qué evidencia mostró transferencia al caso NeuroBiz. Ese registro breve ayuda a decidir si la siguiente sesión debe abrir con reactivación conceptual, con práctica guiada o con análisis de resultados. Evite registrar solo “les fue bien / mal”; documente qué operación concreta dominan y cuál aún requiere andamiaje.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Qué comunicar al grupo</h3>
+        <p>Cierre devolviendo una fortaleza observable y una mejora alcanzable. La retroalimentación más útil no es genérica, sino situada: “su estructura funciona, pero aún no está argumentada con KPI” o “la idea es correcta, pero deben verbalizar mejor la decisión de negocio”. Así la evaluación mantiene foco formativo y orienta el siguiente paso.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Cómo transferir al programa</h3>
+        <p>Conecte la sesión con escenarios de gestión administrativa: trazabilidad de procesos, asignación de recursos, consulta eficiente de registros, organización de historiales y soporte a decisiones. Esta explicitación final evita que el módulo se perciba como ajeno al campo profesional y fortalece la pertinencia curricular del TGA05.</p>
+      </div>
+    </div>
+    <div class='subcard' style='margin-top:18px;'>
+      <h3>Bibliografía docente de apoyo</h3>
+      <p>Use estas referencias para sostener explicaciones, ejemplos y justificaciones pedagógicas durante el módulo.</p>
+      <p>Recomendación operativa: al terminar la clase, marque en su planeador qué decisión curricular tomará la semana siguiente con base en la evidencia recogida: reactivar, profundizar, diferenciar o cerrar. Esa nota de transición fortalece la continuidad del módulo y evita que cada sesión se perciba como un evento aislado.</p>
+      <ol><li>Cairó Battistutti, O. & Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li><li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill. ISBN: 9786071508188.</li><li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li><li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li><li>Google Colaboratory. (2024). https://colab.research.google.com</li><li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial. ISBN: 9788499640884.</li></ol>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>🧠 Nota neurodivergencia (máx. 1 min)</h2>
+    <p>Ofrezca la explicación oral en segmentos breves de 20–30 segundos, use apoyo visual con flechas de color y permita que quien lo necesite verbalice el recorrido antes de codificar; esto reduce sobrecarga cognitiva sin extender más de un minuto la instrucción.</p>
+  </section>
+
+  <section id='contingencias' class='card'>
+    <h2>🚨 Contingencias</h2>
+    <div class='three-col'><article class='contingency'><h3>Sin internet</h3><p>Traslade la práctica a pseudocódigo y diagramas en papel. Use un computador del docente para mostrar una ejecución única al final.</p></article><article class='contingency'><h3>Grupo termina muy rápido</h3><p>Pida añadir eliminación de terapeuta ausente y recalcular el Round Robin con nueva carga.</p></article><article class='contingency'><h3>Grupo se bloquea con ciclos infinitos</h3><p>Haga una parada de 3 minutos para reconstruir la condición de parada desde el tablero y retomar.</p></article></div>
+  </section>
+
+  <section id='cierre' class='card'>
+    <h2>📌 Indicadores de observación + cierre</h2>
+    <div class='two-col'>
+      <div class='subcard'><h3>Indicadores</h3><ul class='observer-list'><li>Distingue lista simple de lista circular sin confundir punteros.</li><li>Demuestra recorrido controlado sin ciclo infinito.</li><li>Relaciona el conteo de asignaciones con al menos un KPI de NeuroBiz.</li><li>Participa de forma colaborativa y documenta decisiones.</li></ul></div>
+      <div class='subcard'><h3>Orientación de cierre</h3><p>Cierre preguntando: “¿qué valor de negocio agrega que el último terapeuta apunte al primero?”. Si la respuesta incluye continuidad, equidad o reducción de sesiones fallidas, la meta se alcanzó.</p></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

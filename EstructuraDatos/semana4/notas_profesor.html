@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TGA05 Semana 4 - Notas del profesor</title>
+    <style>:root {
+    --primary: #1b5e20;
+    --primary-2: #2e7d32;
+    --accent: #FFDF2D;
+    --bg: #f2f7f2;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #526072;
+    --surface: #edf7ee;
+    --surface-2: #f7fbf7;
+    --warning: #fff8e1;
+    --warning-border: #FFDF2D;
+    --shadow: 0 16px 40px rgba(27, 94, 32, 0.10);
+    --radius: 20px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #f4faf4 0%, #eff8ef 100%);
+    color: var(--text);
+    line-height: 1.6;
+}
+.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+    color: white;
+    padding: 28px 20px 34px;
+}
+.hero-content { max-width: 1180px; margin: 0 auto; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.28);
+}
+.badge.docente { background: rgba(249, 168, 37, 0.16); border-color: rgba(249, 168, 37, 0.42); }
+h1 {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    line-height: 1.1;
+}
+.lead { max-width: 920px; color: rgba(255,255,255,0.94); margin: 0; }
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #dbe7dc;
+}
+.sticky-nav .inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 20px;
+}
+.sticky-nav a {
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #edf7ee;
+}
+main { max-width: 1180px; margin: 0 auto; padding: 24px 20px 60px; }
+.card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 26px;
+    margin-bottom: 22px;
+    border-left: 7px solid var(--accent);
+}
+.card h2 { margin-top: 0; color: var(--primary); }
+.section-intro { color: var(--muted); margin-top: -8px; margin-bottom: 18px; }
+.grid-2, .grid-3 {
+    display: grid;
+    gap: 16px;
+}
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.meta-box, .check-box, .warn-box, .note-box {
+    border-radius: 18px;
+    padding: 18px;
+}
+.meta-box { background: #edf7ee; border: 1px solid #c9e6cc; }
+.check-box { background: #f8fbf8; border: 1px solid #dbe7dc; }
+.warn-box { background: var(--warning); border: 1px solid var(--warning-border); }
+.note-box { background: #f4f8ff; border: 1px solid #dbe3ff; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    border-radius: 16px;
+    overflow: hidden;
+}
+th, td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #dfe7e1;
+    text-align: left;
+    vertical-align: top;
+}
+th { background: #edf7ee; color: var(--primary); }
+tr:nth-child(even) td { background: #fbfdfb; }
+.timeline {
+    position: relative;
+    margin-left: 12px;
+    padding-left: 24px;
+}
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--primary), #81c784);
+    border-radius: 999px;
+}
+.timeline-item {
+    position: relative;
+    margin-bottom: 18px;
+    background: var(--surface-2);
+    border: 1px solid #dbe7dc;
+    border-radius: 18px;
+    padding: 18px 18px 18px 20px;
+}
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -24px;
+    top: 22px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 4px solid white;
+    box-shadow: 0 0 0 2px rgba(249, 168, 37, 0.35);
+}
+.time-badge, .mode-badge {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+.time-badge { background: #e8f5e9; color: var(--primary); }
+.mode-badge { background: #fff8e1; color: #7c4d00; }
+.dojo-panel {
+    background: #0f172a;
+    color: #f9e7a0;
+    border-radius: 18px;
+    padding: 20px;
+    border: 1px solid #334155;
+}
+.dojo-panel h3 { color: #FFDF2D; margin-top: 0; }
+.quiz-card {
+    background: #f4f8ff;
+    border: 1px solid #dbe3ff;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 14px;
+}
+.quiz-card h3 { margin-top: 0; color: #1d4ed8; }
+.correcta {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #e8f5e9;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+.footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.92rem;
+    padding: 16px 20px 34px;
+}
+@media (max-width: 920px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    main { padding-inline: 16px; }
+    .card { padding: 20px; }
+    .sticky-nav .inner { padding-inline: 16px; }
+    .timeline { margin-left: 0; padding-left: 18px; }
+    .timeline-item::before { left: -18px; }
+}</style>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge-row">
+                <span class="badge docente">USO EXCLUSIVO DOCENTE</span>
+                <span class="badge">TGA05 · Estructura de Datos para los Negocios</span>
+                <span class="badge">Semana 4 de 14</span>
+            </div>
+            <h1>Colas (Queue) para lista de espera y equidad · Guía docente</h1>
+            <p class="lead">Secuencia detallada para conducir la sesión con Framework GAME, Bloom explícito, gamificación ClassDojo + Quizizz y decisiones contextualizadas en NeuroBiz S.A.S.</p>
+        </div>
+    </header>
+
+    <nav class="sticky-nav">
+        <div class="inner">
+            <a href="#meta">Meta</a>
+            <a href="#checklist">Checklist</a>
+            <a href="#secuencia">Secuencia 240 min</a>
+            <a href="#dojo">ClassDojo</a>
+            <a href="#quiz">Quiz</a>
+            <a href="#hti">HTI</a>
+            <a href="#neuro">Neurodivergencia</a>
+            <a href="#contingencias">Contingencias</a>
+            <a href="#observacion">Observación</a>
+        </div>
+    </nav>
+
+    <main>
+        <section id="meta" class="card">
+            <h2>Meta de sesión</h2>
+            <p class="section-intro">Defina al inicio de la clase qué se espera que el estudiantado comprenda, haga y justifique al cierre.</p>
+            <div class="meta-box">
+    <table>
+        <thead><tr><th>Componente</th><th>Formulación sugerida</th></tr></thead>
+        <tbody>
+            <tr><td>RA</td><td>RA1: implementa estructuras lineales básicas para modelar flujos de atención y servicio en contextos de negocio.</td></tr>
+            <tr><td>CE</td><td>CE1: reconoce la lógica FIFO. CE2: aplica enqueue, dequeue, peek e isEmpty en una simulación de lista de espera. CE3: explica la relación entre estructura y equidad organizacional.</td></tr>
+            <tr><td>Bloom</td><td>Recordar → Aplicar. El estudiante recuerda el principio FIFO y luego lo implementa en un flujo operativo concreto.</td></tr>
+            <tr><td>Meta de sesión</td><td>Al cierre, cada equipo muestra una cola funcional para la lista de espera de NeuroBiz y justifica por qué dicha estructura protege el orden de llegada.</td></tr>
+        </tbody>
+    </table>
+</div>
+            <div class="warn-box">
+    <strong>Recuerdo docente:</strong> Python se usa como herramienta analítica para representar decisiones de negocio; el foco evaluativo no es memorizar sintaxis, sino justificar por qué la estructura elegida resuelve mejor el problema de NeuroBiz y cómo se comunica esa decisión con evidencia observable.
+</div>
+        </section>
+
+        <section id="checklist" class="card">
+            <h2>Checklist pre-clase</h2>
+            <p class="section-intro">Revise condiciones pedagógicas y tecnológicas antes de iniciar para que la experiencia no dependa solo del software.</p>
+            <div class="grid-3">
+    <div class="check-box">
+        <h3>Pedagógico</h3>
+        <ul>
+            <li>Preparar una dinámica corta de fila física para representar frente y final.</li>
+            <li>Llevar un caso base sin prioridad clínica para no mezclar reglas prematuramente.</li>
+            <li>Definir un contraste breve con pila para reforzar criterio de selección de estructura.</li>
+            <li>Recordar que el lenguaje de equidad debe aparecer en las socializaciones.</li>
+        </ul>
+    </div>
+    <div class="check-box">
+        <h3>Tecnológico</h3>
+        <ul>
+            <li>Verificar importación de <code>collections.deque</code> en Colab.</li>
+            <li>Tener lista una celda con datos de pacientes para copiar y pegar.</li>
+            <li>Probar el proyector con tamaño suficiente para visualizar la cola y el frente.</li>
+            <li>Guardar un plan B en tablero para simular enqueue y dequeue manualmente.</li>
+        </ul>
+    </div>
+    <div class="check-box">
+        <h3>Categorías ClassDojo</h3>
+        <ul>
+            <li>Representación FIFO (+2)</li>
+            <li>Simulación funcional (+3)</li>
+            <li>Justicia operativa (+2)</li>
+            <li>Visualización del estado (+2)</li>
+            <li>Apoyo al equipo (+1)</li>
+        </ul>
+    </div>
+</div>
+        </section>
+
+        <section id="secuencia" class="card">
+            <h2>Secuencia minuto a minuto completa (240 min)</h2>
+            <p class="section-intro">La sesión está pensada para 2 horas HAD y 2 horas HP. Cada bloque incluye propósito, acción, guion sugerido y evidencia observable.</p>
+            <div class="timeline">
+            <div class="timeline-item">
+                <span class="time-badge">0-10 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Apertura con valor de equidad</h3>
+                <p><strong>Propósito:</strong> Instalar la idea de que la estructura materializa una política de servicio.</p>
+                <p><strong>Acción docente:</strong> Presentar el memorando NB-04 y preguntar qué significa atender justamente una lista de espera.</p>
+                <p><strong>Guion sugerido:</strong> Hoy no partimos del código sino de una decisión institucional: quien se registra primero debe ser atendido primero. Nuestra tarea es traducir esa regla a una estructura confiable.</p>
+                <p><strong>Evidencia observable:</strong> Respuestas que conectan tiempo de llegada con justicia en la atención.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">10-25 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Activación corporal y visual</h3>
+                <p><strong>Propósito:</strong> Representar físicamente la cola antes de abstraerla.</p>
+                <p><strong>Acción docente:</strong> Organizar una fila corta de estudiantes y nombrar frente, final, enqueue y dequeue.</p>
+                <p><strong>Guion sugerido:</strong> Miren lo que ocurre cuando alguien llega: entra al final. Y cuando la atención avanza, sale quien está al frente. Esa escena cotidiana ya contiene la lógica de la cola.</p>
+                <p><strong>Evidencia observable:</strong> Participación activa y uso correcto de frente/final.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">25-45 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Conceptualización de FIFO</h3>
+                <p><strong>Propósito:</strong> Formalizar operaciones y diferenciar cola de pila.</p>
+                <p><strong>Acción docente:</strong> Construir tabla comparativa mínima entre LIFO y FIFO y aterrizarla al caso NeuroBiz.</p>
+                <p><strong>Guion sugerido:</strong> La pregunta clave hoy es distinta a la semana pasada. Ya no es ‘qué pasó de último’, sino ‘quién debe ser atendido primero’. Cuando cambia la pregunta del negocio, cambia la estructura adecuada.</p>
+                <p><strong>Evidencia observable:</strong> El estudiantado verbaliza por qué pila y cola resuelven problemas diferentes.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">45-65 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Demostración con deque</h3>
+                <p><strong>Propósito:</strong> Mostrar implementación simple y eficiente en Python.</p>
+                <p><strong>Acción docente:</strong> Ejecutar operaciones básicas de registro y atención usando <code>deque</code>.</p>
+                <p><strong>Guion sugerido:</strong> No miren solo la sintaxis. Observen el sentido de cada operación: append agrega al final; popleft atiende al frente. Si cambiamos ese comportamiento, rompemos la política del proceso.</p>
+                <p><strong>Evidencia observable:</strong> Los equipos anticipan quién sale después de cada llamada.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">65-85 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Lectura de estado</h3>
+                <p><strong>Propósito:</strong> Preparar a los equipos para inspeccionar la cola durante la simulación.</p>
+                <p><strong>Acción docente:</strong> Pedir que dibujen el estado de la cola tras varias operaciones y localicen el frente.</p>
+                <p><strong>Guion sugerido:</strong> Antes de programar en serio, dibujen. Si no saben quién está al frente en el papel, será más difícil sostener el orden correcto en el código.</p>
+                <p><strong>Evidencia observable:</strong> Diagramas con frente y final bien marcados.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">85-100 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Pausa cognitiva y conversación ética</h3>
+                <p><strong>Propósito:</strong> Relacionar estructura con servicio humanizado y reducir fatiga.</p>
+                <p><strong>Acción docente:</strong> Abrir una pausa breve y luego discutir cuándo sí sería legítimo alterar el orden por prioridad clínica.</p>
+                <p><strong>Guion sugerido:</strong> La cola base protege la equidad. Más adelante veremos variantes con prioridad. Por ahora necesitamos dominar el caso simple para no mezclar reglas sin claridad.</p>
+                <p><strong>Evidencia observable:</strong> El grupo distingue caso FIFO puro de casos prioritarios.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">100-120 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Puente a la práctica</h3>
+                <p><strong>Propósito:</strong> Definir entregables y criterios del sistema de lista de espera.</p>
+                <p><strong>Acción docente:</strong> Explicar el reto por equipos y mostrar el tablero de puntos ClassDojo.</p>
+                <p><strong>Guion sugerido:</strong> Su meta es que alguien externo pueda mirar su simulación y reconocer que el orden de llegada fue respetado. Si eso no se ve, la solución aún no está lista.</p>
+                <p><strong>Evidencia observable:</strong> Equipos claros sobre producto y rol.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">120-135 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Preparación del flujo</h3>
+                <p><strong>Propósito:</strong> Distribuir pacientes, terapeutas y secuencia de operaciones.</p>
+                <p><strong>Acción docente:</strong> Entregar casos con distinto tamaño de cola y disponibilidad parcial de recursos.</p>
+                <p><strong>Guion sugerido:</strong> No todos los equipos tendrán el mismo volumen de pacientes. Eso les permitirá comparar cómo cambia la cola cuando la capacidad de atención es limitada.</p>
+                <p><strong>Evidencia observable:</strong> Casos listos y comprendidos.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">135-165 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Construcción del prototipo</h3>
+                <p><strong>Propósito:</strong> Aplicar FIFO en una simulación ejecutable.</p>
+                <p><strong>Acción docente:</strong> Acompañar con preguntas sobre orden de salida, lectura del frente y vaciado de cola.</p>
+                <p><strong>Guion sugerido:</strong> Si el paciente equivocado sale primero, revisen de inmediato dónde se rompió el flujo. El mejor criterio de depuración hoy es la justicia temporal del proceso.</p>
+                <p><strong>Evidencia observable:</strong> Prototipos funcionales con orden correcto de atención.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">165-190 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Reporte y dashboard sencillo</h3>
+                <p><strong>Propósito:</strong> Hacer visible el estado de la cola para la toma de decisiones.</p>
+                <p><strong>Acción docente:</strong> Pedir un pequeño resumen: cuántos pacientes quedan, quién está al frente, cuánto es la espera promedio si la calculan.</p>
+                <p><strong>Guion sugerido:</strong> Una estructura útil no solo opera; también informa. ¿Qué dato necesitaría coordinación para decidir si abre otro bloque o reasigna terapeutas?</p>
+                <p><strong>Evidencia observable:</strong> Salidas resumidas y comentadas por los equipos.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">190-210 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Socialización</h3>
+                <p><strong>Propósito:</strong> Compartir cómo se representó la equidad en cada solución.</p>
+                <p><strong>Acción docente:</strong> Invitar a tres equipos a mostrar su cola y explicar cómo evitaron saltos arbitrarios.</p>
+                <p><strong>Guion sugerido:</strong> Escuchen si la solución se puede defender con lenguaje institucional: orden de llegada, transparencia y continuidad del servicio.</p>
+                <p><strong>Evidencia observable:</strong> Justificaciones con vocabulario de gestión y estructura.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">210-225 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Quizizz formativo</h3>
+                <p><strong>Propósito:</strong> Verificar comprensión rápida de FIFO y operaciones.</p>
+                <p><strong>Acción docente:</strong> Aplicar quiz y comentar en especial respuestas donde se confunda cola con pila.</p>
+                <p><strong>Guion sugerido:</strong> Si todavía aparece la idea de que sale el último, es una señal útil para reforzar contraste con la semana 2. El error aquí nos orienta.</p>
+                <p><strong>Evidencia observable:</strong> Resultados y retroalimentación inmediata.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">225-235 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Orientación de HTI</h3>
+                <p><strong>Propósito:</strong> Diferenciar profundización en prioridades y consolidación visual.</p>
+                <p><strong>Acción docente:</strong> Asignar Escenario A a quienes dominan FIFO y Escenario B a quienes requieren reforzar representación.</p>
+                <p><strong>Guion sugerido:</strong> Si ya controlas la cola base, estás listo para explorar prioridad. Si aún necesitas fijar frente y final, toma la ruta breve; no te bloqueará la siguiente clase.</p>
+                <p><strong>Evidencia observable:</strong> Ruta HTI acordada y comprendida.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">235-240 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Cierre metacognitivo</h3>
+                <p><strong>Propósito:</strong> Sintetizar la idea de estructura al servicio de una política organizacional.</p>
+                <p><strong>Acción docente:</strong> Pedir una frase de salida: “La cola le sirve a NeuroBiz porque…”.</p>
+                <p><strong>Guion sugerido:</strong> Quiero que se lleven una idea clara: una estructura de datos también puede ser una forma de garantizar trato justo y trazable.</p>
+                <p><strong>Evidencia observable:</strong> Síntesis precisas vinculadas a FIFO y equidad.</p>
+            </div>
+            </div>
+        </section>
+
+        <section id="dojo" class="card">
+            <h2>Integración ClassDojo</h2>
+            <p class="section-intro">Asigne puntos con criterios concretos, visibles y coherentes con el verbo Bloom de la semana. Evite premiar solo velocidad.</p>
+            <div class="dojo-panel"><h3>Tabla sugerida de asignación</h3>
+<table>
+    <thead><tr><th>Momento</th><th>Acción</th><th>Criterio concreto</th><th>Puntos</th></tr></thead>
+    <tbody>
+        <tr><td>Representación</td><td>Identifica frente y final</td><td>Diagrama correcto</td><td>+2</td></tr>
+        <tr><td>Simulación</td><td>Respeta FIFO en todos los casos</td><td>Orden de salida correcto</td><td>+3</td></tr>
+        <tr><td>Análisis</td><td>Explica equidad en la atención</td><td>Justificación contextual clara</td><td>+2</td></tr>
+        <tr><td>Visualización</td><td>Genera reporte de estado</td><td>Frente, longitud y pendientes visibles</td><td>+2</td></tr>
+        <tr><td>Colaboración</td><td>Ayuda al equipo a depurar</td><td>Apoyo específico y respetuoso</td><td>+1</td></tr>
+    </tbody>
+</table>
+<p><strong>Nota de uso:</strong> si un equipo atiende fuera de orden pero explica el error y lo corrige, valore la depuración como evidencia formativa.</p></div>
+        </section>
+
+        <section id="quiz" class="card">
+            <h2>Quiz formativo</h2>
+            <p class="section-intro">Use estas preguntas para Quizizz o como cierre oral rápido. Las respuestas correctas están marcadas para facilitar la moderación.</p>
+            
+            <article class="quiz-card">
+                <h3>Pregunta 1</h3>
+                <p><strong>¿Qué significa FIFO en una cola?</strong></p>
+                <ul><li>a) El último en entrar es el primero en salir</li><li>b) El primero en entrar es el primero en salir</li><li>c) Todos salen al mismo tiempo</li><li>d) No existe un orden de salida</li></ul>
+                <p><span class="correcta">Correcta</span> b) El primero en entrar es el primero en salir</p>
+                <p><strong>Justificación didáctica:</strong> Confirma identificación de la regla de servicio propia de la cola.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 2</h3>
+                <p><strong>¿Qué operación agrega un paciente al final de la cola?</strong></p>
+                <ul><li>a) pop</li><li>b) push</li><li>c) enqueue</li><li>d) peek</li></ul>
+                <p><span class="correcta">Correcta</span> c) enqueue</p>
+                <p><strong>Justificación didáctica:</strong> Verifica vocabulario técnico mínimo.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 3</h3>
+                <p><strong>En una cola, ¿qué elemento se atiende primero?</strong></p>
+                <ul><li>a) El que llegó más recientemente</li><li>b) El que está al frente</li><li>c) El que tenga nombre más corto</li><li>d) El que tenga mayor KPI</li></ul>
+                <p><span class="correcta">Correcta</span> b) El que está al frente</p>
+                <p><strong>Justificación didáctica:</strong> Relaciona la abstracción con el caso de lista de espera.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 4</h3>
+                <p><strong>¿Qué estructura de Python es especialmente útil para colas eficientes?</strong></p>
+                <ul><li>a) set</li><li>b) tuple</li><li>c) collections.deque</li><li>d) dict</li></ul>
+                <p><span class="correcta">Correcta</span> c) collections.deque</p>
+                <p><strong>Justificación didáctica:</strong> Conecta teoría con herramienta de implementación.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 5</h3>
+                <p><strong>¿Por qué la cola se asocia con equidad en el caso base de NeuroBiz?</strong></p>
+                <ul><li>a) Porque prioriza siempre al último paciente</li><li>b) Porque respeta el orden de registro</li><li>c) Porque elimina la necesidad de datos</li><li>d) Porque siempre reduce la cola a cero</li></ul>
+                <p><span class="correcta">Correcta</span> b) Porque respeta el orden de registro</p>
+                <p><strong>Justificación didáctica:</strong> Apunta a la justificación organizacional, no solo técnica.</p>
+            </article>
+            
+        </section>
+
+        <section id="hti" class="card">
+            <h2>HTI: elección de Escenario A o B</h2>
+            <p class="section-intro">La decisión de ruta debe responder al desempeño observado y a la autorregulación del estudiante, no a castigo o premio arbitrario.</p>
+            <div class="grid-2">
+    <div class="note-box">
+        <h3>Escenario A</h3>
+        <ul>
+            <li>Para estudiantes que ya protegen FIFO y pueden discutir cuándo aparece la necesidad de prioridad.</li>
+            <li>Recomendado si el prototipo incluye dashboard o justificación robusta.</li>
+            <li>Abre la puerta a variantes más sofisticadas sin perder el caso base.</li>
+        </ul>
+        <p><strong>Consecuencia:</strong> amplía la comprensión hacia colas con prioridad y decisiones éticas de asignación.</p>
+    </div>
+    <div class="warn-box">
+        <h3>Escenario B</h3>
+        <ul>
+            <li>Para estudiantes que todavía mezclan el frente con el final o confunden cola con pila.</li>
+            <li>Útil cuando conviene fortalecer la representación antes de complejizar con prioridad.</li>
+            <li>Se centra en visualizar estados y secuencias básicas.</li>
+        </ul>
+        <p><strong>Consecuencia:</strong> consolida la base y <strong>NO BLOQUEA la siguiente clase</strong>; úselo como ruta de apoyo gradual.</p>
+    </div>
+</div>
+        </section>
+
+        <section id="neuro" class="card">
+            <h2>Nota breve de neurodivergencia (máx. 1 min)</h2>
+            <p class="section-intro">Incluya una frase explícita de validación y estructura para reducir incertidumbre sin sobreextender el tiempo de clase.</p>
+            <div class="meta-box">
+    <p><strong>Frase sugerida:</strong> “Si hoy necesitas moverte o visualizar físicamente la fila para entender la cola, está bien. Puedes pensar primero con el cuerpo o con el dibujo y luego pasar al código; lo importante es sostener quién está al frente y por qué”.</p>
+</div>
+        </section>
+
+        <section id="contingencias" class="card">
+            <h2>Contingencias</h2>
+            <p class="section-intro">Plan de respuesta ante falla técnica, baja participación o compresión de tiempo.</p>
+            <div class="grid-3">
+    <div class="check-box">
+        <h3>Si falla la tecnología</h3>
+        <p>Use la dinámica de fila física y un registro en tablero. Simule entradas y salidas y pida a los equipos que documenten la secuencia en cuaderno. El aprendizaje central de FIFO se mantiene intacto.</p>
+    </div>
+    <div class="check-box">
+        <h3>Si el grupo se desconecta</h3>
+        <p>Active un caso competitivo: dos colas reciben pacientes simultáneamente y los equipos deben detectar cuál respetó el orden. Esto vuelve visible el valor de la equidad en términos concretos.</p>
+    </div>
+    <div class="check-box">
+        <h3>Si no alcanza el tiempo</h3>
+        <p>Priorice la cola básica y la justificación FIFO. El reporte ampliado o la prioridad con <code>heapq</code> pueden desplazarse al HTI A.</p>
+    </div>
+</div>
+        </section>
+
+        <section id="observacion" class="card">
+            <h2>Indicadores de observación docente + cierre sugerido</h2>
+            <p class="section-intro">Observe evidencias en proceso y cierre con una síntesis verbal conectada al caso NeuroBiz.</p>
+            <table>
+    <thead><tr><th>Indicador</th><th>Señal positiva</th><th>Alerta</th></tr></thead>
+    <tbody>
+        <tr><td>Comprensión de FIFO</td><td>Identifica que sale quien llegó primero.</td><td>Atiende al último sin criterio.</td></tr>
+        <tr><td>Representación</td><td>Señala frente y final sin dudas.</td><td>Ubica ambos extremos de forma ambigua.</td></tr>
+        <tr><td>Aplicación en Python</td><td>Usa append y popleft o equivalente con sentido correcto.</td><td>Implementa una lista que rompe la eficiencia o el orden sin advertirlo.</td></tr>
+        <tr><td>Transferencia al negocio</td><td>Conecta cola con equidad y trazabilidad.</td><td>Habla solo de comandos sin servicio al paciente.</td></tr>
+        <tr><td>Preparación para extensión</td><td>Distingue cola base de cola con prioridad.</td><td>Mezcla criterios sin comprender el caso simple.</td></tr>
+    </tbody>
+</table>
+<div class="meta-box">
+    <p><strong>Cierre sugerido:</strong> “La cola nos mostró que una estructura de datos puede traducir un principio institucional: respetar el orden de llegada. Cuando el sistema refleja esa política con claridad, la operación gana transparencia, equidad y mejor capacidad de análisis”.</p>
+</div>
+        </section>
+    </main>
+
+    <footer class="footer">UIB · TGA05 · Semana 4 · Guía docente exclusiva · Caso transversal NeuroBiz S.A.S.</footer>
+</body>
+</html>

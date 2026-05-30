@@ -1,0 +1,1050 @@
+<!DOCTYPE html><html lang="es"><head><link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Semana 7 — Recursividad II | TGA05</title><style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #FAFAFA;
+  color: #1f2937;
+  line-height: 1.7;
+}
+:root {
+  --primary:   #1E2843;
+  --accent:    #2d3a5e;
+  --gold:      #FFDF2D;
+  --gold-soft: #fff8e1;
+  --green: #2e7d32;
+  --green-soft: #e8f5e9;
+  --orange: #ef6c00;
+  --orange-soft: #fff3e0;
+  --blue-soft: #e3f2fd;
+  --purple-soft: #f3e5f5;
+  --ink: #212121;
+  --muted: #546e7a;
+  --card: #ffffff;
+  --border:    #DEDFE4;
+  --shadow: 0 12px 30px rgba(26,35,126,.08);
+  --radius: 16px;
+  --dojo-bg: #0f172a;
+  --dojo-line: #22304e;
+  --code-bg: #1E2843;
+  --code-top: #2d3a5e;
+  --rose: #f38ba8;
+  --lavender: #b4befe;
+  --mauve: #cba6f7;
+  --teal: #94e2d5;
+  --green-code: #a6e3a1;
+  --yellow-code: #f9e2af;
+  --peach: #fab387;
+  --subtle: #eef2ff;
+}
+a { color: var(--accent); }
+header {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1E2843 0%, #2d3a5e 100%);
+  color: #fff;
+  padding: 2.6rem 1.2rem 2rem;
+}
+header::before,
+header::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+}
+header::before { width: 220px; height: 220px; top: -80px; right: -40px; }
+header::after  { width: 160px; height: 160px; bottom: -70px; left: -50px; }
+.hero {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-bottom: 1rem;
+}
+.badge-module, .badge-week {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .35rem .9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.14);
+  font-size: .82rem;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+header h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  line-height: 1.15;
+}
+.subtitle {
+  max-width: 880px;
+  margin: .85rem 0 1rem;
+  font-size: 1rem;
+  color: rgba(255,255,255,.92);
+}
+.hero-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1.3fr .9fr;
+  align-items: end;
+}
+.xp-panel, .hero-note {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 18px;
+  padding: 1rem 1.1rem;
+  backdrop-filter: blur(4px);
+}
+.xp-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: .82rem;
+  margin-bottom: .55rem;
+  color: rgba(255,255,255,.92);
+}
+.xp-track {
+  height: 16px;
+  background: rgba(255,255,255,.18);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.xp-bar {
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #fbc02d, #FFDF2D);
+  box-shadow: 0 0 18px rgba(249,168,37,.55);
+  transition: width 1.8s ease;
+}
+.hero-note p { margin: 0; font-size: .93rem; }
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(15,23,42,.06);
+}
+.nav-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: .7rem 1rem;
+  display: flex;
+  gap: .55rem;
+  flex-wrap: wrap;
+}
+nav a {
+  text-decoration: none;
+  font-weight: 700;
+  font-size: .84rem;
+  color: var(--accent);
+  padding: .45rem .75rem;
+  border-radius: 10px;
+}
+nav a:hover { background: var(--subtle); }
+main {
+  max-width: 1180px;
+  margin: 1.8rem auto 0;
+  padding: 0 1rem 3rem;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.4rem;
+  margin-bottom: 1.4rem;
+}
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.35rem;
+  color: var(--primary);
+  border-left: 5px solid var(--gold);
+  padding-left: .85rem;
+}
+.card h3 {
+  margin-top: 1.15rem;
+  margin-bottom: .6rem;
+  color: var(--accent);
+  font-size: 1.05rem;
+}
+.lead {
+  font-size: 1rem;
+  color: #374151;
+}
+.bloom-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .4rem .95rem;
+  border-radius: 999px;
+  background: #fff8e1;
+  color: #5d4037;
+  border: 1px solid #FFDF2D;
+  font-weight: 800;
+  font-size: .82rem;
+  margin-bottom: 1rem;
+}
+.memo {
+  background: linear-gradient(90deg, #fffde7, #fff8e1);
+  border-left: 6px solid var(--gold);
+  border-radius: 0 16px 16px 0;
+  padding: 1.2rem 1.2rem 1.2rem 1.1rem;
+  margin-bottom: 1rem;
+}
+.memo strong {
+  display: block;
+  margin-bottom: .5rem;
+  color: var(--primary);
+}
+.summary-grid,
+.kpi-grid,
+.theory-grid,
+.python-grid,
+.activity-grid,
+.game-grid,
+.hti-grid,
+.quiz-grid,
+.bib-grid,
+.dual-grid {
+  display: grid;
+  gap: 1rem;
+}
+.summary-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.kpi-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 1rem; }
+.kpi-card {
+  background: linear-gradient(180deg, #ffffff, #f7f9ff);
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--gold);
+  border-radius: 14px;
+  padding: 1rem;
+}
+.kpi-top { display: flex; align-items: center; gap: .7rem; }
+.kpi-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--subtle);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+.kpi-name { font-weight: 800; color: var(--primary); font-size: .95rem; }
+.kpi-var { color: var(--muted); font-size: .8rem; }
+.kpi-value { font-size: 1.6rem; font-weight: 900; margin: .6rem 0 .3rem; color: #0f172a; }
+.kpi-insight { margin: 0; font-size: .88rem; color: #475569; }
+.mini-card {
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--gold);
+  border-radius: 14px;
+  padding: 1rem;
+  background: #fff;
+}
+.mini-card h4 { margin: 0 0 .5rem; color: var(--accent); }
+.mini-card p, .mini-card li { font-size: .93rem; }
+.mini-card ul { padding-left: 1.2rem; margin: .4rem 0 0; }
+.ods-strip {
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #e8f5e9, #e3f2fd);
+  border: 1px solid #b7d7c0;
+}
+.ods-strip strong { color: #1b5e20; }
+.info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: .8rem;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  margin: 1rem 0;
+}
+.info-box.tip { background: #e8f5e9; border-left: 5px solid #43a047; }
+.info-box.warn { background: #fff8e1; border-left: 5px solid #FFDF2D; }
+.info-box.brain { background: #f3e5f5; border-left: 5px solid #8e24aa; }
+.info-box .icon { font-size: 1.3rem; }
+.info-box p { margin: 0; }
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: .9rem 0;
+  font-size: .92rem;
+}
+th {
+  background: var(--primary);
+  color: #fff;
+  text-align: left;
+  padding: .75rem .9rem;
+}
+td {
+  border-bottom: 1px solid var(--border);
+  padding: .75rem .9rem;
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: #f8faff; }
+.code-wrap {
+  margin: 1rem 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(30,30,46,.22);
+}
+.code-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: .65rem 1rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: var(--code-top);
+  color: #cdd6f4;
+  font-size: .82rem;
+}
+.code-title a {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 700;
+}
+pre {
+  margin: 0;
+  padding: 1.15rem 1.2rem;
+  background: var(--code-bg);
+  color: #cdd6f4;
+  overflow-x: auto;
+  font-size: .88rem;
+  line-height: 1.65;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.kw { color: var(--mauve); }
+.fn { color: #89b4fa; }
+.str { color: var(--green-code); }
+.cm { color: #6c7086; font-style: italic; }
+.num { color: var(--peach); }
+.var { color: #cdd6f4; }
+.op { color: var(--teal); }
+.cls { color: var(--yellow-code); }
+.activity-card {
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--gold);
+  border-radius: 16px;
+  padding: 1rem;
+  background: #fff;
+}
+.activity-card h3 { margin-top: 0; }
+.step-list, .rubric-list, .quiz-options {
+  padding-left: 1.2rem;
+}
+.step-list li, .rubric-list li, .quiz-options li { margin-bottom: .45rem; }
+.game-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: 1rem 0; }
+.game-card {
+  border-radius: 14px;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, #fff, #f8fbff);
+}
+.game-card h4 { margin: 0 0 .45rem; color: var(--primary); }
+.dojo-panel {
+  border-radius: 18px;
+  background: linear-gradient(180deg, #0f172a, #172554);
+  color: #fff;
+  border: 1px solid #334155;
+  padding: 1rem;
+}
+.dojo-panel h3 { color: #fff; margin-top: 0; }
+.dojo-panel table { color: #fff; }
+.dojo-panel th { background: rgba(249,168,37,.18); color: #f9d46a; }
+.dojo-panel td { border-bottom: 1px solid var(--dojo-line); }
+.dojo-panel tr:nth-child(even) td { background: rgba(255,255,255,.03); }
+.points {
+  color: #f9d46a;
+  font-weight: 900;
+}
+.scenario {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid;
+  margin-top: 1rem;
+}
+.scenario.a { border-color: #2e7d32; }
+.scenario.b { border-color: #ef6c00; }
+.scenario-header {
+  padding: .8rem 1rem;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.scenario.a .scenario-header { background: #e8f5e9; color: #1b5e20; }
+.scenario.b .scenario-header { background: #fff3e0; color: #e65100; }
+.scenario-body {
+  padding: 1rem 1.1rem;
+  background: #fff;
+}
+.scenario-note {
+  padding: .7rem .9rem;
+  border-radius: 12px;
+  background: rgba(0,0,0,.03);
+  font-size: .9rem;
+  margin-top: .8rem;
+}
+.quiz-box {
+  background: #e3f2fd;
+  border: 1px solid #90caf9;
+  border-radius: 16px;
+  padding: 1rem;
+}
+.quiz-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.quiz-item {
+  background: rgba(255,255,255,.78);
+  border-radius: 14px;
+  padding: 1rem;
+  border: 1px solid rgba(21,101,192,.18);
+  min-height: 100%;
+}
+.quiz-item h4 { margin-top: 0; color: #0d47a1; }
+.quiz-item small { color: #355c7d; display: block; margin-bottom: .6rem; }
+.quiz-answer {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-top: 0;
+  transition: all .35s ease;
+  background: #fff;
+  border-left: 4px solid #1565c0;
+  border-radius: 0 10px 10px 0;
+  padding: 0 .9rem;
+}
+.quiz-item:hover .quiz-answer,
+.quiz-item:focus-within .quiz-answer {
+  max-height: 220px;
+  opacity: 1;
+  margin-top: .8rem;
+  padding: .8rem .9rem;
+}
+.citation {
+  display: inline-block;
+  padding: .15rem .55rem;
+  border-radius: 999px;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  color: #3730a3;
+  font-size: .78rem;
+  font-weight: 700;
+  margin: .2rem .2rem .2rem 0;
+}
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: .82rem;
+  padding: 1.8rem 1rem 2.2rem;
+}
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  header { padding: 2rem 1rem 1.8rem; }
+  .card { padding: 1rem; }
+  .nav-wrap { padding: .7rem; }
+  nav a { font-size: .8rem; padding: .4rem .6rem; }
+  .xp-label { flex-direction: column; gap: .2rem; }
+  table { font-size: .86rem; }
+}
+</style>
+<style id="progress-tracker-css">
+/* ── Progress Tracker Widget ── */
+#pt-widget{
+  position:fixed; bottom:20px; right:20px; z-index:9999;
+  background:linear-gradient(135deg,#1E2843,#1E2843);
+  color:#fff; border-radius:16px; padding:14px 18px;
+  min-width:240px; max-width:280px;
+  box-shadow:0 8px 32px rgba(0,0,0,.35);
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size:.85rem; transition:transform .3s;
+}
+#pt-widget.collapsed { transform:translateY(calc(100% - 42px)); }
+#pt-header{ display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+#pt-header strong{ font-size:.92rem; }
+#pt-toggle{ background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer; line-height:1; }
+#pt-body{ margin-top:10px; }
+#pt-nombre{ width:100%; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3);
+  border-radius:8px; color:#fff; padding:5px 10px; font-size:.82rem; margin-bottom:8px; }
+#pt-nombre::placeholder{ color:rgba(255,255,255,.5); }
+#pt-xp-bar-wrap{ background:rgba(255,255,255,.2); border-radius:20px; height:10px; overflow:hidden; }
+#pt-xp-bar{ height:100%; background:linear-gradient(90deg,#FFDF2D,#fff176); border-radius:20px;
+  transition:width .8s ease; }
+#pt-xp-label{ display:flex; justify-content:space-between; font-size:.75rem; opacity:.8; margin-top:4px; }
+#pt-btns{ display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.pt-btn{ flex:1; padding:5px 8px; border:none; border-radius:8px; font-size:.75rem;
+  font-weight:700; cursor:pointer; transition:opacity .2s; }
+.pt-btn:hover{ opacity:.85; }
+#pt-btn-save  { background:#43a047; color:#fff; }
+#pt-btn-export{ background:#FFDF2D; color:#1E2843; }
+#pt-btn-load  { background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.3); }
+#pt-msg{ font-size:.72rem; margin-top:6px; min-height:16px; opacity:.85; text-align:center; }
+#pt-quiz-panel{ margin-top:1rem; }
+#pt-quiz-panel .pq{ margin-bottom:.8rem; }
+#pt-quiz-panel .pq p{ font-weight:600; font-size:.88rem; margin-bottom:.4rem; }
+#pt-quiz-panel .pq button{ display:block; width:100%; text-align:left; margin-bottom:3px;
+  padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08); color:#fff; cursor:pointer; font-size:.8rem;
+  transition:background .2s; }
+#pt-quiz-panel .pq button:hover  { background:rgba(255,255,255,.18); }
+#pt-quiz-panel .pq button.correct{ background:#2e7d32; border-color:#43a047; }
+#pt-quiz-panel .pq button.wrong  { background:#c62828; border-color:#e57373; }
+#pt-quiz-panel .pq button:disabled{ opacity:.7; cursor:default; }
+</style>
+
+  <script src="../js/supabase-config.js"></script>
+</head><body><header><div class="hero"><div class="badge-row"><span class="badge-module">🎓 TGA05 · Estructura de Datos para los Negocios</span><span class="badge-week">🗓 Semana 7 de 14</span><span class="badge-week">🏅 Módulo en progreso</span></div><div class="hero-grid"><div><h1>Recursividad II</h1><p class="subtitle">Recursividad directa e indirecta, comparación con iteración y búsqueda binaria recursiva para optimizar la consulta de sesiones ordenadas en NeuroBiz.</p><div class="xp-panel"><div class="xp-label"><span>Barra XP del módulo</span><span>540 / 980 XP del módulo</span></div><div class="xp-track"><div class="xp-bar" data-progress="50.0"></div></div></div></div><aside class="hero-note"><p><strong>Rol inmersivo:</strong> Analista de Datos Estratégico de NeuroBiz S.A.S.</p><p>Pasas de “entender qué es” a decidir cuándo conviene aplicar recursión y cuándo una estrategia iterativa resulta más clara o eficiente para el negocio.</p></aside></div></div></header><nav><div class="nav-wrap"><a href="#mision">📋 Memorando</a><a href="#teoria">📚 Teoría</a><a href="#python">🐍 Python BI</a><a href="#actividad">⚙️ Actividad</a><a href="#quiz">🎮 Quizizz</a><a href="#bib">📖 Bibliografía</a></div></nav><main>
+
+<!-- ── PROGRESS TRACKER WIDGET ── -->
+<div id="pt-widget">
+  <div id="pt-header" onclick="ptToggle()">
+    <strong>📊 Mi Progreso TGA05</strong>
+    <button id="pt-toggle">▲</button>
+  </div>
+  <div id="pt-body">
+    <input id="pt-nombre" type="text" placeholder="Tu nombre completo…" oninput="ptSaveLocal()" />
+    <div id="pt-xp-bar-wrap"><div id="pt-xp-bar" style="width:0%"></div></div>
+    <div id="pt-xp-label"><span id="pt-semana-label">Semana —</span><span id="pt-xp-count">0 XP</span></div>
+    <div id="pt-btns" style="display:flex;gap:5px;align-items:center">
+      <button class="pt-btn" id="pt-btn-save" onclick="ptSyncCloud()" style="flex:1">☁️ Guardar</button>
+      <button class="pt-btn" id="pt-btn-opts"
+        title="Opciones de respaldo"
+        onclick="(function(){var a=document.getElementById('pt-advanced');a.style.display=a.style.display==='block'?'none':'block';})()"
+        style="width:32px;flex-shrink:0;padding:0;font-size:.8rem">⚙️</button>
+    </div>
+    <div id="pt-advanced" style="display:none;margin-top:5px">
+      <button class="pt-btn" onclick="ptExportCode()" style="width:100%;margin-bottom:3px;font-size:.72rem">📋 Exportar código de respaldo</button>
+      <button class="pt-btn" onclick="ptImportCode()" style="width:100%;font-size:.72rem">📥 Cargar desde código</button>
+    </div>
+    <div id="pt-msg"></div>
+  </div>
+</div>
+<section id="mision" class="card"><div class="bloom-badge">🧠 Bloom de la semana: Aplicar → Analizar</div><h2>📋 Memorando — Tu misión en NeuroBiz</h2><div class="memo"><strong>Memorando interno · Dirección de Analítica Clínica</strong><p>La gerencia operativa de NeuroBiz quiere acelerar la consulta de historiales porque el equipo administrativo tarda demasiado buscando una sesión específica en listas extensas. Como <strong>Analista de Datos Estratégico</strong>, debes argumentar por qué una búsqueda binaria recursiva es mejor que revisar registro por registro cuando los datos ya están ordenados.</p><p>Además, el área de calidad desea validar perfiles terapéuticos enlazando reglas que se llaman entre sí. Esto introduce la <strong>recursividad indirecta</strong>: una función invoca otra y el ciclo conceptual se completa con una tercera validación base.</p></div><div class="summary-grid"><article class="mini-card"><h4>Resultado de aprendizaje <span class="citation">RA2</span></h4><p>Aplicar estructuras simples para resolver situaciones organizacionales con verificación y justificación.</p></article><article class="mini-card"><h4>Criterios activados <span class="citation">CE1 · CE2 · CE3 · CE4</span></h4><p>Seleccionar estrategia, implementarla, compararla y codificarla con evidencia.</p></article><article class="mini-card"><h4>Entregable central <span class="citation">Búsqueda optimizada</span></h4><p>Implementación de búsqueda binaria recursiva y comparación razonada con búsqueda lineal.</p></article><article class="mini-card"><h4>Framework GAME <span class="citation">Guiar · Articular · Motivar · Evaluar</span></h4><p>El análisis del algoritmo se conecta con decisiones operativas reales y retroalimentación rápida.</p></article></div><h3>📊 KPIs de contexto que debes usar siempre</h3><p class="lead">Estos indicadores atraviesan toda la unidad. Aunque la estructura de datos cambie, el contexto sigue siendo NeuroBiz y sus decisiones basadas en evidencia.</p><div class="kpi-grid"><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">📆</div><div><div class="kpi-name">sesiones_asistidas</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">26</div><p class="kpi-insight">Más volumen de sesiones hace visible la necesidad de búsquedas eficientes.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">🛑</div><div><div class="kpi-name">sesiones_fallidas</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">3</div><p class="kpi-insight">Permite discutir filtros y validaciones en el perfil terapéutico.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">📈</div><div><div class="kpi-name">tasa_retencion</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">0.91</div><p class="kpi-insight">Se usará luego como criterio de ordenamiento en el HTI A.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">🧠</div><div><div class="kpi-name">indice_progreso</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">5.4</div><p class="kpi-insight">El historial ordenado facilita localizar hitos de progreso.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">🎯</div><div><div class="kpi-name">nivel_hiperfoco</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">0.79</div><p class="kpi-insight">Permite segmentar búsquedas por perfiles TDAH.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">🧩</div><div><div class="kpi-name">reconocimiento_patrones</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">0.84</div><p class="kpi-insight">Ayuda a explicar por qué un dato bien ordenado mejora el análisis de patrones.</p></article></div><div class="ods-strip">🌍 Comparar recursión e iteración favorece decisiones más eficientes sobre cómputo. Eso contribuye al <strong>ODS 7</strong> y al <strong>ODS 13</strong> porque reduce búsquedas redundantes, tiempos muertos y reprocesos digitales en la gestión terapéutica.</div></section><section id="teoria" class="card"><h2>📚 Teoría construida desde fuentes reales</h2><p class="lead">Lee esta sección como una caja de herramientas conceptuales. Las ideas se parafrasean desde bibliografía base del módulo y se aterrizan al caso NeuroBiz para mantener el enfoque de negocio.</p><div class="citation">Cairó & Guardati, 2006</div><div class="citation">Joyanes Aguilar, 2014</div><div class="citation">Weiss, 2014</div><div class="citation">Moreno Pérez, 2012</div><h3>1. Recursividad directa e indirecta</h3><p>La recursividad directa ocurre cuando una función se llama a sí misma de manera explícita. Joyanes Aguilar (2014) la usa para introducir el patrón básico de reducción del problema. Es útil porque la relación entre problema grande y problema pequeño se ve inmediatamente.</p><p>La recursividad indirecta aparece cuando la llamada pasa por una o más funciones intermedias. Cairó Battistutti y Guardati Bueno (2006) la presentan como una extensión del mismo principio: el proceso sigue siendo recursivo aunque la referencia no sea literal dentro del mismo cuerpo de función.</p><h3>2. Recursión vs iteración: no es una guerra, es una decisión</h3><p>Weiss (2014) recuerda que una buena estructura de datos siempre debe analizarse junto con el costo de las operaciones. En clase, esto significa que la pregunta no es “¿cuál técnica es más bonita?”, sino “¿cuál explica mejor el problema y cuál consume menos pasos para este caso?”.</p><p>La iteración suele ser más familiar y puede ser más eficiente en tareas lineales sencillas. La recursividad, por su parte, suele comunicar mejor problemas que se dividen naturalmente, como una búsqueda binaria o un ordenamiento tipo Merge Sort.</p><h3>3. Búsqueda binaria recursiva en historiales ordenados</h3><p>Si las sesiones de un paciente están ordenadas por fecha o por identificador, no es necesario revisar una a una. La búsqueda binaria reduce el espacio de búsqueda a la mitad en cada paso. Esa reducción es un ejemplo perfecto de aplicación recursiva con valor empresarial claro.</p><p>Moreno Pérez (2012) insiste en que el análisis paso a paso es clave para que el estudiante no confunda “dividir el rango” con “moverse secuencialmente”. Por eso conviene contar pasos y registrar el centro evaluado en cada llamada.</p><h3>4. Programas recursivos como soluciones verificables</h3><p>Un programa recursivo bien diseñado debe ser demostrable: el estudiante debe poder describir la entrada, el caso base, la reducción del problema y la salida. Ese marco será el mismo cuando más adelante se estudien algoritmos de ordenamiento o estructuras dinámicas.</p><p>En el contexto NeuroBiz, la comparación entre búsqueda lineal y binaria no solo mejora la sintaxis; mejora la lectura crítica de procesos organizacionales: si los datos están preparados, el análisis puede ser más rápido y sostenible.</p><div class="info-box tip"><div class="icon">🧭</div><p><strong>Pista didáctica:</strong> leer una estructura de datos como si fuera una historia de negocio evita que el código se vuelva mecánico. Primero nombra la lógica, luego escríbela.</p></div><div class="table-wrap"><table><thead><tr><th>Concepto</th><th>Descripción</th><th>Ejemplo NeuroBiz</th><th>Valor analítico</th></tr></thead><tbody><tr><td><strong>Recursión directa</strong></td><td>La función se invoca a sí misma</td><td>factorial(n), búsqueda_binaria()</td><td>Patrón visible y fácil de auditar</td></tr><tr><td><strong>Recursión indirecta</strong></td><td>Una función llama a otra y el ciclo vuelve</td><td>validar_perfil → validar_diagnostico → validar_perfil_base</td><td>Permite modelar flujos de validación por etapas</td></tr><tr><td><strong>Iteración</strong></td><td>Repite con bucles y variables de control</td><td>buscar sesión con for</td><td>Suele ser simple para recorridos lineales</td></tr><tr><td><strong>Búsqueda binaria</strong></td><td>Reduce el espacio de búsqueda a la mitad</td><td>listas de sesiones ordenadas</td><td>Disminuye pasos y tiempo de consulta</td></tr></tbody></table></div><div class="info-box brain"><div class="icon">🧠</div><p><strong>Neurodivergencia y lectura del dato:</strong> las variables <code>nivel_hiperfoco</code> y <code>reconocimiento_patrones</code> se usan como contexto de negocio para reforzar una visión respetuosa de la diversidad; no son etiquetas reductoras, sino información para decisiones de acompañamiento.</p></div><div class="info-box warn"><div class="icon">⚙️</div><p><strong>Recuerda:</strong> en este módulo Python se usa como herramienta de <em>Business Intelligence</em>. El foco es elegir y explicar una estructura adecuada para un problema organizacional, no coleccionar sintaxis sin contexto.</p></div></section><section id="python" class="card"><h2>🐍 Python como herramienta analítica — Google Colab</h2><p class="lead">Ejecuta los bloques en Google Colab o Replit. La meta no es memorizar cada símbolo, sino comprender cómo la estructura elegida permite responder preguntas de gestión sobre sesiones, retención y progreso.</p><div class="activity-card"><h3>Bloque 1 — Recursión directa e indirecta en validación de perfil</h3><p>Permite mostrar que la idea recursiva puede distribuirse entre varias funciones del proceso.</p><div class="code-wrap"><div class="code-title"><span>Google Colab · Bloque 1</span><a href="https://colab.research.google.com" target="_blank" rel="noopener">Abrir Colab</a></div><pre><span class="kw">def</span> <span class="fn">validar_perfil_base</span>(perfil):
+    <span class="kw">return</span> <span class="str">"diagnostico"</span> <span class="kw">in</span> <span class="var">perfil</span> <span class="kw">and</span> <span class="str">"sesiones"</span> <span class="kw">in</span> <span class="var">perfil</span>
+
+<span class="kw">def</span> <span class="fn">validar_diagnostico</span>(perfil):
+    <span class="kw">if</span> <span class="var">perfil</span>[<span class="str">"diagnostico"</span>] <span class="kw">in</span> {<span class="str">"TDAH"</span>, <span class="str">"TEA"</span>, <span class="str">"ACCC"</span>}:
+        <span class="kw">return</span> <span class="fn">validar_perfil_base</span>(<span class="var">perfil</span>)
+    <span class="kw">return</span> <span class="kw">False</span>
+
+<span class="kw">def</span> <span class="fn">validar_perfil</span>(perfil):
+    <span class="kw">if</span> <span class="kw">not</span> <span class="var">perfil</span>:
+        <span class="kw">return</span> <span class="kw">False</span>
+    <span class="kw">return</span> <span class="fn">validar_diagnostico</span>(<span class="var">perfil</span>)
+
+<span class="var">perfil_neurobiz</span> <span class="op">=</span> {<span class="str">"diagnostico"</span>: <span class="str">"TEA"</span>, <span class="str">"sesiones"</span>: <span class="num">12</span>}
+<span class="fn">print</span>(<span class="fn">validar_perfil</span>(<span class="var">perfil_neurobiz</span>))</pre></div><p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p></div><div class="activity-card"><h3>Bloque 2 — Búsqueda binaria recursiva en sesiones ordenadas</h3><p>El bloque usa una lista ordenada por id o fecha y registra cada paso para volver visible la reducción del rango.</p><div class="code-wrap"><div class="code-title"><span>Google Colab · Bloque 2</span><a href="https://colab.research.google.com" target="_blank" rel="noopener">Abrir Colab</a></div><pre><span class="var">sesiones_ordenadas</span> <span class="op">=</span> [<span class="num">101</span>, <span class="num">105</span>, <span class="num">109</span>, <span class="num">120</span>, <span class="num">132</span>, <span class="num">140</span>, <span class="num">155</span>]
+
+<span class="kw">def</span> <span class="fn">busqueda_binaria_recursiva</span>(lista, objetivo, inicio, fin, pasos=<span class="num">0</span>):
+    <span class="kw">if</span> <span class="var">inicio</span> <span class="op">></span> <span class="var">fin</span>:
+        <span class="kw">return</span> <span class="op">-</span><span class="num">1</span>, <span class="var">pasos</span>
+    <span class="var">pasos</span> <span class="op">+=</span> <span class="num">1</span>
+    <span class="var">medio</span> <span class="op">=</span> (<span class="var">inicio</span> <span class="op">+</span> <span class="var">fin</span>) <span class="op">//</span> <span class="num">2</span>
+    <span class="kw">if</span> <span class="var">lista</span>[<span class="var">medio</span>] <span class="op">==</span> <span class="var">objetivo</span>:
+        <span class="kw">return</span> <span class="var">medio</span>, <span class="var">pasos</span>
+    <span class="kw">if</span> <span class="var">objetivo</span> <span class="op"><</span> <span class="var">lista</span>[<span class="var">medio</span>]:
+        <span class="kw">return</span> <span class="fn">busqueda_binaria_recursiva</span>(<span class="var">lista</span>, <span class="var">objetivo</span>, <span class="var">inicio</span>, <span class="var">medio</span> <span class="op">-</span> <span class="num">1</span>, <span class="var">pasos</span>)
+    <span class="kw">return</span> <span class="fn">busqueda_binaria_recursiva</span>(<span class="var">lista</span>, <span class="var">objetivo</span>, <span class="var">medio</span> <span class="op">+</span> <span class="num">1</span>, <span class="var">fin</span>, <span class="var">pasos</span>)
+
+<span class="var">posicion</span>, <span class="var">pasos</span> <span class="op">=</span> <span class="fn">busqueda_binaria_recursiva</span>(<span class="var">sesiones_ordenadas</span>, <span class="num">132</span>, <span class="num">0</span>, <span class="fn">len</span>(<span class="var">sesiones_ordenadas</span>) <span class="op">-</span> <span class="num">1</span>)
+<span class="fn">print</span>(<span class="str">f"Encontrada en posición {posicion}, pasos {pasos}"</span>)</pre></div><p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p></div><div class="activity-card"><h3>Bloque 3 — Comparación lineal vs binaria midiendo pasos</h3><p>El objetivo es analizar, no memorizar: el estudiante debe explicar por qué la segunda estrategia usa menos verificaciones cuando la lista está ordenada.</p><div class="code-wrap"><div class="code-title"><span>Google Colab · Bloque 3</span><a href="https://colab.research.google.com" target="_blank" rel="noopener">Abrir Colab</a></div><pre><span class="kw">def</span> <span class="fn">busqueda_lineal</span>(lista, objetivo):
+    <span class="var">pasos</span> <span class="op">=</span> <span class="num">0</span>
+    <span class="kw">for</span> <span class="var">indice</span>, <span class="var">valor</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="var">lista</span>):
+        <span class="var">pasos</span> <span class="op">+=</span> <span class="num">1</span>
+        <span class="kw">if</span> <span class="var">valor</span> <span class="op">==</span> <span class="var">objetivo</span>:
+            <span class="kw">return</span> <span class="var">indice</span>, <span class="var">pasos</span>
+    <span class="kw">return</span> <span class="op">-</span><span class="num">1</span>, <span class="var">pasos</span>
+
+<span class="var">objetivo</span> <span class="op">=</span> <span class="num">155</span>
+<span class="var">pos_l</span>, <span class="var">pasos_l</span> <span class="op">=</span> <span class="fn">busqueda_lineal</span>(<span class="var">sesiones_ordenadas</span>, <span class="var">objetivo</span>)
+<span class="var">pos_b</span>, <span class="var">pasos_b</span> <span class="op">=</span> <span class="fn">busqueda_binaria_recursiva</span>(<span class="var">sesiones_ordenadas</span>, <span class="var">objetivo</span>, <span class="num">0</span>, <span class="fn">len</span>(<span class="var">sesiones_ordenadas</span>) <span class="op">-</span> <span class="num">1</span>)
+
+<span class="fn">print</span>(<span class="str">f"Lineal: posición={pos_l}, pasos={pasos_l}"</span>)
+<span class="fn">print</span>(<span class="str">f"Binaria recursiva: posición={pos_b}, pasos={pasos_b}"</span>)</pre></div><p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p></div></section><section id="actividad" class="card"><h2>⚙️ Actividad presencial (HAD + HP = 4 horas)</h2><div class="activity-card"><h3>🧪 Optimizando la Búsqueda en NeuroBiz</h3><p><strong>Propósito:</strong> Implementar búsqueda binaria recursiva para encontrar una sesión en el historial de un paciente y compararla con una búsqueda lineal.</p><p><strong>Verbo Bloom explícito:</strong> Aplicar · comparar · analizar · justificar</p><p><strong>Duración total:</strong> 240 minutos presenciales con acompañamiento, demostración, laboratorio y cierre formativo.</p><h3>Instrucciones claras para el estudiante</h3><ol class="step-list"><li>Ordena la lista de sesiones entregada por el docente y verifica que todos los equipos usen el mismo criterio (id o fecha).</li><li>Escribe una versión lineal simple para establecer el punto de comparación.</li><li>Implementa la versión recursiva de búsqueda binaria y registra en una tabla los pasos utilizados en al menos tres consultas.</li><li>Analiza en qué situaciones la estrategia binaria deja de tener sentido (por ejemplo, si la lista no está ordenada).</li><li>Realiza una mini socialización donde tu equipo justifique la decisión técnica frente a la gerencia de NeuroBiz.</li></ol><div class="info-box tip"><div class="icon">✅</div><p><strong>Producto esperado:</strong> Colab con búsqueda lineal, búsqueda binaria recursiva y tabla comparativa de pasos.</p></div><div class="info-box warn"><div class="icon">🎯</div><p><strong>Criterio de evidencia:</strong> El criterio principal no es solo “encontrar la sesión”, sino argumentar por qué la estructura ordenada habilita una mejor estrategia.</p></div><h3>🕹️ Framework GAME en acción</h3><div class="game-grid"><article class="game-card"><h4>Guiar</h4><p>El docente modela una búsqueda manual en una lista ordenada para introducir el razonamiento de “ir a la mitad”.</p></article><article class="game-card"><h4>Articular</h4><p>Se enlazan recursión, orden de datos, validación de perfiles y comparación con iteración.</p></article><article class="game-card"><h4>Motivar</h4><p>La misión se presenta como una mejora operativa real que ahorra tiempo a la sede NeuroBiz.</p></article><article class="game-card"><h4>Evaluar</h4><p>Se observa el código, la tabla de pasos, la justificación oral y el quiz.</p></article></div></div><div class="dojo-panel"><h3>🏆 Panel ClassDojo — puntos de la misión</h3><p>Los puntos se asignan por evidencia observable y concreta, no por impresiones generales. Usa esta tabla como guía de comportamiento y desempeño.</p><div class="table-wrap"><table><thead><tr><th>Momento</th><th>Criterio concreto</th><th>Puntos</th></tr></thead><tbody><tr><td>Inicio</td><td>Reconoce por qué la lista debe estar ordenada</td><td class="points">+1</td></tr><tr><td>Implementación</td><td>Completa búsqueda lineal y binaria</td><td class="points">+2</td></tr><tr><td>Análisis</td><td>Explica diferencias de pasos entre estrategias</td><td class="points">+2</td></tr><tr><td>Validación</td><td>Identifica un caso donde la binaria no aplica</td><td class="points">+1</td></tr><tr><td>Cierre</td><td>Participa en síntesis comparativa final</td><td class="points">+1</td></tr></tbody></table></div></div><h3>🏠 HTI — Trabajo independiente con dos rutas</h3><p class="lead">Ambos escenarios profundizan la semana. El Escenario A desarrolla más dominio técnico; el Escenario B sostiene continuidad conceptual y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>.</p><article class="scenario a"><div class="scenario-header"><span>HTI Escenario A — Merge Sort recursivo para ordenar pacientes por tasa de retención</span><span>60–90 min · entrega digital</span></div><div class="scenario-body"><p>Implementa un algoritmo <code>merge_sort</code> que ordene una lista de pacientes de NeuroBiz según <code>tasa_retencion</code>.</p><p>Debes mostrar la lista antes y después, incluir comentarios cortos sobre el proceso de división y mezcla, y responder: ¿por qué este algoritmo también ejemplifica una estructura recursiva?</p><p>Entrega: notebook funcional, captura de resultados y breve análisis de cómo el ordenamiento puede apoyar priorización gerencial.</p><div class="scenario-note">Escenario A profundiza el análisis y anticipa temas futuros de eficiencia algorítmica.</div></div></article><article class="scenario b"><div class="scenario-header"><span>HTI Escenario B — Tabla comparativa de recursión directa vs indirecta</span><span>20–30 min · cuaderno/papel</span></div><div class="scenario-body"><p>Elabora una tabla con 3 ejemplos de recursión directa y 3 de recursión indirecta usando datos o procesos de NeuroBiz.</p><p>Para cada ejemplo escribe: qué función llama a cuál, cuál sería el caso base y qué beneficio organizacional aporta.</p><p>Este escenario es de bajo umbral y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>; su finalidad es mantener claridad conceptual sin convertir la tarea en barrera.</p><div class="scenario-note">Úsalo cuando el grupo necesite reforzar comparación conceptual antes de asumir un algoritmo recursivo más complejo.</div></div></article></section><section id="quiz" class="card"><h2>🎮 Quiz de verificación — Quizizz</h2><div class="quiz-box"><p><strong>Modalidad sugerida:</strong> 5 preguntas · 8 a 10 minutos · retroalimentación inmediata. Las respuestas correctas están ocultas y aparecen al pasar el cursor sobre cada tarjeta.</p><div class="quiz-grid"><article class="quiz-item" tabindex="0"><h4>Pregunta 1</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Qué diferencia principal hay entre recursión directa e indirecta?</strong></p><ol class="quiz-options"><li>La directa usa listas y la indirecta no</li><li>La directa se llama a sí misma; la indirecta pasa por otra función</li><li>La indirecta no necesita caso base</li><li>La directa siempre es más rápida</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La diferencia está en la ruta de la llamada, no en la necesidad de caso base.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 2</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Cuándo tiene sentido usar búsqueda binaria?</strong></p><ol class="quiz-options"><li>Cuando los datos están ordenados</li><li>Cuando la lista es aleatoria y pequeña</li><li>Solo con cadenas de texto</li><li>Solo en listas de dos elementos</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> Sin orden previo no puedes descartar la mitad del problema con fundamento.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 3</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Qué busca comparar el conteo de pasos en clase?</strong></p><ol class="quiz-options"><li>El color del código</li><li>La longitud del nombre de la función</li><li>La eficiencia relativa entre dos estrategias</li><li>La velocidad del internet</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> Contar pasos hace visible la diferencia analítica entre estrategias.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 4</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>En la validación de perfil terapéutico de NeuroBiz, la recursión indirecta se observa cuando…</strong></p><ol class="quiz-options"><li>una función imprime un texto</li><li>validar_perfil llama a validar_diagnostico y esta a validar_perfil_base</li><li>se usa un bucle while</li><li>se ordena una lista</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La cadena de llamadas entre funciones modela el flujo recursivo indirecto.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 5</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>Si la lista no está ordenada, la búsqueda binaria recursiva…</strong></p><ol class="quiz-options"><li>sigue siendo igualmente válida</li><li>puede fallar conceptualmente porque descarta rangos sin criterio</li><li>ordena automáticamente la lista</li><li>reemplaza la validación</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La reducción solo es válida si el criterio de orden se mantiene.</div></article></div></div></section><section id="bib" class="card"><h2>📖 Bibliografía en formato APA</h2><div class="mini-card"><p>Las siguientes fuentes sostienen la teoría de la semana y legitiman el enfoque de Python como herramienta analítica para resolver problemas organizacionales del caso NeuroBiz.</p><ul><li>Cairó Battistutti, O., & Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li><li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill.</li><li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li><li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial.</li><li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li><li>Google Colaboratory. (2024). <em>Google Colaboratory</em>. https://colab.research.google.com</li></ul></div></section></main><footer>TGA05 · Semana 7 · Material del estudiante · Framework GAME · Caso transversal NeuroBiz S.A.S. · ODS 7 y 13</footer><script>document.addEventListener('DOMContentLoaded', function () {var bar = document.querySelector('.xp-bar'); if (bar) {requestAnimationFrame(function () {bar.style.width = bar.dataset.progress + '%';});}});</script>
+<script id="progress-tracker-js">
+// ════════════════════════════════════════════════════
+//  NeuroBiz Progress Tracker · Semana 7
+// ════════════════════════════════════════════════════
+
+const PT = (function() {
+  const SEMANA       = 7;
+  const XP_BASE      = 35;          // XP base por abrir el material
+  const XP_MAX       = 100;
+  const LS_KEY       = `tga05_s7`;
+  const LS_GLOBAL    = "tga05_global";
+
+  // URL del Apps Script — reemplaza con tu URL al configurar
+  // Ver: EstructuraDatos/setup/CONFIGURAR_PROGRESO.html
+  const SHEETS_URL = localStorage.getItem("tga05_sheets_url") || "";
+
+  let state = {
+    nombre          : "",
+    id_estudiante   : "",
+    semana          : SEMANA,
+    xp              : XP_BASE,
+    quiz_respuestas : {},
+    quiz_puntaje    : 0,
+    hti_entregado   : false,
+    actividad_completada: false,
+    dispositivo     : navigator.userAgent.substring(0, 80)
+  };
+
+  // ── Cargar desde localStorage ──────────────────────
+  function load() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (raw) Object.assign(state, JSON.parse(raw));
+
+      // Cargar nombre/id del perfil global si no está en esta semana
+      const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
+      if (!state.nombre       && global.nombre)        state.nombre        = global.nombre;
+      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante;
+    } catch(e) { console.warn("PT load error:", e); }
+  }
+
+  // ── Guardar en localStorage ────────────────────────
+  function save() {
+    // Capturar nombre del input
+    const inp = document.getElementById("pt-nombre");
+    if (inp && inp.value.trim()) {
+      state.nombre = inp.value.trim();
+      // Generar ID si no existe
+      if (!state.id_estudiante) {
+        state.id_estudiante = state.nombre.toLowerCase()
+          .replace(/\s+/g,"_").replace(/[^a-z0-9_]/g,"")
+          .substring(0,20) + "_" + Math.random().toString(36).substr(2,4);
+      }
+      // Guardar perfil global
+      const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
+      global.nombre = state.nombre;
+      global.id_estudiante = state.id_estudiante;
+      localStorage.setItem(LS_GLOBAL, JSON.stringify(global));
+    }
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+    render();
+  }
+
+  // ── Renderizar widget ──────────────────────────────
+  function render() {
+    const xpBar   = document.getElementById("pt-xp-bar");
+    const xpCount = document.getElementById("pt-xp-count");
+    const semLbl  = document.getElementById("pt-semana-label");
+    const inp     = document.getElementById("pt-nombre");
+
+    if (xpBar)   xpBar.style.width   = Math.min(state.xp, XP_MAX) + "%";
+    if (xpCount) xpCount.textContent = state.xp + " XP";
+    if (semLbl)  semLbl.textContent  = "Semana " + SEMANA;
+    if (inp && !inp.value && state.nombre) inp.value = state.nombre;
+
+    // Sync original XP bars in the page
+    document.querySelectorAll(".xp-fill,[data-target]").forEach(el => {
+      el.style.width = Math.min(state.xp, XP_MAX) + "%";
+    });
+    const xpCounters = document.querySelectorAll("#xpCount,.xp-row strong");
+    xpCounters.forEach(el => { el.textContent = state.xp + " XP"; });
+  }
+
+  // ── Sumar XP ──────────────────────────────────────
+  function addXP(pts, motivo) {
+    state.xp = Math.min(state.xp + pts, XP_MAX);
+    msg("✨ +" + pts + " XP — " + motivo, "lime");
+    save();
+  }
+
+  // ── Sincronizar con Supabase + Google Sheets ──────
+  async function syncCloud() {
+    save();
+    const sheetsUrl = localStorage.getItem("tga05_sheets_url") || "";
+    const sbUrl     = localStorage.getItem("tga05_supabase_url") || "";
+    const sbKey     = localStorage.getItem("tga05_supabase_key") || "";
+
+    if (!sheetsUrl && !sbUrl) {
+      msg("⚠️ Sin destino configurado. Ver CONFIGURAR_SUPABASE.html", "orange");
+      return;
+    }
+
+    msg("⏳ Sincronizando…", "#fff9c4");
+    let synced = false;
+
+    // ── Supabase (recomendado) ─────────────────────
+    if (sbUrl && sbKey) {
+      try {
+        const res = await fetch(sbUrl + "/rest/v1/student_progress", {
+          method : "POST",
+          headers: {
+            "apikey"       : sbKey,
+            "Authorization": "Bearer " + sbKey,
+            "Content-Type" : "application/json",
+            "Prefer"       : "resolution=merge-duplicates"
+          },
+          body: JSON.stringify({
+            student_name    : state.nombre         || "Anónimo",
+            student_id      : state.id_estudiante  || "desconocido",
+            semana          : state.semana,
+            xp              : state.xp             || 0,
+            quiz_answers    : state.quiz_respuestas || {},
+            quiz_score      : state.quiz_puntaje    || 0,
+            hti_done        : !!state.hti_entregado,
+            activity_done   : !!state.actividad_completada,
+            updated_at      : new Date().toISOString()
+          })
+        });
+        if (res.ok || res.status === 201) {
+          synced = true;
+          msg("✅ Guardado en Supabase ☁️", "lightgreen");
+        } else {
+          msg("❌ Supabase: error " + res.status, "salmon");
+        }
+      } catch(e) {
+        msg("❌ Sin conexión (Supabase). Local guardado.", "salmon");
+      }
+    }
+
+    // ── Google Sheets (opcional adicional) ─────────
+    if (sheetsUrl) {
+      try {
+        const resp = await fetch(sheetsUrl, {
+          method : "POST",
+          headers: { "Content-Type": "text/plain" },
+          body   : JSON.stringify(state)
+        });
+        const json = await resp.json();
+        if (json.ok) {
+          synced = true;
+          msg(sbUrl ? "✅ Guardado en Supabase + Sheets" : "✅ Guardado en Google Sheets", "lightgreen");
+        } else {
+          if (!synced) msg("❌ Sheets: " + (json.error || "Error"), "salmon");
+        }
+      } catch(e) {
+        if (!synced) msg("❌ Sin conexión. Solo guardado local.", "salmon");
+      }
+    }
+  }
+
+  // ── Exportar código de progreso ────────────────────
+  function exportCode() {
+    save();
+    const code = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+    const ta = document.createElement("textarea");
+    ta.value = code;
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy");
+    document.body.removeChild(ta);
+    msg("📋 ¡Código copiado! Guárdalo en Google Drive o OneDrive.", "#fff9c4");
+    // También abrir como descarga
+    const a = document.createElement("a");
+    a.href     = "data:text/plain;charset=utf-8," + encodeURIComponent(code);
+    a.download = "progreso_tga05_s7_" + (state.id_estudiante || "estudiante") + ".txt";
+    a.click();
+  }
+
+  // ── Importar desde código ──────────────────────────
+  function importCode() {
+    const code = prompt("Pega tu código de progreso:");
+    if (!code) return;
+    try {
+      const decoded = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+      Object.assign(state, decoded);
+      save();
+      msg("✅ Progreso restaurado correctamente.", "lightgreen");
+    } catch(e) {
+      msg("❌ Código inválido.", "salmon");
+    }
+  }
+
+  // ── Toggle widget ──────────────────────────────────
+  function toggle() {
+    const w = document.getElementById("pt-widget");
+    const t = document.getElementById("pt-toggle");
+    if (w) w.classList.toggle("collapsed");
+    if (t) t.textContent = w && w.classList.contains("collapsed") ? "▼" : "▲";
+  }
+
+  // ── Mensaje en widget ──────────────────────────────
+  function msg(text, color) {
+    const el = document.getElementById("pt-msg");
+    if (!el) return;
+    el.textContent = text;
+    el.style.color = color || "#fff";
+    setTimeout(() => { if (el.textContent === text) el.textContent = ""; }, 4000);
+  }
+
+  // ── Init ───────────────────────────────────────────
+  function init() {
+    load();
+    render();
+
+    // XP por visitar la semana (solo una vez por semana)
+    const visitKey = `tga05_visited_s7`;
+    if (!localStorage.getItem(visitKey)) {
+      localStorage.setItem(visitKey, "1");
+      addXP(15, "Material de Semana 7 abierto");
+    }
+
+    // Hacer quiz interactivo si hay preguntas con clase .quiz-q
+    document.querySelectorAll(".quiz-q").forEach((qEl, qi) => {
+      const answers = qEl.querySelectorAll("li");
+      // Buscar la respuesta oculta (.quiz-answer)
+      const answerEl = qEl.querySelector(".quiz-answer");
+      const correctText = answerEl ? answerEl.textContent : "";
+      const correctLetter = correctText.match(/^✅\s*([a-d])/i);
+      const correctIdx = correctLetter
+        ? ["a","b","c","d"].indexOf(correctLetter[1].toLowerCase())
+        : -1;
+
+      answers.forEach((li, ai) => {
+        li.style.cursor = "pointer";
+        li.style.borderRadius = "6px";
+        li.style.padding = "3px 8px";
+        li.style.transition = "background .2s";
+        li.addEventListener("mouseenter", () => {
+          if (!li.dataset.answered) li.style.background = "rgba(25,118,210,.15)";
+        });
+        li.addEventListener("mouseleave", () => {
+          if (!li.dataset.answered) li.style.background = "";
+        });
+        li.addEventListener("click", () => {
+          const key = "q" + qi;
+          if (state.quiz_respuestas[key] !== undefined) return; // ya respondida
+          answers.forEach(a => { a.dataset.answered = "1"; });
+          if (ai === correctIdx) {
+            li.style.background = "#2e7d32";
+            li.style.color = "#fff";
+            addXP(10, "Respuesta correcta en quiz");
+            state.quiz_puntaje = (state.quiz_puntaje || 0) + 1;
+          } else {
+            li.style.background = "#c62828";
+            li.style.color = "#fff";
+            if (correctIdx >= 0) {
+              answers[correctIdx].style.background = "#2e7d32";
+              answers[correctIdx].style.color = "#fff";
+            }
+          }
+          state.quiz_respuestas[key] = ai;
+          if (answerEl) answerEl.style.display = "block";
+          save();
+        });
+      });
+
+      // Restaurar estado previo
+      const prevKey = "q" + qi;
+      if (state.quiz_respuestas[prevKey] !== undefined) {
+        const prev = state.quiz_respuestas[prevKey];
+        answers.forEach(a => { a.dataset.answered = "1"; });
+        if (prev === correctIdx && correctIdx >= 0) {
+          answers[prev].style.background = "#2e7d32";
+          answers[prev].style.color = "#fff";
+        } else {
+          if (prev < answers.length) {
+            answers[prev].style.background = "#c62828";
+            answers[prev].style.color = "#fff";
+          }
+          if (correctIdx >= 0) {
+            answers[correctIdx].style.background = "#2e7d32";
+            answers[correctIdx].style.color = "#fff";
+          }
+        }
+        if (answerEl) answerEl.style.display = "block";
+      }
+    });
+
+    // XP por configurar nombre
+    const nombreInp = document.getElementById("pt-nombre");
+    if (nombreInp) {
+      nombreInp.addEventListener("blur", () => {
+        if (nombreInp.value.trim() && !state._nombre_xp) {
+          state._nombre_xp = true;
+          addXP(5, "Perfil configurado");
+        }
+      });
+    }
+  }
+
+  return {
+    init,
+    addXP,
+    save  : save,
+    sync  : syncCloud,
+    export: exportCode,
+    import: importCode,
+    toggle,
+    state : () => state
+  };
+})();
+
+// ── Exponer funciones para botones HTML ────────────────────
+function ptSaveLocal()  { PT.save(); }
+function ptSyncCloud()  { PT.sync(); }
+function ptExportCode() { PT.export(); }
+function ptImportCode() { PT.import(); }
+function ptToggle()     { PT.toggle(); }
+
+// ── Inicializar cuando cargue el DOM ───────────────────────
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", PT.init);
+} else {
+  PT.init();
+}
+</script>
+
+<!-- ── WELCOME MODAL ── -->
+<style id="welcome-modal-css">
+#pt-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeIn .3s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+#pt-modal-box{
+  background:linear-gradient(160deg,#1E2843,#1E2843 70%,#2d3a5e);
+  color:#fff;border-radius:20px;padding:2rem 2rem 1.5rem;
+  width:min(94vw,400px);box-shadow:0 20px 60px rgba(0,0,0,.5);
+  position:relative;animation:slideUp .35s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+#pt-modal-box h2{font-size:1.25rem;font-weight:900;margin-bottom:.3rem}
+#pt-modal-box .sub{opacity:.75;font-size:.85rem;margin-bottom:1.3rem}
+#pt-modal-box .field{margin-bottom:.9rem}
+#pt-modal-box label{display:block;font-size:.78rem;font-weight:700;
+  opacity:.85;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em}
+#pt-modal-box input{
+  width:100%;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.35);
+  border-radius:10px;padding:.6rem .9rem;color:#fff;font-size:.95rem;outline:none;
+}
+#pt-modal-box input::placeholder{color:rgba(255,255,255,.45)}
+#pt-modal-box input:focus{border-color:rgba(249,168,37,.9)}
+#pt-modal-btn{
+  width:100%;padding:.7rem;border:none;border-radius:12px;
+  background:linear-gradient(135deg,#FFDF2D,#FFDF2D);
+  color:#1E2843;font-weight:900;font-size:1rem;cursor:pointer;
+  margin-top:.4rem;transition:opacity .15s;
+}
+#pt-modal-btn:hover{opacity:.9}
+#pt-modal-error{color:#ff8a80;font-size:.8rem;margin-top:.5rem;min-height:1em}
+#pt-modal-xp{
+  text-align:center;font-size:.78rem;opacity:.7;margin-top:.7rem;
+}
+</style>
+
+<div id="pt-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="pt-modal-title">
+  <div id="pt-modal-box">
+    <h2 id="pt-modal-title">👋 ¡Bienvenido a TGA05!</h2>
+    <p class="sub">NeuroBiz S.A.S. · Estructura de Datos para los Negocios</p>
+    <div class="field">
+      <label for="pt-modal-nombre">Tu nombre completo *</label>
+      <input id="pt-modal-nombre" type="text" placeholder="Ej: María García López"
+        autocomplete="name" autofocus
+        onkeydown="if(event.key==='Enter')ptModalSetup()" />
+    </div>
+    <div class="field">
+      <label for="pt-modal-grupo">Grupo / Paralelo</label>
+      <input id="pt-modal-grupo" type="text" placeholder="Ej: GA-01" />
+    </div>
+    <button id="pt-modal-btn" onclick="ptModalSetup()">¡Empezar! 🚀</button>
+    <div id="pt-modal-error"></div>
+    <p id="pt-modal-xp">⭐ Recibirás +5 XP por configurar tu perfil</p>
+  </div>
+</div>
+
+<script id="welcome-modal-js">
+(function () {
+  function shouldShowModal() {
+    try {
+      var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
+      return !g.nombre || g.nombre.trim().length < 2;
+    } catch(e) { return true; }
+  }
+
+  function showModal() {
+    var overlay = document.getElementById("pt-overlay");
+    if (overlay) {
+      overlay.style.display = "flex";
+      var inp = document.getElementById("pt-modal-nombre");
+      // Pre-fill if there's a partial name saved
+      try {
+        var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
+        if (g.nombre && inp) inp.value = g.nombre;
+        var gInp = document.getElementById("pt-modal-grupo");
+        if (g.grupo && gInp) gInp.value = g.grupo;
+      } catch(e) {}
+      if (inp) setTimeout(function(){ inp.focus(); }, 100);
+    }
+  }
+
+  window.ptModalSetup = function() {
+    var nombreInp = document.getElementById("pt-modal-nombre");
+    var grupoInp  = document.getElementById("pt-modal-grupo");
+    var errEl     = document.getElementById("pt-modal-error");
+    var nombre    = nombreInp ? nombreInp.value.trim() : "";
+    var grupo     = grupoInp  ? grupoInp.value.trim()  : "";
+
+    if (!nombre || nombre.length < 3) {
+      if (errEl) errEl.textContent = "Por favor escribe tu nombre completo (mínimo 3 caracteres).";
+      if (nombreInp) nombreInp.focus();
+      return;
+    }
+
+    // Build / update global profile
+    var profile = {};
+    try { profile = JSON.parse(localStorage.getItem("tga05_global") || "{}"); } catch(e) {}
+
+    profile.nombre = nombre;
+    if (grupo) profile.grupo = grupo;
+    if (!profile.id_estudiante) {
+      profile.id_estudiante = nombre.toLowerCase()
+        .replace(/\s+/g, "_").replace(/[^a-z0-9_áéíóúñ]/g, "")
+        .substring(0, 22) + "_" + Math.random().toString(36).substr(2, 4);
+    }
+    localStorage.setItem("tga05_global", JSON.stringify(profile));
+
+    // Sync into the PT widget name input
+    var ptInp = document.getElementById("pt-nombre");
+    if (ptInp) { ptInp.value = nombre; ptInp.dispatchEvent(new Event("input")); }
+
+    // XP reward
+    if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
+      PT.addXP(5, "Perfil configurado ✨");
+    }
+
+    // Close modal
+    var overlay = document.getElementById("pt-overlay");
+    if (overlay) {
+      overlay.style.opacity = "0";
+      overlay.style.transition = "opacity .2s";
+      setTimeout(function(){ overlay.style.display = "none"; overlay.style.opacity = ""; }, 200);
+    }
+
+    // Auto-sync to Supabase after a short delay
+    setTimeout(function(){
+      if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
+    }, 800);
+  };
+
+  // Show on load if no name
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function(){
+      if (shouldShowModal()) showModal();
+    });
+  } else {
+    if (shouldShowModal()) showModal();
+  }
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configurar Progreso — TGA05 NeuroBiz</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #1a237e; --accent: #3949ab; --green: #2e7d32;
+      --gold: #f9a825; --border: #c5cae9; --light: #f5f7ff;
+      --radius: 12px;
+    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--light);
+      color: #212121; line-height: 1.7; }
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff; padding: 2.5rem 2rem 2rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    header::after { content:''; position:absolute; bottom:-2px; left:0; right:0;
+      height:36px; background:var(--light); clip-path: ellipse(55% 100% at 50% 100%); }
+    header h1 { font-size: 1.9rem; font-weight: 800; }
+    header p { opacity:.85; margin-top:.4rem; }
+    main { max-width: 860px; margin: 2rem auto; padding: 0 1.2rem 4rem; }
+    .card { background:#fff; border-radius:var(--radius); border:1px solid var(--border);
+      padding:1.8rem 2rem; margin-bottom:2rem; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .card h2 { font-size:1.2rem; color:var(--primary); border-left:5px solid var(--gold);
+      padding-left:.8rem; margin-bottom:1.2rem; }
+    .card h3 { font-size:1rem; color:var(--accent); margin:1.1rem 0 .5rem; }
+    .step { display:flex; gap:1.2rem; align-items:flex-start; padding:.8rem 0;
+      border-bottom:1px solid var(--border); }
+    .step:last-child { border-bottom:none; }
+    .step-num { width:32px; height:32px; border-radius:50%; background:var(--primary);
+      color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; font-size:.9rem; }
+    .step-body { flex:1; }
+    .step-body strong { display:block; margin-bottom:.3rem; }
+    .step-body p { font-size:.92rem; color:#444; }
+    .step-body a { color:var(--accent); font-weight:700; }
+    pre { background:#1e1e2e; color:#cdd6f4; border-radius:10px; padding:1rem 1.3rem;
+      font-size:.85rem; overflow-x:auto; margin:.6rem 0; line-height:1.6; }
+    .tag { display:inline-block; padding:.2rem .7rem; border-radius:20px;
+      font-size:.75rem; font-weight:700; }
+    .tag.free   { background:#e8f5e9; color:#2e7d32; border:1px solid #81c784; }
+    .tag.cloud  { background:#e3f2fd; color:#0d47a1; border:1px solid #90caf9; }
+    .tag.local  { background:#fff8e1; color:#e65100; border:1px solid #ffcc02; }
+    .box { border-radius:10px; padding:1rem 1.3rem; margin:.8rem 0;
+      display:flex; gap:.8rem; align-items:flex-start; }
+    .box.ok   { background:#e8f5e9; border-left:4px solid #43a047; }
+    .box.warn { background:#fff8e1; border-left:4px solid #ffa000; }
+    .box.tip  { background:#e3f2fd; border-left:4px solid #1976d2; }
+    .box .ico { font-size:1.3rem; flex-shrink:0; }
+    .box p { margin:0; font-size:.9rem; }
+    input[type=text], input[type=url] {
+      width:100%; padding:.6rem 1rem; border:2px solid var(--border);
+      border-radius:8px; font-size:.9rem; margin:.4rem 0; outline:none; }
+    input:focus { border-color:var(--accent); }
+    button.primary { background:var(--primary); color:#fff; border:none; border-radius:8px;
+      padding:.6rem 1.4rem; font-size:.9rem; font-weight:700; cursor:pointer; margin-top:.5rem; }
+    button.primary:hover { background:var(--accent); }
+    .option-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1rem 0; }
+    .option-card { border:2px solid var(--border); border-radius:var(--radius);
+      padding:1.2rem; text-align:center; cursor:pointer; transition:border-color .2s; }
+    .option-card:hover { border-color:var(--accent); }
+    .option-card .ico { font-size:2rem; margin-bottom:.5rem; }
+    .option-card strong { display:block; margin-bottom:.3rem; }
+    .option-card p { font-size:.8rem; color:#666; }
+    table { width:100%; border-collapse:collapse; font-size:.88rem; }
+    th { background:var(--primary); color:#fff; padding:.6rem .9rem; text-align:left; }
+    td { padding:.55rem .9rem; border-bottom:1px solid var(--border); }
+    footer { text-align:center; padding:2rem; font-size:.8rem; color:#78909c;
+      border-top:1px solid var(--border); }
+    @media(max-width:600px){ .option-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚙️ Configurar Persistencia de Progreso</h1>
+  <p>TGA05 · NeuroBiz S.A.S. · Sistema de Gamificación</p>
+</header>
+
+<main>
+
+  <!-- INTRO -->
+  <div class="card">
+    <h2>¿Por qué se pierde el progreso?</h2>
+    <p>
+      Cuando un estudiante cierra la pestaña de Moodle o cambia de dispositivo, 
+      el progreso (XP, respuestas del quiz, actividades completadas) desaparece porque 
+      los archivos HTML son estáticos. Esta guía explica cómo solucionarlo.
+    </p>
+
+    <div class="option-grid" style="margin-top:1.2rem">
+      <div class="option-card">
+        <div class="ico">💾</div>
+        <strong>Opción A — Solo local</strong>
+        <span class="tag local">Sin configuración</span>
+        <p style="margin-top:.5rem">Funciona automáticamente en el mismo navegador/dispositivo. 
+        El estudiante exporta un código para respaldo.</p>
+      </div>
+      <div class="option-card">
+        <div class="ico">☁️</div>
+        <strong>Opción B — Google Sheets</strong>
+        <span class="tag cloud">Recomendado</span>
+        <p style="margin-top:.5rem">Sincroniza con Google Sheets. Funciona entre dispositivos. 
+        El docente ve el dashboard de todos los estudiantes.</p>
+      </div>
+    </div>
+
+    <div class="box tip" style="margin-top:1rem">
+      <span class="ico">ℹ️</span>
+      <p>Las dos opciones funcionan juntas. localStorage actúa como caché offline; 
+      Google Sheets como respaldo en la nube. El botón <strong>"☁️ Guardar"</strong> 
+      activa la sincronización.</p>
+    </div>
+  </div>
+
+  <!-- OPCIÓN A -->
+  <div class="card">
+    <h2>💾 Opción A — Progreso Local (funciona sin configuración)</h2>
+    <div class="box ok">
+      <span class="ico">✅</span>
+      <p>Ya está activo. No necesitas hacer nada. Cada vez que el estudiante visita una semana, 
+      su progreso se guarda automáticamente en el navegador.</p>
+    </div>
+    <h3>¿Cómo el estudiante respalda su progreso?</h3>
+    <p>En el widget flotante <strong>📊 Mi Progreso TGA05</strong> (esquina inferior derecha):</p>
+    <ol style="padding-left:1.4rem; margin:.8rem 0; font-size:.92rem;">
+      <li>Clic en <strong>"📋 Código"</strong> — copia y descarga un código de texto.</li>
+      <li>Guardar ese archivo <code>.txt</code> en Google Drive, OneDrive o enviárselo por email.</li>
+      <li>Para restaurar en otro dispositivo: clic en <strong>"📥 Cargar"</strong> y pegar el código.</li>
+    </ol>
+    <div class="box warn">
+      <span class="ico">⚠️</span>
+      <p>Si el estudiante borra las cookies o usa modo incógnito, pierde el localStorage. 
+      El código exportado es el respaldo. Recuerda a los estudiantes exportarlo al final de cada sesión.</p>
+    </div>
+  </div>
+
+  <!-- OPCIÓN B -->
+  <div class="card">
+    <h2>☁️ Opción B — Google Sheets (recomendado para el docente)</h2>
+    <p>Configuración única de ~10 minutos. Solo necesitas una cuenta de Google.</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Crear el Google Sheet</strong>
+        <p>Ve a <a href="https://sheets.google.com" target="_blank">sheets.google.com</a> 
+        y crea una hoja nueva. Puedes llamarla <code>TGA05_Progreso_NeuroBiz</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Abrir Apps Script</strong>
+        <p>En la hoja: Menú <strong>Extensiones → Apps Script</strong>. 
+        Se abrirá el editor de código.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Pegar el código</strong>
+        <p>Borra todo lo que hay en el editor y pega el contenido del archivo:</p>
+        <pre>EstructuraDatos/setup/apps_script_neurobiz.gs</pre>
+        <p>Guarda con <strong>Ctrl+S</strong> (o ⌘+S en Mac).</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Implementar como aplicación web</strong>
+        <p>Clic en <strong>"Implementar" → "Nueva implementación"</strong>.<br>
+        Configurar así:</p>
+        <table style="margin:.6rem 0">
+          <thead><tr><th>Campo</th><th>Valor</th></tr></thead>
+          <tbody>
+            <tr><td>Tipo</td><td><strong>Aplicación web</strong></td></tr>
+            <tr><td>Descripción</td><td>TGA05 Progress Tracker</td></tr>
+            <tr><td>Ejecutar como</td><td><strong>Yo (tu cuenta)</strong></td></tr>
+            <tr><td>Quién tiene acceso</td><td><strong>Cualquier persona</strong></td></tr>
+          </tbody>
+        </table>
+        <p>Clic en <strong>"Implementar"</strong>. Autoriza los permisos que solicite.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <strong>Copiar la URL y configurarla en los materiales</strong>
+        <p>Copia la <strong>URL de la aplicación web</strong> (empieza con 
+        <code>https://script.google.com/macros/s/...</code>).</p>
+        <p>Pégala en el campo de abajo y haz clic en "Guardar configuración":</p>
+        <input type="url" id="sheets-url" placeholder="https://script.google.com/macros/s/XXXXXXXXXX/exec" />
+        <button class="primary" onclick="saveConfig()">💾 Guardar configuración en este navegador</button>
+        <div id="config-msg" style="margin-top:.5rem; font-size:.85rem; color:#2e7d32;"></div>
+        <div class="box tip" style="margin-top:.8rem">
+          <span class="ico">ℹ️</span>
+          <p>Esta configuración se guarda en localStorage de este navegador. 
+          Los estudiantes deben configurarla <strong>una sola vez</strong> en su dispositivo principal 
+          (o puedes pre-configurar la URL dentro de los archivos HTML editando la línea 
+          <code>const SHEETS_URL = ""</code> en cada index.html).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <strong>¡Listo! Verificar el dashboard del docente</strong>
+        <p>En el Google Sheet, aparecerá el menú <strong>📊 TGA05 NeuroBiz</strong>. 
+        Desde ahí puedes generar el resumen con XP total, semanas visitadas y % de avance 
+        por estudiante.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUÉ VE EL ESTUDIANTE -->
+  <div class="card">
+    <h2>🎓 ¿Qué ve el estudiante?</h2>
+    <p>En cada <code>index.html</code> aparece un widget flotante en la esquina inferior derecha:</p>
+    <div style="background:linear-gradient(135deg,#1a237e,#283593); color:#fff; border-radius:16px;
+      padding:1.2rem 1.5rem; max-width:280px; margin:1rem 0; font-size:.85rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.8rem;">
+        <strong>📊 Mi Progreso TGA05</strong>
+        <span style="opacity:.7">▲</span>
+      </div>
+      <div style="background:rgba(255,255,255,.15); border-radius:8px; padding:.4rem .8rem;
+        font-size:.8rem; margin-bottom:.7rem; color:rgba(255,255,255,.6);">Tu nombre completo…</div>
+      <div style="background:rgba(255,255,255,.2); border-radius:20px; height:10px; overflow:hidden; margin-bottom:.4rem;">
+        <div style="height:100%; width:45%; background:linear-gradient(90deg,#f9a825,#fff176); border-radius:20px;"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:.75rem; opacity:.8; margin-bottom:.8rem;">
+        <span>Semana 3</span><span>45 XP</span>
+      </div>
+      <div style="display:flex; gap:.5rem;">
+        <div style="flex:1; background:#43a047; border-radius:8px; padding:.4rem; text-align:center; font-size:.72rem; font-weight:700;">☁️ Guardar</div>
+        <div style="flex:1; background:#f9a825; color:#1a237e; border-radius:8px; padding:.4rem; text-align:center; font-size:.72rem; font-weight:700;">📋 Código</div>
+        <div style="flex:1; background:rgba(255,255,255,.15); border-radius:8px; padding:.4rem; text-align:center; font-size:.72rem; font-weight:700;">📥 Cargar</div>
+      </div>
+    </div>
+    <h3>Cómo se gana XP:</h3>
+    <table>
+      <thead><tr><th>Acción</th><th>XP ganado</th></tr></thead>
+      <tbody>
+        <tr><td>Abrir el material de una semana (primera vez)</td><td>+15 XP</td></tr>
+        <tr><td>Configurar nombre en el widget</td><td>+5 XP</td></tr>
+        <tr><td>Responder una pregunta del quiz correctamente</td><td>+10 XP por pregunta</td></tr>
+        <tr><td>XP base acumulado por semana visitada</td><td>+5 XP × nº semana</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- QUÉ VE EL DOCENTE -->
+  <div class="card">
+    <h2>👩‍🏫 ¿Qué ve el docente en Google Sheets?</h2>
+    <p>La hoja <strong>Progreso_TGA05</strong> se actualiza automáticamente con cada sincronización:</p>
+    <table style="margin:.8rem 0">
+      <thead><tr><th>Columna</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>Timestamp</td><td>Fecha y hora de la última sincronización (hora Colombia)</td></tr>
+        <tr><td>Estudiante</td><td>Nombre ingresado por el estudiante</td></tr>
+        <tr><td>ID_Estudiante</td><td>ID único generado automáticamente</td></tr>
+        <tr><td>Semana</td><td>Número de semana del material</td></tr>
+        <tr><td>XP</td><td>Puntos de experiencia acumulados en esa semana</td></tr>
+        <tr><td>Quiz_Respuestas</td><td>JSON con respuestas dadas a cada pregunta</td></tr>
+        <tr><td>Quiz_Puntaje</td><td>Número de respuestas correctas</td></tr>
+        <tr><td>HTI_Entregado</td><td>SI / NO</td></tr>
+        <tr><td>Actividad_Completada</td><td>SI / NO</td></tr>
+      </tbody>
+    </table>
+    <div class="box ok">
+      <span class="ico">📊</span>
+      <p>Usa el menú <strong>📊 TGA05 NeuroBiz → Generar resumen docente</strong> 
+      para crear automáticamente una hoja resumen con XP total, semanas visitadas 
+      y % de avance por cada estudiante.</p>
+    </div>
+  </div>
+
+  <!-- INSTRUCCIÓN PARA ESTUDIANTES -->
+  <div class="card">
+    <h2>📢 Mensaje para copiar y enviar a los estudiantes</h2>
+    <div style="background:#f5f7ff; border:2px dashed var(--border); border-radius:10px;
+      padding:1.2rem 1.5rem; font-size:.9rem; line-height:1.8;">
+      <strong>📌 Instrucciones para guardar tu progreso en TGA05:</strong><br><br>
+      1. Cuando abras el material de cada semana, verás un widget azul oscuro 
+         <strong>📊 Mi Progreso TGA05</strong> en la esquina inferior derecha.<br>
+      2. Escribe tu nombre completo en el campo de texto. Esto se guarda automáticamente.<br>
+      3. Las respuestas del quiz y los XP se guardan solos en tu navegador.<br>
+      4. Para hacer una copia de seguridad: clic en <strong>📋 Código</strong> → 
+         guarda el archivo <code>.txt</code> en tu Google Drive o OneDrive.<br>
+      5. Si cambias de dispositivo: clic en <strong>📥 Cargar</strong> y pega el código que guardaste.<br>
+      6. Para sincronizar con el servidor: clic en <strong>☁️ Guardar</strong> 
+         (requiere internet).
+    </div>
+  </div>
+
+</main>
+
+<footer>TGA05 · Configuración de Progreso · UIB · NeuroBiz S.A.S.</footer>
+
+<script>
+function saveConfig() {
+  const url = document.getElementById("sheets-url").value.trim();
+  const msg = document.getElementById("config-msg");
+  if (!url || !url.startsWith("https://script.google.com")) {
+    msg.style.color = "#c62828";
+    msg.textContent = "❌ URL inválida. Debe empezar con https://script.google.com/macros/...";
+    return;
+  }
+  localStorage.setItem("tga05_sheets_url", url);
+  msg.style.color = "#2e7d32";
+  msg.textContent = "✅ URL guardada. Los materiales del módulo ya pueden sincronizar automáticamente.";
+}
+
+// Cargar URL guardada si existe
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem("tga05_sheets_url");
+  if (saved) document.getElementById("sheets-url").value = saved;
+});
+</script>
+</body>
+</html>

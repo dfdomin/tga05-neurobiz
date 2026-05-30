@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Puntos de Participación — TGA05</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1E2843;--yellow:#FFDF2D;--bg:#FAFAFA;--border:#DEDFE4;--green:#2e7d32;--red:#c62828;--orange:#e65100;--radius:10px;--shadow:0 2px 12px rgba(30,40,67,.10);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Open Sans',sans-serif;background:var(--bg);color:#222;min-height:100vh;}
+
+/* ── PIN GATE ── */
+#pin-gate{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:999;}
+.pin-box{background:#fff;border-radius:16px;padding:2rem 2.5rem;max-width:340px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.4);}
+.pin-box .logo{font-size:2.5rem;margin-bottom:.5rem;}
+.pin-box h2{color:var(--navy);font-size:1.2rem;margin-bottom:.3rem;}
+.pin-box p{color:#777;font-size:.85rem;margin-bottom:1.2rem;}
+.pin-box input{width:100%;padding:.7rem 1rem;border:2px solid var(--border);border-radius:8px;font-size:1.2rem;text-align:center;letter-spacing:.2rem;margin-bottom:.8rem;}
+.pin-box input:focus{outline:none;border-color:var(--navy);}
+.pin-box button{width:100%;padding:.75rem;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;}
+#pin-error{color:var(--red);font-size:.85rem;min-height:1.2rem;margin-top:.4rem;}
+
+/* ── HEADER ── */
+header{background:var(--navy);color:#fff;padding:0 1.5rem;}
+.hdr-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 0;flex-wrap:wrap;}
+.hdr-title h1{font-size:1.2rem;font-weight:800;}
+.hdr-title p{font-size:.78rem;opacity:.75;margin-top:.1rem;}
+.hdr-actions{display:flex;gap:.5rem;flex-wrap:wrap;}
+.hdr-btn{background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:6px;padding:.45rem .9rem;font-size:.8rem;font-weight:600;cursor:pointer;text-decoration:none;transition:.15s;}
+.hdr-btn:hover{background:rgba(255,255,255,.22);}
+.hdr-btn.yellow{background:rgba(255,223,45,.2);color:var(--yellow);}
+
+/* ── MAIN ── */
+main{max-width:1200px;margin:0 auto;padding:1.5rem;}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:.4rem;margin-bottom:1.5rem;border-bottom:2px solid var(--border);padding-bottom:0;}
+.tab{padding:.55rem 1.2rem;background:none;border:none;font-size:.9rem;font-weight:600;color:#888;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.15s;}
+.tab.active{color:var(--navy);border-bottom-color:var(--navy);}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:1rem;box-shadow:var(--shadow);}
+.card-title{font-size:.85rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.8rem;}
+
+/* ── STATS BAR ── */
+.stat-row{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.stat-chip{background:#fff;border:1px solid var(--border);border-radius:8px;padding:.5rem 1rem;text-align:center;flex:1;min-width:110px;}
+.stat-chip .n{font-size:1.4rem;font-weight:800;color:var(--navy);}
+.stat-chip .l{font-size:.72rem;color:#888;margin-top:.1rem;}
+
+/* ── REWARD BADGES ── */
+.badge{display:inline-block;padding:.15rem .55rem;border-radius:20px;font-size:.72rem;font-weight:700;}
+.badge-exon{background:#e8f5e9;color:#1b5e20;}
+.badge-ayuda{background:#fff8e1;color:#e65100;}
+.badge-normal{background:#e3f2fd;color:#0d47a1;}
+.badge-riesgo{background:#ffebee;color:var(--red);}
+.badge-neutral{background:#f5f5f5;color:#555;}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.84rem;}
+thead th{background:var(--navy);color:#fff;padding:.6rem .8rem;text-align:left;font-size:.78rem;font-weight:700;}
+thead th.center{text-align:center;}
+tbody tr:nth-child(even){background:#f9fafb;}
+tbody tr:hover{background:#e8eaf6;}
+td{padding:.55rem .8rem;vertical-align:middle;border-bottom:1px solid var(--border);}
+td.center{text-align:center;}
+.pts-big{font-size:1.15rem;font-weight:800;color:var(--navy);}
+.nota-chip{display:inline-block;padding:.2rem .6rem;border-radius:6px;font-weight:700;font-size:.85rem;}
+.nota-pass{background:#e8f5e9;color:#1b5e20;}
+.nota-fail{background:#ffebee;color:var(--red);}
+.nota-na{background:#f5f5f5;color:#888;}
+
+/* ── FILTER TABS ── */
+.filter-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.8rem;}
+.filter-btn{padding:.3rem .8rem;border:1px solid var(--border);background:#fff;border-radius:20px;font-size:.78rem;cursor:pointer;font-weight:600;transition:.15s;}
+.filter-btn.active,.filter-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+/* ── CLASS MODE ── */
+.class-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:1rem;}
+@media(max-width:700px){.class-grid{grid-template-columns:1fr;}}
+
+/* Student selector */
+.student-search{width:100%;padding:.6rem .9rem;border:2px solid var(--border);border-radius:8px;font-size:.9rem;margin-bottom:.5rem;}
+.student-search:focus{outline:none;border-color:var(--navy);}
+.student-list{max-height:280px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+.student-item{padding:.55rem .9rem;cursor:pointer;font-size:.85rem;border-bottom:1px solid #f0f0f0;transition:.12s;}
+.student-item:hover{background:#e8eaf6;}
+.student-item.selected{background:var(--navy);color:#fff;}
+.student-item.selected .si-badge{background:rgba(255,255,255,.2);color:#fff;}
+.si-badge{float:right;font-size:.72rem;font-weight:700;padding:.1rem .4rem;border-radius:10px;}
+
+/* Quick action buttons */
+.qa-title{font-size:.8rem;color:#888;font-weight:700;text-transform:uppercase;margin-bottom:.5rem;}
+.qa-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.4rem;margin-bottom:.6rem;}
+.qa-btn{padding:.55rem .5rem;border:none;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.12s;text-align:center;}
+.qa-btn.pos{background:#e8f5e9;color:#1b5e20;}
+.qa-btn.pos:hover{background:#c8e6c9;}
+.qa-btn.neg{background:#ffebee;color:var(--red);}
+.qa-btn.neg:hover{background:#ffcdd2;}
+.qa-btn.custom{background:#e3f2fd;color:#0d47a1;grid-column:1/-1;}
+.qa-btn:disabled{opacity:.4;cursor:not-allowed;}
+.selected-name{background:var(--navy);color:#fff;border-radius:8px;padding:.5rem 1rem;font-weight:700;font-size:.9rem;margin-bottom:.6rem;text-align:center;min-height:2.4rem;}
+
+/* Session log */
+.log-entry{display:flex;align-items:center;gap:.5rem;padding:.4rem .6rem;border-radius:6px;font-size:.8rem;margin-bottom:.3rem;}
+.log-entry.pos{background:#f1f8e9;}
+.log-entry.neg{background:#fff3e0;}
+.log-pts{font-weight:800;min-width:30px;text-align:center;}
+.log-pts.pos{color:var(--green);}
+.log-pts.neg{color:var(--red);}
+.log-meta{flex:1;}
+.log-name{font-weight:600;}
+.log-concept{color:#888;}
+.undo-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:.3rem .7rem;font-size:.78rem;cursor:pointer;color:#888;}
+.undo-btn:hover{background:#ffebee;color:var(--red);border-color:var(--red);}
+
+/* Settings panel */
+.settings-toggle{background:none;border:1px solid var(--border);border-radius:6px;padding:.35rem .9rem;font-size:.82rem;color:var(--navy);cursor:pointer;font-weight:600;}
+.settings-panel{background:#f8f9ff;border:1px solid var(--border);border-radius:8px;padding:1rem;margin-top:.6rem;}
+.settings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;}
+@media(max-width:600px){.settings-grid{grid-template-columns:1fr;}}
+.settings-grid label{font-size:.8rem;color:#888;font-weight:600;display:block;margin-bottom:.2rem;}
+.settings-grid input{width:100%;padding:.4rem .7rem;border:1px solid var(--border);border-radius:6px;font-size:.9rem;}
+
+/* Motiv message */
+.motiv-box{background:linear-gradient(135deg,var(--navy),#3949ab);color:#fff;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem;font-size:.88rem;line-height:1.5;}
+.motiv-box strong{color:var(--yellow);}
+
+/* Reward table */
+.reward-table{width:100%;font-size:.82rem;border-collapse:collapse;}
+.reward-table td,.reward-table th{padding:.4rem .7rem;border:1px solid var(--border);}
+.reward-table th{background:#f0f4f8;font-weight:700;color:var(--navy);}
+
+/* Buttons */
+.btn{padding:.55rem 1.2rem;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;transition:.15s;}
+.btn-navy{background:var(--navy);color:#fff;}
+.btn-navy:hover{background:#2d3f6b;}
+.btn-yellow{background:var(--yellow);color:var(--navy);}
+.btn-green{background:var(--green);color:#fff;}
+.btn-sm{padding:.35rem .8rem;font-size:.78rem;}
+
+/* Custom input row */
+.custom-row{display:flex;gap:.4rem;align-items:center;margin-top:.4rem;}
+.custom-row input{flex:1;padding:.4rem .7rem;border:1px solid var(--border);border-radius:6px;font-size:.85rem;}
+.custom-row input[type=number]{width:75px;flex:none;}
+
+/* Toast */
+#toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:#fff;padding:.7rem 1.3rem;border-radius:8px;font-size:.88rem;font-weight:600;opacity:0;transition:.3s;z-index:9999;pointer-events:none;}
+#toast.show{opacity:1;}
+
+/* Export area */
+.export-area{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.5rem;}
+</style>
+</head>
+<body>
+
+<!-- ── PIN GATE ── -->
+<div id="pin-gate">
+  <div class="pin-box">
+    <div class="logo">🏫</div>
+    <h2>Puntos de Participación</h2>
+    <p>Ingresa tu PIN docente para continuar</p>
+    <input type="password" id="pin-input" placeholder="PIN" inputmode="numeric" autocomplete="off">
+    <button onclick="checkPin()">Entrar →</button>
+    <p id="pin-error"></p>
+  </div>
+</div>
+
+<div id="app-content" style="display:none">
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="hdr-inner">
+    <div class="hdr-title">
+      <h1>🎯 Puntos de Participación</h1>
+      <p>TGA05 · Grupo 7_GA_G1 · Viernes 07:00–10:59 · SALÓN CENH P1-7</p>
+    </div>
+    <div class="hdr-actions">
+      <a href="mis_puntos.html" class="hdr-btn" target="_blank">👨‍🎓 Ver como estudiante</a>
+      <a href="profesor.html" class="hdr-btn">📊 Dashboard</a>
+      <button class="hdr-btn yellow" onclick="exportGrades()">⬇️ Exportar notas</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ── TABS ── -->
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('lista',this)">📋 Lista General</button>
+  <button class="tab" onclick="switchTab('clase',this)">⚡ Clase en Vivo</button>
+  <button class="tab" onclick="switchTab('config',this)">⚙️ Configuración</button>
+</div>
+
+<!-- ════════════════════ LISTA TAB ════════════════════ -->
+<div id="tab-lista">
+
+  <div class="stat-row" id="stats-row"></div>
+
+  <div class="card">
+    <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+      <span>Estudiantes — <span id="cnt-shown">29</span> mostrados</span>
+      <div class="filter-row" style="margin:0">
+        <button class="filter-btn active" onclick="setFilter('todos',this)">Todos</button>
+        <button class="filter-btn" onclick="setFilter('exon',this)">🏆 Exoneración</button>
+        <button class="filter-btn" onclick="setFilter('ayuda',this)">📝 Ayuda parcial</button>
+        <button class="filter-btn" onclick="setFilter('normal',this)">✅ Normal</button>
+        <button class="filter-btn" onclick="setFilter('riesgo',this)">⚠️ Sin puntos</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table id="students-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Estudiante</th>
+            <th class="center">Puntos</th>
+            <th class="center">Nota (0–5)</th>
+            <th class="center">Estado</th>
+            <th class="center">Última actividad</th>
+            <th class="center">Acción</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="background:#fffde7;border-color:#ffe082;">
+    <table class="reward-table">
+      <tr>
+        <th>Umbral</th><th>Puntos necesarios</th><th>Beneficio</th>
+      </tr>
+      <tr>
+        <td>🏆 Exoneración</td>
+        <td id="rw-exon">≥ 40 pts</td>
+        <td><strong>Exoneración</strong> de la parte práctica del parcial</td>
+      </tr>
+      <tr>
+        <td>📝 Ayuda parcial</td>
+        <td id="rw-ayuda">≥ 30 pts</td>
+        <td>Una <strong>ayuda permitida</strong> en parciales 1 y 2</td>
+      </tr>
+    </table>
+  </div>
+
+</div><!-- /tab-lista -->
+
+<!-- ════════════════════ CLASE TAB ════════════════════ -->
+<div id="tab-clase" style="display:none">
+
+  <div class="motiv-box">
+    💡 Recuerda decirles a tus estudiantes: <strong>"Lo importante no es esta puntuación ni tu nota, sino lo que has aprendido y cómo has crecido."</strong>
+  </div>
+
+  <div class="class-grid">
+
+    <!-- COLUMNA IZQUIERDA: Selección y acciones -->
+    <div>
+      <div class="card">
+        <div class="card-title">1. Selecciona el estudiante</div>
+        <input type="text" class="student-search" id="student-search" placeholder="🔍 Busca por nombre…" oninput="filterStudents()">
+        <div class="student-list" id="student-list-ui"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">2. Acción rápida</div>
+        <div class="selected-name" id="sel-name-display">— Ningún estudiante seleccionado —</div>
+
+        <div class="qa-title">✅ Positivos</div>
+        <div class="qa-grid">
+          <button class="qa-btn pos" onclick="quickAction(1,'Participó en clase')">+1 Participó</button>
+          <button class="qa-btn pos" onclick="quickAction(2,'Participación de calidad')">+2 Calidad</button>
+          <button class="qa-btn pos" onclick="quickAction(3,'Respuesta excepcional')">+3 Excepcional</button>
+          <button class="qa-btn pos" onclick="quickAction(2,'HTI voluntaria entregada')">+2 HTI</button>
+          <button class="qa-btn pos" onclick="quickAction(2,'Ganó actividad')">+2 Ganó juego</button>
+          <button class="qa-btn pos" onclick="quickAction(1,'Ejemplo propio aportado')">+1 Ejemplo</button>
+        </div>
+
+        <div class="qa-title" style="margin-top:.6rem">❌ Negativos</div>
+        <div class="qa-grid">
+          <button class="qa-btn neg" onclick="quickAction(-1,'Llegó tarde')">-1 Tarde</button>
+          <button class="qa-btn neg" onclick="quickAction(-2,'Ausencia injustificada')">-2 Ausente</button>
+          <button class="qa-btn neg" onclick="quickAction(-1,'Distracción / teléfono')">-1 Distracción</button>
+          <button class="qa-btn neg" onclick="quickAction(-1,'Comportamiento disruptivo')">-1 Disruptivo</button>
+        </div>
+
+        <div class="qa-title" style="margin-top:.6rem">🎯 Personalizado</div>
+        <div class="custom-row">
+          <input type="number" id="custom-pts" placeholder="pts" min="-10" max="10" step="1">
+          <input type="text" id="custom-concept" placeholder="Motivo (ej: Proyecto especial)">
+          <button class="btn btn-navy btn-sm" onclick="customAction()">Agregar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA: Log de la sesión -->
+    <div>
+      <div class="card" style="height:100%">
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+          <span>📋 Log de hoy — Semana <span id="session-semana">1</span></span>
+          <button class="undo-btn" onclick="undoLast()" id="undo-btn" title="Deshacer último">↩ Deshacer</button>
+        </div>
+        <div id="session-log" style="max-height:400px;overflow-y:auto;"></div>
+        <div id="empty-log" style="text-align:center;color:#aaa;padding:2rem;font-size:.85rem">
+          Aún no hay acciones esta sesión.<br>Selecciona un estudiante y agrega puntos.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /class-grid -->
+
+</div><!-- /tab-clase -->
+
+<!-- ════════════════════ CONFIG TAB ════════════════════ -->
+<div id="tab-config" style="display:none">
+  <div class="card">
+    <div class="card-title">⚙️ Configuración del sistema de puntos</div>
+    <div class="settings-grid">
+      <div>
+        <label>Puntos máximos (100%)</label>
+        <input type="number" id="cfg-max" min="10" max="200" value="50" oninput="saveConfig()">
+        <small style="color:#888;font-size:.75rem">Ejemplo: 50 pts = nota 5.0</small>
+      </div>
+      <div>
+        <label>Umbral Exoneración (pts)</label>
+        <input type="number" id="cfg-exon" min="1" max="200" value="40" oninput="saveConfig()">
+        <small style="color:#888;font-size:.75rem">Por defecto: 40 pts</small>
+      </div>
+      <div>
+        <label>Umbral Ayuda Parcial (pts)</label>
+        <input type="number" id="cfg-ayuda" min="1" max="200" value="30" oninput="saveConfig()">
+        <small style="color:#888;font-size:.75rem">Por defecto: 30 pts</small>
+      </div>
+      <div>
+        <label>Semana actual</label>
+        <input type="number" id="cfg-semana" min="1" max="14" value="1" oninput="saveConfig()">
+      </div>
+      <div>
+        <label>Peso en nota de corte (%)</label>
+        <input type="number" id="cfg-peso" min="0" max="30" value="10" oninput="saveConfig()">
+        <small style="color:#888;font-size:.75rem">% que este componente aporta a la nota</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--red);">
+    <div class="card-title">🗑️ Zona de peligro</div>
+    <p style="font-size:.85rem;color:#555;margin-bottom:.8rem">Estas acciones son permanentes y no se pueden deshacer.</p>
+    <button class="btn btn-sm" style="background:#ffebee;color:var(--red);border:1px solid var(--red)" onclick="clearAllData()">Borrar todos los datos de participación</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">ℹ️ Fórmula de conversión</div>
+    <p style="font-size:.85rem;color:#555;line-height:1.6">
+      <strong>Nota participación</strong> = mín(5.0, máx(0, (puntos_totales / max_pts) × 5.0))<br>
+      Esta nota se puede incluir en la consolidación de <a href="notas.html">notas.html</a>.<br><br>
+      <strong>Ejemplo:</strong> estudiante con 35 pts / máx 50 = 70% → Nota = 3.5 → Estado: Ayuda parcial ✅
+    </p>
+  </div>
+</div><!-- /tab-config -->
+
+</main>
+</div><!-- /app-content -->
+
+<div id="toast"></div>
+
+<script>
+// ── STUDENTS (hardcoded from Reporte_Estudiantes-TGA05-ejemplo.pdf) ─────────
+const STUDENTS = [
+  { id:1,  name:'ARIZA DE LA CRUZ YORYELIS PATRICIA',     cc:'1043158867' },
+  { id:2,  name:'BERRIO JULIO BLEIDYS',                    cc:'SIN_DOC_2'  },
+  { id:3,  name:'BOTELLO CACERES ALBERTO MARIO',           cc:'1042455285' },
+  { id:4,  name:'CAÑATE HERRERA SANTIAGO',                 cc:'1129513136' },
+  { id:5,  name:'CASARRUBIA PUELLO LINA MARCELA',          cc:'SIN_DOC_5'  },
+  { id:6,  name:'DE LA CRUZ DONADO ANGELITH YULIETH',      cc:'1130269210' },
+  { id:7,  name:'ESTRADA GOMEZ LUIS EDUARDO',              cc:'1044619786' },
+  { id:8,  name:'FLORES CHAVARRO HILARY JOHANA',           cc:'1043132495' },
+  { id:9,  name:'GONZALEZ ZAMORA JHONLUIS',                cc:'1130271420' },
+  { id:10, name:'HERAZO PEREZ LUIS JAVIER',                cc:'1100394417' },
+  { id:11, name:'HERNANDEZ AVILA ESTELIA DEL CARMEN',      cc:'1044390913' },
+  { id:12, name:'HERNANDEZ COGOLLO MARIA FERNANDA',        cc:'1045750902' },
+  { id:13, name:'JIMÉNEZ LOPEZ MARYURIS ARLE',             cc:'1092185876' },
+  { id:14, name:'MERIÑO SILVERA ARNOLD JUNIOR',            cc:'1043442844' },
+  { id:15, name:'OLIVEROS CAMACHO LAIZA LEM',              cc:'1193548488' },
+  { id:16, name:'OLIVEROS SIERRA LUISA FERNANDA',          cc:'1096801658' },
+  { id:17, name:'PALENCIA RODRIGUEZ MELANY ESTHER',        cc:'1001876950' },
+  { id:18, name:'PEREZ RODRIGUEZ LARITZA JOHANA',          cc:'1043669582' },
+  { id:19, name:'PEREZ SANCHEZ JULIETH PAOLA',             cc:'1002231958' },
+  { id:20, name:'PUGLIESE HERNANDEZ CAROLINE MICHELLE',    cc:'1044622270' },
+  { id:21, name:'REALES TOVAR YEIMY SADRIT',               cc:'1129505964' },
+  { id:22, name:'REDONDO LAURENS MARIA JOSE',              cc:'1143120550' },
+  { id:23, name:'RESTREPO FLOREZ JASSLEYDYS SHARIK',       cc:'1048064753' },
+  { id:24, name:'ROSAS GARCIA MIGUEL ARMANDO',             cc:'1121844008' },
+  { id:25, name:'SENIOR GONZALEZ YULEYDIS MARIA',          cc:'1007892916' },
+  { id:26, name:'UCROS ZAMBRANO VALENTINA',                cc:'1192714188' },
+  { id:27, name:'VALDÉS VALIENTE CARLOS ANDRÉS',           cc:'1042249560' },
+  { id:28, name:'VIDAL ORTIZ SABRINA ISABEL',              cc:'1045691499' },
+  { id:29, name:'VILORIA CARDENAS DANIT MERCEDES',         cc:'1143461984' },
+];
+
+// ── CONFIG & STORAGE ─────────────────────────────────────────────────────────
+const STORE_KEY = 'tga05_participacion_v1';
+const PIN_KEY   = 'tga05_prof_pin';
+
+let data = { config: { max_pts:50, thresh_exon:40, thresh_ayuda:30, semana_actual:1, peso:10 }, events: [] };
+let selectedStudentId = null;
+let activeFilter = 'todos';
+
+function loadData() {
+  const raw = localStorage.getItem(STORE_KEY);
+  if (raw) { try { data = JSON.parse(raw); } catch(e) {} }
+}
+
+function saveData() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  savePublicSnapshot();
+}
+
+function getTotal(studentId) {
+  return data.events.filter(e => e.sid === studentId).reduce((s,e) => s + e.pts, 0);
+}
+
+function getGrade(studentId) {
+  const pts = getTotal(studentId);
+  const cfg = data.config;
+  return Math.min(5.0, Math.max(0, (pts / cfg.max_pts) * 5.0));
+}
+
+function getStatus(pts) {
+  const c = data.config;
+  if (pts >= c.thresh_exon)  return { label:'🏆 Exoneración', cls:'badge-exon' };
+  if (pts >= c.thresh_ayuda) return { label:'📝 Ayuda parcial', cls:'badge-ayuda' };
+  if (pts > 0)               return { label:'✅ Normal', cls:'badge-normal' };
+  if (pts < 0)               return { label:'⚠️ Déficit', cls:'badge-riesgo' };
+  return { label:'— Sin puntos', cls:'badge-neutral' };
+}
+
+function getLastActivity(studentId) {
+  const evs = data.events.filter(e => e.sid === studentId);
+  if (!evs.length) return '—';
+  const last = evs[evs.length-1];
+  return `${last.date.slice(5)} · ${last.concept}`;
+}
+
+// ── PIN ───────────────────────────────────────────────────────────────────────
+document.getElementById('pin-input').addEventListener('keydown', e => { if(e.key==='Enter') checkPin(); });
+function checkPin() {
+  const entered = document.getElementById('pin-input').value.trim();
+  const stored  = localStorage.getItem(PIN_KEY) || 'tga05';
+  if (entered === stored) {
+    document.getElementById('pin-gate').style.display = 'none';
+    document.getElementById('app-content').style.display = 'block';
+    initApp();
+  } else {
+    document.getElementById('pin-error').textContent = '❌ PIN incorrecto';
+    document.getElementById('pin-input').value = '';
+  }
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+function initApp() {
+  loadData();
+  loadConfig();
+  renderStats();
+  renderTable();
+  renderStudentListUI();
+  renderSessionLog();
+  updateRewardTable();
+}
+
+function loadConfig() {
+  const c = data.config;
+  document.getElementById('cfg-max').value    = c.max_pts;
+  document.getElementById('cfg-exon').value   = c.thresh_exon;
+  document.getElementById('cfg-ayuda').value  = c.thresh_ayuda;
+  document.getElementById('cfg-semana').value = c.semana_actual;
+  document.getElementById('cfg-peso').value   = c.peso || 10;
+  document.getElementById('session-semana').textContent = c.semana_actual;
+}
+
+function saveConfig() {
+  data.config.max_pts       = parseInt(document.getElementById('cfg-max').value)    || 50;
+  data.config.thresh_exon   = parseInt(document.getElementById('cfg-exon').value)   || 40;
+  data.config.thresh_ayuda  = parseInt(document.getElementById('cfg-ayuda').value)  || 30;
+  data.config.semana_actual = parseInt(document.getElementById('cfg-semana').value) || 1;
+  data.config.peso          = parseInt(document.getElementById('cfg-peso').value)   || 10;
+  document.getElementById('session-semana').textContent = data.config.semana_actual;
+  saveData();
+  renderStats();
+  renderTable();
+  renderStudentListUI();
+  updateRewardTable();
+}
+
+// ── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  ['lista','clase','config'].forEach(t =>
+    document.getElementById('tab-'+t).style.display = t===tab ? 'block' : 'none'
+  );
+}
+
+// ── FILTER ───────────────────────────────────────────────────────────────────
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+// ── STATS ────────────────────────────────────────────────────────────────────
+function renderStats() {
+  const totals = STUDENTS.map(s => getTotal(s.id));
+  const avg = totals.reduce((a,b)=>a+b,0) / STUDENTS.length;
+  const exon = totals.filter(p => p >= data.config.thresh_exon).length;
+  const ayuda = totals.filter(p => p >= data.config.thresh_ayuda && p < data.config.thresh_exon).length;
+  const clean = totals.filter(p => p === 0).length;
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-chip"><div class="n">${STUDENTS.length}</div><div class="l">Estudiantes</div></div>
+    <div class="stat-chip"><div class="n">${avg.toFixed(1)}</div><div class="l">Pts promedio</div></div>
+    <div class="stat-chip"><div class="n">${exon}</div><div class="l">🏆 Exoneración</div></div>
+    <div class="stat-chip"><div class="n">${ayuda}</div><div class="l">📝 Ayuda parcial</div></div>
+    <div class="stat-chip"><div class="n">${clean}</div><div class="l">Sin puntos aún</div></div>
+    <div class="stat-chip"><div class="n">${data.events.length}</div><div class="l">Total eventos</div></div>
+  `;
+}
+
+// ── TABLE ────────────────────────────────────────────────────────────────────
+function renderTable() {
+  let students = [...STUDENTS];
+
+  if (activeFilter === 'exon') students = students.filter(s => getTotal(s.id) >= data.config.thresh_exon);
+  else if (activeFilter === 'ayuda') students = students.filter(s => {
+    const p = getTotal(s.id); return p >= data.config.thresh_ayuda && p < data.config.thresh_exon;
+  });
+  else if (activeFilter === 'normal') students = students.filter(s => {
+    const p = getTotal(s.id); return p > 0 && p < data.config.thresh_ayuda;
+  });
+  else if (activeFilter === 'riesgo') students = students.filter(s => getTotal(s.id) <= 0);
+
+  document.getElementById('cnt-shown').textContent = students.length;
+
+  const rows = students.map((s, i) => {
+    const pts   = getTotal(s.id);
+    const nota  = getGrade(s.id).toFixed(2);
+    const notaV = parseFloat(nota);
+    const st    = getStatus(pts);
+    const last  = getLastActivity(s.id);
+    return `<tr>
+      <td>${i+1}</td>
+      <td><strong>${esc(s.name)}</strong></td>
+      <td class="center"><span class="pts-big">${pts >= 0 ? '+'+pts : pts}</span></td>
+      <td class="center"><span class="nota-chip ${pts>0 ? (notaV>=3?'nota-pass':'nota-fail') : 'nota-na'}">${nota}</span></td>
+      <td class="center"><span class="badge ${st.cls}">${st.label}</span></td>
+      <td style="font-size:.75rem;color:#888;max-width:180px">${esc(last)}</td>
+      <td class="center">
+        <button class="btn btn-sm btn-navy" onclick="selectStudentFromTable(${s.id})">+ Punto</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('table-body').innerHTML = rows || '<tr><td colspan="7" style="text-align:center;color:#aaa;padding:1.5rem">No hay estudiantes en este filtro</td></tr>';
+}
+
+function selectStudentFromTable(id) {
+  selectedStudentId = id;
+  switchTab('clase', document.querySelectorAll('.tab')[1]);
+  const s = STUDENTS.find(s => s.id === id);
+  document.getElementById('sel-name-display').textContent = s ? s.name : '—';
+  document.getElementById('student-search').value = '';
+  filterStudents();
+  renderStudentListUI();
+  toast(`✅ ${s?.name} seleccionado — ve a Clase en Vivo`);
+}
+
+// ── STUDENT LIST UI ──────────────────────────────────────────────────────────
+function renderStudentListUI(filter = '') {
+  const list = document.getElementById('student-list-ui');
+  const q = filter.toLowerCase();
+  const students = STUDENTS.filter(s => !q || s.name.toLowerCase().includes(q));
+  list.innerHTML = students.map(s => {
+    const pts = getTotal(s.id);
+    const st  = getStatus(pts);
+    const sel = s.id === selectedStudentId ? ' selected' : '';
+    return `<div class="student-item${sel}" onclick="selectStudent(${s.id})">
+      ${esc(s.name)}
+      <span class="si-badge badge ${st.cls}" style="float:right">${pts >= 0 ? '+'+pts : pts}</span>
+    </div>`;
+  }).join('') || '<div style="padding:.8rem;color:#aaa;text-align:center;font-size:.83rem">Sin resultados</div>';
+}
+
+function filterStudents() {
+  const q = document.getElementById('student-search').value.trim();
+  renderStudentListUI(q);
+}
+
+function selectStudent(id) {
+  selectedStudentId = id;
+  const s = STUDENTS.find(s => s.id === id);
+  document.getElementById('sel-name-display').textContent = s ? s.name : '—';
+  renderStudentListUI(document.getElementById('student-search').value.trim());
+}
+
+// ── ACTIONS ──────────────────────────────────────────────────────────────────
+function quickAction(pts, concept) {
+  if (!selectedStudentId) { toast('⚠️ Selecciona un estudiante primero'); return; }
+  addEvent(selectedStudentId, pts, concept);
+  if (pts < 0) {
+    const msg = 'Recuerda decirle: "Lo importante no es la nota, sino lo que aprendiste."';
+    toast(`${pts} punto(s) · ${concept} — ${msg}`, 3500);
+  } else {
+    toast(`+${pts} pts para ${STUDENTS.find(s=>s.id===selectedStudentId)?.name.split(' ')[0]}`);
+  }
+}
+
+function customAction() {
+  if (!selectedStudentId) { toast('⚠️ Selecciona un estudiante primero'); return; }
+  const pts     = parseInt(document.getElementById('custom-pts').value);
+  const concept = document.getElementById('custom-concept').value.trim() || 'Acción personalizada';
+  if (isNaN(pts) || pts === 0) { toast('⚠️ Ingresa un valor de puntos válido'); return; }
+  addEvent(selectedStudentId, pts, concept);
+  document.getElementById('custom-pts').value = '';
+  document.getElementById('custom-concept').value = '';
+  toast(`${pts > 0 ? '+' : ''}${pts} pts · ${concept}`);
+}
+
+function addEvent(sid, pts, concept, note = '') {
+  const today = new Date().toISOString().slice(0,10);
+  data.events.push({ uid: uid(), sid, pts, concept, note, date: today, semana: data.config.semana_actual });
+  saveData();
+  renderStats();
+  renderTable();
+  renderStudentListUI(document.getElementById('student-search').value.trim());
+  renderSessionLog();
+}
+
+function undoLast() {
+  if (!data.events.length) { toast('No hay acciones para deshacer'); return; }
+  const last = data.events.pop();
+  saveData();
+  renderStats();
+  renderTable();
+  renderStudentListUI(document.getElementById('student-search').value.trim());
+  renderSessionLog();
+  toast(`↩ Deshecho: ${last.concept} (${last.pts} pts)`);
+}
+
+// ── SESSION LOG ───────────────────────────────────────────────────────────────
+function renderSessionLog() {
+  const today = new Date().toISOString().slice(0,10);
+  const todayEvents = data.events.filter(e => e.date === today).slice().reverse();
+  const log  = document.getElementById('session-log');
+  const empty = document.getElementById('empty-log');
+  if (!todayEvents.length) {
+    log.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  log.innerHTML = todayEvents.map(e => {
+    const s = STUDENTS.find(s => s.id === e.sid);
+    return `<div class="log-entry ${e.pts >= 0 ? 'pos' : 'neg'}">
+      <span class="log-pts ${e.pts >= 0 ? 'pos' : 'neg'}">${e.pts >= 0 ? '+'+e.pts : e.pts}</span>
+      <div class="log-meta">
+        <div class="log-name">${esc(s?.name?.split(' ').slice(0,2).join(' ') || 'Desconocido')}</div>
+        <div class="log-concept">${esc(e.concept)} · ${e.date.slice(5)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── REWARD TABLE ──────────────────────────────────────────────────────────────
+function updateRewardTable() {
+  document.getElementById('rw-exon').textContent  = `≥ ${data.config.thresh_exon} pts`;
+  document.getElementById('rw-ayuda').textContent = `≥ ${data.config.thresh_ayuda} pts`;
+}
+
+// ── EXPORT ───────────────────────────────────────────────────────────────────
+function exportGrades() {
+  const rows = STUDENTS.map(s => {
+    const pts  = getTotal(s.id);
+    const nota = getGrade(s.id).toFixed(2);
+    const st   = getStatus(pts);
+    return `${s.cc}\t${s.name}\t${pts}\t${nota}\t${st.label.replace(/[🏆📝✅⚠️—]/g,'')}`;
+  });
+  const header = 'CC\tNombre\tPuntos\tNota (0-5)\tEstado';
+  const blob = new Blob([header + '\n' + rows.join('\n')], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'participacion_TGA05.tsv'; a.click();
+  URL.revokeObjectURL(url);
+  toast('📥 Exportado: participacion_TGA05.tsv');
+}
+
+// ── DANGER ZONE ──────────────────────────────────────────────────────────────
+function clearAllData() {
+  if (!confirm('¿Seguro? Se borrarán TODOS los eventos de participación. Esta acción es irreversible.')) return;
+  data.events = [];
+  saveData();
+  renderStats();
+  renderTable();
+  renderSessionLog();
+  toast('🗑️ Datos borrados');
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function uid() { return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
+
+let toastTimer;
+function toast(msg, duration = 2200) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), duration);
+}
+
+// ── EXPOSE FOR MIS PUNTOS ─────────────────────────────────────────────────────
+function savePublicSnapshot() {
+  const snap = {
+    config: data.config,
+    students: STUDENTS.map(s => ({
+      id:     s.id,
+      name:   s.name,
+      pts:    getTotal(s.id),
+      nota:   getGrade(s.id).toFixed(2),
+      events: data.events.filter(e => e.sid === s.id),
+    }))
+  };
+  localStorage.setItem('tga05_participacion_pub', JSON.stringify(snap));
+}
+</script>
+</body>
+</html>

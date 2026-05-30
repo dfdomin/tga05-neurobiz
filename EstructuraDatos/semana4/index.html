@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TGA05 Semana 4 - Colas (Queue) para lista de espera y equidad</title>
+    <style>:root {
+    --primary:   #1E2843;
+    --primary-2: #2d3a5e;
+    --accent: #FFDF2D;
+    --bg: #f4f7fb;
+    --text: #1f2937;
+    --muted: #526072;
+    --card: #ffffff;
+    --code-bg: #1E2843;
+    --code-top: #11111b;
+    --code-border: #2d3a5e;
+    --surface: #eef3ff;
+    --green: #1b5e20;
+    --green-soft: #e8f5e9;
+    --orange: #ef6c00;
+    --orange-soft: #fff3e0;
+    --blue-soft: #e3f2fd;
+    --shadow: 0 16px 40px rgba(26, 35, 126, 0.10);
+    --radius: 20px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #f4f7fb 0%, #eef3ff 100%);
+    color: var(--text);
+    line-height: 1.6;
+}
+.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+    color: white;
+    padding: 28px 20px 36px;
+    position: relative;
+    overflow: hidden;
+}
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -120px -140px auto;
+    width: 320px;
+    height: 320px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+}
+.hero-content {
+    max-width: 1180px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+.badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.badge, .badge-outline, .week-chip, .micro-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+.badge { background: rgba(249, 168, 37, 0.18); border: 1px solid rgba(249, 168, 37, 0.45); }
+.badge-outline { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); }
+.week-chip { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); }
+.micro-chip {
+    background: rgba(255,255,255,0.10);
+    border: 1px dashed rgba(255,255,255,0.35);
+    font-size: 0.82rem;
+}
+h1 {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 4vw, 3.35rem);
+    line-height: 1.1;
+}
+.hero p.lead {
+    max-width: 900px;
+    margin: 0 0 18px;
+    font-size: 1.04rem;
+    color: rgba(255,255,255,0.92);
+}
+.xp-shell {
+    margin-top: 18px;
+    background: rgba(255,255,255,0.14);
+    border-radius: 999px;
+    padding: 6px;
+    border: 1px solid rgba(255,255,255,0.18);
+    max-width: 680px;
+}
+.xp-track {
+    width: 100%;
+    height: 18px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.14);
+    overflow: hidden;
+    position: relative;
+}
+.xp-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #FFDF2D, #FFDF2D);
+    border-radius: 999px;
+    position: relative;
+    transition: width 1.8s ease;
+}
+.xp-fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.38) 45%, rgba(255,255,255,0) 100%);
+    animation: shine 3s infinite;
+}
+@keyframes shine {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+}
+.xp-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.88rem;
+    margin-top: 10px;
+    color: rgba(255,255,255,0.92);
+}
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #dce4f5;
+}
+.sticky-nav .inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 14px 20px;
+}
+.sticky-nav a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: #eef2ff;
+}
+.sticky-nav a:hover { background: #dbe6ff; }
+main {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+}
+.card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 26px;
+    margin-bottom: 22px;
+    border-left: 7px solid var(--accent);
+}
+.card h2 {
+    margin-top: 0;
+    font-size: 1.7rem;
+    color: var(--primary);
+}
+.section-intro {
+    color: var(--muted);
+    margin-top: -8px;
+    margin-bottom: 18px;
+}
+.grid-2, .grid-3 {
+    display: grid;
+    gap: 16px;
+}
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.info-box, .memo-box, .ods-box, .framework-box, .note-box {
+    border-radius: 18px;
+    padding: 18px;
+    margin: 16px 0;
+}
+.memo-box { background: #eef2ff; border: 1px solid #c7d2fe; }
+.ods-box { background: #e8f5e9; border: 1px solid #a5d6a7; }
+.framework-box { background: #fff8e1; border: 1px solid #ffe082; }
+.note-box { background: #f8fafc; border: 1px dashed #b0bec5; }
+.info-box { background: #f7f9ff; border: 1px solid #dbe3ff; }
+.bloom-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff8e1;
+    color: #7c4d00;
+    border: 1px solid #FFDF2D;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-weight: 700;
+    margin: 8px 0 18px;
+}
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+}
+.kpi-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    border-radius: 18px;
+    padding: 18px;
+    border: 1px solid #dbe3ff;
+    box-shadow: 0 10px 24px rgba(57, 73, 171, 0.06);
+}
+.kpi-card small { color: var(--muted); display: block; }
+.kpi-value {
+    margin: 8px 0 6px;
+    color: var(--primary);
+    font-size: 1.9rem;
+    font-weight: 800;
+}
+.pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+.pill {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: var(--primary);
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    overflow: hidden;
+    border-radius: 16px;
+}
+th, td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #dde5f3;
+    text-align: left;
+    vertical-align: top;
+}
+th { background: #eef2ff; color: var(--primary); }
+tr:nth-child(even) td { background: #fbfcff; }
+.code-window {
+    background: var(--code-bg);
+    color: #cdd6f4;
+    border-radius: 18px;
+    overflow: hidden;
+    margin: 20px 0;
+    border: 1px solid var(--code-border);
+    box-shadow: 0 16px 36px rgba(17, 17, 27, 0.28);
+}
+.code-topbar {
+    background: var(--code-top);
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    color: #bac2de;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--code-border);
+}
+.code-dots { display: inline-flex; gap: 8px; }
+.code-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.code-dots span:nth-child(1) { background: #f38ba8; }
+.code-dots span:nth-child(2) { background: #f9e2af; }
+.code-dots span:nth-child(3) { background: #a6e3a1; }
+pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; }
+.kw { color: #cba6f7; font-weight: 700; }
+.str { color: #a6e3a1; }
+.num { color: #fab387; }
+.cm { color: #6c7086; font-style: italic; }
+.op { color: #89dceb; }
+.var { color: #cdd6f4; }
+.activity-shell {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 18px;
+    margin-top: 18px;
+}
+.subcard {
+    background: #f8fbff;
+    border: 1px solid #d9e5ff;
+    border-radius: 18px;
+    padding: 18px;
+    height: 100%;
+}
+.subcard h3 { margin-top: 0; color: var(--primary); }
+.phase-label {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.had { background: #E9EAED; color: #1E2843; }
+.hp { background: #e3f2fd; color: #1565c0; }
+.dojo-panel {
+    background: #111827;
+    color: #f9e7a0;
+    border-radius: 18px;
+    padding: 20px;
+    border: 1px solid #374151;
+    box-shadow: 0 14px 28px rgba(17, 24, 39, 0.2);
+}
+.dojo-panel h3 { margin-top: 0; color: #FFDF2D; }
+.dojo-panel li { margin-bottom: 10px; }
+.scenario-a, .scenario-b {
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 16px;
+}
+.scenario-a { background: var(--green-soft); border: 1px solid #a5d6a7; }
+.scenario-b { background: var(--orange-soft); border: 1px solid #ffcc80; }
+.scenario-b strong { color: var(--orange); }
+.quiz-shell {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+.quiz-card {
+    background: var(--blue-soft);
+    border: 1px solid #bbdefb;
+    border-radius: 18px;
+    padding: 18px;
+    position: relative;
+    min-height: 230px;
+}
+.quiz-card h3 { margin-top: 0; color: #0d47a1; }
+.quiz-card ul { padding-left: 18px; }
+.quiz-answer {
+    margin-top: 14px;
+    padding: 12px;
+    background: rgba(255,255,255,0.92);
+    border-radius: 14px;
+    border: 1px dashed #64b5f6;
+    opacity: 0.08;
+    filter: blur(5px);
+    transition: all 0.25s ease;
+}
+.quiz-card:hover .quiz-answer {
+    opacity: 1;
+    filter: blur(0);
+}
+.foot-ref {
+    font-size: 0.92rem;
+    color: var(--muted);
+}
+.footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.92rem;
+    padding: 16px 20px 34px;
+}
+.callout-list li, .subcard li, .scenario-a li, .scenario-b li { margin-bottom: 8px; }
+.mini-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+.week-map {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+.week-map .map-card {
+    background: #f8fbff;
+    border-radius: 16px;
+    padding: 14px;
+    border: 1px solid #dde6f6;
+}
+.week-map h4 { margin: 0 0 8px; color: var(--primary); }
+blockquote {
+    margin: 16px 0;
+    padding: 14px 18px;
+    background: #f8fbff;
+    border-left: 4px solid var(--primary-2);
+    border-radius: 0 12px 12px 0;
+    color: var(--muted);
+}
+@media (max-width: 920px) {
+    .grid-2, .grid-3, .kpi-grid, .activity-shell, .quiz-shell, .mini-grid, .week-map { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    .hero { padding-inline: 16px; }
+    main { padding-inline: 16px; }
+    .card { padding: 20px; }
+    .sticky-nav .inner { padding-inline: 16px; }
+    h1 { font-size: 1.85rem; }
+    .badge-row { gap: 8px; }
+}</style>
+
+<style id="progress-tracker-css">
+/* ── Progress Tracker Widget ── */
+#pt-widget{
+  position:fixed; bottom:20px; right:20px; z-index:9999;
+  background:linear-gradient(135deg,#1E2843,#1E2843);
+  color:#fff; border-radius:16px; padding:14px 18px;
+  min-width:240px; max-width:280px;
+  box-shadow:0 8px 32px rgba(0,0,0,.35);
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size:.85rem; transition:transform .3s;
+}
+#pt-widget.collapsed { transform:translateY(calc(100% - 42px)); }
+#pt-header{ display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+#pt-header strong{ font-size:.92rem; }
+#pt-toggle{ background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer; line-height:1; }
+#pt-body{ margin-top:10px; }
+#pt-nombre{ width:100%; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3);
+  border-radius:8px; color:#fff; padding:5px 10px; font-size:.82rem; margin-bottom:8px; }
+#pt-nombre::placeholder{ color:rgba(255,255,255,.5); }
+#pt-xp-bar-wrap{ background:rgba(255,255,255,.2); border-radius:20px; height:10px; overflow:hidden; }
+#pt-xp-bar{ height:100%; background:linear-gradient(90deg,#FFDF2D,#fff176); border-radius:20px;
+  transition:width .8s ease; }
+#pt-xp-label{ display:flex; justify-content:space-between; font-size:.75rem; opacity:.8; margin-top:4px; }
+#pt-btns{ display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.pt-btn{ flex:1; padding:5px 8px; border:none; border-radius:8px; font-size:.75rem;
+  font-weight:700; cursor:pointer; transition:opacity .2s; }
+.pt-btn:hover{ opacity:.85; }
+#pt-btn-save  { background:#43a047; color:#fff; }
+#pt-btn-export{ background:#FFDF2D; color:#1E2843; }
+#pt-btn-load  { background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.3); }
+#pt-msg{ font-size:.72rem; margin-top:6px; min-height:16px; opacity:.85; text-align:center; }
+#pt-quiz-panel{ margin-top:1rem; }
+#pt-quiz-panel .pq{ margin-bottom:.8rem; }
+#pt-quiz-panel .pq p{ font-weight:600; font-size:.88rem; margin-bottom:.4rem; }
+#pt-quiz-panel .pq button{ display:block; width:100%; text-align:left; margin-bottom:3px;
+  padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08); color:#fff; cursor:pointer; font-size:.8rem;
+  transition:background .2s; }
+#pt-quiz-panel .pq button:hover  { background:rgba(255,255,255,.18); }
+#pt-quiz-panel .pq button.correct{ background:#2e7d32; border-color:#43a047; }
+#pt-quiz-panel .pq button.wrong  { background:#c62828; border-color:#e57373; }
+#pt-quiz-panel .pq button:disabled{ opacity:.7; cursor:default; }
+</style>
+
+  <script src="../js/supabase-config.js"></script>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge-row">
+                <span class="badge">TGA05 · Estructura de Datos para los Negocios</span>
+                <span class="badge-outline">Programa: Tecnología en Gestión Administrativa</span>
+                <span class="week-chip">Semana 4 de 14</span>
+                <span class="micro-chip">Rol activo: Analista de Datos Estratégico</span>
+            </div>
+            <h1>Colas (Queue) para lista de espera y equidad</h1>
+            <p class="lead">Concepto FIFO, operaciones enqueue / dequeue / peek / isEmpty, representación y aplicaciones organizacionales usando la lista de espera de pacientes de NeuroBiz.</p>
+            <div class="xp-shell">
+                <div class="xp-track"><div class="xp-fill" data-progress="50%"></div></div>
+                <div class="xp-label"><span>XP acumulada del módulo</span><span>750 / 1500 XP · Nivel Gestor de flujo</span></div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sticky-nav">
+        <div class="inner">
+            <a href="#memorando">Memorando</a>
+            <a href="#teoria">Teoría</a>
+            <a href="#python">Python BI</a>
+            <a href="#actividad">Actividad presencial</a>
+            <a href="#hti">HTI</a>
+            <a href="#quiz">Quizizz</a>
+            <a href="#bibliografia">Bibliografía</a>
+        </div>
+    </nav>
+
+    <main>
+
+<!-- ── PROGRESS TRACKER WIDGET ── -->
+<div id="pt-widget">
+  <div id="pt-header" onclick="ptToggle()">
+    <strong>📊 Mi Progreso TGA05</strong>
+    <button id="pt-toggle">▲</button>
+  </div>
+  <div id="pt-body">
+    <input id="pt-nombre" type="text" placeholder="Tu nombre completo…" oninput="ptSaveLocal()" />
+    <div id="pt-xp-bar-wrap"><div id="pt-xp-bar" style="width:0%"></div></div>
+    <div id="pt-xp-label"><span id="pt-semana-label">Semana —</span><span id="pt-xp-count">0 XP</span></div>
+    <div id="pt-btns" style="display:flex;gap:5px;align-items:center">
+      <button class="pt-btn" id="pt-btn-save" onclick="ptSyncCloud()" style="flex:1">☁️ Guardar</button>
+      <button class="pt-btn" id="pt-btn-opts"
+        title="Opciones de respaldo"
+        onclick="(function(){var a=document.getElementById('pt-advanced');a.style.display=a.style.display==='block'?'none':'block';})()"
+        style="width:32px;flex-shrink:0;padding:0;font-size:.8rem">⚙️</button>
+    </div>
+    <div id="pt-advanced" style="display:none;margin-top:5px">
+      <button class="pt-btn" onclick="ptExportCode()" style="width:100%;margin-bottom:3px;font-size:.72rem">📋 Exportar código de respaldo</button>
+      <button class="pt-btn" onclick="ptImportCode()" style="width:100%;font-size:.72rem">📥 Cargar desde código</button>
+    </div>
+    <div id="pt-msg"></div>
+  </div>
+</div>
+
+        <section id="memorando" class="card">
+            <h2>Memorando NeuroBiz</h2>
+            <p class="section-intro">Narrativa inmersiva para activar el caso transversal de la asignatura.</p>
+            <div class="bloom-badge">Bloom visible de la semana: Recordar → Aplicar</div>
+            <div class="memo-box"><p><strong>Memorando interno NB-04.</strong> La coordinación operativa de NeuroBiz necesita mejorar la gestión de la lista de espera de pacientes. El criterio institucional es de equidad: <strong>quien se registra primero debe ser atendido primero</strong>, salvo que exista una política explícita de prioridad clínica.</p>
+<p>Tu rol como <strong>Analista de Datos Estratégico</strong> consiste en modelar ese flujo con una estructura que refleje el orden de llegada, permita atender pacientes sin alterar injustamente la secuencia y deje evidencia clara del estado de la espera en cada momento.</p>
+<div class="mini-grid">
+    <div class="info-box">
+        <strong>Problema de negocio:</strong>
+        <ul class="callout-list">
+            <li>Evitar saltos arbitrarios en la asignación de turnos.</li>
+            <li>Simular el proceso de llegada y atención en Python.</li>
+            <li>Traducir el principio FIFO a una justificación de equidad operativa.</li>
+        </ul>
+    </div>
+    <div class="info-box">
+        <strong>Pregunta guía:</strong>
+        <p>¿Qué estructura protege mejor la prioridad temporal de una lista de espera cuando el criterio principal es el orden de registro?</p>
+    </div>
+</div></div>
+            <div class="ods-box">
+                <strong>Conexión con ODS 7 y 13:</strong> Una cola bien gestionada reduce tiempos muertos, reprogramaciones innecesarias y desplazamientos improductivos de familias y terapeutas. Optimizar la asignación por orden de llegada aporta eficiencia operativa y menor impacto ambiental, en línea con ODS 7 y 13.
+            </div>
+            <div class="note-box">
+                <strong>Recuerda:</strong> Python se usa aquí como herramienta de Business Intelligence para modelar decisiones, inspeccionar estados de la estructura y comunicar hallazgos operativos; no se evalúa como fin aislado.
+            </div>
+            <h3>KPIs operativos que acompañan el caso</h3>
+            <div class="kpi-grid">
+        <div class="kpi-card">
+            <small>sesiones_asistidas</small>
+            <div class="kpi-value">203</div>
+            <p>La capacidad de atención semanal condiciona cuántos pacientes salen de la cola.</p>
+            <div class="pill-row"><span class="pill">entero</span><span class="pill">atención</span><span class="pill">flujo</span></div>
+        </div>
+        
+
+        <div class="kpi-card">
+            <small>sesiones_fallidas</small>
+            <div class="kpi-value">18</div>
+            <p>Las inasistencias alteran la dinámica de la espera y pueden requerir reencolar decisiones.</p>
+            <div class="pill-row"><span class="pill">entero</span><span class="pill">reprogramación</span><span class="pill">riesgo</span></div>
+        </div>
+        
+
+        <div class="kpi-card">
+            <small>tasa_retencion</small>
+            <div class="kpi-value">0.86</div>
+            <p>Una espera mejor gestionada puede contribuir a sostener la permanencia de pacientes.</p>
+            <div class="pill-row"><span class="pill">float</span><span class="pill">retención</span><span class="pill">servicio</span></div>
+        </div>
+        
+
+        <div class="kpi-card">
+            <small>indice_progreso</small>
+            <div class="kpi-value">7.1</div>
+            <p>La continuidad del tratamiento puede afectarse si la cola no se atiende con oportunidad.</p>
+            <div class="pill-row"><span class="pill">float</span><span class="pill">continuidad</span><span class="pill">desempeño</span></div>
+        </div>
+        
+
+        <div class="kpi-card">
+            <small>nivel_hiperfoco</small>
+            <div class="kpi-value">7.9</div>
+            <p>Dato clínico que podría justificar futuras colas con prioridad, pero no cambia la cola base FIFO.</p>
+            <div class="pill-row"><span class="pill">float</span><span class="pill">TDAH</span><span class="pill">criterio</span></div>
+        </div>
+        
+
+        <div class="kpi-card">
+            <small>reconocimiento_patrones</small>
+            <div class="kpi-value">7.6</div>
+            <p>Sirve de contexto para comparar necesidades sin romper la regla general de llegada.</p>
+            <div class="pill-row"><span class="pill">float</span><span class="pill">TEA</span><span class="pill">contexto</span></div>
+        </div>
+        </div>
+            <div class="framework-box">
+    <h3>Framework GAME aplicado esta semana</h3>
+    <div class="week-map">
+        <div class="map-card">
+            <h4>Guiar</h4>
+            <p>La sesión se activa desde la noción de equidad: primero en registrarse, primero en ser atendido.</p>
+        </div>
+        <div class="map-card">
+            <h4>Articular</h4>
+            <p>La cola conecta estructura de datos, servicio al paciente, tiempos de espera y trazabilidad operativa.</p>
+        </div>
+        <div class="map-card">
+            <h4>Motivar</h4>
+            <p>La misión consiste en simular la lista de espera real de NeuroBiz y ganar puntos por justicia, claridad y funcionalidad.</p>
+        </div>
+        <div class="map-card">
+            <h4>Evaluar</h4>
+            <p>Se valora si el equipo mantiene el orden FIFO, ejecuta operaciones correctas y comunica el impacto en la asignación de terapeutas.</p>
+        </div>
+    </div>
+</div>
+        </section>
+
+        <section id="teoria" class="card">
+            <h2>Teoría aplicada a negocios</h2>
+            <p class="section-intro">La teoría se construye con base en literatura clásica de estructuras de datos y se traduce al lenguaje operativo de NeuroBiz.</p>
+            <h3>1. Cola como estructura de servicio</h3>
+<p>Cairó Battistutti y Guardati Bueno (2006) presentan la cola como una estructura lineal donde la inserción ocurre en un extremo y la extracción en el otro. Esa separación de extremos refleja de manera natural procesos de espera. En lenguaje de negocios, la cola formaliza una regla de trato: <strong>primero en entrar, primero en salir</strong>.</p>
+<p>En NeuroBiz, la lista de espera de pacientes para asignación de terapeuta exige precisamente esa lógica. Cuando el criterio organizacional es la equidad temporal, la cola no es un detalle técnico sino una forma de traducir una política de servicio a una estructura operativa verificable.</p>
+
+<h3>2. FIFO y justicia de proceso</h3>
+<p>Joyanes Aguilar (2014) explica que la cola responde al patrón FIFO (<em>First In, First Out</em>). La relevancia didáctica está en que el estudiante compare este comportamiento con LIFO y entienda que la estructura depende del criterio del proceso. Aquí no importa lo más reciente, sino el orden de llegada.</p>
+<table>
+    <thead>
+        <tr><th>Concepto</th><th>En la cola</th><th>En NeuroBiz</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Frente</td><td>Primer elemento listo para salir</td><td>Paciente que debe ser atendido primero</td></tr>
+        <tr><td>Final</td><td>Extremo donde se agregan nuevos elementos</td><td>Nuevo paciente que acaba de registrarse</td></tr>
+        <tr><td>FIFO</td><td>First In, First Out</td><td>Respeto del orden de llegada</td></tr>
+    </tbody>
+</table>
+
+<h3>3. Operaciones fundamentales y lectura organizacional</h3>
+<p>Las operaciones esenciales son <strong>enqueue</strong> (agregar al final), <strong>dequeue</strong> (retirar del frente), <strong>peek</strong> (consultar el frente sin extraer) e <strong>isEmpty</strong> (verificar si no hay elementos). Weiss (2014) destaca que estas operaciones modelan sistemas de atención y procesamiento de tareas, lo que las vuelve especialmente pertinentes en contextos administrativos.</p>
+<table>
+    <thead>
+        <tr><th>Operación</th><th>Sentido computacional</th><th>Traducción organizacional</th><th>Complejidad esperada</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>enqueue</td><td>Agregar al final</td><td>Registrar un paciente en espera</td><td>O(1)</td></tr>
+        <tr><td>dequeue</td><td>Extraer del frente</td><td>Asignar el siguiente turno o terapeuta</td><td>O(1)</td></tr>
+        <tr><td>peek</td><td>Mirar el frente</td><td>Ver quién debe pasar primero</td><td>O(1)</td></tr>
+        <tr><td>isEmpty</td><td>Verificar ausencia de elementos</td><td>Saber si aún quedan pacientes por atender</td><td>O(1)</td></tr>
+    </tbody>
+</table>
+
+<h3>4. Representación práctica en Python con deque</h3>
+<p>La biblioteca estándar de Python ofrece <code>collections.deque</code>, una estructura de doble extremo eficiente para agregar y retirar elementos en ambos lados. Python Software Foundation (2024) documenta su uso como una herramienta adecuada para colas. En esta semana se utiliza <code>deque</code> para mantener el foco en la lógica FIFO sin distraer al estudiante con detalles de desplazamiento interno de listas.</p>
+<p>Desde la didáctica, esta decisión es importante: el lenguaje debe facilitar la comprensión del patrón organizacional, no convertirse en una barrera accidental. Aun así, el docente debe verbalizar que la estructura elegida representa la política de servicio, no simplemente una función conveniente del lenguaje.</p>
+
+<h3>5. Aplicaciones organizacionales y posibles extensiones</h3>
+<p>Una cola básica protege la equidad por llegada. Más adelante, si la institución define criterios de urgencia clínica, podrá migrarse hacia colas con prioridad. Sin embargo, conviene primero consolidar el caso FIFO puro. Moreno Pérez (2012) subraya que una buena solución parte de un problema claramente delimitado; mezclar reglas muy pronto puede confundir la comprensión base.</p>
+<blockquote>Cuando la decisión central es respetar turnos, la cola no solo organiza datos: hace visible la política de atención de la organización.</blockquote>
+        </section>
+
+        <section id="python" class="card">
+            <h2>Python como herramienta analítica (Google Colab)</h2>
+            <p class="section-intro">Ejecuta cada bloque en Colab o Replit, documenta el comportamiento observado y conecta la salida con una decisión de negocio.</p>
+            <blockquote>Antes de ejecutar, imagina quién debe quedar al frente de la cola. Si tu predicción no coincide con la salida, revisa si cambiaste accidentalmente la lógica FIFO.</blockquote>
+            
+            <div class="code-window">
+                <div class="code-topbar">
+                    <span><strong>Bloque 1:</strong> Cola básica con collections.deque</span>
+                    <span>colab_queue_deque.py</span>
+                    <span class="code-dots"><span></span><span></span><span></span></span>
+                </div>
+                <pre><code>from collections import deque
+
+                    cola_espera = deque()
+
+                    def registrar_paciente(cola, nombre, necesidad):
+                        cola.append({&quot;paciente&quot;: nombre, &quot;necesidad&quot;: necesidad})
+                        print(f&quot;Ingresó {nombre}. Cola actual: {[item[&#x27;paciente&#x27;] for item in cola]}&quot;)
+
+                    def atender_siguiente(cola):
+                        if not cola:
+                            print(&quot;No hay pacientes en espera&quot;)
+                            return None
+                        paciente = cola.popleft()
+                        print(f&quot;Se atiende a {paciente[&#x27;paciente&#x27;]}&quot;)
+                        return paciente
+
+                    registrar_paciente(cola_espera, &quot;Samuel&quot;, &quot;Lenguaje&quot;)
+                    registrar_paciente(cola_espera, &quot;Valentina&quot;, &quot;Integración sensorial&quot;)
+                    registrar_paciente(cola_espera, &quot;Martín&quot;, &quot;Seguimiento TEA&quot;)
+
+                    print(&quot;
+Paciente al frente:&quot;, cola_espera[0])
+                    atender_siguiente(cola_espera)
+                    print(&quot;Cola restante:&quot;, [item[&#x27;paciente&#x27;] for item in cola_espera])</code></pre>
+            </div>
+            <div class="info-box">
+                <strong>Uso pedagógico:</strong> Muestra de forma inmediata cómo se registra y atiende una lista de espera preservando el orden de llegada.
+            </div>
+            
+
+            <div class="code-window">
+                <div class="code-topbar">
+                    <span><strong>Bloque 2:</strong> Simulación de asignación de terapeutas con cola de espera</span>
+                    <span>colab_queue_assignment.py</span>
+                    <span class="code-dots"><span></span><span></span><span></span></span>
+                </div>
+                <pre><code>from collections import deque
+
+                    pacientes = deque([
+                        {&quot;paciente&quot;: &quot;Samuel&quot;, &quot;servicio&quot;: &quot;Lenguaje&quot;},
+                        {&quot;paciente&quot;: &quot;Valentina&quot;, &quot;servicio&quot;: &quot;Sensorial&quot;},
+                        {&quot;paciente&quot;: &quot;Martín&quot;, &quot;servicio&quot;: &quot;TEA&quot;},
+                        {&quot;paciente&quot;: &quot;Lucía&quot;, &quot;servicio&quot;: &quot;TDAH&quot;},
+                    ])
+
+                    terapeutas_disponibles = [&quot;Laura&quot;, &quot;Carlos&quot;]
+                    asignaciones = []
+
+                    while pacientes and terapeutas_disponibles:
+                        paciente = pacientes.popleft()
+                        terapeuta = terapeutas_disponibles.pop(0)
+                        asignaciones.append((paciente[&quot;paciente&quot;], terapeuta, paciente[&quot;servicio&quot;]))
+                        print(f&quot;Asignado {paciente[&#x27;paciente&#x27;]} a {terapeuta}&quot;)
+
+                    print(&quot;
+Asignaciones del bloque:&quot;)
+                    for asignacion in asignaciones:
+                        print(asignacion)
+
+                    print(&quot;Pacientes aún en cola:&quot;, [p[&quot;paciente&quot;] for p in pacientes])</code></pre>
+            </div>
+            <div class="info-box">
+                <strong>Uso pedagógico:</strong> Integra la cola con una necesidad de negocio: asignar pacientes al siguiente recurso disponible.
+            </div>
+            
+
+            <div class="code-window">
+                <div class="code-topbar">
+                    <span><strong>Bloque 3:</strong> Panel operativo para inspeccionar la cola</span>
+                    <span>colab_queue_dashboard.py</span>
+                    <span class="code-dots"><span></span><span></span><span></span></span>
+                </div>
+                <pre><code><span class="kw">from</span> <span class="var">collections</span> <span class="kw">import</span> <span class="var">deque</span>
+
+<span class="var">cola</span> <span class="op">=</span> <span class="var">deque</span><span class="op">(</span><span class="op">[</span>
+    <span class="op">{</span><span class="str">&quot;paciente&quot;</span><span class="op">:</span> <span class="str">&quot;Samuel&quot;</span><span class="op">,</span> <span class="str">&quot;espera_min&quot;</span><span class="op">:</span> <span class="num">12</span><span class="op">}</span><span class="op">,</span>
+    <span class="op">{</span><span class="str">&quot;paciente&quot;</span><span class="op">:</span> <span class="str">&quot;Valentina&quot;</span><span class="op">,</span> <span class="str">&quot;espera_min&quot;</span><span class="op">:</span> <span class="num">18</span><span class="op">}</span><span class="op">,</span>
+    <span class="op">{</span><span class="str">&quot;paciente&quot;</span><span class="op">:</span> <span class="str">&quot;Martín&quot;</span><span class="op">,</span> <span class="str">&quot;espera_min&quot;</span><span class="op">:</span> <span class="num">25</span><span class="op">}</span><span class="op">,</span>
+<span class="op">]</span><span class="op">)</span>
+
+<span class="kw">def</span> <span class="num">resumen_cola</span><span class="op">(</span><span class="var">cola_actual</span><span class="op">)</span><span class="op">:</span>
+    <span class="kw">if</span> <span class="kw">not</span> <span class="var">cola_actual</span><span class="op">:</span>
+        <span class="kw">return</span> <span class="op">{</span>
+            <span class="str">&quot;longitud&quot;</span><span class="op">:</span> <span class="num">0</span><span class="op">,</span>
+            <span class="str">&quot;frente&quot;</span><span class="op">:</span> <span class="kw">None</span><span class="op">,</span>
+            <span class="str">&quot;espera_promedio&quot;</span><span class="op">:</span> <span class="num">0</span><span class="op">,</span>
+        <span class="op">}</span>
+
+    <span class="var">espera_promedio</span> <span class="op">=</span> <span class="var">sum</span><span class="op">(</span><span class="var">item</span><span class="op">[</span><span class="str">&quot;espera_min&quot;</span><span class="op">]</span> <span class="kw">for</span> <span class="var">item</span> <span class="kw">in</span> <span class="var">cola_actual</span><span class="op">)</span> <span class="op">/</span> <span class="var">len</span><span class="op">(</span><span class="var">cola_actual</span><span class="op">)</span>
+    <span class="kw">return</span> <span class="op">{</span>
+        <span class="str">&quot;longitud&quot;</span><span class="op">:</span> <span class="var">len</span><span class="op">(</span><span class="var">cola_actual</span><span class="op">)</span><span class="op">,</span>
+        <span class="str">&quot;frente&quot;</span><span class="op">:</span> <span class="var">cola_actual</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">[</span><span class="str">&quot;paciente&quot;</span><span class="op">]</span><span class="op">,</span>
+        <span class="str">&quot;espera_promedio&quot;</span><span class="op">:</span> <span class="var">round</span><span class="op">(</span><span class="var">espera_promedio</span><span class="op">,</span> <span class="num">2</span><span class="op">)</span><span class="op">,</span>
+    <span class="op">}</span>
+
+<span class="var">print</span><span class="op">(</span><span class="var">resumen_cola</span><span class="op">(</span><span class="var">cola</span><span class="op">)</span><span class="op">)</span>
+<span class="var">cola</span><span class="op">.</span><span class="var">popleft</span><span class="op">(</span><span class="op">)</span>
+<span class="var">print</span><span class="op">(</span><span class="var">resumen_cola</span><span class="op">(</span><span class="var">cola</span><span class="op">)</span><span class="op">)</span></code></pre>
+            </div>
+            <div class="info-box">
+                <strong>Uso pedagógico:</strong> Ayuda a convertir la estructura en una salida legible para la toma de decisiones.
+            </div>
+            
+        </section>
+
+        <section id="actividad" class="card">
+            <h2>Actividad presencial HAD + HP (4 horas)</h2>
+            <p class="section-intro">Actividad central de la semana con verbo Bloom explícito, evidencias y puntos ClassDojo.</p>
+            <div class="activity-shell">
+    <div class="subcard">
+        <h3>Sistema de Lista de Espera NeuroBiz</h3>
+        <p><strong>Verbo Bloom explícito:</strong> <strong>Aplicar</strong> una cola para simular la asignación de terapeutas a pacientes según orden de llegada.</p>
+        <p><strong>Reto:</strong> cada equipo recibirá una secuencia de registros de pacientes y una disponibilidad parcial de terapeutas. Debe construir una simulación que preserve FIFO, atender ciertos pacientes y reportar quién queda en espera al finalizar.</p>
+        <div class="mini-grid">
+            <div class="subcard">
+                <span class="phase-label had">HAD · 120 min</span>
+                <ul>
+                    <li>Activación con filas físicas: estudiantes representan el frente y el final de la cola.</li>
+                    <li>Conceptualización de FIFO y comparación rápida con la pila de semanas anteriores.</li>
+                    <li>Demostración guiada en Colab con <code>collections.deque</code>.</li>
+                    <li>Discusión sobre equidad: qué se rompe si se atiende fuera de orden sin criterio explícito.</li>
+                </ul>
+            </div>
+            <div class="subcard">
+                <span class="phase-label hp">HP · 120 min</span>
+                <ul>
+                    <li>Construcción del prototipo por equipos con datos del caso.</li>
+                    <li>Prueba con al menos 5 <em>enqueue</em> y 3 <em>dequeue</em>.</li>
+                    <li>Generación de un reporte sencillo: frente actual, longitud de la cola y pacientes pendientes.</li>
+                    <li>Socialización del criterio: por qué la cola responde al valor de equidad en la asignación.</li>
+                </ul>
+            </div>
+        </div>
+        <h3>Entregables mínimos</h3>
+        <ul>
+            <li>Simulación funcional de llegada y atención.</li>
+            <li>Registro de al menos una consulta al frente con <em>peek</em> o índice equivalente.</li>
+            <li>Explicación de cómo se preservó FIFO.</li>
+            <li>Conexión con el impacto en espera, retención o continuidad del servicio.</li>
+        </ul>
+        <table>
+            <thead><tr><th>Criterio</th><th>Qué observar</th><th>Evidencia</th></tr></thead>
+            <tbody>
+                <tr><td>Respeto de FIFO</td><td>El primer registrado es el primero atendido</td><td>Salida de ejecución</td></tr>
+                <tr><td>Uso de operaciones</td><td>Emplea enqueue, dequeue y verificación de vacío</td><td>Código comentado o explicado</td></tr>
+                <tr><td>Lectura organizacional</td><td>Justifica la cola como mecanismo de equidad</td><td>Explicación oral o escrita</td></tr>
+                <tr><td>Visualización del estado</td><td>Reporta frente y elementos pendientes</td><td>Panel o impresión final</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <aside class="dojo-panel">
+        <h3>Panel ClassDojo</h3>
+        <ul>
+            <li><strong>+2 puntos</strong> por representar correctamente el frente y el final de la cola.</li>
+            <li><strong>+2 puntos</strong> por mantener FIFO durante toda la simulación.</li>
+            <li><strong>+3 puntos</strong> por prototipo funcional con <code>deque</code>.</li>
+            <li><strong>+2 puntos</strong> por explicar el impacto de la cola en la equidad del servicio.</li>
+            <li><strong>+1 punto</strong> por mostrar un pequeño resumen de estado o dashboard.</li>
+        </ul>
+        <p><strong>Total sugerido:</strong> 10 puntos.</p>
+        <p><strong>ODS:</strong> insistir en que una espera organizada evita desplazamientos improductivos y reprocesos administrativos.</p>
+    </aside>
+</div>
+        </section>
+
+        <section id="hti" class="card">
+            <h2>HTI - Trabajo independiente</h2>
+            <p class="section-intro">Selecciona la ruta de trabajo indicada por tu docente. Ambas se conectan con el mismo resultado de aprendizaje, pero con distinta profundidad y carga.</p>
+            <div class="scenario-a">
+    <h3>HTI Escenario A · Profundización (60-90 min, entrega digital)</h3>
+    <p><strong>Producto:</strong> agregar prioridades a la cola usando <code>heapq</code> para casos críticos.</p>
+    <ul>
+        <li>Definir una prioridad numérica donde valores más bajos signifiquen atención más urgente.</li>
+        <li>Registrar al menos 6 pacientes y mostrar cómo cambia el orden de atención.</li>
+        <li>Explicar en 8 a 10 líneas por qué esta solución ya no es una cola FIFO pura.</li>
+        <li>Entregar código, salida y breve comentario sobre criterios éticos de prioridad.</li>
+    </ul>
+    <p><strong>Énfasis Bloom:</strong> aplicar con extensión y comenzar a distinguir variantes de la estructura base.</p>
+</div>
+<div class="scenario-b">
+    <h3>HTI Escenario B · Bajo umbral (20-30 min, cuaderno/papel)</h3>
+    <p><strong>Producto:</strong> elaborar un diagrama de una cola después de 5 operaciones <em>enqueue</em> y 3 <em>dequeue</em> con datos de pacientes NeuroBiz.</p>
+    <ul>
+        <li>Marcar frente y final después de cada paso.</li>
+        <li>Indicar quién sería el siguiente en ser atendido.</li>
+        <li>Escribir una frase final que explique por qué la estructura protege el orden de llegada.</li>
+    </ul>
+    <p><strong>Importante:</strong> este escenario <strong>NO BLOQUEA la siguiente clase</strong> si no se realiza; se usa como refuerzo visual y de baja carga.</p>
+</div>
+        </section>
+
+        <section id="quiz" class="card">
+            <h2>Quiz formativo tipo Quizizz</h2>
+            <p class="section-intro">Responde primero sin mirar la solución. Luego pasa el cursor sobre cada tarjeta para contrastar tu elección.</p>
+            <div class="quiz-shell">
+            <article class="quiz-card">
+                <h3>Pregunta 1</h3>
+                <p><strong>¿Qué significa FIFO en una cola?</strong></p>
+                <ul><li>a) El último en entrar es el primero en salir</li><li>b) El primero en entrar es el primero en salir</li><li>c) Todos salen al mismo tiempo</li><li>d) No existe un orden de salida</li></ul>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) El primero en entrar es el primero en salir</div>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 2</h3>
+                <p><strong>¿Qué operación agrega un paciente al final de la cola?</strong></p>
+                <ul><li>a) pop</li><li>b) push</li><li>c) enqueue</li><li>d) peek</li></ul>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> c) enqueue</div>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 3</h3>
+                <p><strong>En una cola, ¿qué elemento se atiende primero?</strong></p>
+                <ul><li>a) El que llegó más recientemente</li><li>b) El que está al frente</li><li>c) El que tenga nombre más corto</li><li>d) El que tenga mayor KPI</li></ul>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) El que está al frente</div>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 4</h3>
+                <p><strong>¿Qué estructura de Python es especialmente útil para colas eficientes?</strong></p>
+                <ul><li>a) set</li><li>b) tuple</li><li>c) collections.deque</li><li>d) dict</li></ul>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> c) collections.deque</div>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 5</h3>
+                <p><strong>¿Por qué la cola se asocia con equidad en el caso base de NeuroBiz?</strong></p>
+                <ul><li>a) Porque prioriza siempre al último paciente</li><li>b) Porque respeta el orden de registro</li><li>c) Porque elimina la necesidad de datos</li><li>d) Porque siempre reduce la cola a cero</li></ul>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) Porque respeta el orden de registro</div>
+            </article>
+            </div>
+        </section>
+
+        <section id="bibliografia" class="card">
+            <h2>Bibliografía base en formato APA</h2>
+            <p class="section-intro">Fuentes base del módulo, usadas para fundamentar la conceptualización y la traducción al contexto organizacional.</p>
+            <ol>
+    <li>Cairó Battistutti, O. &amp; Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li>
+    <li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill. ISBN: 9786071508188.</li>
+    <li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li>
+    <li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li>
+    <li>Google Colaboratory. (2024). https://colab.research.google.com</li>
+    <li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial. ISBN: 9788499640884.</li>
+</ol>
+            <p class="foot-ref">Las referencias impresas se interpretan de forma aplicada; las referencias digitales se emplean para validar la implementación en Python y la ejecución en entornos de notebook.</p>
+        </section>
+    </main>
+
+    <footer class="footer">UIB · TGA05 · Semana 4 · Material autónomo para estudiante · Caso transversal NeuroBiz S.A.S.</footer>
+    <script>document.addEventListener('DOMContentLoaded', () => {
+  const bar = document.querySelector('.xp-fill');
+  if (bar) {
+    requestAnimationFrame(() => {
+      bar.style.width = bar.dataset.progress || '50%';
+    });
+  }
+});</script>
+
+<script id="progress-tracker-js">
+// ════════════════════════════════════════════════════
+//  NeuroBiz Progress Tracker · Semana 4
+// ════════════════════════════════════════════════════
+
+const PT = (function() {
+  const SEMANA       = 4;
+  const XP_BASE      = 20;          // XP base por abrir el material
+  const XP_MAX       = 100;
+  const LS_KEY       = `tga05_s4`;
+  const LS_GLOBAL    = "tga05_global";
+
+  // URL del Apps Script — reemplaza con tu URL al configurar
+  // Ver: EstructuraDatos/setup/CONFIGURAR_PROGRESO.html
+  const SHEETS_URL = localStorage.getItem("tga05_sheets_url") || "";
+
+  let state = {
+    nombre          : "",
+    id_estudiante   : "",
+    semana          : SEMANA,
+    xp              : XP_BASE,
+    quiz_respuestas : {},
+    quiz_puntaje    : 0,
+    hti_entregado   : false,
+    actividad_completada: false,
+    dispositivo     : navigator.userAgent.substring(0, 80)
+  };
+
+  // ── Cargar desde localStorage ──────────────────────
+  function load() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (raw) Object.assign(state, JSON.parse(raw));
+
+      // Cargar nombre/id del perfil global si no está en esta semana
+      const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
+      if (!state.nombre       && global.nombre)        state.nombre        = global.nombre;
+      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante;
+    } catch(e) { console.warn("PT load error:", e); }
+  }
+
+  // ── Guardar en localStorage ────────────────────────
+  function save() {
+    // Capturar nombre del input
+    const inp = document.getElementById("pt-nombre");
+    if (inp && inp.value.trim()) {
+      state.nombre = inp.value.trim();
+      // Generar ID si no existe
+      if (!state.id_estudiante) {
+        state.id_estudiante = state.nombre.toLowerCase()
+          .replace(/\s+/g,"_").replace(/[^a-z0-9_]/g,"")
+          .substring(0,20) + "_" + Math.random().toString(36).substr(2,4);
+      }
+      // Guardar perfil global
+      const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
+      global.nombre = state.nombre;
+      global.id_estudiante = state.id_estudiante;
+      localStorage.setItem(LS_GLOBAL, JSON.stringify(global));
+    }
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+    render();
+  }
+
+  // ── Renderizar widget ──────────────────────────────
+  function render() {
+    const xpBar   = document.getElementById("pt-xp-bar");
+    const xpCount = document.getElementById("pt-xp-count");
+    const semLbl  = document.getElementById("pt-semana-label");
+    const inp     = document.getElementById("pt-nombre");
+
+    if (xpBar)   xpBar.style.width   = Math.min(state.xp, XP_MAX) + "%";
+    if (xpCount) xpCount.textContent = state.xp + " XP";
+    if (semLbl)  semLbl.textContent  = "Semana " + SEMANA;
+    if (inp && !inp.value && state.nombre) inp.value = state.nombre;
+
+    // Sync original XP bars in the page
+    document.querySelectorAll(".xp-fill,[data-target]").forEach(el => {
+      el.style.width = Math.min(state.xp, XP_MAX) + "%";
+    });
+    const xpCounters = document.querySelectorAll("#xpCount,.xp-row strong");
+    xpCounters.forEach(el => { el.textContent = state.xp + " XP"; });
+  }
+
+  // ── Sumar XP ──────────────────────────────────────
+  function addXP(pts, motivo) {
+    state.xp = Math.min(state.xp + pts, XP_MAX);
+    msg("✨ +" + pts + " XP — " + motivo, "lime");
+    save();
+  }
+
+  // ── Sincronizar con Supabase + Google Sheets ──────
+  async function syncCloud() {
+    save();
+    const sheetsUrl = localStorage.getItem("tga05_sheets_url") || "";
+    const sbUrl     = localStorage.getItem("tga05_supabase_url") || "";
+    const sbKey     = localStorage.getItem("tga05_supabase_key") || "";
+
+    if (!sheetsUrl && !sbUrl) {
+      msg("⚠️ Sin destino configurado. Ver CONFIGURAR_SUPABASE.html", "orange");
+      return;
+    }
+
+    msg("⏳ Sincronizando…", "#fff9c4");
+    let synced = false;
+
+    // ── Supabase (recomendado) ─────────────────────
+    if (sbUrl && sbKey) {
+      try {
+        const res = await fetch(sbUrl + "/rest/v1/student_progress", {
+          method : "POST",
+          headers: {
+            "apikey"       : sbKey,
+            "Authorization": "Bearer " + sbKey,
+            "Content-Type" : "application/json",
+            "Prefer"       : "resolution=merge-duplicates"
+          },
+          body: JSON.stringify({
+            student_name    : state.nombre         || "Anónimo",
+            student_id      : state.id_estudiante  || "desconocido",
+            semana          : state.semana,
+            xp              : state.xp             || 0,
+            quiz_answers    : state.quiz_respuestas || {},
+            quiz_score      : state.quiz_puntaje    || 0,
+            hti_done        : !!state.hti_entregado,
+            activity_done   : !!state.actividad_completada,
+            updated_at      : new Date().toISOString()
+          })
+        });
+        if (res.ok || res.status === 201) {
+          synced = true;
+          msg("✅ Guardado en Supabase ☁️", "lightgreen");
+        } else {
+          msg("❌ Supabase: error " + res.status, "salmon");
+        }
+      } catch(e) {
+        msg("❌ Sin conexión (Supabase). Local guardado.", "salmon");
+      }
+    }
+
+    // ── Google Sheets (opcional adicional) ─────────
+    if (sheetsUrl) {
+      try {
+        const resp = await fetch(sheetsUrl, {
+          method : "POST",
+          headers: { "Content-Type": "text/plain" },
+          body   : JSON.stringify(state)
+        });
+        const json = await resp.json();
+        if (json.ok) {
+          synced = true;
+          msg(sbUrl ? "✅ Guardado en Supabase + Sheets" : "✅ Guardado en Google Sheets", "lightgreen");
+        } else {
+          if (!synced) msg("❌ Sheets: " + (json.error || "Error"), "salmon");
+        }
+      } catch(e) {
+        if (!synced) msg("❌ Sin conexión. Solo guardado local.", "salmon");
+      }
+    }
+  }
+
+  // ── Exportar código de progreso ────────────────────
+  function exportCode() {
+    save();
+    const code = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+    const ta = document.createElement("textarea");
+    ta.value = code;
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy");
+    document.body.removeChild(ta);
+    msg("📋 ¡Código copiado! Guárdalo en Google Drive o OneDrive.", "#fff9c4");
+    // También abrir como descarga
+    const a = document.createElement("a");
+    a.href     = "data:text/plain;charset=utf-8," + encodeURIComponent(code);
+    a.download = "progreso_tga05_s4_" + (state.id_estudiante || "estudiante") + ".txt";
+    a.click();
+  }
+
+  // ── Importar desde código ──────────────────────────
+  function importCode() {
+    const code = prompt("Pega tu código de progreso:");
+    if (!code) return;
+    try {
+      const decoded = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+      Object.assign(state, decoded);
+      save();
+      msg("✅ Progreso restaurado correctamente.", "lightgreen");
+    } catch(e) {
+      msg("❌ Código inválido.", "salmon");
+    }
+  }
+
+  // ── Toggle widget ──────────────────────────────────
+  function toggle() {
+    const w = document.getElementById("pt-widget");
+    const t = document.getElementById("pt-toggle");
+    if (w) w.classList.toggle("collapsed");
+    if (t) t.textContent = w && w.classList.contains("collapsed") ? "▼" : "▲";
+  }
+
+  // ── Mensaje en widget ──────────────────────────────
+  function msg(text, color) {
+    const el = document.getElementById("pt-msg");
+    if (!el) return;
+    el.textContent = text;
+    el.style.color = color || "#fff";
+    setTimeout(() => { if (el.textContent === text) el.textContent = ""; }, 4000);
+  }
+
+  // ── Init ───────────────────────────────────────────
+  function init() {
+    load();
+    render();
+
+    // XP por visitar la semana (solo una vez por semana)
+    const visitKey = `tga05_visited_s4`;
+    if (!localStorage.getItem(visitKey)) {
+      localStorage.setItem(visitKey, "1");
+      addXP(15, "Material de Semana 4 abierto");
+    }
+
+    // Hacer quiz interactivo si hay preguntas con clase .quiz-q
+    document.querySelectorAll(".quiz-q").forEach((qEl, qi) => {
+      const answers = qEl.querySelectorAll("li");
+      // Buscar la respuesta oculta (.quiz-answer)
+      const answerEl = qEl.querySelector(".quiz-answer");
+      const correctText = answerEl ? answerEl.textContent : "";
+      const correctLetter = correctText.match(/^✅\s*([a-d])/i);
+      const correctIdx = correctLetter
+        ? ["a","b","c","d"].indexOf(correctLetter[1].toLowerCase())
+        : -1;
+
+      answers.forEach((li, ai) => {
+        li.style.cursor = "pointer";
+        li.style.borderRadius = "6px";
+        li.style.padding = "3px 8px";
+        li.style.transition = "background .2s";
+        li.addEventListener("mouseenter", () => {
+          if (!li.dataset.answered) li.style.background = "rgba(25,118,210,.15)";
+        });
+        li.addEventListener("mouseleave", () => {
+          if (!li.dataset.answered) li.style.background = "";
+        });
+        li.addEventListener("click", () => {
+          const key = "q" + qi;
+          if (state.quiz_respuestas[key] !== undefined) return; // ya respondida
+          answers.forEach(a => { a.dataset.answered = "1"; });
+          if (ai === correctIdx) {
+            li.style.background = "#2e7d32";
+            li.style.color = "#fff";
+            addXP(10, "Respuesta correcta en quiz");
+            state.quiz_puntaje = (state.quiz_puntaje || 0) + 1;
+          } else {
+            li.style.background = "#c62828";
+            li.style.color = "#fff";
+            if (correctIdx >= 0) {
+              answers[correctIdx].style.background = "#2e7d32";
+              answers[correctIdx].style.color = "#fff";
+            }
+          }
+          state.quiz_respuestas[key] = ai;
+          if (answerEl) answerEl.style.display = "block";
+          save();
+        });
+      });
+
+      // Restaurar estado previo
+      const prevKey = "q" + qi;
+      if (state.quiz_respuestas[prevKey] !== undefined) {
+        const prev = state.quiz_respuestas[prevKey];
+        answers.forEach(a => { a.dataset.answered = "1"; });
+        if (prev === correctIdx && correctIdx >= 0) {
+          answers[prev].style.background = "#2e7d32";
+          answers[prev].style.color = "#fff";
+        } else {
+          if (prev < answers.length) {
+            answers[prev].style.background = "#c62828";
+            answers[prev].style.color = "#fff";
+          }
+          if (correctIdx >= 0) {
+            answers[correctIdx].style.background = "#2e7d32";
+            answers[correctIdx].style.color = "#fff";
+          }
+        }
+        if (answerEl) answerEl.style.display = "block";
+      }
+    });
+
+    // XP por configurar nombre
+    const nombreInp = document.getElementById("pt-nombre");
+    if (nombreInp) {
+      nombreInp.addEventListener("blur", () => {
+        if (nombreInp.value.trim() && !state._nombre_xp) {
+          state._nombre_xp = true;
+          addXP(5, "Perfil configurado");
+        }
+      });
+    }
+  }
+
+  return {
+    init,
+    addXP,
+    save  : save,
+    sync  : syncCloud,
+    export: exportCode,
+    import: importCode,
+    toggle,
+    state : () => state
+  };
+})();
+
+// ── Exponer funciones para botones HTML ────────────────────
+function ptSaveLocal()  { PT.save(); }
+function ptSyncCloud()  { PT.sync(); }
+function ptExportCode() { PT.export(); }
+function ptImportCode() { PT.import(); }
+function ptToggle()     { PT.toggle(); }
+
+// ── Inicializar cuando cargue el DOM ───────────────────────
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", PT.init);
+} else {
+  PT.init();
+}
+</script>
+
+<!-- ── WELCOME MODAL ── -->
+<style id="welcome-modal-css">
+#pt-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeIn .3s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+#pt-modal-box{
+  background:linear-gradient(160deg,#1E2843,#1E2843 70%,#2d3a5e);
+  color:#fff;border-radius:20px;padding:2rem 2rem 1.5rem;
+  width:min(94vw,400px);box-shadow:0 20px 60px rgba(0,0,0,.5);
+  position:relative;animation:slideUp .35s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+#pt-modal-box h2{font-size:1.25rem;font-weight:900;margin-bottom:.3rem}
+#pt-modal-box .sub{opacity:.75;font-size:.85rem;margin-bottom:1.3rem}
+#pt-modal-box .field{margin-bottom:.9rem}
+#pt-modal-box label{display:block;font-size:.78rem;font-weight:700;
+  opacity:.85;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em}
+#pt-modal-box input{
+  width:100%;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.35);
+  border-radius:10px;padding:.6rem .9rem;color:#fff;font-size:.95rem;outline:none;
+}
+#pt-modal-box input::placeholder{color:rgba(255,255,255,.45)}
+#pt-modal-box input:focus{border-color:rgba(249,168,37,.9)}
+#pt-modal-btn{
+  width:100%;padding:.7rem;border:none;border-radius:12px;
+  background:linear-gradient(135deg,#FFDF2D,#FFDF2D);
+  color:#1E2843;font-weight:900;font-size:1rem;cursor:pointer;
+  margin-top:.4rem;transition:opacity .15s;
+}
+#pt-modal-btn:hover{opacity:.9}
+#pt-modal-error{color:#ff8a80;font-size:.8rem;margin-top:.5rem;min-height:1em}
+#pt-modal-xp{
+  text-align:center;font-size:.78rem;opacity:.7;margin-top:.7rem;
+}
+</style>
+
+<div id="pt-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="pt-modal-title">
+  <div id="pt-modal-box">
+    <h2 id="pt-modal-title">👋 ¡Bienvenido a TGA05!</h2>
+    <p class="sub">NeuroBiz S.A.S. · Estructura de Datos para los Negocios</p>
+    <div class="field">
+      <label for="pt-modal-nombre">Tu nombre completo *</label>
+      <input id="pt-modal-nombre" type="text" placeholder="Ej: María García López"
+        autocomplete="name" autofocus
+        onkeydown="if(event.key==='Enter')ptModalSetup()" />
+    </div>
+    <div class="field">
+      <label for="pt-modal-grupo">Grupo / Paralelo</label>
+      <input id="pt-modal-grupo" type="text" placeholder="Ej: GA-01" />
+    </div>
+    <button id="pt-modal-btn" onclick="ptModalSetup()">¡Empezar! 🚀</button>
+    <div id="pt-modal-error"></div>
+    <p id="pt-modal-xp">⭐ Recibirás +5 XP por configurar tu perfil</p>
+  </div>
+</div>
+
+<script id="welcome-modal-js">
+(function () {
+  function shouldShowModal() {
+    try {
+      var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
+      return !g.nombre || g.nombre.trim().length < 2;
+    } catch(e) { return true; }
+  }
+
+  function showModal() {
+    var overlay = document.getElementById("pt-overlay");
+    if (overlay) {
+      overlay.style.display = "flex";
+      var inp = document.getElementById("pt-modal-nombre");
+      // Pre-fill if there's a partial name saved
+      try {
+        var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
+        if (g.nombre && inp) inp.value = g.nombre;
+        var gInp = document.getElementById("pt-modal-grupo");
+        if (g.grupo && gInp) gInp.value = g.grupo;
+      } catch(e) {}
+      if (inp) setTimeout(function(){ inp.focus(); }, 100);
+    }
+  }
+
+  window.ptModalSetup = function() {
+    var nombreInp = document.getElementById("pt-modal-nombre");
+    var grupoInp  = document.getElementById("pt-modal-grupo");
+    var errEl     = document.getElementById("pt-modal-error");
+    var nombre    = nombreInp ? nombreInp.value.trim() : "";
+    var grupo     = grupoInp  ? grupoInp.value.trim()  : "";
+
+    if (!nombre || nombre.length < 3) {
+      if (errEl) errEl.textContent = "Por favor escribe tu nombre completo (mínimo 3 caracteres).";
+      if (nombreInp) nombreInp.focus();
+      return;
+    }
+
+    // Build / update global profile
+    var profile = {};
+    try { profile = JSON.parse(localStorage.getItem("tga05_global") || "{}"); } catch(e) {}
+
+    profile.nombre = nombre;
+    if (grupo) profile.grupo = grupo;
+    if (!profile.id_estudiante) {
+      profile.id_estudiante = nombre.toLowerCase()
+        .replace(/\s+/g, "_").replace(/[^a-z0-9_áéíóúñ]/g, "")
+        .substring(0, 22) + "_" + Math.random().toString(36).substr(2, 4);
+    }
+    localStorage.setItem("tga05_global", JSON.stringify(profile));
+
+    // Sync into the PT widget name input
+    var ptInp = document.getElementById("pt-nombre");
+    if (ptInp) { ptInp.value = nombre; ptInp.dispatchEvent(new Event("input")); }
+
+    // XP reward
+    if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
+      PT.addXP(5, "Perfil configurado ✨");
+    }
+
+    // Close modal
+    var overlay = document.getElementById("pt-overlay");
+    if (overlay) {
+      overlay.style.opacity = "0";
+      overlay.style.transition = "opacity .2s";
+      setTimeout(function(){ overlay.style.display = "none"; overlay.style.opacity = ""; }, 200);
+    }
+
+    // Auto-sync to Supabase after a short delay
+    setTimeout(function(){
+      if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
+    }, 800);
+  };
+
+  // Show on load if no name
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function(){
+      if (shouldShowModal()) showModal();
+    });
+  } else {
+    if (shouldShowModal()) showModal();
+  }
+})();
+</script>
+
+</body>
+</html>

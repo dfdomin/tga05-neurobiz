@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semanas 6–9 — Material de Estudio | IUB — GOL06</title>
+  <style>
+    /* ── Reset y base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --iub-blue:       #003087;
+      --iub-blue-mid:   #0056B3;
+      --iub-blue-light: #E8F0FE;
+      --iub-gold:       #F5A000;
+      --iub-gold-light: #FFF3CD;
+      --iub-white:      #FFFFFF;
+      --iub-bg:         #F4F7FC;
+      --iub-text:       #1A2744;
+      --iub-muted:      #5A6A8A;
+      --iub-border:     #C8D7F0;
+      --iub-code-bg:    #0F1E3D;
+      --iub-code-text:  #E8F0FE;
+      --radius:         8px;
+      --shadow:         0 2px 8px rgba(0,48,135,.12);
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--iub-bg);
+      color: var(--iub-text);
+      line-height: 1.7;
+      padding-bottom: 3rem;
+    }
+
+    /* ── Header institucional ── */
+    .iub-header {
+      background: linear-gradient(135deg, var(--iub-blue) 0%, var(--iub-blue-mid) 100%);
+      color: var(--iub-white);
+      padding: 0;
+      box-shadow: 0 4px 16px rgba(0,48,135,.3);
+    }
+    .iub-header-top {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1rem 2rem;
+      border-bottom: 3px solid var(--iub-gold);
+    }
+    .iub-logo {
+      width: 60px; height: 60px;
+      background: var(--iub-white);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--iub-blue);
+      letter-spacing: -1px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    }
+    .iub-institution { font-size: .8rem; opacity: .85; }
+    .iub-institution strong { font-size: 1.05rem; display: block; opacity: 1; }
+    .iub-header-meta {
+      background: rgba(0,0,0,.18);
+      padding: .55rem 2rem;
+      font-size: .82rem;
+      display: flex; flex-wrap: wrap; gap: .75rem 2rem;
+      opacity: .9;
+    }
+    .iub-header-meta span::before { content: "● "; font-size: .65rem; }
+
+    /* ── Barra de título del documento ── */
+    .doc-title-bar {
+      background: var(--iub-gold);
+      color: var(--iub-blue);
+      padding: .75rem 2rem;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: .02em;
+    }
+
+    /* ── Contenedor principal ── */
+    .content-wrap {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ── Tarjeta de contenido ── */
+    .content-card {
+      background: var(--iub-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2.5rem 2.75rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Tipografía ── */
+    h1 {
+      font-size: 1.8rem;
+      color: var(--iub-blue);
+      border-bottom: 3px solid var(--iub-gold);
+      padding-bottom: .5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 1.35rem;
+      color: var(--iub-blue);
+      margin: 2rem 0 .75rem;
+      padding-left: .75rem;
+      border-left: 4px solid var(--iub-gold);
+    }
+    h3 {
+      font-size: 1.1rem;
+      color: var(--iub-blue-mid);
+      margin: 1.5rem 0 .5rem;
+    }
+    h4 {
+      font-size: 1rem;
+      color: var(--iub-muted);
+      margin: 1.25rem 0 .4rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    p { margin-bottom: 1rem; }
+    strong { color: var(--iub-blue); }
+    em { color: var(--iub-muted); }
+
+    /* ── Listas ── */
+    ul, ol { margin: .5rem 0 1rem 1.5rem; }
+    li { margin-bottom: .3rem; }
+    ul li::marker { color: var(--iub-gold); }
+    ol li::marker { color: var(--iub-blue); font-weight: 700; }
+
+    /* ── Blockquote ── */
+    blockquote {
+      background: var(--iub-blue-light);
+      border-left: 5px solid var(--iub-blue-mid);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      color: var(--iub-text);
+    }
+    blockquote p { margin-bottom: .5rem; }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    /* ── Código inline ── */
+    code {
+      background: var(--iub-blue-light);
+      color: var(--iub-blue);
+      padding: .15em .4em;
+      border-radius: 4px;
+      font-size: .88em;
+      font-family: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+    }
+
+    /* ── Bloque de código ── */
+    pre {
+      background: var(--iub-code-bg);
+      color: var(--iub-code-text);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      font-size: .85rem;
+      line-height: 1.6;
+      border-left: 4px solid var(--iub-gold);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,.3);
+    }
+    pre code {
+      background: transparent;
+      color: var(--iub-code-text);
+      padding: 0;
+      font-size: inherit;
+    }
+
+    /* ── Tablas ── */
+    .table-wrap { overflow-x: auto; margin: 1.25rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+      min-width: 400px;
+    }
+    th {
+      background: var(--iub-blue);
+      color: var(--iub-white);
+      padding: .65rem 1rem;
+      text-align: left;
+      font-weight: 600;
+    }
+    th:first-child { border-radius: var(--radius) 0 0 0; }
+    th:last-child  { border-radius: 0 var(--radius) 0 0; }
+    td {
+      padding: .55rem 1rem;
+      border-bottom: 1px solid var(--iub-border);
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: var(--iub-blue-light); }
+    tr:hover td { background: var(--iub-gold-light); }
+
+    /* ── Separador ── */
+    hr {
+      border: none;
+      border-top: 2px solid var(--iub-border);
+      margin: 2rem 0;
+    }
+
+    /* ── Alerta / aviso ── */
+    .alert {
+      background: var(--iub-gold-light);
+      border-left: 5px solid var(--iub-gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: .85rem 1.1rem;
+      margin: 1rem 0;
+      font-size: .92rem;
+    }
+
+    /* ── Footer ── */
+    .iub-footer {
+      background: var(--iub-blue);
+      color: rgba(255,255,255,.75);
+      text-align: center;
+      padding: 1rem 2rem;
+      font-size: .8rem;
+      margin-top: 3rem;
+    }
+    .iub-footer strong { color: var(--iub-gold); }
+
+    /* ── Impresión ── */
+    @media print {
+      body { background: white; font-size: 11pt; }
+      .content-card { box-shadow: none; padding: 1rem; }
+      pre { background: #f0f0f0 !important; color: #000 !important;
+            border-left-color: #999; }
+      .iub-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .iub-footer { display: none; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .iub-header-top { padding: .75rem 1rem; }
+      .content-card { padding: 1.25rem 1rem; }
+      .iub-header-meta { padding: .4rem 1rem; }
+      .doc-title-bar { padding: .6rem 1rem; }
+    }
+</style>
+</head>
+<body>
+
+  <!-- ── Encabezado institucional ── -->
+  <header class="iub-header">
+    <div class="iub-header-top">
+      <div class="iub-logo">IUB</div>
+      <div>
+        <div class="iub-institution">
+          <strong>Institución Universitaria de Barranquilla</strong>
+          Facultad · Tecnología en Gestión de Operaciones Logísticas
+        </div>
+      </div>
+    </div>
+    <div class="iub-header-meta">
+      <span><strong>Módulo:</strong> GOL06 — Costos y Presupuestos</span>
+      <span><strong>Créditos:</strong> 2 | HAD 2 + HP 2 + HTI 5</span>
+      <span><strong>Período:</strong> 2024 – 2025</span>
+      <span><strong>Caso hilo:</strong> LOGÍSATL S.A.S.</span>
+    </div>
+    <div class="doc-title-bar">📖 Semanas 6–9 · Material de Estudio · RA2</div>
+  </header>
+
+  <!-- ── Contenido ── -->
+  <main class="content-wrap">
+    <article class="content-card">
+      <h1>📖 Semana 6 — Sistemas de Producción y Tipos de Costeo</h1>
+<p><strong>IUB | GOL06 Costos y Presupuestos | RA2</strong><br />
+<strong>Caso:</strong> LOGÍSATL S.A.S.</p>
+<hr />
+<h2>🎯 Objetivo de la semana</h2>
+<p>Identificar los principales sistemas de producción, relacionarlos con el tipo de costeo apropiado, y determinar cuál aplica para LOGÍSATL.</p>
+<hr />
+<h2>🧩 Analogía: Fábrica de camisas vs. pastelería custom</h2>
+<p><strong>Fábrica de camisas:</strong> Produce 5.000 camisas talla M azules estándar todos los días. El proceso es idéntico para todas. El costo de una camisa = costo total del lote / 5.000.<br />
+→ <strong>Sistema por procesos</strong> (producción masiva y homogénea)</p>
+<p><strong>Pastelería custom:</strong> Cada torta es diferente: diferente tamaño, sabor, decoración, para un cliente diferente. El costo de cada torta se calcula por separado.<br />
+→ <strong>Sistema por órdenes</strong> (producción bajo pedido, cada unidad o lote es único)</p>
+<blockquote>
+<p>¿Y LOGÍSATL? Cada cliente tiene una necesidad diferente: distinta carga, distinta ruta, distinta cantidad de embalaje. El costo no puede ser el mismo para todos.<br />
+<strong>LOGÍSATL usa costeo por órdenes de servicio.</strong></p>
+</blockquote>
+<hr />
+<h2>📚 Contenido teórico</h2>
+<h3>Sistemas de producción</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Sistema</th>
+<th>Características</th>
+<th>Tipo de empresa</th>
+<th>Sistema de costeo que usa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Por órdenes</strong></td>
+<td>Producción bajo pedido específico, cada unidad o lote es diferente</td>
+<td>Talleres, constructoras, empresas logísticas, agencias, imprentas</td>
+<td><strong>Costeo por órdenes</strong></td>
+</tr>
+<tr>
+<td><strong>Por procesos</strong></td>
+<td>Producción continua y homogénea en masa</td>
+<td>Cementeras, refinerías, empresas de alimentos masivos</td>
+<td><strong>Costeo por procesos</strong></td>
+</tr>
+<tr>
+<td><strong>Mixto</strong></td>
+<td>Combinación de los dos anteriores</td>
+<td>Automotriz, textiles semi-personalizados</td>
+<td>Híbrido</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Tipos de costeo según el tratamiento de los CIF</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>¿Qué incluye en el costo?</th>
+<th>Ventaja</th>
+<th>Limitación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Costeo Absorbente</strong> (total)</td>
+<td>MP + MOD + CIF fijos + CIF variables</td>
+<td>Base para estados financieros NIIF</td>
+<td>Los fijos "se esconden" en el inventario</td>
+</tr>
+<tr>
+<td><strong>Costeo Variable</strong> (directo)</td>
+<td>Solo MP + MOD + CIF variables</td>
+<td>Mejor para decisiones gerenciales</td>
+<td>No acepta NIIF para informes externos</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Costeo histórico vs. predeterminado</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Cuándo se calcula el costo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Histórico (real)</strong></td>
+<td>Después de terminada la producción</td>
+<td>Control post-operación</td>
+</tr>
+<tr>
+<td><strong>Predeterminado</strong></td>
+<td>Antes de la producción (estándar o estimado)</td>
+<td>Planeación y control presupuestal</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>🔢 Diagnóstico de LOGÍSATL</h2>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>DIAGNÓSTICO DEL SISTEMA DE COSTEO — LOGÍSATL S.A.S.
+
+¿La producción es homogénea?           NO → cada orden es diferente
+¿Cada cliente tiene necesidades únicas? SÍ
+¿Se pueden identificar MP, MO por orden? SÍ
+
+CONCLUSIÓN: LOGÍSATL usa COSTEO POR ÓRDENES DE SERVICIO (COS)
+
+Documento central: HOJA DE COSTOS por orden
+Una hoja de costos = un cliente/pedido = un acumulador de MP + MO + CIF
+</code></pre></div>
+
+<hr />
+<h2>✅ Puntos clave para recordar</h2>
+<ol>
+<li>El sistema de costeo debe ser coherente con el <strong>tipo de producción</strong></li>
+<li><strong>Por órdenes:</strong> producción bajo pedido → cada orden tiene su propia hoja de costos</li>
+<li><strong>Por procesos:</strong> producción masiva → el costo se promedia por período y unidades</li>
+<li><strong>Costeo absorbente:</strong> incluye CIF fijos → requerido por NIIF</li>
+<li><strong>Costeo variable:</strong> excluye CIF fijos → mejor para decisiones internas</li>
+</ol>
+<hr />
+<h2>🧠 Pregunta de reflexión</h2>
+<blockquote>
+<p>Imagina que LOGÍSATL decide ofrecer un nuevo servicio: "almacenamiento mensual estándar" a $800.000/mes fijo para cualquier cliente con hasta 20 paletas.<br />
+¿Cambia el sistema de costeo apropiado?<br />
+¿Qué pasa con la hoja de costos individual en ese caso?</p>
+</blockquote>
+<hr />
+<p><em>Material IUB | GOL06 | Semana 6 de 13</em></p>
+<h2>---</h2>
+<h1>📖 Semana 7 — Costeo por Órdenes de Servicio (Producción)</h1>
+<p><strong>IUB | GOL06 Costos y Presupuestos | RA2</strong><br />
+<strong>Caso:</strong> LOGÍSATL S.A.S.</p>
+<hr />
+<h2>🎯 Objetivo de la semana</h2>
+<p>Construir una hoja de costos completa para una orden de servicio logístico, acumulando MP, MO y CIF según los documentos de soporte.</p>
+<hr />
+<h2>🧩 Analogía: El restaurante a la carta</h2>
+<p>En un restaurante de carta, cada mesa pide algo diferente. El mesero abre una <strong>comanda</strong> cuando la mesa llega, y cada cosa que pide la mesa se va anotando en esa comanda: la entrada, el plato fuerte, el postre, las bebidas. Al final, la comanda tiene el total exacto de esa mesa.</p>
+<blockquote>
+<p>La <strong>Hoja de Costos</strong> es la comanda de LOGÍSATL. Se abre cuando llega la orden del cliente, y en ella se acumulan todos los costos: los materiales pedidos por esa orden, las horas de los trabajadores asignados, y la parte proporcional de los CIF.</p>
+</blockquote>
+<hr />
+<h2>📚 Contenido teórico</h2>
+<h3>La Hoja de Costos — documento central del sistema por órdenes</h3>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>ESTRUCTURA DE LA HOJA DE COSTOS
+
+Encabezado:
+  Número de orden, cliente, descripción del servicio,
+  fecha de inicio, fecha de entrega prometida.
+
+Cuerpo — tres secciones:
+  ┌─────────────────┬──────────────────┬──────────────────┐
+  │ MATERIALES      │ MANO DE OBRA     │ CIF APLICADOS    │
+  │ DIRECTOS        │ DIRECTA          │                  │
+  ├─────────────────┼──────────────────┼──────────────────┤
+  │ Requisición #   │ Tarjeta tiempo   │ Tasa × base      │
+  │ Material/cant.  │ Empleado/horas   │                  │
+  │ Valor unitario  │ Costo/hora       │                  │
+  │ Total           │ Total            │ Total            │
+  └─────────────────┴──────────────────┴──────────────────┘
+
+Resumen:
+  Total MP + Total MOD + Total CIF = COSTO TOTAL DE LA ORDEN
+</code></pre></div>
+
+<h3>Flujo de documentos que alimentan la Hoja de Costos</h3>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>Requisición de materiales → MP de la Hoja de Costos
+Tarjeta de tiempo → MO de la Hoja de Costos
+Tasa predeterminada × horas usadas → CIF de la Hoja de Costos
+</code></pre></div>
+
+<hr />
+<h2>🔢 Ejercicio completo — Orden #048 LOGÍSATL</h2>
+<p><strong>Cliente:</strong> Distribuidora Caribe S.A.S.<br />
+<strong>Servicio:</strong> Recepción, almacenamiento (10 días) y distribución de 800 cajas de producto.</p>
+<p><strong>Documentos de soporte:</strong></p>
+<p><em>Requisición #R-055:</em><br />
+- Stretch film: 35 rollos × $8.545 = $299.075<br />
+- Estibas nuevas: 6 × $12.000 = $72.000<br />
+- Zuncho y cinta: $28.000</p>
+<p><em>Tarjeta de tiempo:</em><br />
+- Operadora Ana Torres: 18 h MOD × $14.416 = $259.488<br />
+- Operador Pedro Manjarrez: 16 h MOD × $14.416 = $230.656<br />
+- Conductor Ramiro Salas: 12 h MOD × $14.416 = $172.992</p>
+<p><em>CIF:</em><br />
+- Horas MOD totales: 46 horas × $16.667 = $766.682</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>HOJA DE COSTOS — ORDEN #048
+Cliente: Distribuidora Caribe S.A.S.
+Período: 5–15 febrero 2024
+
+MATERIALES DIRECTOS:
+  Stretch film (R-055):                $299.075
+  Estibas (R-055):                      $72.000
+  Zuncho y cinta (R-055):               $28.000
+  SUBTOTAL MP:                         $399.075
+
+MANO DE OBRA DIRECTA:
+  Ana Torres — 18h × $14.416:         $259.488
+  Pedro Manjarrez — 16h × $14.416:    $230.656
+  Ramiro Salas — 12h × $14.416:       $172.992
+  SUBTOTAL MOD:                        $663.136
+
+CIF APLICADOS:
+  46 horas MOD × $16.667/h:           $766.682
+
+═══════════════════════════════════════════════
+COSTO TOTAL ORDEN #048:              $1.828.893
+Precio facturado al cliente:         $2.600.000
+Utilidad bruta:                        $771.107
+Margen bruto:                             29.7%
+</code></pre></div>
+
+<hr />
+<h2>✅ Puntos clave para recordar</h2>
+<ol>
+<li>Una <strong>Hoja de Costos</strong> = una orden = un acumulador de los tres elementos</li>
+<li>La HdC se <strong>abre al iniciar</strong> la orden y se <strong>cierra al terminarla</strong></li>
+<li>Los documentos fuente son: Requisición (MP), Tarjeta de tiempo (MO), Tasa predeterminada (CIF)</li>
+<li>El costo total permite calcular la <strong>rentabilidad por cliente</strong></li>
+<li>Al acumular todas las HdC del período se obtiene el <strong>Estado de Costos</strong></li>
+</ol>
+<hr />
+<h2>🧠 Pregunta de reflexión</h2>
+<blockquote>
+<p>LOGÍSATL tiene dos clientes recurrentes:<br />
+Cliente A: órdenes de alto volumen (muchos materiales, pocas horas de MO)<br />
+Cliente B: órdenes de alto servicio (pocos materiales, muchas horas de MO especializado)</p>
+<p>Si la tasa de CIF se calcula sobre horas MOD, ¿cuál cliente carga más CIF?<br />
+¿Es eso justo? ¿Qué base de aplicación diferente podría ser más equitativa?</p>
+</blockquote>
+<hr />
+<p><em>Material IUB | GOL06 | Semana 7 de 13</em></p>
+<h2>---</h2>
+<h1>📖 Semana 8 — Costeo por Procesos</h1>
+<p><strong>IUB | GOL06 Costos y Presupuestos | RA2</strong><br />
+<strong>Caso:</strong> LOGÍSATL S.A.S. + empresa comparativa</p>
+<hr />
+<h2>🎯 Objetivo de la semana</h2>
+<p>Aplicar el costeo por procesos para calcular el costo unitario por período y reconocer cuándo este sistema es apropiado vs. el costeo por órdenes.</p>
+<hr />
+<h2>🧩 Analogía: La línea de ensamblaje de un carro</h2>
+<p>En una planta de Toyota, cada carro pasa por las mismas estaciones: carrocería → motor → electricidad → pintura → acabados. Al final del día, salieron 400 carros exactamente iguales. El costo de UN carro = costo total de la planta ese día / 400.</p>
+<blockquote>
+<p>Nadie pregunta "¿cuánto costó exactamente el carro #227?". Todos costaron lo mismo.</p>
+</blockquote>
+<p><strong>¿Cuándo LOGÍSATL usaría costeo por procesos?</strong> Si ofreciera un servicio estándar (ej. "servicio de entrega exprés urbana — siempre lo mismo") a miles de usuarios. En ese caso, el costo por entrega = total del mes / número de entregas.</p>
+<hr />
+<h2>📚 Contenido teórico</h2>
+<h3>Características del costeo por procesos</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Característica</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Producción continua</td>
+<td>El proceso no para entre unidades</td>
+</tr>
+<tr>
+<td>Unidades homogéneas</td>
+<td>Todas las unidades son iguales</td>
+</tr>
+<tr>
+<td>Acumulación por departamento/proceso</td>
+<td>Los costos se acumulan por etapa, no por pedido</td>
+</tr>
+<tr>
+<td>Costo unitario</td>
+<td>Se calcula al dividir el costo total por las unidades producidas</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Unidades equivalentes — el concepto clave</h3>
+<p>Al final del período, algunas unidades están terminadas y otras están en proceso (incompletas). Las unidades <strong>en proceso</strong> se convierten a <strong>unidades equivalentes</strong> según su grado de avance.</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>Fórmula:
+Unidades equivalentes = Unidades terminadas + (Unidades en proceso × % de avance)
+
+Ejemplo:
+  100 unidades terminadas + 40 unidades en proceso al 50%:
+  = 100 + (40 × 0.50) = 120 unidades equivalentes
+
+Costo unitario = Costo total / Unidades equivalentes
+</code></pre></div>
+
+<h3>Comparación: órdenes vs. procesos en el contexto logístico</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Criterio</th>
+<th>Por Órdenes (LOGÍSATL)</th>
+<th>Por Procesos (hipotético)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unidad de costeo</td>
+<td>Una orden = un cliente</td>
+<td>Un período = todas las unidades</td>
+</tr>
+<tr>
+<td>Documento clave</td>
+<td>Hoja de costos</td>
+<td>Informe de producción del departamento</td>
+</tr>
+<tr>
+<td>Cuándo se usa</td>
+<td>Servicios personalizados</td>
+<td>Servicios masivos y estándar</td>
+</tr>
+<tr>
+<td>Costo unitario</td>
+<td>Diferente por cada orden</td>
+<td>Igual para todas las unidades del período</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>🔢 Ejercicio por procesos — servicio estándar hipotético</h2>
+<p><strong>Situación:</strong> LOGÍSATL lanza un nuevo servicio: "Entrega Urbana Estándar" — distribución de paquetes iguales en Barranquilla. En enero:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>Unidades al inicio del período: 0
+Unidades ingresadas al proceso: 1.200 entregas
+Unidades terminadas y entregadas: 1.000
+Unidades en proceso al final: 200 (al 60% de avance)
+
+Costos del mes:
+  MP (embalajes estándar): $2.400.000
+  MOD: $3.600.000
+  CIF: $2.000.000
+  TOTAL: $8.000.000
+
+Unidades equivalentes:
+  1.000 + (200 × 60%) = 1.000 + 120 = 1.120
+
+Costo unitario por entrega:
+  $8.000.000 / 1.120 = $7.143/entrega
+
+Costo del servicio completado:
+  1.000 × $7.143 = $7.143.000
+
+Inventario en proceso al cierre:
+  120 eq. × $7.143 = $857.160
+</code></pre></div>
+
+<hr />
+<h2>✅ Puntos clave para recordar</h2>
+<ol>
+<li><strong>Por procesos:</strong> producción masiva, todas las unidades son iguales</li>
+<li>Las <strong>unidades equivalentes</strong> corrigen el problema de las unidades incompletas</li>
+<li>El <strong>costo unitario</strong> se calcula dividiendo el total por las unidades equivalentes</li>
+<li>LOGÍSATL <strong>normalmente usa órdenes</strong>, pero podría usar procesos para servicios estándar</li>
+<li>La diferencia entre sistemas no es de dificultad sino de <strong>adecuación al tipo de producción</strong></li>
+</ol>
+<hr />
+<p><em>Material IUB | GOL06 | Semana 8 de 13</em></p>
+<h2>---</h2>
+<h1>📖 Semana 9 — Estado de Costos de Producción y Ventas: el resumen final</h1>
+<p><strong>IUB | GOL06 Costos y Presupuestos | RA2</strong><br />
+<strong>Caso:</strong> LOGÍSATL S.A.S.</p>
+<hr />
+<h2>🎯 Objetivo de la semana</h2>
+<p>Construir el Estado de Costos de Producción y Ventas completo de LOGÍSATL, integrando todos los elementos del costo del período.</p>
+<hr />
+<h2>🧩 Analogía: El resumen de una temporada deportiva</h2>
+<p>Al final de la temporada, el director técnico hace el balance: ¿cuántos partidos se jugaron, cuántos goles se metieron, qué jugadores más rindieron, cuánto costó la plantilla? El <strong>Estado de Costos</strong> es ese balance — un resumen de todo lo que costó producir y vender los servicios del período.</p>
+<hr />
+<h2>📚 Estructura del Estado de Costos de Producción y Ventas</h2>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>ESTADO DE COSTOS DE PRODUCCIÓN Y VENTAS
+(Empresa manufacturera — se adapta a servicios)
+
+MATERIA PRIMA:
+  Inventario inicial de MP                    XXX
+  + Compras netas de MP                       XXX
+  = MP disponible para uso                    XXX
+  - Inventario final de MP                   (XXX)
+  = MATERIA PRIMA USADA                       XXX
+
+MANO DE OBRA DIRECTA:                         XXX
+
+CIF:                                          XXX
+  MOI, depreciación, arriendo, etc.
+  ────────────────────────────────────────────────
+= COSTO DE PRODUCCIÓN DEL PERÍODO             XXX
+
++ Inventario inicial de producción en proceso XXX
+= COSTO DE PRODUCCIÓN EN PROCESO              XXX
+- Inventario final de producción en proceso  (XXX)
+  ────────────────────────────────────────────────
+= COSTO DE SERVICIOS/PRODUCTOS TERMINADOS     XXX
+
++ Inventario inicial de terminados            XXX
+= COSTO DISPONIBLE PARA VENTA                 XXX
+- Inventario final de terminados             (XXX)
+  ════════════════════════════════════════════════
+= COSTO DE SERVICIOS/PRODUCTOS VENDIDOS       XXX
+</code></pre></div>
+
+<hr />
+<h2>🔢 Estado de Costos de LOGÍSATL — Enero 2024</h2>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>LOGÍSATL S.A.S.
+ESTADO DE COSTOS DE SERVICIOS PRESTADOS
+Mes de enero de 2024
+(Cifras en pesos colombianos)
+
+MATERIALES DIRECTOS:
+  Inventario inicial (01-ene):           $1.840.000
+  + Compras del mes:                     $3.005.000
+  = MP disponible:                       $4.845.000
+  − Inventario final (31-ene):          ($2.093.525)
+  = MATERIALES DIRECTOS USADOS:         $2.751.475
+
+MANO DE OBRA DIRECTA:
+  Total MOD del mes (ver nómina):        $4.120.480
+
+COSTOS INDIRECTOS DE FABRICACIÓN:
+  CIF aplicados en el mes (órdenes):     $5.833.450
+  Ajuste CIF sub-aplicado:                 $166.550
+  = CIF REALES DEL MES:                 $6.000.000
+  ──────────────────────────────────────────────────
+COSTO DE SERVICIOS DEL PERÍODO:        $12.871.955
+
++ Servicios en proceso inicio mes:               $0
+= COSTO EN PROCESO:                    $12.871.955
+− Servicios en proceso fin mes:                  $0 *
+  ══════════════════════════════════════════════════
+COSTO TOTAL DE SERVICIOS PRESTADOS:   $12.871.955
+
+*En servicios logísticos, generalmente no hay WIP (servicio se completa en el período)
+
+VERIFICACIÓN CON EL ERI:
+Ingresos del mes:                      $18.500.000
+− Costo de servicios prestados:       ($12.871.955)
+= UTILIDAD BRUTA:                       $5.628.045  (30.4% margen bruto)
+− Gastos operacionales:                ($2.400.000)
+= UTILIDAD OPERACIONAL:                 $3.228.045
+</code></pre></div>
+
+<hr />
+<h2>✅ Puntos clave para recordar</h2>
+<ol>
+<li>El Estado de Costos integra <strong>MP + MO + CIF</strong> del período completo</li>
+<li>Mueve el costo a través de las tres etapas: <strong>materiales → en proceso → terminados → vendidos</strong></li>
+<li>El <strong>inventario final de MP</strong> reduce el costo del período (lo que no se usó, no se gasta)</li>
+<li>El ajuste de CIF (sub/sobre aplicado) corrige la diferencia entre tasa predeterminada y CIF real</li>
+<li>El costo de servicios prestados es el <strong>primer gran componente del ERI</strong> → conecta con contabilidad financiera</li>
+</ol>
+<hr />
+<h2>🧠 Pregunta de reflexión (REPASO PARA PARCIAL 2)</h2>
+<blockquote>
+<p>Si LOGÍSATL compra $4.000.000 en materiales en febrero pero solo usa $3.200.000,<br />
+¿cuánto va al Estado de Costos como MP?<br />
+¿Qué pasa con los $800.000 restantes?<br />
+¿Dónde aparecen en el balance?</p>
+</blockquote>
+<hr />
+<p><em>Material IUB | GOL06 | Semana 9 de 13 — ÚLTIMA ANTES DEL PARCIAL 2</em></p>
+    </article>
+  </main>
+
+  <footer class="iub-footer">
+    <strong>Institución Universitaria de Barranquilla — IUB</strong> ·
+    GOL06 Costos y Presupuestos · Material de apoyo académico · 2024–2025
+  </footer>
+
+</body>
+</html>

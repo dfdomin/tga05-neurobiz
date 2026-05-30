@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOL06 Costos y Presupuestos — IUB</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --iub-blue:  #003087;
+      --iub-blue2: #0056B3;
+      --iub-gold:  #F5A000;
+      --iub-bg:    #F4F7FC;
+      --iub-white: #FFFFFF;
+      --iub-text:  #1A2744;
+      --iub-light: #E8F0FE;
+      --radius: 10px;
+      --shadow: 0 3px 12px rgba(0,48,135,.13);
+    }
+    html { font-size: 16px; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--iub-bg);
+      color: var(--iub-text);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, var(--iub-blue) 0%, var(--iub-blue2) 100%);
+      color: white;
+      padding: 0;
+      box-shadow: 0 4px 20px rgba(0,48,135,.35);
+    }
+    .header-top {
+      display: flex; align-items: center; gap: 1.5rem;
+      padding: 1.5rem 2.5rem;
+      border-bottom: 4px solid var(--iub-gold);
+    }
+    .logo-circle {
+      width: 72px; height: 72px;
+      background: white; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: 900;
+      color: var(--iub-blue); letter-spacing: -1px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.2);
+      flex-shrink: 0;
+    }
+    .header-info h1 { font-size: 1.5rem; margin-bottom: .2rem; }
+    .header-info p  { opacity: .85; font-size: .9rem; }
+    .header-meta {
+      display: flex; flex-wrap: wrap; gap: .5rem 2rem;
+      padding: .6rem 2.5rem;
+      background: rgba(0,0,0,.2);
+      font-size: .82rem; opacity: .9;
+    }
+
+    /* Hero banner */
+    .hero {
+      background: var(--iub-gold);
+      color: var(--iub-blue);
+      padding: 1rem 2.5rem;
+      font-weight: 700; font-size: 1.05rem;
+    }
+
+    /* Main layout */
+    .container { max-width: 1000px; margin: 2.5rem auto; padding: 0 1.5rem; }
+
+    /* Bloque intro */
+    .intro-card {
+      background: var(--iub-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.75rem 2rem;
+      margin-bottom: 2rem;
+      border-top: 4px solid var(--iub-gold);
+    }
+    .intro-card h2 { color: var(--iub-blue); font-size: 1.2rem; margin-bottom: .75rem; }
+    .intro-card p  { color: #4a5568; font-size: .95rem; }
+    .logisatl-badge {
+      display: inline-block;
+      background: var(--iub-light);
+      color: var(--iub-blue);
+      border: 1.5px solid var(--iub-blue2);
+      border-radius: 20px;
+      padding: .25rem .85rem;
+      font-size: .82rem; font-weight: 600;
+      margin-top: .5rem;
+    }
+
+    /* Bloques del módulo */
+    .block-title {
+      display: flex; align-items: center; gap: .75rem;
+      margin-bottom: 1rem;
+    }
+    .block-num {
+      background: var(--iub-blue);
+      color: white;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .95rem;
+      flex-shrink: 0;
+    }
+    .block-title h3 { font-size: 1.1rem; color: var(--iub-blue); }
+    .block-title small { font-size: .8rem; color: #6b7280; display: block; }
+
+    /* Cards de documentos */
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .doc-card {
+      background: var(--iub-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      color: var(--iub-text);
+      transition: transform .18s, box-shadow .18s;
+      border-left: 5px solid var(--iub-blue);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .doc-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,48,135,.2);
+    }
+    .doc-card.taller  { border-left-color: var(--iub-gold); }
+    .doc-card.parcial { border-left-color: #e53e3e; }
+    .doc-card.planner { border-left-color: #38a169; }
+
+    .doc-card-body { padding: 1.1rem 1.25rem; flex: 1; }
+    .doc-card-type {
+      font-size: .72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; margin-bottom: .35rem;
+    }
+    .doc-card.taller  .doc-card-type { color: var(--iub-gold); }
+    .doc-card.parcial .doc-card-type { color: #e53e3e; }
+    .doc-card.planner .doc-card-type { color: #38a169; }
+    .doc-card-type.estudio { color: var(--iub-blue2); }
+
+    .doc-card h4 { font-size: .98rem; color: var(--iub-blue); margin-bottom: .4rem; line-height: 1.35; }
+    .doc-card p  { font-size: .83rem; color: #6b7280; }
+    .doc-card-footer {
+      background: var(--iub-light);
+      padding: .45rem 1.25rem;
+      font-size: .78rem;
+      color: var(--iub-blue2);
+      font-weight: 600;
+      display: flex; align-items: center; gap: .4rem;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--iub-blue);
+      color: rgba(255,255,255,.7);
+      text-align: center;
+      padding: 1.25rem;
+      font-size: .82rem;
+      margin-top: 2rem;
+    }
+    footer strong { color: var(--iub-gold); }
+
+    @media (max-width: 640px) {
+      .header-top { padding: 1rem; }
+      .container { padding: 0 1rem; }
+      .docs-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <div class="logo-circle">IUB</div>
+    <div class="header-info">
+      <h1>Institución Universitaria de Barranquilla</h1>
+      <p>Tecnología en Gestión de Operaciones Logísticas · Módulo GOL06</p>
+    </div>
+  </div>
+  <div class="header-meta">
+    <span>📚 <strong>Módulo:</strong> GOL06 — Costos y Presupuestos</span>
+    <span>🎓 <strong>Créditos:</strong> 2 | HAD 2 + HP 2 + HTI 5</span>
+    <span>📅 <strong>Semanas:</strong> 13 semanas</span>
+    <span>📊 <strong>Período:</strong> 2024 – 2025</span>
+  </div>
+  <div class="hero">📂 Índice de Materiales del Módulo — Acceso rápido para docente y estudiantes</div>
+</header>
+
+<main class="container">
+
+  <!-- Descripción del módulo -->
+  <div class="intro-card">
+    <h2>📋 Acerca del módulo</h2>
+    <p>
+      Este módulo aborda los fundamentos de <strong>Costos y Presupuestos</strong> aplicados a operaciones logísticas,
+      estructurado en tres Resultados de Aprendizaje (<em>RA1, RA2 y RA3</em>). Todo el contenido usa como
+      hilo conductor a <strong>LOGÍSATL S.A.S.</strong>, empresa ficticia de logística en Barranquilla.
+    </p>
+    <span class="logisatl-badge">🏢 Caso hilo: LOGÍSATL S.A.S. — Logística Atlántico, Barranquilla</span>
+  </div>
+
+  <!-- Planeador -->
+  <div class="block-title">
+    <div class="block-num">★</div>
+    <div>
+      <h3>Documento maestro</h3>
+      <small>Planeación del módulo completo</small>
+    </div>
+  </div>
+  <div class="docs-grid">
+    <a href="00_PLANEADOR_MAESTRO.html" class="doc-card planner">
+      <div class="doc-card-body">
+        <div class="doc-card-type">Planeador Maestro</div>
+        <h4>📊 Planeador Maestro del Módulo</h4>
+        <p>Mapa del módulo, semana a semana, sistema de gamificación, evaluación y formato estándar.</p>
+      </div>
+      <div class="doc-card-footer">📄 Ver documento →</div>
+    </a>
+  </div>
+
+  <!-- Bloque I -->
+  <div class="block-title">
+    <div class="block-num">I</div>
+    <div>
+      <h3>Bloque I — RA1: Elementos del Costo</h3>
+      <small>Semanas 1–4 · Clasificación, materiales, mano de obra, CIF</small>
+    </div>
+  </div>
+  <div class="docs-grid">
+    <a href="Sem01_Estudio.html" class="doc-card">
+      <div class="doc-card-body">
+        <div class="doc-card-type estudio">📖 Material de Estudio</div>
+        <h4>Semana 1 — ¿Qué es el costo y para qué sirve medirlo?</h4>
+        <p>Conceptos básicos: costo, gasto y pérdida. Clasificaciones. Los 3 elementos del costo.</p>
+      </div>
+      <div class="doc-card-footer">📄 Ver semana 1 →</div>
+    </a>
+    <a href="Sem02_03_04_Estudio.html" class="doc-card">
+      <div class="doc-card-body">
+        <div class="doc-card-type estudio">📖 Material de Estudio</div>
+        <h4>Semanas 2–4 — Materiales, Mano de Obra y CIF</h4>
+        <p>Kárdex y métodos de valoración · Factor prestacional · Tasas predeterminadas de CIF.</p>
+      </div>
+      <div class="doc-card-footer">📄 Ver semanas 2–4 →</div>
+    </a>
+    <a href="Sem01_02_03_04_Talleres.html" class="doc-card taller">
+      <div class="doc-card-body">
+        <div class="doc-card-type">🛠️ Talleres</div>
+        <h4>Talleres Semanas 1–4</h4>
+        <p>Trivia diagnóstica · Kárdex Vivo · Nómina de LOGÍSATL · Ruleta de los CIF. Con rúbricas.</p>
+      </div>
+      <div class="doc-card-footer">📄 Ver talleres →</div>
+    </a>
+  </div>
+
+  <!-- Bloque II -->
+  <div class="block-title">
+    <div class="block-num">II</div>
+    <div>
+      <h3>Bloque II — RA2: Sistemas de Costeo</h3>
+      <small>Semanas 6–9 · Costeo por órdenes, por procesos, estado de costos</small>
+    </div>
+  </div>
+  <div class="docs-grid">
+    <a href="Sem06_07_08_09_Estudio.html" class="doc-card">
+      <div class="doc-card-body">
+        <div class="doc-card-type estudio">📖 Material de Estudio</div>
+        <h4>Semanas 6–9 — Sistemas de Costeo y Estado de Costos</h4>
+        <p>Costeo por órdenes vs. procesos · Hoja de Costos completa · Estado de Costos de LOGÍSATL.</p>
+      </div>
+      <div class="doc-card-footer">📄 Ver semanas 6–9 →</div>
+    </a>
+    <a href="Sem06_07_08_09_11_12_13_Talleres.html" class="doc-card taller">
+      <div class="doc-card-body">
+        <div class="doc-card-type">🛠️ Talleres</div>
+        <h4>Talleres Semanas 6–9 y 11–13</h4>
+        <p>Diagnóstico de sistema · Orden #055 completa · Relay race de procesos · Forecasting Game · Shark Tank Logístico.</p>
+      </div>
+      <div class="doc-card-footer">📄 Ver talleres →</div>
+    </a>
+  </div>
+
+  <!-- Bloque III -->
+  <div class="block-title">
+    <div class="block-num">III</div>
+    <div>
+      <h3>Bloque III — RA3: Presupuesto</h3>
+      <small>Semanas 11–13 · Pronóstico, presupuesto maestro, integración final</small>
+    </div>
+  </div>
+  <div class="docs-grid">
+    <a href="Sem11_12_13_Estudio.html" class="doc-card">
+      <div class="doc-card-body">
+        <div class="doc-card-type estudio">📖 Material de Estudio</div>
+        <h4>Semanas 11–13 — Presupuesto Maestro e Integración Final</h4>
+        <p>Tipos de presupuesto · Pronóstico de ventas · Cadena del presupuesto maestro · Diagnóstico final.</p>
+      </div>
+      <div class="doc-card-footer">📄 Ver semanas 11–13 →</div>
+    </a>
+  </div>
+
+  <!-- Evaluación -->
+  <div class="block-title">
+    <div class="block-num">✓</div>
+    <div>
+      <h3>Evaluaciones</h3>
+      <small>Parcial 1 (sem. 5) · Parcial 2 (sem. 10) · Proyecto Final (sem. 13)</small>
+    </div>
+  </div>
+  <div class="docs-grid">
+    <a href="Parciales_Guia.html" class="doc-card parcial">
+      <div class="doc-card-body">
+        <div class="doc-card-type">📝 Guía de Evaluaciones</div>
+        <h4>Guía de Parciales 1 y 2 + Proyecto Final (Shark Tank)</h4>
+        <p>Estructura de puntos, casos aplicados, rúbricas y criterios de calificación. 30% + 30% + 30% + 10%.</p>
+      </div>
+      <div class="doc-card-footer">📄 Ver guía →</div>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <strong>Institución Universitaria de Barranquilla — IUB</strong> ·
+  Tecnología en Gestión de Operaciones Logísticas ·
+  GOL06 Costos y Presupuestos · 2024–2025
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="es"><head><link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Notas del profesor — Semana 7 | TGA05</title><style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f7fbf4;
+  color: #1f2937;
+  line-height: 1.7;
+}
+:root {
+  --primary: #1b5e20;
+  --accent: #2e7d32;
+  --gold:      #FFDF2D;
+  --light: #f1f8e9;
+  --border: #c8e6c9;
+  --warn: #ef6c00;
+  --warn-bg: #fff3e0;
+  --blue: #1565c0;
+  --blue-bg: #e3f2fd;
+  --purple: #8e24aa;
+  --purple-bg: #f3e5f5;
+  --red: #b71c1c;
+  --red-bg: #ffebee;
+  --ink: #1f2937;
+  --muted: #546e7a;
+  --card: #ffffff;
+  --radius: 16px;
+  --shadow: 0 12px 30px rgba(27,94,32,.08);
+}
+header {
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+  color: #fff;
+  padding: 2.3rem 1.2rem 1.8rem;
+  position: relative;
+  overflow: hidden;
+}
+header::before,
+header::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+}
+header::before { width: 220px; height: 220px; top: -90px; right: -50px; }
+header::after { width: 170px; height: 170px; bottom: -80px; left: -60px; }
+.header-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .35rem .9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.14);
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+header h1 { margin: .8rem 0 .4rem; font-size: clamp(1.7rem, 3vw, 2.7rem); }
+header p { margin: 0; max-width: 860px; color: rgba(255,255,255,.93); }
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 8px 22px rgba(27,94,32,.08);
+}
+.nav-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: .7rem 1rem;
+  display: flex;
+  gap: .55rem;
+  flex-wrap: wrap;
+}
+nav a {
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: .84rem;
+  padding: .42rem .72rem;
+  border-radius: 10px;
+}
+nav a:hover { background: #edf7ee; }
+main { max-width: 1180px; margin: 1.8rem auto 0; padding: 0 1rem 3rem; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.3rem;
+  margin-bottom: 1.4rem;
+}
+.card h2 {
+  margin: 0 0 1rem;
+  color: var(--primary);
+  font-size: 1.3rem;
+  border-left: 5px solid var(--gold);
+  padding-left: .85rem;
+}
+.card h3 { color: var(--accent); margin: 1rem 0 .55rem; }
+.lead { color: #374151; }
+.grid-2, .grid-3, .meta-grid, .scenario-grid {
+  display: grid;
+  gap: 1rem;
+}
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.meta-grid { grid-template-columns: 1.1fr .9fr; align-items: start; }
+.box {
+  display: flex;
+  align-items: flex-start;
+  gap: .8rem;
+  padding: 1rem 1.05rem;
+  border-radius: 14px;
+}
+.box.ok { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+.box.warn { background: #fff3e0; border-left: 5px solid #ef6c00; }
+.box.blue { background: #e3f2fd; border-left: 5px solid #1565c0; }
+.box.brain { background: #f3e5f5; border-left: 5px solid #8e24aa; }
+.box.red { background: #ffebee; border-left: 5px solid #c62828; }
+.box .ico { font-size: 1.25rem; }
+.box p { margin: 0; }
+.checklist { list-style: none; padding: 0; margin: 0; }
+.checklist li {
+  display: flex;
+  gap: .75rem;
+  align-items: flex-start;
+  padding: .55rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.checklist li:last-child { border-bottom: none; }
+.check {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 2px solid var(--accent);
+  border-radius: 5px;
+  margin-top: .2rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: .9rem 0;
+  font-size: .92rem;
+}
+th {
+  background: var(--primary);
+  color: #fff;
+  text-align: left;
+  padding: .75rem .9rem;
+}
+td {
+  padding: .72rem .9rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: #f9fcf7; }
+.timeline {
+  position: relative;
+  margin-left: .4rem;
+  padding-left: 1.4rem;
+  border-left: 3px solid #c8e6c9;
+}
+.tl-item {
+  position: relative;
+  padding: .2rem 0 1rem 1.2rem;
+  border-bottom: 1px dashed #d7ead7;
+}
+.tl-item:last-child { border-bottom: none; padding-bottom: 0; }
+.tl-dot {
+  position: absolute;
+  left: -12px;
+  top: .45rem;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.tl-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  align-items: center;
+  margin-bottom: .35rem;
+}
+.tl-time {
+  font-size: .77rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: .04em;
+}
+.tl-title { font-size: 1rem; font-weight: 800; color: var(--primary); }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 800;
+}
+.tag.habla { background: #e3f2fd; color: #0d47a1; }
+.tag.silencio { background: #fce4ec; color: #880e4f; }
+.tag.monit { background: #fff8e1; color: #8d6e00; }
+.tag.dojo { background: #f3e5f5; color: #6a1b9a; }
+.tl-body { font-size: .93rem; }
+.tl-body ul { padding-left: 1.2rem; margin: .35rem 0; }
+.tl-body li { margin-bottom: .35rem; }
+.tl-guion {
+  margin-top: .55rem;
+  background: #f1f8e9;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  padding: .7rem .9rem;
+  font-style: italic;
+}
+.qa {
+  border-radius: 14px;
+  padding: 1rem;
+  background: #eef7ee;
+  border: 1px solid var(--border);
+  margin-bottom: .8rem;
+}
+.qa h4 { margin: 0 0 .45rem; color: var(--primary); }
+.correct { font-weight: 800; color: var(--primary); }
+.scenario {
+  border: 2px solid;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.scenario.a { border-color: #2e7d32; }
+.scenario.b { border-color: #ef6c00; }
+.scenario-header {
+  padding: .8rem 1rem;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.scenario.a .scenario-header { background: #e8f5e9; color: #1b5e20; }
+.scenario.b .scenario-header { background: #fff3e0; color: #e65100; }
+.scenario-body { padding: 1rem 1.05rem; }
+.note-table td:first-child { font-weight: 700; color: var(--primary); width: 28%; }
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: .82rem;
+  padding: 1.8rem 1rem 2.2rem;
+}
+@media (max-width: 900px) {
+  .meta-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .card { padding: 1rem; }
+  .timeline { padding-left: 1rem; }
+  .tl-item { padding-left: 1rem; }
+  table { font-size: .86rem; }
+}
+</style></head><body><header><div class="header-inner"><div class="badge">🔒 USO EXCLUSIVO DOCENTE · Semana 7 · TGA05</div><h1>Notas del Profesor — Recursividad II</h1><p>Guía docente detallada para la sesión de 4 horas presenciales del módulo Estructura de Datos para los Negocios, con enfoque GAME, Bloom explícito y narrativa NeuroBiz.</p></div></header><nav><div class="nav-wrap"><a href="#meta">🎯 Meta</a><a href="#checklist">✅ Checklist</a><a href="#secuencia">⏱ Secuencia</a><a href="#dojo">🏆 ClassDojo</a><a href="#quiz">🎮 Quiz</a><a href="#hti">🏠 HTI</a><a href="#neuro">🧠 Neurodivergencia</a><a href="#contingencias">🚨 Contingencias</a><a href="#observacion">👁 Observación</a></div></nav><main><section id="meta" class="card"><h2>🎯 Meta de la sesión</h2><div class="meta-grid"><div><p class="lead">Al finalizar la sesión, el estudiante aplica recursión directa e indirecta, implementa búsqueda binaria recursiva y analiza sus ventajas frente a la iteración lineal en un caso de consulta de historiales.</p><div class="box ok"><div class="ico">📌</div><p><strong>Recordatorio metodológico:</strong> Python opera aquí como lenguaje de apoyo a la inteligencia de negocios. La comprensión de la estructura y su relación con el caso es más importante que escribir código velozmente.</p></div><div class="box blue"><div class="ico">🎮</div><p><strong>Framework GAME:</strong> guía con ejemplo inicial, articula teoría-caso-código, motiva con narrativa y puntos visibles, y evalúa con evidencia concreta, quiz y retroalimentación formativa.</p></div></div><div><div class="table-wrap"><table><thead><tr><th>RA</th><th>CE</th><th>Bloom</th><th>Meta observable</th></tr></thead><tbody><tr><td>RA2</td><td>CE1 · CE2 · CE3 · CE4</td><td>Aplicar → Analizar</td><td>Selecciona, implementa, compara y justifica una estrategia de búsqueda adecuada para datos ordenados.</td></tr></tbody></table></div></div></div></section><section id="checklist" class="card"><h2>✅ Checklist pre-clase</h2><div class="grid-2"><div><h3>Pedagógico</h3><ul class="checklist"><li><span class="check"></span><span>Definir un conjunto pequeño y otro grande de sesiones para evidenciar diferencias de pasos.</span></li><li><span class="check"></span><span>Preparar una analogía física: buscar un libro en una estantería ordenada vs revisar uno por uno.</span></li><li><span class="check"></span><span>Diseñar preguntas de transferencia: “¿qué necesita la estructura de datos para que la estrategia funcione?”</span></li><li><span class="check"></span><span>Acordar qué significará “paso” en la comparación para evitar métricas inconsistentes.</span></li><li><span class="check"></span><span>Prever apoyo extra a estudiantes que aún confunden índice medio con valor medio.</span></li></ul></div><div><h3>Tecnológico</h3><ul class="checklist"><li><span class="check"></span><span>Dejar listas en Colab una lista ordenada y una no ordenada para contrastar escenarios.</span></li><li><span class="check"></span><span>Verificar que el quiz incluya distractores sobre ordenamiento, caso base y eficiencia.</span></li><li><span class="check"></span><span>Abrir ClassDojo con categorías centradas en análisis, implementación y argumentación.</span></li><li><span class="check"></span><span>Tener visible una tabla en blanco para registrar pasos de búsqueda lineal y binaria.</span></li><li><span class="check"></span><span>Probar proyección de código con tipografía grande y resaltado de los índices inicio, fin y medio.</span></li></ul></div></div><h3>ClassDojo — categorías sugeridas</h3><div class="table-wrap"><table><thead><tr><th>Categoría</th><th>Puntos</th><th>Cuándo aplicar</th></tr></thead><tbody><tr><td>🔎 Preparación analítica</td><td>+1</td><td>Reconoce la condición de lista ordenada antes de programar</td></tr><tr><td>💻 Implementación</td><td>+2</td><td>Completa los dos algoritmos requeridos</td></tr><tr><td>📊 Comparación</td><td>+2</td><td>Registra pasos y obtiene conclusiones consistentes</td></tr><tr><td>🗣️ Argumentación</td><td>+1</td><td>Defiende oralmente qué estrategia conviene y por qué</td></tr><tr><td>🤝 Coevaluación</td><td>+1</td><td>Retroalimenta a otro equipo con una observación útil</td></tr></tbody></table></div></section><section id="secuencia" class="card"><h2>⏱ Secuencia minuto a minuto completa (240 min)</h2><p class="lead">La siguiente línea de tiempo está pensada para 2 horas HAD + 2 horas HP. Incluye guion sugerido en momentos clave, observables y microdecisiones de acompañamiento.</p><div class="timeline"><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">0–15 min</span><span class="tl-title">Reingreso narrativo y desafío de eficiencia</span><span class="tag habla">🎙️ Habla docente</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Presenta la queja operativa de NeuroBiz: se tarda demasiado en encontrar una sesión.</li><li>Plantea una pregunta provocadora: “¿buscar uno por uno siempre es razonable?”.</li></ul><div class="tl-guion">Hoy la meta no es solo encontrar algo: es decidir una estrategia inteligente para encontrarlo.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">15–35 min</span><span class="tl-title">Diagnóstico con búsqueda manual</span><span class="tag monit">👀 Monitoreo</span></div><div class="tl-body"><ul><li>Entrega dos listas impresas: una ordenada y otra desordenada.</li><li>Pide localizar un id específico y contar pasos.</li><li>Recoge intuiciones sobre por qué una lista permite “saltar” y la otra no.</li></ul><div class="tl-guion">La estructura de los datos condiciona la estrategia; no existe algoritmo bueno en el vacío.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">35–55 min</span><span class="tl-title">Mini-lección: recursión directa e indirecta</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Explica ambas formas con ejemplos cortos.</li><li>Relaciona el flujo de validación de perfiles terapéuticos con recursión indirecta.</li><li>Subraya que en ambos casos se requiere criterio de parada y reducción inteligible.</li></ul><div class="tl-guion">Directa e indirecta cambian la ruta, pero conservan la idea central: resolver un problema por medio de otro más pequeño o más básico.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">55–80 min</span><span class="tl-title">Construcción colectiva de búsqueda binaria</span><span class="tag habla">🎙️ Habla docente</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Dibuja una lista ordenada y pregunta dónde mirar primero.</li><li>Formaliza los conceptos de inicio, fin y medio.</li><li>Haz una traza en tablero hasta encontrar o descartar el elemento.</li></ul><div class="tl-guion">Cada decisión de la búsqueda binaria tiene una justificación: si el centro ya me dice algo, no necesito revisar todo.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">80–105 min</span><span class="tl-title">Demostración de código y conteo de pasos</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Implementa la versión recursiva frente al grupo.</li><li>Agrega variable de pasos para convertir la intuición en evidencia.</li><li>Comparte resultados con una búsqueda lineal equivalente.</li></ul><div class="tl-guion">Cuando medimos pasos, el análisis deja de ser opinión y se vuelve argumento.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">105–120 min</span><span class="tl-title">Discusión guiada: cuándo NO usar binaria</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Plantea casos con listas no ordenadas o muy pequeñas.</li><li>Pide a los estudiantes decidir si la inversión en ordenar vale la pena según el contexto.</li></ul><div class="tl-guion">No romantizamos un algoritmo: lo elegimos porque encaja con la estructura del problema.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">120–130 min</span><span class="tl-title">Pausa activa</span><span class="tag silencio">✍️ Trabajo silencioso</span></div><div class="tl-body"><ul><li>Propón pausa breve y un recordatorio visual: orden, división, descarte, verificación.</li></ul><div class="tl-guion">Regresamos para aplicar, no para copiar.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">130–160 min</span><span class="tl-title">Trabajo por equipos: versión base</span><span class="tag silencio">✍️ Trabajo silencioso</span><span class="tag monit">👀 Monitoreo</span></div><div class="tl-body"><ul><li>Los equipos construyen primero búsqueda lineal y registran pasos.</li><li>Solo después pasan a la binaria recursiva.</li><li>Verifica que usen la misma definición de “paso”.</li></ul><div class="tl-guion">Si no comparas con la línea base, no puedes demostrar mejora.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">160–190 min</span><span class="tl-title">Laboratorio principal: análisis comparado</span><span class="tag monit">👀 Monitoreo</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Cada equipo ejecuta tres búsquedas y completa tabla de resultados.</li><li>Solicita una conclusión escrita de máximo 4 líneas.</li><li>Apoya a quienes tengan errores con rangos o límites.</li></ul><div class="tl-guion">El resultado importante no es el índice; es la razón por la que llegaste a él con menos o más trabajo.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">190–210 min</span><span class="tl-title">Socialización y defensa</span><span class="tag habla">🎙️ Habla docente</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Pide a dos equipos defender por qué usarían binaria en NeuroBiz.</li><li>Invita a otros a cuestionar supuestos: tamaño de lista, orden previo, mantenimiento.</li></ul><div class="tl-guion">Un analista no solo programa: justifica decisiones ante personas con necesidades reales.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">210–225 min</span><span class="tl-title">Quizizz y lectura de errores frecuentes</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Aplica quiz con foco en ordenamiento, recursión indirecta y comparación.</li><li>Comenta por qué algunos distractores son plausibles.</li></ul><div class="tl-guion">Si fallamos una pregunta, ganamos una pista sobre qué reforzar antes de seguir.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">225–240 min</span><span class="tl-title">HTI, cierre y conexión con listas enlazadas</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Explica HTI A y HTI B, dejando claro que el Escenario B NO BLOQUEA la siguiente clase.</li><li>Conecta la optimización de búsqueda con la siguiente unidad sobre estructuras dinámicas.</li></ul><div class="tl-guion">La próxima semana no solo buscaremos datos: construiremos estructuras que cambian mientras el negocio sigue ocurriendo.</div></div></article></div></section><section id="dojo" class="card"><h2>🏆 Integración ClassDojo</h2><p class="lead">Registra los puntos en el momento exacto en que la evidencia aparece. Evita asignaciones ambiguas; la claridad de criterios mejora la percepción de justicia y la motivación.</p><div class="table-wrap"><table><thead><tr><th>Momento</th><th>Criterio concreto</th><th>Puntos</th></tr></thead><tbody><tr><td>Inicio</td><td>Reconoce por qué la lista debe estar ordenada</td><td class="points">+1</td></tr><tr><td>Implementación</td><td>Completa búsqueda lineal y binaria</td><td class="points">+2</td></tr><tr><td>Análisis</td><td>Explica diferencias de pasos entre estrategias</td><td class="points">+2</td></tr><tr><td>Validación</td><td>Identifica un caso donde la binaria no aplica</td><td class="points">+1</td></tr><tr><td>Cierre</td><td>Participa en síntesis comparativa final</td><td class="points">+1</td></tr></tbody></table></div><div class="box warn"><div class="ico">📝</div><p><strong>Sugerencia:</strong> verbaliza el criterio cada vez que otorgues puntos. Ejemplo: “sumo +2 porque identificaste el caso límite y además lo probaste con evidencia”.</p></div></section><section id="quiz" class="card"><h2>🎮 Quiz Quizizz — preguntas y respuestas correctas</h2><p class="lead">Usa el quiz como evaluación formativa de cierre. Si el puntaje promedio del grupo queda bajo, retoma solo la idea crítica antes de terminar; no intentes reenseñar toda la sesión en los últimos 10 minutos.</p><div class="qa"><h4>Pregunta 1</h4><p><strong>¿Qué diferencia principal hay entre recursión directa e indirecta?</strong></p><ol><li>La directa usa listas y la indirecta no</li><li>La directa se llama a sí misma; la indirecta pasa por otra función</li><li>La indirecta no necesita caso base</li><li>La directa siempre es más rápida</li></ol><p class="correct">Respuesta correcta: La diferencia está en la ruta de la llamada, no en la necesidad de caso base.</p></div><div class="qa"><h4>Pregunta 2</h4><p><strong>¿Cuándo tiene sentido usar búsqueda binaria?</strong></p><ol><li>Cuando los datos están ordenados</li><li>Cuando la lista es aleatoria y pequeña</li><li>Solo con cadenas de texto</li><li>Solo en listas de dos elementos</li></ol><p class="correct">Respuesta correcta: Sin orden previo no puedes descartar la mitad del problema con fundamento.</p></div><div class="qa"><h4>Pregunta 3</h4><p><strong>¿Qué busca comparar el conteo de pasos en clase?</strong></p><ol><li>El color del código</li><li>La longitud del nombre de la función</li><li>La eficiencia relativa entre dos estrategias</li><li>La velocidad del internet</li></ol><p class="correct">Respuesta correcta: Contar pasos hace visible la diferencia analítica entre estrategias.</p></div><div class="qa"><h4>Pregunta 4</h4><p><strong>En la validación de perfil terapéutico de NeuroBiz, la recursión indirecta se observa cuando…</strong></p><ol><li>una función imprime un texto</li><li>validar_perfil llama a validar_diagnostico y esta a validar_perfil_base</li><li>se usa un bucle while</li><li>se ordena una lista</li></ol><p class="correct">Respuesta correcta: La cadena de llamadas entre funciones modela el flujo recursivo indirecto.</p></div><div class="qa"><h4>Pregunta 5</h4><p><strong>Si la lista no está ordenada, la búsqueda binaria recursiva…</strong></p><ol><li>sigue siendo igualmente válida</li><li>puede fallar conceptualmente porque descarta rangos sin criterio</li><li>ordena automáticamente la lista</li><li>reemplaza la validación</li></ol><p class="correct">Respuesta correcta: La reducción solo es válida si el criterio de orden se mantiene.</p></div></section><section id="hti" class="card"><h2>🏠 HTI — cómo elegir Escenario A vs B</h2><p class="lead">Escenario A conviene si el estudiante ya comparó dos estrategias en clase y puede asumir un algoritmo de ordenamiento. Escenario B conviene para afianzar categorías conceptuales; no sustituye la profundidad de A, pero sostiene continuidad y NO BLOQUEA la siguiente clase.</p><div class="scenario-grid"><div class="scenario a"><div class="scenario-header"><span>Escenario A · profundización</span><span>60–90 min · entrega digital</span></div><div class="scenario-body"><p>Implementa un algoritmo <code>merge_sort</code> que ordene una lista de pacientes de NeuroBiz según <code>tasa_retencion</code>.</p><p>Debes mostrar la lista antes y después, incluir comentarios cortos sobre el proceso de división y mezcla, y responder: ¿por qué este algoritmo también ejemplifica una estructura recursiva?</p><p>Entrega: notebook funcional, captura de resultados y breve análisis de cómo el ordenamiento puede apoyar priorización gerencial.</p><div class="box ok"><div class="ico">✅</div><p><strong>Consecuencia pedagógica:</strong> ofrece evidencia más robusta del desempeño y prepara mejor el siguiente contenido.</p></div></div></div><div class="scenario b"><div class="scenario-header"><span>Escenario B · bajo umbral</span><span>20–30 min · cuaderno/papel</span></div><div class="scenario-body"><p>Elabora una tabla con 3 ejemplos de recursión directa y 3 de recursión indirecta usando datos o procesos de NeuroBiz.</p><p>Para cada ejemplo escribe: qué función llama a cuál, cuál sería el caso base y qué beneficio organizacional aporta.</p><p>Este escenario es de bajo umbral y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>; su finalidad es mantener claridad conceptual sin convertir la tarea en barrera.</p><div class="box warn"><div class="ico">🟠</div><p><strong>Consecuencia pedagógica:</strong> sostiene continuidad conceptual para estudiantes con menos tiempo, conectividad o seguridad técnica. <strong>NO BLOQUEA la siguiente clase</strong>.</p></div></div></div></div><div class="table-wrap"><table class="note-table"><tbody><tr><td>Si elige A</td><td>Obtiene una práctica más profunda, evidencia digital más sólida y mejor preparación para transferir el concepto a nuevos algoritmos.</td></tr><tr><td>Si elige B</td><td>Refuerza la imagen mental o el paso a paso sin convertir la tarea en barrera. Útil para nivelación o recuperación de confianza.</td></tr><tr><td>Qué debe decir el docente</td><td>“Ambas rutas suman al proceso; A profundiza más, B mantiene continuidad. La no realización de B no impide comprender la siguiente sesión”.</td></tr></tbody></table></div></section><section id="neuro" class="card"><h2>🧠 Nota de neurodivergencia (máx. 1 minuto)</h2><div class="box brain"><div class="ico">🧠</div><p>Frase sugerida: “Los perfiles neurodivergentes no son anomalías del dato; son realidades humanas que exigen leer información con más contexto y menos prejuicio”.</p></div><div class="box blue"><div class="ico">⏱</div><p><strong>Sugerencia de uso:</strong> di esta frase durante el aterrizaje del caso o antes del laboratorio. No la conviertas en discurso largo; basta una mención breve, respetuosa y natural.</p></div></section><section id="contingencias" class="card"><h2>🚨 Contingencias</h2><div class="box warn"><div class="ico">⚠️</div><p><strong>Falla técnica:</strong> Haz la búsqueda binaria manual con tarjetas numeradas en el piso o en el tablero. El análisis de pasos puede realizarse sin computador.</p></div><div class="box warn"><div class="ico">⚠️</div><p><strong>Bajo engagement:</strong> Convierte la comparación en competencia sana: gana el equipo que logre la conclusión más sólida, no el que termine primero.</p></div><div class="box warn"><div class="ico">⚠️</div><p><strong>Falta de tiempo:</strong> Prioriza comparación de una sola búsqueda con conteo de pasos y deja la recursión indirecta como demostración corta o lectura guiada.</p></div></section><section id="observacion" class="card"><h2>👁 Indicadores de observación docente</h2><ul><li>Comprende que la búsqueda binaria exige orden previo.</li><li>Puede identificar inicio, fin y medio sin perder el rango.</li><li>Argumenta por qué la comparación de pasos importa para una decisión organizacional.</li><li>Diferencia recursión directa de indirecta con un ejemplo propio.</li><li>Evita presentar la eficiencia como dogma y la relaciona con contexto de uso.</li></ul><div class="box ok"><div class="ico">🎤</div><p><strong>Cierre sugerido:</strong> Cierre sugerido: “Hoy demostramos que elegir una estrategia depende del estado de los datos. En negocios, organizar bien la información abre la puerta a decisiones más rápidas y más sostenibles.”</p></div></section></main><footer>TGA05 · Notas del profesor · Semana 7 · Uso exclusivo docente · Caso NeuroBiz S.A.S.</footer></body></html>

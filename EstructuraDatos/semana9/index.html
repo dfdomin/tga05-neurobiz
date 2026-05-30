@@ -1,0 +1,1140 @@
+<!DOCTYPE html><html lang="es"><head><link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Semana 9 — Listas Enlazadas Simples II: Operaciones | TGA05</title><style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #FAFAFA;
+  color: #1f2937;
+  line-height: 1.7;
+}
+:root {
+  --primary:   #1E2843;
+  --accent:    #2d3a5e;
+  --gold:      #FFDF2D;
+  --gold-soft: #fff8e1;
+  --green: #2e7d32;
+  --green-soft: #e8f5e9;
+  --orange: #ef6c00;
+  --orange-soft: #fff3e0;
+  --blue-soft: #e3f2fd;
+  --purple-soft: #f3e5f5;
+  --ink: #212121;
+  --muted: #546e7a;
+  --card: #ffffff;
+  --border:    #DEDFE4;
+  --shadow: 0 12px 30px rgba(26,35,126,.08);
+  --radius: 16px;
+  --dojo-bg: #0f172a;
+  --dojo-line: #22304e;
+  --code-bg: #1E2843;
+  --code-top: #2d3a5e;
+  --rose: #f38ba8;
+  --lavender: #b4befe;
+  --mauve: #cba6f7;
+  --teal: #94e2d5;
+  --green-code: #a6e3a1;
+  --yellow-code: #f9e2af;
+  --peach: #fab387;
+  --subtle: #eef2ff;
+}
+a { color: var(--accent); }
+header {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1E2843 0%, #2d3a5e 100%);
+  color: #fff;
+  padding: 2.6rem 1.2rem 2rem;
+}
+header::before,
+header::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+}
+header::before { width: 220px; height: 220px; top: -80px; right: -40px; }
+header::after  { width: 160px; height: 160px; bottom: -70px; left: -50px; }
+.hero {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-bottom: 1rem;
+}
+.badge-module, .badge-week {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .35rem .9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.14);
+  font-size: .82rem;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+header h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  line-height: 1.15;
+}
+.subtitle {
+  max-width: 880px;
+  margin: .85rem 0 1rem;
+  font-size: 1rem;
+  color: rgba(255,255,255,.92);
+}
+.hero-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1.3fr .9fr;
+  align-items: end;
+}
+.xp-panel, .hero-note {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 18px;
+  padding: 1rem 1.1rem;
+  backdrop-filter: blur(4px);
+}
+.xp-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: .82rem;
+  margin-bottom: .55rem;
+  color: rgba(255,255,255,.92);
+}
+.xp-track {
+  height: 16px;
+  background: rgba(255,255,255,.18);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.xp-bar {
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #fbc02d, #FFDF2D);
+  box-shadow: 0 0 18px rgba(249,168,37,.55);
+  transition: width 1.8s ease;
+}
+.hero-note p { margin: 0; font-size: .93rem; }
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(15,23,42,.06);
+}
+.nav-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: .7rem 1rem;
+  display: flex;
+  gap: .55rem;
+  flex-wrap: wrap;
+}
+nav a {
+  text-decoration: none;
+  font-weight: 700;
+  font-size: .84rem;
+  color: var(--accent);
+  padding: .45rem .75rem;
+  border-radius: 10px;
+}
+nav a:hover { background: var(--subtle); }
+main {
+  max-width: 1180px;
+  margin: 1.8rem auto 0;
+  padding: 0 1rem 3rem;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.4rem;
+  margin-bottom: 1.4rem;
+}
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.35rem;
+  color: var(--primary);
+  border-left: 5px solid var(--gold);
+  padding-left: .85rem;
+}
+.card h3 {
+  margin-top: 1.15rem;
+  margin-bottom: .6rem;
+  color: var(--accent);
+  font-size: 1.05rem;
+}
+.lead {
+  font-size: 1rem;
+  color: #374151;
+}
+.bloom-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .4rem .95rem;
+  border-radius: 999px;
+  background: #fff8e1;
+  color: #5d4037;
+  border: 1px solid #FFDF2D;
+  font-weight: 800;
+  font-size: .82rem;
+  margin-bottom: 1rem;
+}
+.memo {
+  background: linear-gradient(90deg, #fffde7, #fff8e1);
+  border-left: 6px solid var(--gold);
+  border-radius: 0 16px 16px 0;
+  padding: 1.2rem 1.2rem 1.2rem 1.1rem;
+  margin-bottom: 1rem;
+}
+.memo strong {
+  display: block;
+  margin-bottom: .5rem;
+  color: var(--primary);
+}
+.summary-grid,
+.kpi-grid,
+.theory-grid,
+.python-grid,
+.activity-grid,
+.game-grid,
+.hti-grid,
+.quiz-grid,
+.bib-grid,
+.dual-grid {
+  display: grid;
+  gap: 1rem;
+}
+.summary-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.kpi-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 1rem; }
+.kpi-card {
+  background: linear-gradient(180deg, #ffffff, #f7f9ff);
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--gold);
+  border-radius: 14px;
+  padding: 1rem;
+}
+.kpi-top { display: flex; align-items: center; gap: .7rem; }
+.kpi-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--subtle);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+.kpi-name { font-weight: 800; color: var(--primary); font-size: .95rem; }
+.kpi-var { color: var(--muted); font-size: .8rem; }
+.kpi-value { font-size: 1.6rem; font-weight: 900; margin: .6rem 0 .3rem; color: #0f172a; }
+.kpi-insight { margin: 0; font-size: .88rem; color: #475569; }
+.mini-card {
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--gold);
+  border-radius: 14px;
+  padding: 1rem;
+  background: #fff;
+}
+.mini-card h4 { margin: 0 0 .5rem; color: var(--accent); }
+.mini-card p, .mini-card li { font-size: .93rem; }
+.mini-card ul { padding-left: 1.2rem; margin: .4rem 0 0; }
+.ods-strip {
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #e8f5e9, #e3f2fd);
+  border: 1px solid #b7d7c0;
+}
+.ods-strip strong { color: #1b5e20; }
+.info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: .8rem;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  margin: 1rem 0;
+}
+.info-box.tip { background: #e8f5e9; border-left: 5px solid #43a047; }
+.info-box.warn { background: #fff8e1; border-left: 5px solid #FFDF2D; }
+.info-box.brain { background: #f3e5f5; border-left: 5px solid #8e24aa; }
+.info-box .icon { font-size: 1.3rem; }
+.info-box p { margin: 0; }
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: .9rem 0;
+  font-size: .92rem;
+}
+th {
+  background: var(--primary);
+  color: #fff;
+  text-align: left;
+  padding: .75rem .9rem;
+}
+td {
+  border-bottom: 1px solid var(--border);
+  padding: .75rem .9rem;
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: #f8faff; }
+.code-wrap {
+  margin: 1rem 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(30,30,46,.22);
+}
+.code-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: .65rem 1rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: var(--code-top);
+  color: #cdd6f4;
+  font-size: .82rem;
+}
+.code-title a {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 700;
+}
+pre {
+  margin: 0;
+  padding: 1.15rem 1.2rem;
+  background: var(--code-bg);
+  color: #cdd6f4;
+  overflow-x: auto;
+  font-size: .88rem;
+  line-height: 1.65;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.kw { color: var(--mauve); }
+.fn { color: #89b4fa; }
+.str { color: var(--green-code); }
+.cm { color: #6c7086; font-style: italic; }
+.num { color: var(--peach); }
+.var { color: #cdd6f4; }
+.op { color: var(--teal); }
+.cls { color: var(--yellow-code); }
+.activity-card {
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--gold);
+  border-radius: 16px;
+  padding: 1rem;
+  background: #fff;
+}
+.activity-card h3 { margin-top: 0; }
+.step-list, .rubric-list, .quiz-options {
+  padding-left: 1.2rem;
+}
+.step-list li, .rubric-list li, .quiz-options li { margin-bottom: .45rem; }
+.game-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: 1rem 0; }
+.game-card {
+  border-radius: 14px;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, #fff, #f8fbff);
+}
+.game-card h4 { margin: 0 0 .45rem; color: var(--primary); }
+.dojo-panel {
+  border-radius: 18px;
+  background: linear-gradient(180deg, #0f172a, #172554);
+  color: #fff;
+  border: 1px solid #334155;
+  padding: 1rem;
+}
+.dojo-panel h3 { color: #fff; margin-top: 0; }
+.dojo-panel table { color: #fff; }
+.dojo-panel th { background: rgba(249,168,37,.18); color: #f9d46a; }
+.dojo-panel td { border-bottom: 1px solid var(--dojo-line); }
+.dojo-panel tr:nth-child(even) td { background: rgba(255,255,255,.03); }
+.points {
+  color: #f9d46a;
+  font-weight: 900;
+}
+.scenario {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid;
+  margin-top: 1rem;
+}
+.scenario.a { border-color: #2e7d32; }
+.scenario.b { border-color: #ef6c00; }
+.scenario-header {
+  padding: .8rem 1rem;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.scenario.a .scenario-header { background: #e8f5e9; color: #1b5e20; }
+.scenario.b .scenario-header { background: #fff3e0; color: #e65100; }
+.scenario-body {
+  padding: 1rem 1.1rem;
+  background: #fff;
+}
+.scenario-note {
+  padding: .7rem .9rem;
+  border-radius: 12px;
+  background: rgba(0,0,0,.03);
+  font-size: .9rem;
+  margin-top: .8rem;
+}
+.quiz-box {
+  background: #e3f2fd;
+  border: 1px solid #90caf9;
+  border-radius: 16px;
+  padding: 1rem;
+}
+.quiz-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.quiz-item {
+  background: rgba(255,255,255,.78);
+  border-radius: 14px;
+  padding: 1rem;
+  border: 1px solid rgba(21,101,192,.18);
+  min-height: 100%;
+}
+.quiz-item h4 { margin-top: 0; color: #0d47a1; }
+.quiz-item small { color: #355c7d; display: block; margin-bottom: .6rem; }
+.quiz-answer {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-top: 0;
+  transition: all .35s ease;
+  background: #fff;
+  border-left: 4px solid #1565c0;
+  border-radius: 0 10px 10px 0;
+  padding: 0 .9rem;
+}
+.quiz-item:hover .quiz-answer,
+.quiz-item:focus-within .quiz-answer {
+  max-height: 220px;
+  opacity: 1;
+  margin-top: .8rem;
+  padding: .8rem .9rem;
+}
+.citation {
+  display: inline-block;
+  padding: .15rem .55rem;
+  border-radius: 999px;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  color: #3730a3;
+  font-size: .78rem;
+  font-weight: 700;
+  margin: .2rem .2rem .2rem 0;
+}
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: .82rem;
+  padding: 1.8rem 1rem 2.2rem;
+}
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  header { padding: 2rem 1rem 1.8rem; }
+  .card { padding: 1rem; }
+  .nav-wrap { padding: .7rem; }
+  nav a { font-size: .8rem; padding: .4rem .6rem; }
+  .xp-label { flex-direction: column; gap: .2rem; }
+  table { font-size: .86rem; }
+}
+</style>
+<style id="progress-tracker-css">
+/* ── Progress Tracker Widget ── */
+#pt-widget{
+  position:fixed; bottom:20px; right:20px; z-index:9999;
+  background:linear-gradient(135deg,#1E2843,#1E2843);
+  color:#fff; border-radius:16px; padding:14px 18px;
+  min-width:240px; max-width:280px;
+  box-shadow:0 8px 32px rgba(0,0,0,.35);
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size:.85rem; transition:transform .3s;
+}
+#pt-widget.collapsed { transform:translateY(calc(100% - 42px)); }
+#pt-header{ display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+#pt-header strong{ font-size:.92rem; }
+#pt-toggle{ background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer; line-height:1; }
+#pt-body{ margin-top:10px; }
+#pt-nombre{ width:100%; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3);
+  border-radius:8px; color:#fff; padding:5px 10px; font-size:.82rem; margin-bottom:8px; }
+#pt-nombre::placeholder{ color:rgba(255,255,255,.5); }
+#pt-xp-bar-wrap{ background:rgba(255,255,255,.2); border-radius:20px; height:10px; overflow:hidden; }
+#pt-xp-bar{ height:100%; background:linear-gradient(90deg,#FFDF2D,#fff176); border-radius:20px;
+  transition:width .8s ease; }
+#pt-xp-label{ display:flex; justify-content:space-between; font-size:.75rem; opacity:.8; margin-top:4px; }
+#pt-btns{ display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.pt-btn{ flex:1; padding:5px 8px; border:none; border-radius:8px; font-size:.75rem;
+  font-weight:700; cursor:pointer; transition:opacity .2s; }
+.pt-btn:hover{ opacity:.85; }
+#pt-btn-save  { background:#43a047; color:#fff; }
+#pt-btn-export{ background:#FFDF2D; color:#1E2843; }
+#pt-btn-load  { background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.3); }
+#pt-msg{ font-size:.72rem; margin-top:6px; min-height:16px; opacity:.85; text-align:center; }
+#pt-quiz-panel{ margin-top:1rem; }
+#pt-quiz-panel .pq{ margin-bottom:.8rem; }
+#pt-quiz-panel .pq p{ font-weight:600; font-size:.88rem; margin-bottom:.4rem; }
+#pt-quiz-panel .pq button{ display:block; width:100%; text-align:left; margin-bottom:3px;
+  padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08); color:#fff; cursor:pointer; font-size:.8rem;
+  transition:background .2s; }
+#pt-quiz-panel .pq button:hover  { background:rgba(255,255,255,.18); }
+#pt-quiz-panel .pq button.correct{ background:#2e7d32; border-color:#43a047; }
+#pt-quiz-panel .pq button.wrong  { background:#c62828; border-color:#e57373; }
+#pt-quiz-panel .pq button:disabled{ opacity:.7; cursor:default; }
+</style>
+
+  <script src="../js/supabase-config.js"></script>
+</head><body><header><div class="hero"><div class="badge-row"><span class="badge-module">🎓 TGA05 · Estructura de Datos para los Negocios</span><span class="badge-week">🗓 Semana 9 de 14</span><span class="badge-week">🏅 Módulo en progreso</span></div><div class="hero-grid"><div><h1>Listas Enlazadas Simples II: Operaciones</h1><p class="subtitle">Operaciones completas en listas enlazadas simples: insertar en posición, eliminar, buscar e invertir el historial terapéutico de NeuroBiz.</p><div class="xp-panel"><div class="xp-label"><span>Barra XP del módulo</span><span>700 / 980 XP del módulo</span></div><div class="xp-track"><div class="xp-bar" data-progress="64.3"></div></div></div></div><aside class="hero-note"><p><strong>Rol inmersivo:</strong> Analista de Datos Estratégico de NeuroBiz S.A.S.</p><p>Ahora la estructura ya existe; el reto es operarla con precisión para mantener historiales confiables, actualizables y auditables en tiempo real.</p></aside></div></div></header><nav><div class="nav-wrap"><a href="#mision">📋 Memorando</a><a href="#teoria">📚 Teoría</a><a href="#python">🐍 Python BI</a><a href="#actividad">⚙️ Actividad</a><a href="#quiz">🎮 Quizizz</a><a href="#bib">📖 Bibliografía</a></div></nav><main>
+
+<!-- ── PROGRESS TRACKER WIDGET ── -->
+<div id="pt-widget">
+  <div id="pt-header" onclick="ptToggle()">
+    <strong>📊 Mi Progreso TGA05</strong>
+    <button id="pt-toggle">▲</button>
+  </div>
+  <div id="pt-body">
+    <input id="pt-nombre" type="text" placeholder="Tu nombre completo…" oninput="ptSaveLocal()" />
+    <div id="pt-xp-bar-wrap"><div id="pt-xp-bar" style="width:0%"></div></div>
+    <div id="pt-xp-label"><span id="pt-semana-label">Semana —</span><span id="pt-xp-count">0 XP</span></div>
+    <div id="pt-btns" style="display:flex;gap:5px;align-items:center">
+      <button class="pt-btn" id="pt-btn-save" onclick="ptSyncCloud()" style="flex:1">☁️ Guardar</button>
+      <button class="pt-btn" id="pt-btn-opts"
+        title="Opciones de respaldo"
+        onclick="(function(){var a=document.getElementById('pt-advanced');a.style.display=a.style.display==='block'?'none':'block';})()"
+        style="width:32px;flex-shrink:0;padding:0;font-size:.8rem">⚙️</button>
+    </div>
+    <div id="pt-advanced" style="display:none;margin-top:5px">
+      <button class="pt-btn" onclick="ptExportCode()" style="width:100%;margin-bottom:3px;font-size:.72rem">📋 Exportar código de respaldo</button>
+      <button class="pt-btn" onclick="ptImportCode()" style="width:100%;font-size:.72rem">📥 Cargar desde código</button>
+    </div>
+    <div id="pt-msg"></div>
+  </div>
+</div>
+<section id="mision" class="card"><div class="bloom-badge">🧠 Bloom de la semana: Aplicar → Analizar</div><h2>📋 Memorando — Tu misión en NeuroBiz</h2><div class="memo"><strong>Memorando interno · Dirección de Analítica Clínica</strong><p>La coordinación clínica de NeuroBiz necesita realizar tres acciones frecuentes sobre el historial terapéutico: eliminar sesiones canceladas, insertar seguimientos en una posición específica e invertir el orden para ver primero las sesiones más recientes.</p><p>Tu rol como <strong>Analista de Datos Estratégico</strong> es implementar estas operaciones sin romper la integridad de la lista enlazada. Ya no basta con construir la estructura: debes gobernarla.</p></div><div class="summary-grid"><article class="mini-card"><h4>Resultado de aprendizaje <span class="citation">RA2</span></h4><p>Aplicar operaciones sobre estructuras dinámicas simples y analizarlas en un caso organizacional.</p></article><article class="mini-card"><h4>Criterios activados <span class="citation">CE2 · CE3 · CE4</span></h4><p>Desarrollar, verificar y codificar operaciones sobre la lista enlazada.</p></article><article class="mini-card"><h4>Entregable central <span class="citation">Gestión avanzada del historial</span></h4><p>Lista enlazada con insertar en posición, eliminar, buscar e invertir.</p></article><article class="mini-card"><h4>Framework GAME <span class="citation">Guiar · Articular · Motivar · Evaluar</span></h4><p>Cada operación se prueba con decisiones administrativas reales de NeuroBiz.</p></article></div><h3>📊 KPIs de contexto que debes usar siempre</h3><p class="lead">Estos indicadores atraviesan toda la unidad. Aunque la estructura de datos cambie, el contexto sigue siendo NeuroBiz y sus decisiones basadas en evidencia.</p><div class="kpi-grid"><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">📅</div><div><div class="kpi-name">sesiones_asistidas</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">35</div><p class="kpi-insight">El historial crece y exige operaciones de mantenimiento.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">❌</div><div><div class="kpi-name">sesiones_fallidas</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">5</div><p class="kpi-insight">Justifica la necesidad de eliminar sesiones canceladas.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">📈</div><div><div class="kpi-name">tasa_retencion</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">0.92</div><p class="kpi-insight">Puede verse afectada al limpiar o fusionar historiales inconsistentes.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">🧠</div><div><div class="kpi-name">indice_progreso</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">6.1</div><p class="kpi-insight">Requiere ubicarse correctamente al insertar seguimientos.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">🎯</div><div><div class="kpi-name">nivel_hiperfoco</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">0.78</div><p class="kpi-insight">Dato que puede consultarse al buscar nodos específicos.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">🧩</div><div><div class="kpi-name">reconocimiento_patrones</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">0.88</div><p class="kpi-insight">Permite comparar secuencias cuando se invierte el recorrido del historial.</p></article></div><div class="ods-strip">🌍 Mantener historiales coherentes evita duplicidad, reproceso y consultas innecesarias. Eso se alinea con el <strong>ODS 7</strong> al usar mejor los recursos digitales y con el <strong>ODS 13</strong> al fortalecer flujos administrativos más ligeros y menos desperdicio documental.</div></section><section id="teoria" class="card"><h2>📚 Teoría construida desde fuentes reales</h2><p class="lead">Lee esta sección como una caja de herramientas conceptuales. Las ideas se parafrasean desde bibliografía base del módulo y se aterrizan al caso NeuroBiz para mantener el enfoque de negocio.</p><div class="citation">Cairó & Guardati, 2006</div><div class="citation">Joyanes Aguilar, 2014</div><div class="citation">Weiss, 2014</div><div class="citation">Moreno Pérez, 2012</div><h3>1. Operar una estructura es comprenderla de verdad</h3><p>Construir la lista enlazada fue el primer paso; ahora la comprensión se evidencia cuando el estudiante manipula referencias sin perder la integridad de la estructura. Weiss (2014) insiste en que las operaciones revelan el verdadero costo y valor de una estructura de datos.</p><p>En términos pedagógicos, pasar de crear a operar implica subir en Bloom: el estudiante ya no solo reconoce componentes, sino que aplica procedimientos y analiza sus efectos sobre el sistema completo.</p><h3>2. Insertar, eliminar y buscar</h3><p>Insertar en posición exige recorrer hasta el punto correcto y luego reencadenar enlaces. El concepto clave es que una operación local puede afectar la coherencia global si no se actualizan bien las referencias.</p><p>Eliminar nodos obliga a pensar en el nodo actual, el anterior y los casos especiales: lista vacía, cabeza y elemento inexistente. Joyanes Aguilar (2014) subraya que los algoritmos sobre listas deben contemplar explícitamente estos escenarios límite.</p><h3>3. Invertir una lista: leer el historial desde el presente</h3><p>Invertir una lista enlazada simple es una operación poderosa porque obliga a reconsiderar la dirección de cada enlace. El caso NeuroBiz la justifica cuando la coordinación desea ver primero las sesiones más recientes.</p><p>Cairó Battistutti y Guardati Bueno (2006) ayudan a comprender que invertir no es “copiar al revés”, sino reconstruir la dirección de las referencias. Esa distinción fortalece la comprensión estructural.</p><h3>4. CRUD y trazabilidad en un contexto de negocio</h3><p>Aunque aquí no trabajamos con una base de datos formal, las operaciones se acercan a una lógica CRUD: crear nodos, leer/recorrer, actualizar mediante inserción y eliminar registros cancelados. Esta conexión ayuda a que el estudiante vea continuidad con sistemas administrativos reales.</p><p>Moreno Pérez (2012) recomienda verificar cada operación con ejemplos pequeños antes de escalar. Por eso en clase se prueban listas de 3 a 5 nodos antes de pasar a historiales más ricos.</p><div class="info-box tip"><div class="icon">🧭</div><p><strong>Pista didáctica:</strong> leer una estructura de datos como si fuera una historia de negocio evita que el código se vuelva mecánico. Primero nombra la lógica, luego escríbela.</p></div><div class="table-wrap"><table><thead><tr><th>Concepto</th><th>Descripción</th><th>Ejemplo NeuroBiz</th><th>Valor analítico</th></tr></thead><tbody><tr><td><strong>Insertar en posición</strong></td><td>Agregar un nodo en un punto específico</td><td>Insertar seguimiento entre sesión 2 y 3</td><td>Mantener cronología del historial</td></tr><tr><td><strong>Eliminar</strong></td><td>Quitar un nodo sin romper la lista</td><td>Retirar sesión cancelada</td><td>Depurar el historial terapéutico</td></tr><tr><td><strong>Buscar</strong></td><td>Localizar un valor o id dentro de la cadena</td><td>Consultar una sesión por identificador</td><td>Apoyar auditoría y seguimiento</td></tr><tr><td><strong>Invertir</strong></td><td>Cambiar dirección de los enlaces</td><td>Ver primero sesiones recientes</td><td>Lectura ejecutiva del historial</td></tr></tbody></table></div><div class="info-box brain"><div class="icon">🧠</div><p><strong>Neurodivergencia y lectura del dato:</strong> las variables <code>nivel_hiperfoco</code> y <code>reconocimiento_patrones</code> se usan como contexto de negocio para reforzar una visión respetuosa de la diversidad; no son etiquetas reductoras, sino información para decisiones de acompañamiento.</p></div><div class="info-box warn"><div class="icon">⚙️</div><p><strong>Recuerda:</strong> en este módulo Python se usa como herramienta de <em>Business Intelligence</em>. El foco es elegir y explicar una estructura adecuada para un problema organizacional, no coleccionar sintaxis sin contexto.</p></div></section><section id="python" class="card"><h2>🐍 Python como herramienta analítica — Google Colab</h2><p class="lead">Ejecuta los bloques en Google Colab o Replit. La meta no es memorizar cada símbolo, sino comprender cómo la estructura elegida permite responder preguntas de gestión sobre sesiones, retención y progreso.</p><div class="activity-card"><h3>Bloque 1 — Buscar y eliminar sesiones canceladas</h3><p>Primera capa de operaciones sobre la lista enlazada del historial.</p><div class="code-wrap"><div class="code-title"><span>Google Colab · Bloque 1</span><a href="https://colab.research.google.com" target="_blank" rel="noopener">Abrir Colab</a></div><pre><span class="kw">class</span> <span class="cls">Nodo</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, dato):
+        self.dato <span class="op">=</span> dato
+        self.siguiente <span class="op">=</span> <span class="kw">None</span>
+
+<span class="kw">class</span> <span class="cls">ListaEnlazada</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.cabeza <span class="op">=</span> <span class="kw">None</span>
+
+    <span class="kw">def</span> <span class="fn">insertar_al_final</span>(self, dato):
+        <span class="var">nuevo</span> <span class="op">=</span> <span class="cls">Nodo</span>(<span class="var">dato</span>)
+        <span class="kw">if</span> self.cabeza <span class="kw">is</span> <span class="kw">None</span>:
+            self.cabeza <span class="op">=</span> <span class="var">nuevo</span>
+            <span class="kw">return</span>
+        <span class="var">actual</span> <span class="op">=</span> self.cabeza
+        <span class="kw">while</span> <span class="var">actual</span>.siguiente:
+            <span class="var">actual</span> <span class="op">=</span> <span class="var">actual</span>.siguiente
+        <span class="var">actual</span>.siguiente <span class="op">=</span> <span class="var">nuevo</span>
+
+    <span class="kw">def</span> <span class="fn">buscar</span>(self, id_sesion):
+        <span class="var">actual</span> <span class="op">=</span> self.cabeza
+        <span class="kw">while</span> <span class="var">actual</span>:
+            <span class="kw">if</span> <span class="var">actual</span>.dato[<span class="str">"id"</span>] <span class="op">==</span> <span class="var">id_sesion</span>:
+                <span class="kw">return</span> <span class="var">actual</span>.dato
+            <span class="var">actual</span> <span class="op">=</span> <span class="var">actual</span>.siguiente
+        <span class="kw">return</span> <span class="kw">None</span>
+
+    <span class="kw">def</span> <span class="fn">eliminar</span>(self, id_sesion):
+        <span class="var">actual</span> <span class="op">=</span> self.cabeza
+        <span class="var">anterior</span> <span class="op">=</span> <span class="kw">None</span>
+        <span class="kw">while</span> <span class="var">actual</span>:
+            <span class="kw">if</span> <span class="var">actual</span>.dato[<span class="str">"id"</span>] <span class="op">==</span> <span class="var">id_sesion</span>:
+                <span class="kw">if</span> <span class="var">anterior</span> <span class="kw">is</span> <span class="kw">None</span>:
+                    self.cabeza <span class="op">=</span> <span class="var">actual</span>.siguiente
+                <span class="kw">else</span>:
+                    <span class="var">anterior</span>.siguiente <span class="op">=</span> <span class="var">actual</span>.siguiente
+                <span class="kw">return</span> <span class="kw">True</span>
+            <span class="var">anterior</span> <span class="op">=</span> <span class="var">actual</span>
+            <span class="var">actual</span> <span class="op">=</span> <span class="var">actual</span>.siguiente
+        <span class="kw">return</span> <span class="kw">False</span></pre></div><p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p></div><div class="activity-card"><h3>Bloque 2 — Insertar en posición para seguimientos específicos</h3><p>Este método permite mantener cronología o priorización del historial.</p><div class="code-wrap"><div class="code-title"><span>Google Colab · Bloque 2</span><a href="https://colab.research.google.com" target="_blank" rel="noopener">Abrir Colab</a></div><pre><span class="kw">class</span> <span class="cls">Nodo</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, dato):
+        self.dato <span class="op">=</span> dato
+        self.siguiente <span class="op">=</span> <span class="kw">None</span>
+
+<span class="kw">class</span> <span class="cls">ListaEnlazada</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.cabeza <span class="op">=</span> <span class="kw">None</span>
+
+    <span class="kw">def</span> <span class="fn">insertar_al_final</span>(self, dato):
+        <span class="var">nuevo</span> <span class="op">=</span> <span class="cls">Nodo</span>(<span class="var">dato</span>)
+        <span class="kw">if</span> self.cabeza <span class="kw">is</span> <span class="kw">None</span>:
+            self.cabeza <span class="op">=</span> <span class="var">nuevo</span>
+            <span class="kw">return</span>
+        <span class="var">actual</span> <span class="op">=</span> self.cabeza
+        <span class="kw">while</span> <span class="var">actual</span>.siguiente:
+            <span class="var">actual</span> <span class="op">=</span> <span class="var">actual</span>.siguiente
+        <span class="var">actual</span>.siguiente <span class="op">=</span> <span class="var">nuevo</span>
+
+    <span class="kw">def</span> <span class="fn">insertar_en_posicion</span>(self, posicion, dato):
+        <span class="var">nuevo</span> <span class="op">=</span> <span class="cls">Nodo</span>(<span class="var">dato</span>)
+        <span class="kw">if</span> <span class="var">posicion</span> <span class="op">==</span> <span class="num">0</span>:
+            <span class="var">nuevo</span>.siguiente <span class="op">=</span> self.cabeza
+            self.cabeza <span class="op">=</span> <span class="var">nuevo</span>
+            <span class="kw">return</span>
+        <span class="var">actual</span> <span class="op">=</span> self.cabeza
+        <span class="var">indice</span> <span class="op">=</span> <span class="num">0</span>
+        <span class="kw">while</span> <span class="var">actual</span> <span class="kw">and</span> <span class="var">indice</span> <span class="op"><</span> <span class="var">posicion</span> <span class="op">-</span> <span class="num">1</span>:
+            <span class="var">actual</span> <span class="op">=</span> <span class="var">actual</span>.siguiente
+            <span class="var">indice</span> <span class="op">+=</span> <span class="num">1</span>
+        <span class="kw">if</span> <span class="var">actual</span> <span class="kw">is</span> <span class="kw">None</span>:
+            <span class="kw">raise</span> <span class="cls">IndexError</span>(<span class="str">"Posición fuera de rango"</span>)
+        <span class="var">nuevo</span>.siguiente <span class="op">=</span> <span class="var">actual</span>.siguiente
+        <span class="var">actual</span>.siguiente <span class="op">=</span> <span class="var">nuevo</span>
+
+    <span class="kw">def</span> <span class="fn">recorrer</span>(self):
+        <span class="var">actual</span> <span class="op">=</span> self.cabeza
+        <span class="kw">while</span> <span class="var">actual</span>:
+            <span class="fn">print</span>(<span class="var">actual</span>.dato)
+            <span class="var">actual</span> <span class="op">=</span> <span class="var">actual</span>.siguiente
+
+<span class="var">historial</span> <span class="op">=</span> <span class="cls">ListaEnlazada</span>()
+<span class="var">historial</span>.<span class="fn">insertar_al_final</span>({<span class="str">"id"</span>: <span class="num">1</span>, <span class="str">"estado"</span>: <span class="str">"asistida"</span>})
+<span class="var">historial</span>.<span class="fn">insertar_al_final</span>({<span class="str">"id"</span>: <span class="num">3</span>, <span class="str">"estado"</span>: <span class="str">"asistida"</span>})
+<span class="var">historial</span>.<span class="fn">insertar_en_posicion</span>(<span class="num">1</span>, {<span class="str">"id"</span>: <span class="num">2</span>, <span class="str">"estado"</span>: <span class="str">"seguimiento"</span>})
+<span class="var">historial</span>.<span class="fn">recorrer</span>()</pre></div><p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p></div><div class="activity-card"><h3>Bloque 3 — Invertir la lista para ver primero lo más reciente</h3><p>La inversión modifica la dirección de cada enlace y sirve para lectura ejecutiva del historial.</p><div class="code-wrap"><div class="code-title"><span>Google Colab · Bloque 3</span><a href="https://colab.research.google.com" target="_blank" rel="noopener">Abrir Colab</a></div><pre><span class="kw">class</span> <span class="cls">Nodo</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, dato):
+        self.dato <span class="op">=</span> dato
+        self.siguiente <span class="op">=</span> <span class="kw">None</span>
+
+<span class="kw">class</span> <span class="cls">ListaEnlazada</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.cabeza <span class="op">=</span> <span class="kw">None</span>
+
+    <span class="kw">def</span> <span class="fn">insertar_al_final</span>(self, dato):
+        <span class="var">nuevo</span> <span class="op">=</span> <span class="cls">Nodo</span>(<span class="var">dato</span>)
+        <span class="kw">if</span> self.cabeza <span class="kw">is</span> <span class="kw">None</span>:
+            self.cabeza <span class="op">=</span> <span class="var">nuevo</span>
+            <span class="kw">return</span>
+        <span class="var">actual</span> <span class="op">=</span> self.cabeza
+        <span class="kw">while</span> <span class="var">actual</span>.siguiente:
+            <span class="var">actual</span> <span class="op">=</span> <span class="var">actual</span>.siguiente
+        <span class="var">actual</span>.siguiente <span class="op">=</span> <span class="var">nuevo</span>
+
+    <span class="kw">def</span> <span class="fn">invertir</span>(self):
+        <span class="var">anterior</span> <span class="op">=</span> <span class="kw">None</span>
+        <span class="var">actual</span> <span class="op">=</span> self.cabeza
+        <span class="kw">while</span> <span class="var">actual</span>:
+            <span class="var">siguiente_temporal</span> <span class="op">=</span> <span class="var">actual</span>.siguiente
+            <span class="var">actual</span>.siguiente <span class="op">=</span> <span class="var">anterior</span>
+            <span class="var">anterior</span> <span class="op">=</span> <span class="var">actual</span>
+            <span class="var">actual</span> <span class="op">=</span> <span class="var">siguiente_temporal</span>
+        self.cabeza <span class="op">=</span> <span class="var">anterior</span>
+
+    <span class="kw">def</span> <span class="fn">recorrer</span>(self):
+        <span class="var">actual</span> <span class="op">=</span> self.cabeza
+        <span class="kw">while</span> <span class="var">actual</span>:
+            <span class="fn">print</span>(<span class="var">actual</span>.dato)
+            <span class="var">actual</span> <span class="op">=</span> <span class="var">actual</span>.siguiente
+
+<span class="var">historial</span> <span class="op">=</span> <span class="cls">ListaEnlazada</span>()
+<span class="kw">for</span> <span class="var">item</span> <span class="kw">in</span> [
+    {<span class="str">"id"</span>: <span class="num">1</span>, <span class="str">"estado"</span>: <span class="str">"asistida"</span>},
+    {<span class="str">"id"</span>: <span class="num">2</span>, <span class="str">"estado"</span>: <span class="str">"seguimiento"</span>},
+    {<span class="str">"id"</span>: <span class="num">3</span>, <span class="str">"estado"</span>: <span class="str">"asistida"</span>}
+]:
+    <span class="var">historial</span>.<span class="fn">insertar_al_final</span>(<span class="var">item</span>)
+
+<span class="fn">print</span>(<span class="str">"Antes de invertir:"</span>)
+<span class="var">historial</span>.<span class="fn">recorrer</span>()
+<span class="var">historial</span>.<span class="fn">invertir</span>()
+<span class="fn">print</span>(<span class="str">"Después de invertir:"</span>)
+<span class="var">historial</span>.<span class="fn">recorrer</span>()</pre></div><p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p></div></section><section id="actividad" class="card"><h2>⚙️ Actividad presencial (HAD + HP = 4 horas)</h2><div class="activity-card"><h3>🧪 Gestión Avanzada del Historial</h3><p><strong>Propósito:</strong> Implementar las operaciones completas CRUD en la lista enlazada del historial terapéutico de NeuroBiz.</p><p><strong>Verbo Bloom explícito:</strong> Aplicar · probar · analizar · justificar</p><p><strong>Duración total:</strong> 240 minutos presenciales con acompañamiento, demostración, laboratorio y cierre formativo.</p><h3>Instrucciones claras para el estudiante</h3><ol class="step-list"><li>Parte de la clase base de la semana 8 y agrega métodos buscar, eliminar, insertar_en_posicion e invertir.</li><li>Prueba cada operación con un historial de 5 nodos y documenta qué ocurre con la cabeza en cada caso especial.</li><li>Elimina al menos una sesión cancelada y justifica por qué el resto del historial sigue siendo coherente.</li><li>Invierte la lista y explica qué valor ejecutivo tiene ver primero las sesiones más recientes.</li><li>Presenta al cierre una mini auditoría: qué errores detectaste y cómo los corregiste.</li></ol><div class="info-box tip"><div class="icon">✅</div><p><strong>Producto esperado:</strong> Colab con operaciones CRUD completas y pruebas sobre un historial de al menos 5 sesiones.</p></div><div class="info-box warn"><div class="icon">🎯</div><p><strong>Criterio de evidencia:</strong> La evaluación prioriza manejo correcto de referencias, prueba de casos límite y lectura crítica del valor de cada operación para el negocio.</p></div><h3>🕹️ Framework GAME en acción</h3><div class="game-grid"><article class="game-card"><h4>Guiar</h4><p>El docente modela un caso límite por operación para anticipar errores comunes.</p></article><article class="game-card"><h4>Articular</h4><p>Se enlazan estructura, mantenimiento del historial y lectura gerencial del dato.</p></article><article class="game-card"><h4>Motivar</h4><p>La actividad se plantea como una misión de saneamiento y visualización ejecutiva del historial clínico.</p></article><article class="game-card"><h4>Evaluar</h4><p>Se valoran funcionalidad, pruebas, explicación de casos límite y quiz formativo.</p></article></div></div><div class="dojo-panel"><h3>🏆 Panel ClassDojo — puntos de la misión</h3><p>Los puntos se asignan por evidencia observable y concreta, no por impresiones generales. Usa esta tabla como guía de comportamiento y desempeño.</p><div class="table-wrap"><table><thead><tr><th>Momento</th><th>Criterio concreto</th><th>Puntos</th></tr></thead><tbody><tr><td>Inicio</td><td>Recupera correctamente la estructura base de la semana 8</td><td class="points">+1</td></tr><tr><td>CRUD</td><td>Implementa al menos tres operaciones sin romper la lista</td><td class="points">+2</td></tr><tr><td>Casos límite</td><td>Maneja cabeza, lista vacía o id inexistente</td><td class="points">+2</td></tr><tr><td>Análisis</td><td>Explica utilidad gerencial de invertir o depurar la lista</td><td class="points">+1</td></tr><tr><td>Cierre</td><td>Documenta pruebas y participa en síntesis final</td><td class="points">+1</td></tr></tbody></table></div></div><h3>🏠 HTI — Trabajo independiente con dos rutas</h3><p class="lead">Ambos escenarios profundizan la semana. El Escenario A desarrolla más dominio técnico; el Escenario B sostiene continuidad conceptual y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>.</p><article class="scenario a"><div class="scenario-header"><span>HTI Escenario A — Fusionar dos listas enlazadas de sedes distintas de NeuroBiz</span><span>60–90 min · entrega digital</span></div><div class="scenario-body"><p>Implementa una función que reciba dos listas enlazadas de pacientes de dos sedes distintas y construya una sola lista consolidada.</p><p>Debes explicar si la fusión conserva el orden original o si requiere un criterio adicional. Incluye pruebas con al menos 3 nodos por lista.</p><p>Entrega: notebook funcional, esquema breve de la estrategia usada y comentario sobre el valor administrativo de consolidar sedes.</p><div class="scenario-note">Escenario A consolida dominio estructural y prepara para pensar en integración de fuentes de datos.</div></div></article><article class="scenario b"><div class="scenario-header"><span>HTI Escenario B — Trazado paso a paso de eliminar(nodo)</span><span>20–30 min · cuaderno/papel</span></div><div class="scenario-body"><p>Dibuja una lista de 5 nodos y muestra paso a paso la operación <code>eliminar</code> para un nodo intermedio.</p><p>Marca dónde están <em>anterior</em>, <em>actual</em> y qué referencia cambia cuando el nodo desaparece.</p><p>Este escenario es de bajo umbral y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>; su propósito es reforzar precisión visual sobre las referencias.</p><div class="scenario-note">Úsalo cuando el estudiante necesita fijar la lógica del reencadenamiento antes de fusionar o invertir estructuras.</div></div></article></section><section id="quiz" class="card"><h2>🎮 Quiz de verificación — Quizizz</h2><div class="quiz-box"><p><strong>Modalidad sugerida:</strong> 5 preguntas · 8 a 10 minutos · retroalimentación inmediata. Las respuestas correctas están ocultas y aparecen al pasar el cursor sobre cada tarjeta.</p><div class="quiz-grid"><article class="quiz-item" tabindex="0"><h4>Pregunta 1</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Qué debe cuidarse al eliminar un nodo de una lista enlazada?</strong></p><ol class="quiz-options"><li>Cambiar el color del nodo</li><li>Actualizar la referencia del nodo anterior o la cabeza</li><li>Ordenar toda la lista</li><li>Crear una tupla</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La operación crítica es reencadenar correctamente la lista.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 2</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Para qué sirve insertar en posición?</strong></p><ol class="quiz-options"><li>Para borrar todos los nodos</li><li>Para añadir una sesión en un punto específico del historial</li><li>Para evitar recorrer la lista</li><li>Para reemplazar la cabeza siempre</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> Permite ubicar seguimientos o correcciones en el punto adecuado.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 3</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>Invertir una lista enlazada simple implica…</strong></p><ol class="quiz-options"><li>copiar los datos a una lista de Python obligatoriamente</li><li>cambiar la dirección de los enlaces entre nodos</li><li>eliminar la cabeza</li><li>usar búsqueda binaria</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La inversión real ocurre al reorientar referencias.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 4</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Qué caso límite merece atención especial en eliminar?</strong></p><ol class="quiz-options"><li>Cuando el nodo está al inicio o la lista está vacía</li><li>Cuando la lista tiene texto</li><li>Cuando el computador es lento</li><li>Cuando se usa Quizizz</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La cabeza y la lista vacía son casos límite centrales.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 5</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Por qué estas operaciones se asocian a una lógica CRUD?</strong></p><ol class="quiz-options"><li>Porque usan colores distintos</li><li>Porque crean, leen, actualizan e incluso eliminan elementos de una estructura</li><li>Porque son exclusivamente de bases de datos SQL</li><li>Porque solo sirven para pacientes</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La analogía CRUD ayuda a vincular estructuras con flujos reales de información.</div></article></div></div></section><section id="bib" class="card"><h2>📖 Bibliografía en formato APA</h2><div class="mini-card"><p>Las siguientes fuentes sostienen la teoría de la semana y legitiman el enfoque de Python como herramienta analítica para resolver problemas organizacionales del caso NeuroBiz.</p><ul><li>Cairó Battistutti, O., & Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li><li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill.</li><li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li><li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial.</li><li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li><li>Google Colaboratory. (2024). <em>Google Colaboratory</em>. https://colab.research.google.com</li></ul></div></section></main><footer>TGA05 · Semana 9 · Material del estudiante · Framework GAME · Caso transversal NeuroBiz S.A.S. · ODS 7 y 13</footer><script>document.addEventListener('DOMContentLoaded', function () {var bar = document.querySelector('.xp-bar'); if (bar) {requestAnimationFrame(function () {bar.style.width = bar.dataset.progress + '%';});}});</script>
+<script id="progress-tracker-js">
+// ════════════════════════════════════════════════════
+//  NeuroBiz Progress Tracker · Semana 9
+// ════════════════════════════════════════════════════
+
+const PT = (function() {
+  const SEMANA       = 9;
+  const XP_BASE      = 45;          // XP base por abrir el material
+  const XP_MAX       = 100;
+  const LS_KEY       = `tga05_s9`;
+  const LS_GLOBAL    = "tga05_global";
+
+  // URL del Apps Script — reemplaza con tu URL al configurar
+  // Ver: EstructuraDatos/setup/CONFIGURAR_PROGRESO.html
+  const SHEETS_URL = localStorage.getItem("tga05_sheets_url") || "";
+
+  let state = {
+    nombre          : "",
+    id_estudiante   : "",
+    semana          : SEMANA,
+    xp              : XP_BASE,
+    quiz_respuestas : {},
+    quiz_puntaje    : 0,
+    hti_entregado   : false,
+    actividad_completada: false,
+    dispositivo     : navigator.userAgent.substring(0, 80)
+  };
+
+  // ── Cargar desde localStorage ──────────────────────
+  function load() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (raw) Object.assign(state, JSON.parse(raw));
+
+      // Cargar nombre/id del perfil global si no está en esta semana
+      const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
+      if (!state.nombre       && global.nombre)        state.nombre        = global.nombre;
+      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante;
+    } catch(e) { console.warn("PT load error:", e); }
+  }
+
+  // ── Guardar en localStorage ────────────────────────
+  function save() {
+    // Capturar nombre del input
+    const inp = document.getElementById("pt-nombre");
+    if (inp && inp.value.trim()) {
+      state.nombre = inp.value.trim();
+      // Generar ID si no existe
+      if (!state.id_estudiante) {
+        state.id_estudiante = state.nombre.toLowerCase()
+          .replace(/\s+/g,"_").replace(/[^a-z0-9_]/g,"")
+          .substring(0,20) + "_" + Math.random().toString(36).substr(2,4);
+      }
+      // Guardar perfil global
+      const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
+      global.nombre = state.nombre;
+      global.id_estudiante = state.id_estudiante;
+      localStorage.setItem(LS_GLOBAL, JSON.stringify(global));
+    }
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+    render();
+  }
+
+  // ── Renderizar widget ──────────────────────────────
+  function render() {
+    const xpBar   = document.getElementById("pt-xp-bar");
+    const xpCount = document.getElementById("pt-xp-count");
+    const semLbl  = document.getElementById("pt-semana-label");
+    const inp     = document.getElementById("pt-nombre");
+
+    if (xpBar)   xpBar.style.width   = Math.min(state.xp, XP_MAX) + "%";
+    if (xpCount) xpCount.textContent = state.xp + " XP";
+    if (semLbl)  semLbl.textContent  = "Semana " + SEMANA;
+    if (inp && !inp.value && state.nombre) inp.value = state.nombre;
+
+    // Sync original XP bars in the page
+    document.querySelectorAll(".xp-fill,[data-target]").forEach(el => {
+      el.style.width = Math.min(state.xp, XP_MAX) + "%";
+    });
+    const xpCounters = document.querySelectorAll("#xpCount,.xp-row strong");
+    xpCounters.forEach(el => { el.textContent = state.xp + " XP"; });
+  }
+
+  // ── Sumar XP ──────────────────────────────────────
+  function addXP(pts, motivo) {
+    state.xp = Math.min(state.xp + pts, XP_MAX);
+    msg("✨ +" + pts + " XP — " + motivo, "lime");
+    save();
+  }
+
+  // ── Sincronizar con Supabase + Google Sheets ──────
+  async function syncCloud() {
+    save();
+    const sheetsUrl = localStorage.getItem("tga05_sheets_url") || "";
+    const sbUrl     = localStorage.getItem("tga05_supabase_url") || "";
+    const sbKey     = localStorage.getItem("tga05_supabase_key") || "";
+
+    if (!sheetsUrl && !sbUrl) {
+      msg("⚠️ Sin destino configurado. Ver CONFIGURAR_SUPABASE.html", "orange");
+      return;
+    }
+
+    msg("⏳ Sincronizando…", "#fff9c4");
+    let synced = false;
+
+    // ── Supabase (recomendado) ─────────────────────
+    if (sbUrl && sbKey) {
+      try {
+        const res = await fetch(sbUrl + "/rest/v1/student_progress", {
+          method : "POST",
+          headers: {
+            "apikey"       : sbKey,
+            "Authorization": "Bearer " + sbKey,
+            "Content-Type" : "application/json",
+            "Prefer"       : "resolution=merge-duplicates"
+          },
+          body: JSON.stringify({
+            student_name    : state.nombre         || "Anónimo",
+            student_id      : state.id_estudiante  || "desconocido",
+            semana          : state.semana,
+            xp              : state.xp             || 0,
+            quiz_answers    : state.quiz_respuestas || {},
+            quiz_score      : state.quiz_puntaje    || 0,
+            hti_done        : !!state.hti_entregado,
+            activity_done   : !!state.actividad_completada,
+            updated_at      : new Date().toISOString()
+          })
+        });
+        if (res.ok || res.status === 201) {
+          synced = true;
+          msg("✅ Guardado en Supabase ☁️", "lightgreen");
+        } else {
+          msg("❌ Supabase: error " + res.status, "salmon");
+        }
+      } catch(e) {
+        msg("❌ Sin conexión (Supabase). Local guardado.", "salmon");
+      }
+    }
+
+    // ── Google Sheets (opcional adicional) ─────────
+    if (sheetsUrl) {
+      try {
+        const resp = await fetch(sheetsUrl, {
+          method : "POST",
+          headers: { "Content-Type": "text/plain" },
+          body   : JSON.stringify(state)
+        });
+        const json = await resp.json();
+        if (json.ok) {
+          synced = true;
+          msg(sbUrl ? "✅ Guardado en Supabase + Sheets" : "✅ Guardado en Google Sheets", "lightgreen");
+        } else {
+          if (!synced) msg("❌ Sheets: " + (json.error || "Error"), "salmon");
+        }
+      } catch(e) {
+        if (!synced) msg("❌ Sin conexión. Solo guardado local.", "salmon");
+      }
+    }
+  }
+
+  // ── Exportar código de progreso ────────────────────
+  function exportCode() {
+    save();
+    const code = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+    const ta = document.createElement("textarea");
+    ta.value = code;
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy");
+    document.body.removeChild(ta);
+    msg("📋 ¡Código copiado! Guárdalo en Google Drive o OneDrive.", "#fff9c4");
+    // También abrir como descarga
+    const a = document.createElement("a");
+    a.href     = "data:text/plain;charset=utf-8," + encodeURIComponent(code);
+    a.download = "progreso_tga05_s9_" + (state.id_estudiante || "estudiante") + ".txt";
+    a.click();
+  }
+
+  // ── Importar desde código ──────────────────────────
+  function importCode() {
+    const code = prompt("Pega tu código de progreso:");
+    if (!code) return;
+    try {
+      const decoded = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+      Object.assign(state, decoded);
+      save();
+      msg("✅ Progreso restaurado correctamente.", "lightgreen");
+    } catch(e) {
+      msg("❌ Código inválido.", "salmon");
+    }
+  }
+
+  // ── Toggle widget ──────────────────────────────────
+  function toggle() {
+    const w = document.getElementById("pt-widget");
+    const t = document.getElementById("pt-toggle");
+    if (w) w.classList.toggle("collapsed");
+    if (t) t.textContent = w && w.classList.contains("collapsed") ? "▼" : "▲";
+  }
+
+  // ── Mensaje en widget ──────────────────────────────
+  function msg(text, color) {
+    const el = document.getElementById("pt-msg");
+    if (!el) return;
+    el.textContent = text;
+    el.style.color = color || "#fff";
+    setTimeout(() => { if (el.textContent === text) el.textContent = ""; }, 4000);
+  }
+
+  // ── Init ───────────────────────────────────────────
+  function init() {
+    load();
+    render();
+
+    // XP por visitar la semana (solo una vez por semana)
+    const visitKey = `tga05_visited_s9`;
+    if (!localStorage.getItem(visitKey)) {
+      localStorage.setItem(visitKey, "1");
+      addXP(15, "Material de Semana 9 abierto");
+    }
+
+    // Hacer quiz interactivo si hay preguntas con clase .quiz-q
+    document.querySelectorAll(".quiz-q").forEach((qEl, qi) => {
+      const answers = qEl.querySelectorAll("li");
+      // Buscar la respuesta oculta (.quiz-answer)
+      const answerEl = qEl.querySelector(".quiz-answer");
+      const correctText = answerEl ? answerEl.textContent : "";
+      const correctLetter = correctText.match(/^✅\s*([a-d])/i);
+      const correctIdx = correctLetter
+        ? ["a","b","c","d"].indexOf(correctLetter[1].toLowerCase())
+        : -1;
+
+      answers.forEach((li, ai) => {
+        li.style.cursor = "pointer";
+        li.style.borderRadius = "6px";
+        li.style.padding = "3px 8px";
+        li.style.transition = "background .2s";
+        li.addEventListener("mouseenter", () => {
+          if (!li.dataset.answered) li.style.background = "rgba(25,118,210,.15)";
+        });
+        li.addEventListener("mouseleave", () => {
+          if (!li.dataset.answered) li.style.background = "";
+        });
+        li.addEventListener("click", () => {
+          const key = "q" + qi;
+          if (state.quiz_respuestas[key] !== undefined) return; // ya respondida
+          answers.forEach(a => { a.dataset.answered = "1"; });
+          if (ai === correctIdx) {
+            li.style.background = "#2e7d32";
+            li.style.color = "#fff";
+            addXP(10, "Respuesta correcta en quiz");
+            state.quiz_puntaje = (state.quiz_puntaje || 0) + 1;
+          } else {
+            li.style.background = "#c62828";
+            li.style.color = "#fff";
+            if (correctIdx >= 0) {
+              answers[correctIdx].style.background = "#2e7d32";
+              answers[correctIdx].style.color = "#fff";
+            }
+          }
+          state.quiz_respuestas[key] = ai;
+          if (answerEl) answerEl.style.display = "block";
+          save();
+        });
+      });
+
+      // Restaurar estado previo
+      const prevKey = "q" + qi;
+      if (state.quiz_respuestas[prevKey] !== undefined) {
+        const prev = state.quiz_respuestas[prevKey];
+        answers.forEach(a => { a.dataset.answered = "1"; });
+        if (prev === correctIdx && correctIdx >= 0) {
+          answers[prev].style.background = "#2e7d32";
+          answers[prev].style.color = "#fff";
+        } else {
+          if (prev < answers.length) {
+            answers[prev].style.background = "#c62828";
+            answers[prev].style.color = "#fff";
+          }
+          if (correctIdx >= 0) {
+            answers[correctIdx].style.background = "#2e7d32";
+            answers[correctIdx].style.color = "#fff";
+          }
+        }
+        if (answerEl) answerEl.style.display = "block";
+      }
+    });
+
+    // XP por configurar nombre
+    const nombreInp = document.getElementById("pt-nombre");
+    if (nombreInp) {
+      nombreInp.addEventListener("blur", () => {
+        if (nombreInp.value.trim() && !state._nombre_xp) {
+          state._nombre_xp = true;
+          addXP(5, "Perfil configurado");
+        }
+      });
+    }
+  }
+
+  return {
+    init,
+    addXP,
+    save  : save,
+    sync  : syncCloud,
+    export: exportCode,
+    import: importCode,
+    toggle,
+    state : () => state
+  };
+})();
+
+// ── Exponer funciones para botones HTML ────────────────────
+function ptSaveLocal()  { PT.save(); }
+function ptSyncCloud()  { PT.sync(); }
+function ptExportCode() { PT.export(); }
+function ptImportCode() { PT.import(); }
+function ptToggle()     { PT.toggle(); }
+
+// ── Inicializar cuando cargue el DOM ───────────────────────
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", PT.init);
+} else {
+  PT.init();
+}
+</script>
+
+<!-- ── WELCOME MODAL ── -->
+<style id="welcome-modal-css">
+#pt-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeIn .3s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+#pt-modal-box{
+  background:linear-gradient(160deg,#1E2843,#1E2843 70%,#2d3a5e);
+  color:#fff;border-radius:20px;padding:2rem 2rem 1.5rem;
+  width:min(94vw,400px);box-shadow:0 20px 60px rgba(0,0,0,.5);
+  position:relative;animation:slideUp .35s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+#pt-modal-box h2{font-size:1.25rem;font-weight:900;margin-bottom:.3rem}
+#pt-modal-box .sub{opacity:.75;font-size:.85rem;margin-bottom:1.3rem}
+#pt-modal-box .field{margin-bottom:.9rem}
+#pt-modal-box label{display:block;font-size:.78rem;font-weight:700;
+  opacity:.85;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em}
+#pt-modal-box input{
+  width:100%;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.35);
+  border-radius:10px;padding:.6rem .9rem;color:#fff;font-size:.95rem;outline:none;
+}
+#pt-modal-box input::placeholder{color:rgba(255,255,255,.45)}
+#pt-modal-box input:focus{border-color:rgba(249,168,37,.9)}
+#pt-modal-btn{
+  width:100%;padding:.7rem;border:none;border-radius:12px;
+  background:linear-gradient(135deg,#FFDF2D,#FFDF2D);
+  color:#1E2843;font-weight:900;font-size:1rem;cursor:pointer;
+  margin-top:.4rem;transition:opacity .15s;
+}
+#pt-modal-btn:hover{opacity:.9}
+#pt-modal-error{color:#ff8a80;font-size:.8rem;margin-top:.5rem;min-height:1em}
+#pt-modal-xp{
+  text-align:center;font-size:.78rem;opacity:.7;margin-top:.7rem;
+}
+</style>
+
+<div id="pt-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="pt-modal-title">
+  <div id="pt-modal-box">
+    <h2 id="pt-modal-title">👋 ¡Bienvenido a TGA05!</h2>
+    <p class="sub">NeuroBiz S.A.S. · Estructura de Datos para los Negocios</p>
+    <div class="field">
+      <label for="pt-modal-nombre">Tu nombre completo *</label>
+      <input id="pt-modal-nombre" type="text" placeholder="Ej: María García López"
+        autocomplete="name" autofocus
+        onkeydown="if(event.key==='Enter')ptModalSetup()" />
+    </div>
+    <div class="field">
+      <label for="pt-modal-grupo">Grupo / Paralelo</label>
+      <input id="pt-modal-grupo" type="text" placeholder="Ej: GA-01" />
+    </div>
+    <button id="pt-modal-btn" onclick="ptModalSetup()">¡Empezar! 🚀</button>
+    <div id="pt-modal-error"></div>
+    <p id="pt-modal-xp">⭐ Recibirás +5 XP por configurar tu perfil</p>
+  </div>
+</div>
+
+<script id="welcome-modal-js">
+(function () {
+  function shouldShowModal() {
+    try {
+      var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
+      return !g.nombre || g.nombre.trim().length < 2;
+    } catch(e) { return true; }
+  }
+
+  function showModal() {
+    var overlay = document.getElementById("pt-overlay");
+    if (overlay) {
+      overlay.style.display = "flex";
+      var inp = document.getElementById("pt-modal-nombre");
+      // Pre-fill if there's a partial name saved
+      try {
+        var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
+        if (g.nombre && inp) inp.value = g.nombre;
+        var gInp = document.getElementById("pt-modal-grupo");
+        if (g.grupo && gInp) gInp.value = g.grupo;
+      } catch(e) {}
+      if (inp) setTimeout(function(){ inp.focus(); }, 100);
+    }
+  }
+
+  window.ptModalSetup = function() {
+    var nombreInp = document.getElementById("pt-modal-nombre");
+    var grupoInp  = document.getElementById("pt-modal-grupo");
+    var errEl     = document.getElementById("pt-modal-error");
+    var nombre    = nombreInp ? nombreInp.value.trim() : "";
+    var grupo     = grupoInp  ? grupoInp.value.trim()  : "";
+
+    if (!nombre || nombre.length < 3) {
+      if (errEl) errEl.textContent = "Por favor escribe tu nombre completo (mínimo 3 caracteres).";
+      if (nombreInp) nombreInp.focus();
+      return;
+    }
+
+    // Build / update global profile
+    var profile = {};
+    try { profile = JSON.parse(localStorage.getItem("tga05_global") || "{}"); } catch(e) {}
+
+    profile.nombre = nombre;
+    if (grupo) profile.grupo = grupo;
+    if (!profile.id_estudiante) {
+      profile.id_estudiante = nombre.toLowerCase()
+        .replace(/\s+/g, "_").replace(/[^a-z0-9_áéíóúñ]/g, "")
+        .substring(0, 22) + "_" + Math.random().toString(36).substr(2, 4);
+    }
+    localStorage.setItem("tga05_global", JSON.stringify(profile));
+
+    // Sync into the PT widget name input
+    var ptInp = document.getElementById("pt-nombre");
+    if (ptInp) { ptInp.value = nombre; ptInp.dispatchEvent(new Event("input")); }
+
+    // XP reward
+    if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
+      PT.addXP(5, "Perfil configurado ✨");
+    }
+
+    // Close modal
+    var overlay = document.getElementById("pt-overlay");
+    if (overlay) {
+      overlay.style.opacity = "0";
+      overlay.style.transition = "opacity .2s";
+      setTimeout(function(){ overlay.style.display = "none"; overlay.style.opacity = ""; }, 200);
+    }
+
+    // Auto-sync to Supabase after a short delay
+    setTimeout(function(){
+      if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
+    }, 800);
+  };
+
+  // Show on load if no name
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function(){
+      if (shouldShowModal()) showModal();
+    });
+  } else {
+    if (shouldShowModal()) showModal();
+  }
+})();
+</script>
+
+</body></html>

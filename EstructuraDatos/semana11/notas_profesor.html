@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Notas del profesor Semana 11 - Listas Doblemente Enlazadas</title>
+<style>
+:root{
+    --primary:#1b5e20;
+    --secondary:#2e7d32;
+    --gold:      #FFDF2D;
+    --bg:#f3f8f4;
+    --card:#ffffff;
+    --text:#17301a;
+    --muted:#4f6b54;
+    --surface:#eef7ef;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;line-height:1.62;background:linear-gradient(180deg,#eef7ef 0%,#f8fbf8 40%,#edf7ef 100%);color:var(--text)}
+header.hero{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:30px 20px 20px;box-shadow:0 12px 28px rgba(27,94,32,.24)}
+.header-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.4fr .8fr;gap:24px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);padding:8px 14px;border-radius:999px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.hero h1{margin:14px 0 8px;font-size:clamp(1.9rem,4vw,2.8rem)}
+.hero p{margin:0;color:#e8f5e9}
+.hero-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:18px;border-radius:18px}
+.hero-box strong{display:block;font-size:1.08rem;margin-bottom:8px}
+nav.sticky{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);box-shadow:0 8px 18px rgba(15,23,42,.08)}
+nav.sticky .nav-wrap{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;gap:10px;flex-wrap:wrap}
+nav.sticky a{text-decoration:none;color:#1b5e20;font-weight:800;padding:10px 14px;background:#eef7ef;border-radius:999px;border:1px solid #c8e6c9}
+main{max-width:1180px;margin:24px auto;padding:0 20px 48px}
+.card{background:var(--card);border-radius:22px;padding:26px;border-left:7px solid var(--gold);box-shadow:0 18px 38px rgba(15,23,42,.07);margin-bottom:24px}
+.card h2{margin-top:0;color:#1b5e20}
+.card h3{color:#2e7d32}
+.alert{display:inline-block;background:#c8e6c9;color:#1b5e20;padding:10px 16px;border-radius:999px;font-weight:900;margin:10px 0 4px}
+.two-col,.three-col{display:grid;gap:18px}
+.two-col{grid-template-columns:repeat(2,minmax(0,1fr))}
+.three-col{grid-template-columns:repeat(3,minmax(0,1fr))}
+.subcard{background:#f8fbf8;border:1px solid #dcedc8;border-radius:18px;padding:18px}
+.meta-table,.dojo-table,.rubric-table{width:100%;border-collapse:collapse;margin-top:16px;border-radius:16px;overflow:hidden}
+.meta-table th,.meta-table td,.dojo-table th,.dojo-table td,.rubric-table th,.rubric-table td{padding:12px 14px;border:1px solid #dcedc8;vertical-align:top}
+.meta-table th,.dojo-table th,.rubric-table th{background:#e8f5e9;color:#1b5e20;text-align:left}
+.check-list li,.observer-list li{margin-bottom:8px}
+.timeline{display:grid;gap:18px;margin-top:16px}
+.timeline-item{display:grid;grid-template-columns:150px 1fr;gap:14px}
+.timeline-time{background:#e8f5e9;border-radius:16px;padding:14px;font-weight:900;text-align:center;color:#1b5e20}
+.timeline-content{background:#f8fbf8;border:1px solid #dcedc8;border-radius:18px;padding:16px}
+.script{background:#fff8e1;border:1px solid #ffe082;border-radius:14px;padding:14px;margin-top:12px}
+.contingency{background:#fff;border:1px solid #dcedc8;border-radius:18px;padding:18px}
+.quiz-answer{background:#f1f8e9;border:1px solid #aed581;border-radius:14px;padding:12px;margin-top:12px}
+.tag{display:inline-block;background:#e8f5e9;color:#1b5e20;border-radius:999px;padding:6px 10px;font-weight:800;margin:0 8px 8px 0}
+@media (max-width:1024px){.header-grid,.two-col,.three-col,.timeline-item{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class='hero'>
+  <div class='header-grid'>
+    <div class='hero'>
+      <span class='badge'>🟢 USO EXCLUSIVO DOCENTE</span>
+      <h1>Semana 11 · Listas Doblemente Enlazadas</h1>
+      <p>Navegación bidireccional del historial terapéutico en NeuroBiz.</p>
+      <div class='alert'>Uso exclusivo docente</div>
+    </div>
+    <aside class='hero-box'>
+      <strong>Meta rápida</strong>
+      <p>Sesión de 240 minutos con secuencia completa GAME, Bloom explícito, puntos ClassDojo, quiz de cierre y articulación permanente con KPI NeuroBiz.</p>
+      <p><strong>Entorno sugerido:</strong> Google Colab o Replit + tablero + equipos de 3 estudiantes.</p>
+    </aside>
+  </div>
+</header>
+<nav class='sticky'>
+  <div class='nav-wrap'>
+    <a href='#meta'>Meta</a>
+    <a href='#checklist'>Checklist</a>
+    <a href='#secuencia'>Secuencia</a>
+    <a href='#dojo'>ClassDojo</a>
+    <a href='#quiz'>Quiz</a>
+    <a href='#hti'>Decisión HTI</a>
+    <a href='#contingencias'>Contingencias</a>
+    <a href='#cierre'>Cierre</a>
+  </div>
+</nav>
+<main>
+  <section id='meta' class='card'>
+    <h2>🎯 Meta de sesión (RA + CE + Bloom)</h2>
+    <table class='meta-table'>
+      <tr><th>Resultado de aprendizaje</th><td>RA3 · Analiza estructuras de datos no lineales y variantes avanzadas para decisiones de negocio.</td></tr>
+      <tr><th>Criterios de evaluación</th><td><span class="tag">CE1: implementa recorridos bidireccionales</span><span class="tag">CE2: mantiene consistencia de enlaces</span><span class="tag">CE3: evalúa pertinencia estructural</span></td></tr>
+      <tr><th>Nivel Bloom</th><td>Analizar → Evaluar</td></tr>
+      <tr><th>Meta observable</th><td>Al finalizar, el estudiante construye un historial con navegación adelante/atrás, compara sesiones con un KPI y evalúa la pertinencia de usar doble enlace frente a alternativas más simples.</td></tr>
+    </table>
+  </section>
+
+  <section id='checklist' class='card'>
+    <h2>✅ Checklist pre-clase</h2>
+    <div class='three-col'><div class='subcard'><h3>Pedagógico</h3><ul class='check-list'><li>Preparar un caso clínico breve con cuatro sesiones contrastables.</li><li>Tener una pregunta comparativa: ¿qué se pierde si solo se avanza?</li><li>Visibilizar el paso Bloom: analizar → evaluar.</li></ul></div><div class='subcard'><h3>Tecnológico</h3><ul class='check-list'><li>Notebook con estructura base de NodoDoble.</li><li>Archivo de datos de 4 sesiones de ejemplo.</li><li>Proyector listo para mostrar depuración de enlaces.</li></ul></div><div class='subcard'><h3>Materiales</h3><ul class='check-list'><li>Cinta o tarjetas para representar punteros prev/next.</li><li>Marcadores verde y azul para ambos sentidos.</li><li>Rúbrica impresa para revisión rápida entre pares.</li></ul></div></div>
+  </section>
+
+  <section id='secuencia' class='card'>
+    <h2>⏱️ Secuencia minuto a minuto (240 min)</h2>
+    <div class='timeline'><article class='timeline-item'><div class='timeline-time'>0–20</div><div class='timeline-content'><h3>Apertura clínica</h3><p>Presentar el caso de un terapeuta que necesita retroceder una sesión para comparar progreso y patrón conductual.</p><div class='script'><strong>Guion sugerido:</strong> “Si solo pudiéramos avanzar, ¿cómo justificaríamos una decisión clínica comparativa?”</div></div></article><article class='timeline-item'><div class='timeline-time'>20–45</div><div class='timeline-content'><h3>Representación física</h3><p>Usar estudiantes o tarjetas como nodos y cuerdas para representar anterior/siguiente.</p><div class='script'><strong>Guion sugerido:</strong> “Quiero que el curso vea que cada sesión mira hacia delante y hacia atrás; esa es la metáfora central”.</div></div></article><article class='timeline-item'><div class='timeline-time'>45–70</div><div class='timeline-content'><h3>Conceptualización</h3><p>Explicar cabeza, cola y ajuste doble al eliminar un nodo intermedio.</p><div class='script'><strong>Guion sugerido:</strong> “Si quitamos la sesión 2, ¿quién debe recordar a quién? nombren ambos enlaces antes de tocar código”.</div></div></article><article class='timeline-item'><div class='timeline-time'>70–105</div><div class='timeline-content'><h3>Codificación guiada</h3><p>Desarrollar insertar_final y recorrer_adelante. Hacer una pausa para que el grupo prediga la salida.</p><div class='script'><strong>Guion sugerido:</strong> “Antes de ejecutar, formulen la salida como si fueran la lista; eso reduce errores por ensayo ciego”.</div></div></article><article class='timeline-item'><div class='timeline-time'>105–120</div><div class='timeline-content'><h3>Pausa / verificación</h3><p>Break corto y revisión por mesas de punteros mal conectados.</p><div class='script'><strong>Guion sugerido:</strong> “En la pausa quiero ver un esquema claro de cabeza y cola en cada equipo”.</div></div></article><article class='timeline-item'><div class='timeline-time'>120–165</div><div class='timeline-content'><h3>Laboratorio autónomo</h3><p>Cada equipo implementa recorrer_atras y eliminar. El docente retroalimenta solo cuando el equipo verbaliza el enlace que va a mover.</p><div class='script'><strong>Guion sugerido:</strong> “No corrijan con prisa: primero expliquen qué debe apuntar a qué; luego escriban la línea”.</div></div></article><article class='timeline-item'><div class='timeline-time'>165–200</div><div class='timeline-content'><h3>Análisis del historial</h3><p>Solicitar una comparación entre dos sesiones usando indice_progreso o tasa_retencion.</p><div class='script'><strong>Guion sugerido:</strong> “No basta navegar; quiero un juicio: ¿qué decisión tomaría el terapeuta con esta comparación?”</div></div></article><article class='timeline-item'><div class='timeline-time'>200–225</div><div class='timeline-content'><h3>Quizizz y cierre evaluativo</h3><p>Aplicar quiz formativo y pedir a dos equipos defender si una lista simple hubiera bastado.</p><div class='script'><strong>Guion sugerido:</strong> “Responder bien el quiz está bien, pero justificar la pertinencia de la estructura vale más”.</div></div></article><article class='timeline-item'><div class='timeline-time'>225–240</div><div class='timeline-content'><h3>Orientación HTI</h3><p>Asignar Escenario A a quienes dominen navegación doble y B a quienes aún necesiten visualización.</p><div class='script'><strong>Guion sugerido:</strong> “El escenario B es una ruta segura de consolidación y NO bloquea la siguiente sesión”.</div></div></article></div>
+  </section>
+
+  <section id='dojo' class='card'>
+    <h2>🏅 Tabla ClassDojo</h2>
+    <table class='dojo-table'>
+      <thead><tr><th>Momento</th><th>Acción observable</th><th>Criterio</th><th>Puntos</th></tr></thead>
+      <tbody><tr><td>Inicio</td><td>Relaciona el caso clínico con necesidad bidireccional</td><td>Comprensión contextual</td><td>+2</td></tr><tr><td>Conceptualización</td><td>Describe correctamente prev/next</td><td>Precisión estructural</td><td>+2</td></tr><tr><td>Laboratorio</td><td>Implementa doble recorrido y eliminación</td><td>Resolución técnica</td><td>+3</td></tr><tr><td>Análisis</td><td>Compara sesiones con KPI</td><td>Lectura analítica</td><td>+3</td></tr><tr><td>Cierre</td><td>Defiende la estructura frente a otra alternativa</td><td>Evaluación argumentada</td><td>+2</td></tr></tbody>
+    </table>
+  </section>
+
+  <section id='quiz' class='card'>
+    <h2>❓ Quiz con respuestas correctas marcadas</h2>
+    <div class='two-col'><div class='subcard'><h3>Pregunta 1</h3><p><strong>¿Qué agrega un nodo doble respecto a un nodo simple?</strong></p><ol type='A'><li>Un contador automático.</li><li>Un puntero anterior además del siguiente.</li><li>Un árbol interno.</li><li>Un índice decimal.</li></ol><div class='quiz-answer'>✅ Correcta: B. Un puntero anterior además del siguiente.<br>Esa característica habilita navegación reversible.</div></div><div class='subcard'><h3>Pregunta 2</h3><p><strong>¿Cuál es la ventaja principal en el historial terapéutico?</strong></p><ol type='A'><li>Buscar por hash.</li><li>Comparar sesiones avanzando y retrocediendo.</li><li>Eliminar todos los datos.</li><li>Evitar cualquier validación.</li></ol><div class='quiz-answer'>✅ Correcta: B. Comparar sesiones avanzando y retrocediendo.<br>La bidireccionalidad reduce tiempo de revisión clínica.</div></div><div class='subcard'><h3>Pregunta 3</h3><p><strong>Eliminar un nodo en una lista doble exige…</strong></p><ol type='A'><li>Ajustar dos enlaces.</li><li>Solo borrar una variable.</li><li>Ordenar alfabéticamente.</li><li>Convertir a cola.</li></ol><div class='quiz-answer'>✅ Correcta: A. Ajustar dos enlaces.<br>Deben mantenerse consistentes anterior y siguiente.</div></div><div class='subcard'><h3>Pregunta 4</h3><p><strong>¿Cuándo cobra sentido una lista doblemente enlazada circular?</strong></p><ol type='A'><li>Cuando se requiere continuidad en ambos sentidos.</li><li>Cuando no hay datos.</li><li>Solo para matrices.</li><li>Únicamente para textos.</li></ol><div class='quiz-answer'>✅ Correcta: A. Cuando se requiere continuidad en ambos sentidos.<br>La circularidad doble sirve para turnos o ciclos cerrados.</div></div><div class='subcard'><h3>Pregunta 5</h3><p><strong>En Bloom esta semana se evalúa porque el estudiante…</strong></p><ol type='A'><li>Copia una definición.</li><li>Juzga si la estructura es adecuada para el caso.</li><li>Solo memoriza punteros.</li><li>Evita comparar alternativas.</li></ol><div class='quiz-answer'>✅ Correcta: B. Juzga si la estructura es adecuada para el caso.<br>Evaluar implica emitir un juicio sustentado.</div></div></div>
+  </section>
+
+  <section id='hti' class='card'>
+    <h2>🏠 Cómo elegir Escenario A vs B</h2>
+    <p>Use Escenario A con estudiantes que ya resuelven inserción/eliminación sin apoyo directo. Reserve Escenario B para quienes aún requieren anclar visualmente los punteros o cuando el tiempo autónomo disponible sea corto. Enfatice que el Escenario B NO BLOQUEA la clase siguiente.</p>
+  </section>
+
+  <section class='card'>
+    <h2>🎮 Protocolo docente GAME para esta sesión</h2>
+    <div class='two-col'>
+      <div class='subcard'>
+        <h3>Guiar + Articular</h3>
+        <p>Abra la clase recordando que la estructura de datos no es un fin, sino una herramienta para tomar decisiones con impacto operativo. Durante la explicación, verbalice siempre la relación entre la estructura, la operación dominante y un KPI de NeuroBiz. Ese puente explícito ayuda a que el estudiantado no vea el contenido como programación aislada, sino como analítica aplicada a gestión administrativa.</p>
+        <p>Mientras circula por el aula, pida que los equipos nombren la estructura con vocabulario técnico y luego la traduzcan a lenguaje de negocio. Esta doble verbalización fortalece la articulación entre teoría, caso y evidencia observable.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Motivar + Evaluar</h3>
+        <p>Use ClassDojo como retroalimentación visible y no solo como premio final. Entregue puntos en momentos concretos: cuando el equipo detecta un error conceptual, cuando justifica una decisión estructural con evidencia o cuando apoya a otra mesa sin resolverle la tarea. Así la gamificación se convierte en una práctica de cultura académica.</p>
+        <p>En la evaluación de cierre, privilegie la explicación del porqué sobre la repetición mecánica del cómo. Un estudiante que argumenta con claridad la elección de la estructura y la conecta con KPI y proceso de negocio está mostrando un desempeño más sólido que quien solo ejecuta código sin justificarlo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>🧭 Preguntas de andamiaje y errores frecuentes</h2>
+    <div class='two-col'>
+      <div class='subcard'>
+        <h3>Preguntas de andamiaje</h3>
+        <ol class='check-list'><li>¿Qué gana el terapeuta cuando puede retroceder una sesión sin reconstruir el historial desde el inicio?</li><li>Si eliminamos la segunda sesión del historial, ¿qué dos enlaces deben actualizarse y qué error aparecería si olvidas uno de ellos?</li><li>¿Qué KPI ayuda más a justificar una comparación entre sesión previa y siguiente: indice_progreso, tasa_retencion u otro? Susténtalo.</li><li>¿En qué escenario real de NeuroBiz tendría sentido pasar de lista doble a lista doble circular y por qué?</li><li>¿Qué diferencia existe entre navegar un historial y solo almacenarlo? ¿Dónde aparece el valor analítico?</li><li>¿Cómo defenderías frente a la coordinación que la memoria adicional del nodo doble sí vale la pena en este caso?</li></ol>
+      </div>
+      <div class='subcard'>
+        <h3>Errores frecuentes a vigilar</h3>
+        <ul class='check-list'><li>Mover únicamente el puntero siguiente y olvidar el anterior, generando historiales que solo funcionan en una dirección.</li><li>Confundir cabeza con cola al recorrer hacia atrás y atribuir el error a Python cuando en realidad es un problema de modelado.</li><li>Eliminar un nodo del centro sin reconectar ambos vecinos, dejando segmentos aislados del historial.</li><li>Usar la estructura como simple lista de almacenamiento sin explotar la comparación bidireccional que le da sentido al caso.</li><li>Describir cambios de progreso sin evidencia cuantitativa, perdiendo el vínculo con KPI y análisis clínico.</li><li>Pensar que la versión circular siempre es mejor, sin preguntarse si el proceso realmente requiere continuidad cerrada.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>📍 Cortes de evidencia y microintervenciones</h2>
+    <div class='three-col'><div class='subcard'><h3>Min 50</h3><p><strong>Evidencia esperada:</strong> Los estudiantes ya diferencian visualmente prev y next y pueden explicar cabeza y cola.</p><p><strong>Movimiento docente:</strong> Si aún nombran solo “puntero”, obligue a distinguir dirección y función antes de avanzar.</p></div><div class='subcard'><h3>Min 100</h3><p><strong>Evidencia esperada:</strong> La clase recorre hacia adelante y al menos un equipo ya predice qué debe ocurrir al recorrer hacia atrás.</p><p><strong>Movimiento docente:</strong> Si todo depende del ensayo y error, pida que describan la salida esperada en el tablero antes de ejecutar.</p></div><div class='subcard'><h3>Min 170</h3><p><strong>Evidencia esperada:</strong> Existe una comparación real entre dos sesiones con al menos un KPI contextual.</p><p><strong>Movimiento docente:</strong> Si la comparación es superficial, solicite un juicio explícito: “¿qué concluye el terapeuta con esta diferencia?”.</p></div><div class='subcard'><h3>Min 230</h3><p><strong>Evidencia esperada:</strong> Cada equipo entiende si debe profundizar con circularidad o consolidar el diagrama manual.</p><p><strong>Movimiento docente:</strong> Si hay ansiedad por la HTI, recuerde verbalmente que el escenario B no bloquea la siguiente clase.</p></div></div>
+    <div class='two-col' style='margin-top:18px;'>
+      <div class='subcard'>
+        <h3>Microintervenciones rápidas</h3>
+        <ul class='check-list'><li><strong>Cuando falla recorrer_atras:</strong> Pida al equipo localizar la cola y seguir manualmente las flechas antes de revisar el código línea por línea.</li><li><strong>Cuando la eliminación rompe el historial:</strong> Invite a dibujar el antes y el después; la doble enlazadura se comprende mejor visualmente que por intuición textual.</li><li><strong>Cuando la lectura clínica es débil:</strong> Solicite una frase que conecte fecha, KPI y decisión terapéutica; sin esa frase la estructura aún no se ha apropiado.</li><li><strong>Cuando el grupo domina rápido:</strong> Proponga pensar la variante circular y que argumenten cuándo sí y cuándo no conviene usarla.</li></ul>
+      </div>
+      <div class='subcard'>
+        <h3>Preguntas frecuentes del estudiantado</h3>
+        <ul class='check-list'><li><strong>“¿No sería más fácil usar una lista normal?”</strong> Solo si bastara con avanzar. En cuanto el caso exige comparación retrospectiva, la lista doble evita reconstrucciones costosas.</li><li><strong>“¿Por qué la eliminación es más delicada?”</strong> Porque hay que preservar coherencia en dos direcciones; si una falla, la navegación queda incompleta o inconsistente.</li><li><strong>“¿Qué se evalúa exactamente?”</strong> No solo que la lista recorra, sino que el estudiante justifique por qué la bidireccionalidad tiene valor para el historial terapéutico.</li><li><strong>“¿La versión circular entra hoy en la nota?”</strong> Se usa como extensión analítica o HTI A; el núcleo de la semana es dominar la navegación doble en un historial finito.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>📝 Matriz rápida de observación docente</h2>
+    <table class='rubric-table'>
+      <thead><tr><th>Aspecto</th><th>Evidencia a recoger</th><th>Si no aparece, intervención sugerida</th></tr></thead>
+      <tbody><tr><td>Comprensión de prev/next</td><td>El estudiante nombra y dibuja ambos enlaces sin ambigüedad.</td><td>Usar un ejemplo corporal o con tarjetas donde cada sesión señale a su anterior y su siguiente.</td></tr><tr><td>Navegación bidireccional</td><td>El código o la simulación permite avanzar y retroceder sin errores.</td><td>Pedir una prueba mínima de 4 nodos antes de validar cualquier caso más grande.</td></tr><tr><td>Análisis clínico</td><td>Se compara al menos un KPI entre sesiones y se formula una lectura útil.</td><td>Entregar la pregunta marco: “¿qué cambió y por qué importa para el seguimiento?”.</td></tr><tr><td>Evaluación de pertinencia</td><td>El equipo puede explicar por qué eligió lista doble y no simple.</td><td>Solicitar una comparación explícita entre alternativas estructurales.</td></tr><tr><td>Trabajo del equipo</td><td>La explicación no recae en una sola persona y hay roles visibles.</td><td>Redistribuir la participación con microturnos de 30 segundos por integrante.</td></tr></tbody>
+    </table>
+  </section>
+ 
+  <section class='card'>
+    <h2>📚 Registro posclase y transferencia docente</h2>
+    <div class='three-col'>
+      <div class='subcard'>
+        <h3>Qué registrar al terminar</h3>
+        <p>Anote tres datos mínimos: qué estructura quedó consolidada, qué error persistente apareció y qué evidencia mostró transferencia al caso NeuroBiz. Ese registro breve ayuda a decidir si la siguiente sesión debe abrir con reactivación conceptual, con práctica guiada o con análisis de resultados. Evite registrar solo “les fue bien / mal”; documente qué operación concreta dominan y cuál aún requiere andamiaje.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Qué comunicar al grupo</h3>
+        <p>Cierre devolviendo una fortaleza observable y una mejora alcanzable. La retroalimentación más útil no es genérica, sino situada: “su estructura funciona, pero aún no está argumentada con KPI” o “la idea es correcta, pero deben verbalizar mejor la decisión de negocio”. Así la evaluación mantiene foco formativo y orienta el siguiente paso.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Cómo transferir al programa</h3>
+        <p>Conecte la sesión con escenarios de gestión administrativa: trazabilidad de procesos, asignación de recursos, consulta eficiente de registros, organización de historiales y soporte a decisiones. Esta explicitación final evita que el módulo se perciba como ajeno al campo profesional y fortalece la pertinencia curricular del TGA05.</p>
+      </div>
+    </div>
+    <div class='subcard' style='margin-top:18px;'>
+      <h3>Bibliografía docente de apoyo</h3>
+      <p>Use estas referencias para sostener explicaciones, ejemplos y justificaciones pedagógicas durante el módulo.</p>
+      <p>Recomendación operativa: al terminar la clase, marque en su planeador qué decisión curricular tomará la semana siguiente con base en la evidencia recogida: reactivar, profundizar, diferenciar o cerrar. Esa nota de transición fortalece la continuidad del módulo y evita que cada sesión se perciba como un evento aislado.</p>
+      <ol><li>Cairó Battistutti, O. & Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li><li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill. ISBN: 9786071508188.</li><li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li><li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li><li>Google Colaboratory. (2024). https://colab.research.google.com</li><li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial. ISBN: 9788499640884.</li></ol>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>🧠 Nota neurodivergencia (máx. 1 min)</h2>
+    <p>Anticipe la estructura de la sesión con un mapa visual simple: “ver, dibujar, programar, comparar”. Permita tomar notas con colores o símbolos; esa previsibilidad ayuda a estudiantes que necesitan organización explícita sin prolongar la instrucción.</p>
+  </section>
+
+  <section id='contingencias' class='card'>
+    <h2>🚨 Contingencias</h2>
+    <div class='three-col'><article class='contingency'><h3>Fallo de un equipo en eliminación</h3><p>Redirija a un ejercicio localizado: eliminar la cabeza o la cola por separado antes de volver al caso general.</p></article><article class='contingency'><h3>Participación baja</h3><p>Asigne roles breves: narrador del puntero anterior, narrador del siguiente y digitador.</p></article><article class='contingency'><h3>Tiempo escaso</h3><p>Recorte la socialización a una demo y mantenga el análisis comparativo como evidencia mínima obligatoria.</p></article></div>
+  </section>
+
+  <section id='cierre' class='card'>
+    <h2>📌 Indicadores de observación + cierre</h2>
+    <div class='two-col'>
+      <div class='subcard'><h3>Indicadores</h3><ul class='observer-list'><li>Ubica correctamente cabeza y cola.</li><li>Ajusta ambos enlaces al eliminar.</li><li>Usa la navegación para interpretar progreso.</li><li>Evalúa la pertinencia de la estructura con argumento claro.</li></ul></div>
+      <div class='subcard'><h3>Orientación de cierre</h3><p>Cierre con la pregunta: “¿qué gana el terapeuta cuando puede retroceder sin reconstruir el historial desde el inicio?”. Escuche si aparece la idea de comparación informada y menor fricción operativa.</p></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

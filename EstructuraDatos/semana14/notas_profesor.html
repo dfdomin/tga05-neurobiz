@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Notas del profesor Semana 14 - Proyecto Integrador + Evaluación Final</title>
+<style>
+:root{
+    --primary:#1b5e20;
+    --secondary:#2e7d32;
+    --gold:      #FFDF2D;
+    --bg:#f3f8f4;
+    --card:#ffffff;
+    --text:#17301a;
+    --muted:#4f6b54;
+    --surface:#eef7ef;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;line-height:1.62;background:linear-gradient(180deg,#eef7ef 0%,#f8fbf8 40%,#edf7ef 100%);color:var(--text)}
+header.hero{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:30px 20px 20px;box-shadow:0 12px 28px rgba(27,94,32,.24)}
+.header-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.4fr .8fr;gap:24px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);padding:8px 14px;border-radius:999px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.hero h1{margin:14px 0 8px;font-size:clamp(1.9rem,4vw,2.8rem)}
+.hero p{margin:0;color:#e8f5e9}
+.hero-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:18px;border-radius:18px}
+.hero-box strong{display:block;font-size:1.08rem;margin-bottom:8px}
+nav.sticky{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);box-shadow:0 8px 18px rgba(15,23,42,.08)}
+nav.sticky .nav-wrap{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;gap:10px;flex-wrap:wrap}
+nav.sticky a{text-decoration:none;color:#1b5e20;font-weight:800;padding:10px 14px;background:#eef7ef;border-radius:999px;border:1px solid #c8e6c9}
+main{max-width:1180px;margin:24px auto;padding:0 20px 48px}
+.card{background:var(--card);border-radius:22px;padding:26px;border-left:7px solid var(--gold);box-shadow:0 18px 38px rgba(15,23,42,.07);margin-bottom:24px}
+.card h2{margin-top:0;color:#1b5e20}
+.card h3{color:#2e7d32}
+.alert{display:inline-block;background:#c8e6c9;color:#1b5e20;padding:10px 16px;border-radius:999px;font-weight:900;margin:10px 0 4px}
+.two-col,.three-col{display:grid;gap:18px}
+.two-col{grid-template-columns:repeat(2,minmax(0,1fr))}
+.three-col{grid-template-columns:repeat(3,minmax(0,1fr))}
+.subcard{background:#f8fbf8;border:1px solid #dcedc8;border-radius:18px;padding:18px}
+.meta-table,.dojo-table,.rubric-table{width:100%;border-collapse:collapse;margin-top:16px;border-radius:16px;overflow:hidden}
+.meta-table th,.meta-table td,.dojo-table th,.dojo-table td,.rubric-table th,.rubric-table td{padding:12px 14px;border:1px solid #dcedc8;vertical-align:top}
+.meta-table th,.dojo-table th,.rubric-table th{background:#e8f5e9;color:#1b5e20;text-align:left}
+.check-list li,.observer-list li{margin-bottom:8px}
+.timeline{display:grid;gap:18px;margin-top:16px}
+.timeline-item{display:grid;grid-template-columns:150px 1fr;gap:14px}
+.timeline-time{background:#e8f5e9;border-radius:16px;padding:14px;font-weight:900;text-align:center;color:#1b5e20}
+.timeline-content{background:#f8fbf8;border:1px solid #dcedc8;border-radius:18px;padding:16px}
+.script{background:#fff8e1;border:1px solid #ffe082;border-radius:14px;padding:14px;margin-top:12px}
+.contingency{background:#fff;border:1px solid #dcedc8;border-radius:18px;padding:18px}
+.quiz-answer{background:#f1f8e9;border:1px solid #aed581;border-radius:14px;padding:12px;margin-top:12px}
+.tag{display:inline-block;background:#e8f5e9;color:#1b5e20;border-radius:999px;padding:6px 10px;font-weight:800;margin:0 8px 8px 0}
+@media (max-width:1024px){.header-grid,.two-col,.three-col,.timeline-item{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class='hero'>
+  <div class='header-grid'>
+    <div class='hero'>
+      <span class='badge'>🟢 USO EXCLUSIVO DOCENTE</span>
+      <h1>Semana 14 · Proyecto Integrador + Evaluación Final</h1>
+      <p>Sistema de Gestión Terapéutica NeuroBiz con pilas, colas, listas y árboles.</p>
+      <div class='alert'>Semana de evaluación integradora sin HTI</div>
+    </div>
+    <aside class='hero-box'>
+      <strong>Meta rápida</strong>
+      <p>Sesión de 240 minutos con secuencia completa GAME, Bloom explícito, puntos ClassDojo, quiz de cierre y articulación permanente con KPI NeuroBiz.</p>
+      <p><strong>Entorno sugerido:</strong> Google Colab o Replit + tablero + equipos de 3 estudiantes.</p>
+    </aside>
+  </div>
+</header>
+<nav class='sticky'>
+  <div class='nav-wrap'>
+    <a href='#meta'>Meta</a>
+    <a href='#checklist'>Checklist</a>
+    <a href='#secuencia'>Secuencia</a>
+    <a href='#dojo'>ClassDojo</a>
+    <a href='#quiz'>Quiz</a>
+    <a href='#hti'>Decisión HTI</a>
+    <a href='#contingencias'>Contingencias</a>
+    <a href='#cierre'>Cierre</a>
+  </div>
+</nav>
+<main>
+  <section id='meta' class='card'>
+    <h2>🎯 Meta de sesión (RA + CE + Bloom)</h2>
+    <table class='meta-table'>
+      <tr><th>Resultado de aprendizaje</th><td>Todos los RA · Integración final del módulo TGA05.</td></tr>
+      <tr><th>Criterios de evaluación</th><td><span class="tag">CE1: integra estructuras del módulo</span><span class="tag">CE2: demuestra un sistema funcional</span><span class="tag">CE3: reflexiona críticamente sobre el aprendizaje</span></td></tr>
+      <tr><th>Nivel Bloom</th><td>Crear</td></tr>
+      <tr><th>Meta observable</th><td>Al finalizar, cada equipo presenta un prototipo funcional integrado, lo defiende con argumentos técnicos y de negocio, y completa su reflexión metacognitiva individual.</td></tr>
+    </table>
+  </section>
+
+  <section id='checklist' class='card'>
+    <h2>✅ Checklist pre-clase</h2>
+    <div class='three-col'><div class='subcard'><h3>Pedagógico</h3><ul class='check-list'><li>Socializar la rúbrica desde el inicio.</li><li>Definir tiempos exactos de exposición por equipo.</li><li>Preparar preguntas de retroalimentación integradora.</li></ul></div><div class='subcard'><h3>Tecnológico</h3><ul class='check-list'><li>Verificar proyección y acceso a notebooks.</li><li>Tener cargadores y plan B offline.</li><li>Asegurar que cada equipo pueda ejecutar su demo sin depender de instalaciones extra.</li></ul></div><div class='subcard'><h3>Materiales</h3><ul class='check-list'><li>Formatos impresos de autoevaluación y coevaluación.</li><li>Cronómetro visible.</li><li>Matriz de observación para el docente.</li></ul></div></div>
+  </section>
+
+  <section id='secuencia' class='card'>
+    <h2>⏱️ Secuencia minuto a minuto (240 min)</h2>
+    <div class='timeline'><article class='timeline-item'><div class='timeline-time'>0–20</div><div class='timeline-content'><h3>Apertura de cierre</h3><p>Presentar la sesión como demostración final de competencia: seleccionar, integrar y justificar estructuras.</p><div class='script'><strong>Guion sugerido:</strong> “Hoy la pregunta ya no es qué hace una estructura, sino cómo se combinan para resolver un sistema real”.</div></div></article><article class='timeline-item'><div class='timeline-time'>20–45</div><div class='timeline-content'><h3>Revisión de rúbrica y roles</h3><p>Explicar criterios, tiempos y formato de preguntas. Cada equipo confirma quién presenta arquitectura, demo y reflexión.</p><div class='script'><strong>Guion sugerido:</strong> “La rúbrica es el mapa: si una parte del sistema no se puede explicar, aún no está integrada”.</div></div></article><article class='timeline-item'><div class='timeline-time'>45–90</div><div class='timeline-content'><h3>Ajuste final de prototipos</h3><p>Tiempo controlado para pruebas, correcciones mínimas y organización de exposición.</p><div class='script'><strong>Guion sugerido:</strong> “No intenten agregar funciones nuevas ahora; aseguren un flujo corto, estable y explicable”.</div></div></article><article class='timeline-item'><div class='timeline-time'>90–170</div><div class='timeline-content'><h3>Exposiciones de equipos</h3><p>Cada grupo dispone de 5–7 minutos de presentación y 2 minutos de preguntas. El docente registra evidencias con la rúbrica.</p><div class='script'><strong>Guion sugerido:</strong> “Mientras escuchan a los otros equipos, identifiquen una decisión estructural acertada y una mejora posible”.</div></div></article><article class='timeline-item'><div class='timeline-time'>170–195</div><div class='timeline-content'><h3>Demo comparativa y feedback</h3><p>Se seleccionan dos soluciones para comparar arquitectura y claridad de justificación.</p><div class='script'><strong>Guion sugerido:</strong> “No gana el código más largo, sino la solución mejor argumentada”.</div></div></article><article class='timeline-item'><div class='timeline-time'>195–215</div><div class='timeline-content'><h3>Quiz integrador</h3><p>Aplicar las 5 preguntas de reflexión para consolidar el cierre conceptual del módulo.</p><div class='script'><strong>Guion sugerido:</strong> “Respondan conectando estructuras con problemas reales; ese puente vale más que recordar definiciones sueltas”.</div></div></article><article class='timeline-item'><div class='timeline-time'>215–230</div><div class='timeline-content'><h3>Autoevaluación y coevaluación</h3><p>Entregar formatos y garantizar silencio breve de reflexión individual.</p><div class='script'><strong>Guion sugerido:</strong> “La evaluación final también incluye mirar críticamente su propio trabajo y el del equipo”.</div></div></article><article class='timeline-item'><div class='timeline-time'>230–240</div><div class='timeline-content'><h3>Cierre metacognitivo</h3><p>Recoger una idea por estudiante sobre el aprendizaje transferible del módulo.</p><div class='script'><strong>Guion sugerido:</strong> “Completen esta frase: ahora sé elegir una estructura de datos cuando…”</div></div></article></div>
+  </section>
+
+  <section id='dojo' class='card'>
+    <h2>🏅 Tabla ClassDojo</h2>
+    <table class='dojo-table'>
+      <thead><tr><th>Momento</th><th>Acción observable</th><th>Criterio</th><th>Puntos</th></tr></thead>
+      <tbody><tr><td>Arquitectura</td><td>Presenta mapa claro del sistema</td><td>Integración conceptual</td><td>+3</td></tr><tr><td>Demo</td><td>Muestra flujo funcional completo</td><td>Desempeño técnico</td><td>+3</td></tr><tr><td>Sustento</td><td>Justifica cada estructura con negocio/KPI</td><td>Rigor analítico</td><td>+2</td></tr><tr><td>Feedback</td><td>Realiza retroalimentación respetuosa a otros equipos</td><td>Comunidad de aprendizaje</td><td>+1</td></tr><tr><td>Reflexión</td><td>Completa autoevaluación honesta y útil</td><td>Metacognición</td><td>+1</td></tr></tbody>
+    </table>
+  </section>
+
+  <section id='quiz' class='card'>
+    <h2>❓ Quiz con respuestas correctas marcadas</h2>
+    <div class='two-col'><div class='subcard'><h3>Pregunta 1</h3><p><strong>Si necesitas buscar pacientes por ID en un catálogo grande, la estructura más adecuada es…</strong></p><ol type='A'><li>Una pila.</li><li>Un BST.</li><li>Una lista circular.</li><li>Un arreglo sin ordenar.</li></ol><div class='quiz-answer'>✅ Correcta: B. Un BST.<br>Su regla de orden favorece búsquedas más eficientes.</div></div><div class='subcard'><h3>Pregunta 2</h3><p><strong>Para gestionar la lista de espera de atención, conviene usar…</strong></p><ol type='A'><li>Una cola.</li><li>Un árbol cualquiera.</li><li>Una pila.</li><li>Una matriz triangular.</li></ol><div class='quiz-answer'>✅ Correcta: A. Una cola.<br>Respeta el orden de llegada y hace transparente la asignación.</div></div><div class='subcard'><h3>Pregunta 3</h3><p><strong>¿Qué estructura respalda mejor la función de deshacer (undo)?</strong></p><ol type='A'><li>Pila.</li><li>Cola.</li><li>BST.</li><li>Lista circular.</li></ol><div class='quiz-answer'>✅ Correcta: A. Pila.<br>La última acción registrada es la primera en deshacerse.</div></div><div class='subcard'><h3>Pregunta 4</h3><p><strong>Para navegar el historial de sesiones hacia adelante y atrás, usarías…</strong></p><ol type='A'><li>Lista doblemente enlazada.</li><li>Solo una pila.</li><li>Un BST.</li><li>Un conjunto.</li></ol><div class='quiz-answer'>✅ Correcta: A. Lista doblemente enlazada.<br>Necesita enlaces prev y next para moverse en ambos sentidos.</div></div><div class='subcard'><h3>Pregunta 5</h3><p><strong>Bloom en la semana final es crear porque el estudiante…</strong></p><ol type='A'><li>Solo recuerda definiciones.</li><li>Integra varias estructuras en un sistema con propósito.</li><li>Evita usar datos.</li><li>Responde un quiz sin explicar nada.</li></ol><div class='quiz-answer'>✅ Correcta: B. Integra varias estructuras en un sistema con propósito.<br>Crear implica diseñar, integrar y justificar una solución completa.</div></div></div>
+  </section>
+
+  <section id='hti' class='card'>
+    <h2>🧩 Cierre evaluativo sin HTI</h2>
+    <p>Semana 14 no usa HTI. Sustituya toda tarea extraclase por la rúbrica del proyecto, la reflexión individual y la auto/coevaluación. Si un equipo no alcanza a exponer, reagende la presentación antes de asignar una actividad adicional.</p>
+  </section>
+
+  <section class='card'>
+    <h2>🎮 Protocolo docente GAME para esta sesión</h2>
+    <div class='two-col'>
+      <div class='subcard'>
+        <h3>Guiar + Articular</h3>
+        <p>Abra la clase recordando que la estructura de datos no es un fin, sino una herramienta para tomar decisiones con impacto operativo. Durante la explicación, verbalice siempre la relación entre la estructura, la operación dominante y un KPI de NeuroBiz. Ese puente explícito ayuda a que el estudiantado no vea el contenido como programación aislada, sino como analítica aplicada a gestión administrativa.</p>
+        <p>Mientras circula por el aula, pida que los equipos nombren la estructura con vocabulario técnico y luego la traduzcan a lenguaje de negocio. Esta doble verbalización fortalece la articulación entre teoría, caso y evidencia observable.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Motivar + Evaluar</h3>
+        <p>Use ClassDojo como retroalimentación visible y no solo como premio final. Entregue puntos en momentos concretos: cuando el equipo detecta un error conceptual, cuando justifica una decisión estructural con evidencia o cuando apoya a otra mesa sin resolverle la tarea. Así la gamificación se convierte en una práctica de cultura académica.</p>
+        <p>En la evaluación de cierre, privilegie la explicación del porqué sobre la repetición mecánica del cómo. Un estudiante que argumenta con claridad la elección de la estructura y la conecta con KPI y proceso de negocio está mostrando un desempeño más sólido que quien solo ejecuta código sin justificarlo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>🧭 Preguntas de andamiaje y errores frecuentes</h2>
+    <div class='two-col'>
+      <div class='subcard'>
+        <h3>Preguntas de andamiaje</h3>
+        <ol class='check-list'><li>¿Qué necesidad concreta del sistema resuelve cada estructura y por qué no sería razonable usar una sola para todo?</li><li>¿Dónde aparece el valor del BST dentro de la demo y cómo se diferencia del valor de la cola o la pila?</li><li>¿Qué KPI usa el equipo para justificar su arquitectura ante la junta y por qué ese indicador fortalece el argumento?</li><li>¿Qué evidencia muestra que el historial doble realmente agrega valor clínico y no es un adorno del prototipo?</li><li>Si tuvieran una segunda iteración del proyecto, ¿qué parte mejorarían primero y con qué criterio?</li><li>¿Qué aprendieron del módulo sobre escoger estructuras según la operación dominante, más allá del lenguaje Python?</li></ol>
+      </div>
+      <div class='subcard'>
+        <h3>Errores frecuentes a vigilar</h3>
+        <ul class='check-list'><li>Integrar estructuras por requisito formal pero sin flujo coherente entre ellas, produciendo una demo fragmentada.</li><li>Explicar demasiado el código y muy poco la razón de negocio detrás de cada estructura elegida.</li><li>Presentar una demo larga y frágil en lugar de un caso corto, estable y bien argumentado.</li><li>Olvidar la autoevaluación y la reflexión metacognitiva, como si la semana final solo midiera funcionamiento técnico.</li><li>Usar KPI de forma decorativa sin conectarlos con una decisión, alerta o mejora del sistema.</li><li>Dejar toda la presentación en una sola persona, debilitando la evidencia de trabajo en equipo.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>📍 Cortes de evidencia y microintervenciones</h2>
+    <div class='three-col'><div class='subcard'><h3>Min 40</h3><p><strong>Evidencia esperada:</strong> Cada equipo tiene claro qué estructura resuelve cada necesidad y cómo lo mostrará en el flujo de demo.</p><p><strong>Movimiento docente:</strong> Si hay dudas, pida un mapa del sistema con flechas y nombre de estructura en cada componente antes de seguir programando.</p></div><div class='subcard'><h3>Min 90</h3><p><strong>Evidencia esperada:</strong> La demo mínima corre al menos una vez y el equipo sabe qué parte explicará cada integrante.</p><p><strong>Movimiento docente:</strong> Si el prototipo sigue inestable, recomiende recortar funcionalidades y concentrarse en un recorrido corto pero seguro.</p></div><div class='subcard'><h3>Min 170</h3><p><strong>Evidencia esperada:</strong> Las exposiciones muestran integración real, no piezas aisladas, y la rúbrica ya registra evidencias objetivas.</p><p><strong>Movimiento docente:</strong> Si la explicación se desvía a detalles menores, recupere la pregunta central: “¿qué problema resuelve esta arquitectura?”.</p></div><div class='subcard'><h3>Min 230</h3><p><strong>Evidencia esperada:</strong> Todos entregaron autoevaluación/coevaluación y verbalizaron un aprendizaje transferible del módulo.</p><p><strong>Movimiento docente:</strong> Si faltan formatos, priorice el cierre metacognitivo antes de cerrar la sesión.</p></div></div>
+    <div class='two-col' style='margin-top:18px;'>
+      <div class='subcard'>
+        <h3>Microintervenciones rápidas</h3>
+        <ul class='check-list'><li><strong>Cuando la demo es confusa:</strong> Pida al equipo narrar primero el flujo en voz alta: registrar, buscar, asignar, consultar historial, deshacer.</li><li><strong>Cuando la arquitectura está clara:</strong> Solicite conectar cada estructura con un KPI o con un riesgo operativo que la justifique.</li><li><strong>Cuando el tiempo aprieta:</strong> Indique que eliminen adornos y conserven solo el caso que mejor evidencia integración y decisión.</li><li><strong>Cuando la reflexión es superficial:</strong> Use preguntas metacognitivas breves sobre dificultad, transferencia y mejora futura.</li></ul>
+      </div>
+      <div class='subcard'>
+        <h3>Preguntas frecuentes del estudiantado</h3>
+        <ul class='check-list'><li><strong>“¿La nota depende más del código o de la exposición?”</strong> Depende de la coherencia entre ambos: un sistema integrado debe funcionar razonablemente y, además, ser explicado con criterio técnico y de negocio.</li><li><strong>“Si algo falla en vivo, perdimos todo?”</strong> No; si la arquitectura está clara y el equipo puede narrar con evidencia qué pretendía demostrar, aún hay desempeño valorable.</li><li><strong>“¿Por qué hay autoevaluación y coevaluación?”</strong> Porque la competencia final incluye trabajo colaborativo y reflexión sobre cómo se construyó la solución.</li><li><strong>“Qué significa crear en Bloom?”</strong> Significa integrar componentes previos en una solución nueva, justificarla y evaluar sus límites.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>📝 Matriz rápida de observación docente</h2>
+    <table class='rubric-table'>
+      <thead><tr><th>Aspecto</th><th>Evidencia a recoger</th><th>Si no aparece, intervención sugerida</th></tr></thead>
+      <tbody><tr><td>Integración de estructuras</td><td>Se observa un flujo donde BST, cola, pila y lista doble intervienen con roles definidos.</td><td>Pedir un rediseño express del mapa del sistema antes de continuar la exposición.</td></tr><tr><td>Estabilidad de la demo</td><td>Existe al menos un recorrido funcional completo con datos de NeuroBiz.</td><td>Reducir el demo a un caso mínimo viable y validarlo una vez más antes de exponer.</td></tr><tr><td>Sustento de negocio</td><td>El equipo nombra KPI, riesgo o mejora operativa al justificar la arquitectura.</td><td>Intervenir con la pregunta: “¿qué decisión mejora esto dentro de NeuroBiz?”</td></tr><tr><td>Trabajo en equipo</td><td>Los tres integrantes asumen un rol visible en la presentación o defensa.</td><td>Redistribuir la palabra con turnos breves y preguntas diferenciadas.</td></tr><tr><td>Reflexión final</td><td>La autoevaluación muestra aprendizaje, límites y aplicación futura.</td><td>Pedir completar oralmente la frase: “la próxima vez mejoraría…” antes de cerrar.</td></tr></tbody>
+    </table>
+  </section>
+ 
+  <section class='card'>
+    <h2>📚 Registro posclase y transferencia docente</h2>
+    <div class='three-col'>
+      <div class='subcard'>
+        <h3>Qué registrar al terminar</h3>
+        <p>Anote tres datos mínimos: qué estructura quedó consolidada, qué error persistente apareció y qué evidencia mostró transferencia al caso NeuroBiz. Ese registro breve ayuda a decidir si la siguiente sesión debe abrir con reactivación conceptual, con práctica guiada o con análisis de resultados. Evite registrar solo “les fue bien / mal”; documente qué operación concreta dominan y cuál aún requiere andamiaje.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Qué comunicar al grupo</h3>
+        <p>Cierre devolviendo una fortaleza observable y una mejora alcanzable. La retroalimentación más útil no es genérica, sino situada: “su estructura funciona, pero aún no está argumentada con KPI” o “la idea es correcta, pero deben verbalizar mejor la decisión de negocio”. Así la evaluación mantiene foco formativo y orienta el siguiente paso.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Cómo transferir al programa</h3>
+        <p>Conecte la sesión con escenarios de gestión administrativa: trazabilidad de procesos, asignación de recursos, consulta eficiente de registros, organización de historiales y soporte a decisiones. Esta explicitación final evita que el módulo se perciba como ajeno al campo profesional y fortalece la pertinencia curricular del TGA05.</p>
+      </div>
+    </div>
+    <div class='subcard' style='margin-top:18px;'>
+      <h3>Bibliografía docente de apoyo</h3>
+      <p>Use estas referencias para sostener explicaciones, ejemplos y justificaciones pedagógicas durante el módulo.</p>
+      <p>Recomendación operativa: al terminar la clase, marque en su planeador qué decisión curricular tomará la semana siguiente con base en la evidencia recogida: reactivar, profundizar, diferenciar o cerrar. Esa nota de transición fortalece la continuidad del módulo y evita que cada sesión se perciba como un evento aislado.</p>
+      <ol><li>Cairó Battistutti, O. & Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li><li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill. ISBN: 9786071508188.</li><li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li><li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li><li>Google Colaboratory. (2024). https://colab.research.google.com</li><li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial. ISBN: 9788499640884.</li></ol>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>🧠 Nota neurodivergencia (máx. 1 min)</h2>
+    <p>Explique la logística final con pasos cortos y visibles en pantalla: presentar, demostrar, responder, reflexionar. Mantener previsibilidad reduce ansiedad en un contexto de evaluación final.</p>
+  </section>
+
+  <section id='contingencias' class='card'>
+    <h2>🚨 Contingencias</h2>
+    <div class='three-col'><article class='contingency'><h3>Falla técnica de un equipo</h3><p>Permita demo narrada sobre capturas o pseudocódigo y valore arquitectura + justificación si el fallo es externo.</p></article><article class='contingency'><h3>Tiempo excedido</h3><p>Use cronómetro estricto y traslade preguntas extensas al cierre comparativo.</p></article><article class='contingency'><h3>Equipo incompleto</h3><p>Reasigne la exposición conservando rúbrica, priorizando funcionalidad y explicación sobre cantidad de integrantes presentes.</p></article></div>
+  </section>
+
+  <section id='cierre' class='card'>
+    <h2>📌 Indicadores de observación + cierre</h2>
+    <div class='two-col'>
+      <div class='subcard'><h3>Indicadores</h3><ul class='observer-list'><li>Integra las estructuras sin contradicción funcional.</li><li>Demuestra una trayectoria completa de uso.</li><li>Explica con vocabulario técnico y sentido de negocio.</li><li>Reflexiona sobre aprendizaje, límites y aplicación futura.</li></ul></div>
+      <div class='subcard'><h3>Orientación de cierre</h3><p>Cierre el módulo destacando que la competencia central no es programar por programar, sino elegir estructuras con criterio para resolver procesos organizacionales reales. Invite a verbalizar esa transferencia profesional.</p></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

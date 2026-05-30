@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Semana 1 — Estructuras de Datos Elementales | TGA05</title>
+  <style>
+    /* ── RESET & BASE ───────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary:   #1E2843;
+      --accent:    #2d3a5e;
+      --gold:      #FFDF2D;
+      --green:     #2e7d32;
+      --red:       #c62828;
+      --light-bg:  #FAFAFA;
+      --card-bg:   #ffffff;
+      --text:      #212121;
+      --muted:     #546e7a;
+      --border:    #DEDFE4;
+      --bloom1:    #e8f5e9;
+      --bloom2:    #fff9c4;
+      --radius:    12px;
+    }
+    body {
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: var(--light-bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* ── HEADER ─────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      color: #fff;
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 40px;
+      background: var(--light-bg);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .badge-module {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 20px;
+      padding: .3rem 1rem;
+      font-size: .8rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: .8rem;
+    }
+    header h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    header p  { font-size: 1rem; opacity: .85; margin-top: .5rem; }
+    .xp-bar-wrap {
+      margin: 1.2rem auto 0;
+      max-width: 400px;
+      background: rgba(255,255,255,.2);
+      border-radius: 20px;
+      height: 14px;
+      overflow: hidden;
+    }
+    .xp-bar { height: 100%; width: 0%; background: var(--gold); border-radius: 20px; transition: width 1.5s ease; }
+    .xp-label { font-size: .78rem; opacity: .8; margin-top: .4rem; }
+
+    /* ── NAV ─────────────────────────────────── */
+    nav {
+      background: var(--card-bg);
+      border-bottom: 2px solid var(--border);
+      padding: .6rem 1.5rem;
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 99;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: .85rem;
+      font-weight: 600;
+      padding: .3rem .7rem;
+      border-radius: 8px;
+      transition: background .2s;
+    }
+    nav a:hover { background: var(--border); }
+
+    /* ── LAYOUT ─────────────────────────────── */
+    main { max-width: 960px; margin: 2rem auto; padding: 0 1.2rem 4rem; }
+
+    /* ── CARDS / SECTIONS ───────────────────── */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1.8rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    }
+    .card h2 {
+      font-size: 1.3rem;
+      color: var(--primary);
+      border-left: 5px solid var(--gold);
+      padding-left: .8rem;
+      margin-bottom: 1.2rem;
+    }
+    .card h3 { font-size: 1.05rem; color: var(--accent); margin: 1.2rem 0 .6rem; }
+
+    /* ── BLOOM BADGE ────────────────────────── */
+    .bloom {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--bloom2);
+      border: 1px solid #FFDF2D;
+      border-radius: 20px;
+      padding: .25rem .85rem;
+      font-size: .8rem;
+      font-weight: 700;
+      color: #5d4037;
+      margin-bottom: 1rem;
+    }
+
+    /* ── MEMO BLOCK ─────────────────────────── */
+    .memo {
+      background: #fffde7;
+      border-left: 5px solid var(--gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+    .memo strong { font-style: normal; display: block; margin-bottom: .4rem; color: var(--primary); }
+
+    /* ── KPI TABLE ──────────────────────────── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .kpi-card {
+      background: var(--light-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .kpi-card .kpi-icon { font-size: 1.8rem; }
+    .kpi-card .kpi-name { font-size: .78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; margin: .4rem 0; }
+    .kpi-card .kpi-val  { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+
+    /* ── CODE BLOCK ─────────────────────────── */
+    .code-wrap {
+      background: #1E2843;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+    .code-title {
+      background: #2d3a5e;
+      color: #cdd6f4;
+      font-size: .78rem;
+      padding: .4rem 1rem;
+      font-family: monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .code-title a {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: .75rem;
+    }
+    pre {
+      padding: 1.2rem 1.5rem;
+      overflow-x: auto;
+      font-size: .88rem;
+      line-height: 1.6;
+      color: #cdd6f4;
+      font-family: 'Courier New', monospace;
+    }
+    .kw  { color: #cba6f7; }
+    .fn  { color: #89b4fa; }
+    .str { color: #a6e3a1; }
+    .cm  { color: #6c7086; font-style: italic; }
+    .num { color: #fab387; }
+    .var { color: #cdd6f4; }
+
+    /* ── INFO BOX ───────────────────────────── */
+    .info-box {
+      border-radius: 10px;
+      padding: 1rem 1.3rem;
+      margin: 1rem 0;
+      display: flex;
+      gap: .8rem;
+      align-items: flex-start;
+    }
+    .info-box.tip    { background: #e8f5e9; border-left: 4px solid #43a047; }
+    .info-box.warn   { background: #fff8e1; border-left: 4px solid #e6c800; }
+    .info-box.brain  { background: #f3e5f5; border-left: 4px solid #8e24aa; }
+    .info-box .icon  { font-size: 1.4rem; line-height: 1; flex-shrink: 0; }
+    .info-box p      { margin: 0; font-size: .93rem; }
+
+    /* ── TABLE ──────────────────────────────── */
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; margin: 1rem 0; }
+    th { background: var(--primary); color: #fff; padding: .7rem 1rem; text-align: left; }
+    td { padding: .6rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: var(--light-bg); }
+
+    /* ── ACTIVITY CARDS ─────────────────────── */
+    .activity {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 1.2rem 0;
+    }
+    .activity-header {
+      padding: .8rem 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .activity-header.presencial { background: #E9EAED; color: var(--primary); }
+    .activity-header.hti-a      { background: #e8f5e9; color: var(--green); }
+    .activity-header.hti-b      { background: #fff8e1; color: #e65100; }
+    .activity-body { padding: 1.2rem 1.5rem; }
+    .activity-body ol, .activity-body ul { padding-left: 1.4rem; }
+    .activity-body li { margin-bottom: .5rem; }
+    .tag {
+      display: inline-block;
+      padding: .15rem .6rem;
+      border-radius: 20px;
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-left: .4rem;
+    }
+    .tag.bloom { background: #fff9c4; color: #6d4c00; border: 1px solid #FFDF2D; }
+    .tag.dojo  { background: #E9EAED; color: var(--primary); border: 1px solid var(--border); }
+    .tag.opc   { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+
+    /* ── GAMIFICATION PANEL ─────────────────── */
+    .dojo-panel {
+      background: linear-gradient(135deg, #1E2843 0%, #1E2843 100%);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      margin: 1.5rem 0;
+    }
+    .dojo-panel h3 { color: var(--gold); margin-bottom: 1rem; font-size: 1.05rem; }
+    .dojo-items { display: flex; flex-wrap: wrap; gap: .8rem; }
+    .dojo-item {
+      background: rgba(255,255,255,.12);
+      border-radius: 8px;
+      padding: .5rem 1rem;
+      font-size: .85rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .pts { color: var(--gold); font-weight: 800; font-size: 1.1rem; }
+
+    /* ── QUIZ SECTION ───────────────────────── */
+    .quiz-box {
+      background: #e3f2fd;
+      border: 2px solid #1565c0;
+      border-radius: var(--radius);
+      padding: 1.4rem 1.8rem;
+      margin: 1.5rem 0;
+    }
+    .quiz-box h3 { color: #0d47a1; margin-bottom: 1rem; }
+    .quiz-q { margin-bottom: 1.2rem; }
+    .quiz-q p { font-weight: 600; margin-bottom: .5rem; }
+    .quiz-q ol { padding-left: 1.4rem; }
+    .quiz-q li { margin-bottom: .3rem; font-size: .92rem; }
+    .quiz-answer {
+      display: none;
+      background: #e8f5e9;
+      border-radius: 6px;
+      padding: .4rem .8rem;
+      font-size: .85rem;
+      margin-top: .4rem;
+      color: var(--green);
+      font-weight: 600;
+    }
+    .quiz-q:hover .quiz-answer { display: block; }
+
+    /* ── BIBLIOGRAPHY ───────────────────────── */
+    .bib { font-size: .88rem; line-height: 1.8; }
+    .bib li { margin-bottom: .6rem; padding-left: .5rem; }
+
+    /* ── FOOTER ─────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: .82rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 640px) {
+      header h1 { font-size: 1.4rem; }
+      .card { padding: 1.2rem; }
+      main { padding: 0 .8rem 3rem; }
+    }
+  </style>
+
+<style id="progress-tracker-css">
+/* ── Progress Tracker Widget ── */
+#pt-widget{
+  position:fixed; bottom:20px; right:20px; z-index:9999;
+  background:linear-gradient(135deg,#1E2843,#1E2843);
+  color:#fff; border-radius:16px; padding:14px 18px;
+  min-width:240px; max-width:280px;
+  box-shadow:0 8px 32px rgba(0,0,0,.35);
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size:.85rem; transition:transform .3s;
+}
+#pt-widget.collapsed { transform:translateY(calc(100% - 42px)); }
+#pt-header{ display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+#pt-header strong{ font-size:.92rem; }
+#pt-toggle{ background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer; line-height:1; }
+#pt-body{ margin-top:10px; }
+#pt-nombre{ width:100%; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3);
+  border-radius:8px; color:#fff; padding:5px 10px; font-size:.82rem; margin-bottom:8px; }
+#pt-nombre::placeholder{ color:rgba(255,255,255,.5); }
+#pt-xp-bar-wrap{ background:rgba(255,255,255,.2); border-radius:20px; height:10px; overflow:hidden; }
+#pt-xp-bar{ height:100%; background:linear-gradient(90deg,#FFDF2D,#fff176); border-radius:20px;
+  transition:width .8s ease; }
+#pt-xp-label{ display:flex; justify-content:space-between; font-size:.75rem; opacity:.8; margin-top:4px; }
+#pt-btns{ display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.pt-btn{ flex:1; padding:5px 8px; border:none; border-radius:8px; font-size:.75rem;
+  font-weight:700; cursor:pointer; transition:opacity .2s; }
+.pt-btn:hover{ opacity:.85; }
+#pt-btn-save  { background:#43a047; color:#fff; }
+#pt-btn-export{ background:#FFDF2D; color:#1E2843; }
+#pt-btn-load  { background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.3); }
+#pt-msg{ font-size:.72rem; margin-top:6px; min-height:16px; opacity:.85; text-align:center; }
+#pt-quiz-panel{ margin-top:1rem; }
+#pt-quiz-panel .pq{ margin-bottom:.8rem; }
+#pt-quiz-panel .pq p{ font-weight:600; font-size:.88rem; margin-bottom:.4rem; }
+#pt-quiz-panel .pq button{ display:block; width:100%; text-align:left; margin-bottom:3px;
+  padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08); color:#fff; cursor:pointer; font-size:.8rem;
+  transition:background .2s; }
+#pt-quiz-panel .pq button:hover  { background:rgba(255,255,255,.18); }
+#pt-quiz-panel .pq button.correct{ background:#2e7d32; border-color:#43a047; }
+#pt-quiz-panel .pq button.wrong  { background:#c62828; border-color:#e57373; }
+#pt-quiz-panel .pq button:disabled{ opacity:.7; cursor:default; }
+</style>
+
+  <script src="../js/supabase-config.js"></script>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════ -->
+<header>
+  <div class="badge-module">TGA05 · Estructura de Datos para los Negocios · Semana 1 de 14</div>
+  <h1>🧱 Estructuras de Datos Elementales</h1>
+  <p>Tipos de datos · Memoria · Arreglos · Contexto NeuroBiz S.A.S.</p>
+  <div class="xp-bar-wrap">
+    <div class="xp-bar" id="xpBar"></div>
+  </div>
+  <p class="xp-label">XP de sesión: <span id="xpCount">0</span> / 100 pts</p>
+</header>
+
+<!-- NAV -->
+<nav>
+  <a href="#mision">🎯 Misión</a>
+  <a href="#teoria">📚 Teoría</a>
+  <a href="#python">🐍 Python</a>
+  <a href="#actividad">⚙️ Actividad</a>
+  <a href="#hti">🏠 HTI</a>
+  <a href="#quiz">🎮 Quiz</a>
+  <a href="#bib">📖 Bibliografía</a>
+</nav>
+
+<main>
+
+<!-- ── PROGRESS TRACKER WIDGET ── -->
+<div id="pt-widget">
+  <div id="pt-header" onclick="ptToggle()">
+    <strong>📊 Mi Progreso TGA05</strong>
+    <button id="pt-toggle">▲</button>
+  </div>
+  <div id="pt-body">
+    <input id="pt-nombre" type="text" placeholder="Tu nombre completo…" oninput="ptSaveLocal()" />
+    <div id="pt-xp-bar-wrap"><div id="pt-xp-bar" style="width:0%"></div></div>
+    <div id="pt-xp-label"><span id="pt-semana-label">Semana —</span><span id="pt-xp-count">0 XP</span></div>
+    <div id="pt-btns" style="display:flex;gap:5px;align-items:center">
+      <button class="pt-btn" id="pt-btn-save" onclick="ptSyncCloud()" style="flex:1">☁️ Guardar</button>
+      <button class="pt-btn" id="pt-btn-opts"
+        title="Opciones de respaldo"
+        onclick="(function(){var a=document.getElementById('pt-advanced');a.style.display=a.style.display==='block'?'none':'block';})()"
+        style="width:32px;flex-shrink:0;padding:0;font-size:.8rem">⚙️</button>
+    </div>
+    <div id="pt-advanced" style="display:none;margin-top:5px">
+      <button class="pt-btn" onclick="ptExportCode()" style="width:100%;margin-bottom:3px;font-size:.72rem">📋 Exportar código de respaldo</button>
+      <button class="pt-btn" onclick="ptImportCode()" style="width:100%;font-size:.72rem">📥 Cargar desde código</button>
+    </div>
+    <div id="pt-msg"></div>
+  </div>
+</div>
+
+
+  <!-- ══ MEMORANDO ══════════════════════════════ -->
+  <section id="mision" class="card">
+    <h2>📋 El Memorando — Tu Misión esta Semana</h2>
+    <div class="memo">
+      <strong>Para: Analistas de Datos Estratégicos — Equipo TGA05<br>
+      De: Dirección Ejecutiva, NeuroBiz S.A.S.<br>
+      Asunto: Modernización del sistema de información terapéutico</strong>
+
+      NeuroBiz S.A.S. atiende actualmente más de <strong>1.200 sesiones mensuales</strong> en sus sedes de Barranquilla, 
+      Bogotá y Medellín, en convenio con la UIB. Sin embargo, los datos de los pacientes 
+      se almacenan de forma dispersa: algunos en hojas de cálculo, otros en notas de papel. 
+      La junta directiva exige que el equipo técnico establezca las <em>bases computacionales</em> 
+      para organizar esta información de manera eficiente. <br><br>
+      Su primera misión como <strong>Analistas de Datos</strong> es dominar los fundamentos: 
+      ¿cómo almacena Python los datos de un paciente en memoria? 
+      ¿Qué estructura es más eficiente para manejar cientos de registros?
+    </div>
+
+    <div class="bloom">🧠 Nivel Bloom de esta semana: Recordar → Comprender</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon">🧑‍⚕️</div>
+        <div class="kpi-name">Sesiones Asistidas</div>
+        <div class="kpi-val">847</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">❌</div>
+        <div class="kpi-name">Sesiones Fallidas</div>
+        <div class="kpi-val">112</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">🔁</div>
+        <div class="kpi-name">Tasa de Retención</div>
+        <div class="kpi-val">78 %</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">📈</div>
+        <div class="kpi-name">Índice de Progreso</div>
+        <div class="kpi-val">6.4 / 10</div>
+      </div>
+    </div>
+    <p style="font-size:.85rem; color:var(--muted);">
+      <em>Estos son los KPIs reales que gestionarás durante todo el módulo. 
+      Esta semana aprenderás a almacenarlos correctamente en Python.</em>
+    </p>
+  </section>
+
+  <!-- ══ TEORÍA ══════════════════════════════════ -->
+  <section id="teoria" class="card">
+    <h2>📚 Marco Teórico</h2>
+
+    <h3>1. ¿Qué es una Estructura de Datos?</h3>
+    <p>
+      Una <strong>estructura de datos</strong> es una forma organizada de almacenar y gestionar 
+      información en la memoria de un computador, de modo que pueda ser accedida y modificada 
+      de manera eficiente (Cairó & Guardati, 2006). Para NeuroBiz, elegir la estructura incorrecta 
+      puede significar buscar el historial de un paciente en segundos… o en horas.
+    </p>
+
+    <div class="info-box tip">
+      <span class="icon">💡</span>
+      <p><strong>Analogía empresarial:</strong> Un cajón de archivos es una estructura de datos física. 
+      Si los archivos están en orden alfabético (arreglo ordenado), encontrar el expediente de un paciente 
+      es rápido. Si están en desorden, toca revisar uno por uno.</p>
+    </div>
+
+    <h3>2. Tipos de Datos en Python</h3>
+    <p>
+      Según Joyanes Aguilar (2014), los tipos de datos son la base de toda estructura. 
+      Python clasifica los datos en:
+    </p>
+    <table>
+      <thead>
+        <tr><th>Tipo</th><th>Python</th><th>Ejemplo NeuroBiz</th><th>Memoria aprox.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Entero</td><td><code>int</code></td><td>Sesiones asistidas: <code>847</code></td><td>28 bytes</td></tr>
+        <tr><td>Flotante</td><td><code>float</code></td><td>Índice de progreso: <code>6.4</code></td><td>24 bytes</td></tr>
+        <tr><td>Cadena</td><td><code>str</code></td><td>Nombre paciente: <code>"Ana Ramos"</code></td><td>Variable</td></tr>
+        <tr><td>Booleano</td><td><code>bool</code></td><td>Sesión completada: <code>True</code></td><td>28 bytes</td></tr>
+        <tr><td>Lista</td><td><code>list</code></td><td>Historial: <code>[68, 72, 80]</code></td><td>56 + n×8 bytes</td></tr>
+        <tr><td>Diccionario</td><td><code>dict</code></td><td>Registro paciente: <code>{"nombre":"Ana"}</code></td><td>Variable</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box brain">
+      <span class="icon">🧠</span>
+      <p><strong>NeuroBiz + Neurodiversidad:</strong> Las personas con TDAH suelen procesar mejor la 
+      información visual y en bloques cortos. Por eso NeuroBiz almacena el 
+      <code>nivel_hiperfoco</code> (float) para personalizar la duración de cada sesión. 
+      Un dato bien tipado permite decisiones más humanas.</p>
+    </div>
+
+    <h3>3. Almacenamiento en Memoria</h3>
+    <p>
+      Cuando Python ejecuta <code>x = 847</code>, reserva un bloque de memoria con una 
+      <em>dirección</em>, un <em>tipo</em> y un <em>valor</em>. Weiss (2014) señala que 
+      la eficiencia de un algoritmo depende directamente de cómo se asigna y libera esa memoria.
+    </p>
+    <p>
+      En Python, la gestión es automática (<em>garbage collector</em>), pero el analista 
+      debe elegir el tipo correcto para evitar desperdicio: guardar <code>847</code> como 
+      <code>str</code> en lugar de <code>int</code> impide hacer operaciones matemáticas 
+      directamente.
+    </p>
+
+    <div class="info-box warn">
+      <span class="icon">⚠️</span>
+      <p>Un error frecuente en bases de datos empresariales: importar todos los campos como 
+      texto (<code>str</code>). Esto obliga a convertir cada dato antes de calcularlo, 
+      generando errores silenciosos en los reportes.</p>
+    </div>
+
+    <h3>4. Arreglos (Arrays) — La estructura más básica</h3>
+    <p>
+      Un <strong>arreglo</strong> es una colección de elementos del mismo tipo almacenados 
+      en posiciones contiguas de memoria, accesibles mediante un índice (Cairó & Guardati, 2006).
+    </p>
+    <p>
+      En Python puro no existe el arreglo tradicional de Java/C; se usan <code>list</code> 
+      o, para rendimiento profesional, <code>numpy.array</code>. Para análisis de datos 
+      en NeuroBiz usaremos listas como punto de partida.
+    </p>
+
+    <table>
+      <thead><tr><th>Operación</th><th>Descripción</th><th>Complejidad</th></tr></thead>
+      <tbody>
+        <tr><td>Acceso por índice</td><td><code>arr[2]</code></td><td>O(1) — Instantáneo</td></tr>
+        <tr><td>Búsqueda lineal</td><td>Recorrer elemento por elemento</td><td>O(n)</td></tr>
+        <tr><td>Inserción al final</td><td><code>arr.append(x)</code></td><td>O(1) amortizado</td></tr>
+        <tr><td>Inserción en medio</td><td><code>arr.insert(i, x)</code></td><td>O(n)</td></tr>
+        <tr><td>Eliminación</td><td><code>arr.remove(x)</code></td><td>O(n)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box tip">
+      <span class="icon">🏢</span>
+      <p><strong>Contexto NeuroBiz:</strong> Si almacenamos en un arreglo las 847 sesiones del mes, 
+      acceder a la sesión número 200 es inmediato (O(1)). Pero buscar todos los pacientes 
+      con <code>tasa_retencion &lt; 0.5</code> requiere recorrer todo el arreglo (O(n)). 
+      Esta diferencia importa cuando escalamos a 10.000 sesiones.</p>
+    </div>
+  </section>
+
+  <!-- ══ PYTHON ══════════════════════════════════ -->
+  <section id="python" class="card">
+    <h2>🐍 Python como Herramienta Analítica — Google Colab</h2>
+    <p>
+      Abre <strong>Google Colab</strong> 
+      (<a href="https://colab.research.google.com" target="_blank">colab.research.google.com</a>) 
+      y ejecuta los siguientes bloques. Python es aquí una herramienta de 
+      <em>Business Intelligence</em>, no un fin en sí mismo.
+    </p>
+
+    <h3>Bloque 1 — Declarar los KPIs de NeuroBiz</h3>
+    <div class="code-wrap">
+      <div class="code-title">
+        <span>📄 kpis_neurobiz.py</span>
+        <a href="https://colab.research.google.com" target="_blank">▶ Abrir en Colab</a>
+      </div>
+      <pre><span class="cm"># ── KPIs de NeuroBiz S.A.S. — Semana 1 ──────────────────</span>
+<span class="cm"># Tipamos correctamente cada indicador de gestión</span>
+
+<span class="var">sesiones_asistidas</span> <span class="kw">=</span> <span class="num">847</span>        <span class="cm"># int   → operaciones aritméticas</span>
+<span class="var">sesiones_fallidas</span>  <span class="kw">=</span> <span class="num">112</span>        <span class="cm"># int</span>
+<span class="var">tasa_retencion</span>     <span class="kw">=</span> <span class="num">0.78</span>       <span class="cm"># float → porcentaje</span>
+<span class="var">indice_progreso</span>    <span class="kw">=</span> <span class="num">6.4</span>        <span class="cm"># float → escala 0–10</span>
+<span class="var">sede</span>               <span class="kw">=</span> <span class="str">"Barranquilla"</span>  <span class="cm"># str</span>
+<span class="var">contrato_activo</span>    <span class="kw">=</span> <span class="kw">True</span>       <span class="cm"># bool</span>
+
+<span class="cm"># Verificar tipos en tiempo de ejecución</span>
+<span class="fn">print</span>(<span class="str">f"Tipo sesiones_asistidas : {type(sesiones_asistidas)}"</span>)
+<span class="fn">print</span>(<span class="str">f"Tipo tasa_retencion     : {type(tasa_retencion)}"</span>)
+<span class="fn">print</span>(<span class="str">f"Tipo sede               : {type(sede)}"</span>)
+
+<span class="cm"># Reporte básico</span>
+<span class="var">total_sesiones</span> <span class="kw">=</span> <span class="var">sesiones_asistidas</span> <span class="kw">+</span> <span class="var">sesiones_fallidas</span>
+<span class="var">eficiencia</span>     <span class="kw">=</span> <span class="var">sesiones_asistidas</span> <span class="kw">/</span> <span class="var">total_sesiones</span> <span class="kw">*</span> <span class="num">100</span>
+<span class="fn">print</span>(<span class="str">f"\n📊 Reporte NeuroBiz — {sede}"</span>)
+<span class="fn">print</span>(<span class="str">f"   Eficiencia operativa : {eficiencia:.1f}%"</span>)
+<span class="fn">print</span>(<span class="str">f"   Tasa de retención    : {tasa_retencion*100:.0f}%"</span>)
+<span class="fn">print</span>(<span class="str">f"   Índice de progreso   : {indice_progreso}/10"</span>)</pre>
+    </div>
+
+    <h3>Bloque 2 — Arreglo de sesiones mensuales</h3>
+    <div class="code-wrap">
+      <div class="code-title"><span>📄 arreglo_sesiones.py</span></div>
+      <pre><span class="cm"># ── Arreglo: historial de sesiones por semana ────────────</span>
+<span class="var">sesiones_semanales</span> <span class="kw">=</span> [<span class="num">198</span>, <span class="num">215</span>, <span class="num">202</span>, <span class="num">232</span>]  <span class="cm"># 4 semanas de enero</span>
+
+<span class="cm"># Acceso directo (O(1))</span>
+<span class="fn">print</span>(<span class="str">f"Semana 3: {sesiones_semanales[2]} sesiones"</span>)
+
+<span class="cm"># Recorrido completo (O(n))</span>
+<span class="fn">print</span>(<span class="str">"\n📅 Detalle mensual:"</span>)
+<span class="kw">for</span> <span class="var">i</span>, <span class="var">ses</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="var">sesiones_semanales</span>, <span class="num">1</span>):
+    <span class="var">estado</span> <span class="kw">=</span> <span class="str">"✅ CUMPLE"</span> <span class="kw">if</span> <span class="var">ses</span> <span class="kw">>=</span> <span class="num">200</span> <span class="kw">else</span> <span class="str">"⚠️ BAJO META"</span>
+    <span class="fn">print</span>(<span class="str">f"  Semana {i}: {ses:3d} sesiones — {estado}"</span>)
+
+<span class="cm"># Estadísticas básicas (BI)</span>
+<span class="fn">print</span>(<span class="str">f"\n📈 Total  : {sum(sesiones_semanales)}"</span>)
+<span class="fn">print</span>(<span class="str">f"   Máximo : {max(sesiones_semanales)}"</span>)
+<span class="fn">print</span>(<span class="str">f"   Mínimo : {min(sesiones_semanales)}"</span>)
+<span class="fn">print</span>(<span class="str">f"   Media  : {sum(sesiones_semanales)/len(sesiones_semanales):.1f}"</span>)</pre>
+    </div>
+
+    <div class="info-box tip">
+      <span class="icon">🎯</span>
+      <p><strong>¿Qué acabas de construir?</strong> Un micro-dashboard en consola. 
+      En módulos avanzados, este mismo código alimentará visualizaciones con 
+      <code>matplotlib</code> y <code>pandas</code>. La lógica es idéntica; 
+      solo cambia la capa de presentación.</p>
+    </div>
+  </section>
+
+  <!-- ══ ACTIVIDAD PRESENCIAL ═══════════════════ -->
+  <section id="actividad" class="card">
+    <h2>⚙️ Actividades de la Semana</h2>
+
+    <!-- PRESENCIAL -->
+    <div class="activity">
+      <div class="activity-header presencial">
+        🏫 Actividad Presencial (HAD + HP · 4 horas)
+        <span class="tag bloom">Bloom: Recordar → Aplicar</span>
+        <span class="tag dojo">ClassDojo</span>
+      </div>
+      <div class="activity-body">
+        <h3>🕵️ "Auditoría de Datos — Caso NeuroBiz Sede Barranquilla"</h3>
+        <p>
+          La junta directiva de NeuroBiz entregó al equipo un reporte de datos 
+          <em>mal tipados</em>. Tu misión: auditarlo, corregirlo y generar el 
+          primer reporte de eficiencia operativa usando Python.
+        </p>
+
+        <h3>Instrucciones (grupos de 3 personas):</h3>
+        <ol>
+          <li>
+            <strong>Diagnóstico (20 min):</strong> Se proyecta el siguiente fragmento. 
+            Identifica qué tipo de dato tiene cada variable y qué errores de tipado hay.
+            <div class="code-wrap" style="margin-top:.8rem">
+              <div class="code-title"><span>📄 datos_sucios_neurobiz.py — ARCHIVO A CORREGIR</span></div>
+              <pre><span class="var">sesiones_asistidas</span> <span class="kw">=</span> <span class="str">"847"</span>     <span class="cm"># ← ¿Problema?</span>
+<span class="var">tasa_retencion</span>     <span class="kw">=</span> <span class="str">"78%"</span>     <span class="cm"># ← ¿Problema?</span>
+<span class="var">sede</span>               <span class="kw">=</span> <span class="num">1</span>         <span class="cm"># ← ¿Problema?</span>
+<span class="var">contrato_activo</span>    <span class="kw">=</span> <span class="str">"True"</span>    <span class="cm"># ← ¿Problema?</span>
+<span class="var">nivel_hiperfoco</span>    <span class="kw">=</span> <span class="str">"7.2"</span>     <span class="cm"># ← ¿Problema?</span></pre>
+            </div>
+          </li>
+          <li>
+            <strong>Corrección (30 min):</strong> En Google Colab, declara cada variable 
+            con el tipo correcto y agrega un comentario explicando por qué.
+          </li>
+          <li>
+            <strong>Reporte (30 min):</strong> Calcula y muestra en consola:
+            <ul>
+              <li>Eficiencia operativa (sesiones asistidas / total sesiones × 100)</li>
+              <li>Sesiones por semana (divide el total entre 4)</li>
+              <li>Un mensaje de alerta si la tasa de retención baja de 75%</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Socialización (20 min):</strong> Cada grupo expone su solución al curso.
+          </li>
+        </ol>
+
+        <div class="dojo-panel">
+          <h3>🏆 Puntos ClassDojo — Actividad Presencial</h3>
+          <div class="dojo-items">
+            <div class="dojo-item">⏰ Puntualidad<br><span class="pts">+1</span></div>
+            <div class="dojo-item">🙋 Participación activa<br><span class="pts">+2</span></div>
+            <div class="dojo-item">📋 Corrección completa<br><span class="pts">+2</span></div>
+            <div class="dojo-item">🤝 Trabajo en equipo<br><span class="pts">+1</span></div>
+            <div class="dojo-item">💡 Pregunta de calidad<br><span class="pts">+1</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HTI A -->
+    <div class="activity">
+      <div class="activity-header hti-a">
+        🏠 HTI — Escenario A: Grupo con Alta Motivación
+        <span class="tag bloom">Bloom: Analizar</span>
+      </div>
+      <div class="activity-body">
+        <h3>📊 "Ampliando el Dashboard NeuroBiz"</h3>
+        <p>
+          <strong>Tiempo estimado:</strong> 60–90 minutos · Individual · Entrega por aula virtual.
+        </p>
+        <p>
+          NeuroBiz tiene tres sedes. Amplía el código de clase para manejar los datos 
+          de las tres ciudades usando <strong>listas</strong> y genera un reporte comparativo.
+        </p>
+        <ol>
+          <li>Crea tres arreglos (uno por sede): <code>sesiones_baq</code>, <code>sesiones_bog</code>, <code>sesiones_med</code>, 
+              cada uno con las sesiones de las 4 semanas del mes.</li>
+          <li>Calcula para cada sede: total, promedio, semana de mayor y menor afluencia.</li>
+          <li>Identifica cuál sede tiene la tasa de eficiencia más alta.</li>
+          <li>Genera un reporte en consola con emojis, como el visto en clase.</li>
+          <li>(Reto extra) Investiga cómo funciona <code>numpy.array</code> y reescribe 
+              los cálculos usando esa librería.</li>
+        </ol>
+        <p style="margin-top:.8rem; font-size:.88rem; color:var(--muted);">
+          📤 Entrega: Enlace público de Google Colab o archivo <code>.py</code> al docente 
+          antes de la próxima sesión presencial.
+        </p>
+      </div>
+    </div>
+
+    <!-- HTI B -->
+    <div class="activity">
+      <div class="activity-header hti-b">
+        🏠 HTI — Escenario B: Actividad de Bajo Umbral
+        <span class="tag opc">Opcional / No bloquea la clase</span>
+        <span class="tag bloom">Bloom: Comprender</span>
+      </div>
+      <div class="activity-body">
+        <h3>🗂️ "Ficha de Tipos de Datos NeuroBiz"</h3>
+        <p>
+          <strong>Tiempo estimado:</strong> 20–30 minutos · Individual o parejas · Sin entrega digital obligatoria.
+        </p>
+        <div class="info-box warn">
+          <span class="icon">🟡</span>
+          <p>Esta versión existe para grupos con mayor carga académica o resistencia a las HTI. 
+          <strong>No realizarla NO afecta el desarrollo de la próxima clase presencial.</strong> 
+          Quien la haga gana puntos ClassDojo (+2 pts) y puede presentarla en la siguiente sesión.</p>
+        </div>
+        <p>En tu cuaderno o en una hoja, completa la siguiente tabla con datos de NeuroBiz 
+           que tú inventas (valores realistas):</p>
+        <table>
+          <thead><tr><th>Variable</th><th>Tipo Python</th><th>Valor que inventé</th><th>¿Por qué ese tipo?</th></tr></thead>
+          <tbody>
+            <tr><td>Nombre del paciente</td><td></td><td></td><td></td></tr>
+            <tr><td>Sesiones completadas</td><td></td><td></td><td></td></tr>
+            <tr><td>Porcentaje de avance</td><td></td><td></td><td></td></tr>
+            <tr><td>Diagnóstico neurodivergencia</td><td></td><td></td><td></td></tr>
+            <tr><td>¿Contrato vigente?</td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:.8rem; font-size:.88rem; color:var(--muted);">
+          Foto o cuaderno físico es válido. Quien lo haga menciona su caso al inicio de la próxima clase (2 min).
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══ QUIZ GAMIFICADO ═════════════════════════ -->
+  <section id="quiz" class="card">
+    <h2>🎮 Quiz de Verificación — Quizizz</h2>
+    <div class="quiz-box">
+      <h3>5 preguntas · 8 minutos · Modo Playground</h3>
+      <p style="font-size:.85rem; margin-bottom:1rem; color:var(--muted);">
+        Pasa el cursor sobre cada pregunta para ver la respuesta correcta (modo estudio). 
+        En clase el docente lanzará el quiz en vivo.
+      </p>
+
+      <div class="quiz-q">
+        <p>1. En NeuroBiz, <code>sesiones_asistidas = "847"</code> está declarado como <code>str</code>. Si intentas calcular <code>sesiones_asistidas + 10</code>, Python…</p>
+        <ol type="a">
+          <li>Devuelve 857</li>
+          <li>Genera un TypeError</li>
+          <li>Devuelve "84710"</li>
+          <li>Redondea al entero más cercano</li>
+        </ol>
+        <div class="quiz-answer">✅ b) Genera un TypeError — no se puede sumar str + int directamente.</div>
+      </div>
+
+      <div class="quiz-q">
+        <p>2. ¿Qué operación sobre un arreglo de 1.000 sesiones es O(1)?</p>
+        <ol type="a">
+          <li>Buscar la sesión con mayor índice de progreso</li>
+          <li>Eliminar el primer elemento</li>
+          <li>Acceder a <code>sesiones[499]</code></li>
+          <li>Recorrer todo el arreglo para calcular el promedio</li>
+        </ol>
+        <div class="quiz-answer">✅ c) Acceder por índice es O(1) — directo a la posición de memoria.</div>
+      </div>
+
+      <div class="quiz-q">
+        <p>3. ¿Cuál tipo de dato en Python es el más apropiado para almacenar <code>tasa_retencion = 0.78</code>?</p>
+        <ol type="a">
+          <li><code>int</code></li>
+          <li><code>str</code></li>
+          <li><code>float</code></li>
+          <li><code>bool</code></li>
+        </ol>
+        <div class="quiz-answer">✅ c) float — los porcentajes decimales requieren punto flotante.</div>
+      </div>
+
+      <div class="quiz-q">
+        <p>4. NeuroBiz necesita saber si una sesión fue completada (sí/no). ¿Qué tipo es más eficiente?</p>
+        <ol type="a">
+          <li><code>int</code> con valor 0 o 1</li>
+          <li><code>bool</code> con <code>True</code> o <code>False</code></li>
+          <li><code>str</code> con "si" o "no"</li>
+          <li>Cualquiera es igual de eficiente</li>
+        </ol>
+        <div class="quiz-answer">✅ b) bool — semánticamente correcto y usa menos memoria que str.</div>
+      </div>
+
+      <div class="quiz-q">
+        <p>5. ¿Cuál es la principal ventaja de un arreglo frente a variables separadas para las 847 sesiones?</p>
+        <ol type="a">
+          <li>Las variables separadas son más rápidas de acceder</li>
+          <li>El arreglo permite tratar todos los datos de forma homogénea con un índice</li>
+          <li>El arreglo siempre ocupa menos memoria</li>
+          <li>Las variables separadas permiten más tipos de datos</li>
+        </ol>
+        <div class="quiz-answer">✅ b) Organización homogénea e indexada — esencial para procesamiento masivo.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BIBLIOGRAFÍA ════════════════════════════ -->
+  <section id="bib" class="card">
+    <h2>📖 Bibliografía y Fuentes</h2>
+    <p style="font-size:.88rem; margin-bottom:1rem; color:var(--muted);">
+      Todo el contenido de esta semana está fundamentado en las siguientes fuentes académicas 
+      y recursos verificables:
+    </p>
+    <ol class="bib">
+      <li>
+        <strong>Cairó Battistutti, O. & Guardati Bueno, S. (2006).</strong> 
+        <em>Estructuras de datos.</em> McGraw-Hill. 
+        — Base conceptual de tipos de datos, arreglos y almacenamiento en memoria (Cap. 1–2).
+      </li>
+      <li>
+        <strong>Joyanes Aguilar, L. (2014).</strong> 
+        <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). 
+        McGraw-Hill Interamericana. ISBN: 9786071508188. 
+        — Tipos de datos estándar y representación en memoria (Cap. 3).
+      </li>
+      <li>
+        <strong>Weiss, M. A. (2014).</strong> 
+        <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). 
+        Pearson / Addison Wesley. 
+        — Análisis de complejidad O(1), O(n) en estructuras básicas (Cap. 1–3).
+      </li>
+      <li>
+        <strong>Python Software Foundation. (2024).</strong> 
+        <em>Built-in Types — Python 3 Documentation.</em> 
+        Recuperado de <a href="https://docs.python.org/3/library/stdtypes.html" target="_blank">
+        https://docs.python.org/3/library/stdtypes.html</a>
+      </li>
+      <li>
+        <strong>Google Colaboratory. (2024).</strong> 
+        <em>Welcome to Colaboratory.</em> 
+        Recuperado de <a href="https://colab.research.google.com" target="_blank">
+        https://colab.research.google.com</a>
+      </li>
+      <li>
+        <strong>Moreno Pérez, J. C. (2012).</strong> 
+        <em>Programación.</em> RA-MA Editorial. ISBN: 9788499640884. 
+        — Tipos de datos en lenguajes de alto nivel (Cap. 2).
+      </li>
+    </ol>
+  </section>
+
+</main>
+
+<footer>
+  TGA05 · Estructura de Datos para los Negocios · Institución Universitaria de Barranquilla (UIB)<br>
+  Semana 1 · Caso transversal: NeuroBiz S.A.S. · Framework GAME · Taxonomía de Bloom
+</footer>
+
+<!-- XP ANIMATION SCRIPT -->
+<script>
+  window.addEventListener('load', () => {
+    const bar = document.getElementById('xpBar');
+    const count = document.getElementById('xpCount');
+    let xp = 0;
+    const target = 15; // XP inicial por abrir el material
+    const interval = setInterval(() => {
+      xp++;
+      bar.style.width = (xp / 100 * 100) + '%';
+      count.textContent = xp;
+      if (xp >= target) clearInterval(interval);
+    }, 40);
+  });
+</script>
+
+
+<script id="progress-tracker-js">
+// ════════════════════════════════════════════════════
+//  NeuroBiz Progress Tracker · Semana 1
+// ════════════════════════════════════════════════════
+
+const PT = (function() {
+  const SEMANA       = 1;
+  const XP_BASE      = 5;          // XP base por abrir el material
+  const XP_MAX       = 100;
+  const LS_KEY       = `tga05_s1`;
+  const LS_GLOBAL    = "tga05_global";
+
+  // URL del Apps Script — reemplaza con tu URL al configurar
+  // Ver: EstructuraDatos/setup/CONFIGURAR_PROGRESO.html
+  const SHEETS_URL = localStorage.getItem("tga05_sheets_url") || "";
+
+  let state = {
+    nombre          : "",
+    id_estudiante   : "",
+    semana          : SEMANA,
+    xp              : XP_BASE,
+    quiz_respuestas : {},
+    quiz_puntaje    : 0,
+    hti_entregado   : false,
+    actividad_completada: false,
+    dispositivo     : navigator.userAgent.substring(0, 80)
+  };
+
+  // ── Cargar desde localStorage ──────────────────────
+  function load() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (raw) Object.assign(state, JSON.parse(raw));
+
+      // Cargar nombre/id del perfil global si no está en esta semana
+      const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
+      if (!state.nombre       && global.nombre)        state.nombre        = global.nombre;
+      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante;
+    } catch(e) { console.warn("PT load error:", e); }
+  }
+
+  // ── Guardar en localStorage ────────────────────────
+  function save() {
+    // Capturar nombre del input
+    const inp = document.getElementById("pt-nombre");
+    if (inp && inp.value.trim()) {
+      state.nombre = inp.value.trim();
+      // Generar ID si no existe
+      if (!state.id_estudiante) {
+        state.id_estudiante = state.nombre.toLowerCase()
+          .replace(/\s+/g,"_").replace(/[^a-z0-9_]/g,"")
+          .substring(0,20) + "_" + Math.random().toString(36).substr(2,4);
+      }
+      // Guardar perfil global
+      const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
+      global.nombre = state.nombre;
+      global.id_estudiante = state.id_estudiante;
+      localStorage.setItem(LS_GLOBAL, JSON.stringify(global));
+    }
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+    render();
+  }
+
+  // ── Renderizar widget ──────────────────────────────
+  function render() {
+    const xpBar   = document.getElementById("pt-xp-bar");
+    const xpCount = document.getElementById("pt-xp-count");
+    const semLbl  = document.getElementById("pt-semana-label");
+    const inp     = document.getElementById("pt-nombre");
+
+    if (xpBar)   xpBar.style.width   = Math.min(state.xp, XP_MAX) + "%";
+    if (xpCount) xpCount.textContent = state.xp + " XP";
+    if (semLbl)  semLbl.textContent  = "Semana " + SEMANA;
+    if (inp && !inp.value && state.nombre) inp.value = state.nombre;
+
+    // Sync original XP bars in the page
+    document.querySelectorAll(".xp-fill,[data-target]").forEach(el => {
+      el.style.width = Math.min(state.xp, XP_MAX) + "%";
+    });
+    const xpCounters = document.querySelectorAll("#xpCount,.xp-row strong");
+    xpCounters.forEach(el => { el.textContent = state.xp + " XP"; });
+  }
+
+  // ── Sumar XP ──────────────────────────────────────
+  function addXP(pts, motivo) {
+    state.xp = Math.min(state.xp + pts, XP_MAX);
+    msg("✨ +" + pts + " XP — " + motivo, "lime");
+    save();
+  }
+
+  // ── Sincronizar con Supabase + Google Sheets ──────
+  async function syncCloud() {
+    save();
+    const sheetsUrl = localStorage.getItem("tga05_sheets_url") || "";
+    const sbUrl     = localStorage.getItem("tga05_supabase_url") || "";
+    const sbKey     = localStorage.getItem("tga05_supabase_key") || "";
+
+    if (!sheetsUrl && !sbUrl) {
+      msg("⚠️ Sin destino configurado. Ver CONFIGURAR_SUPABASE.html", "orange");
+      return;
+    }
+
+    msg("⏳ Sincronizando…", "#fff9c4");
+    let synced = false;
+
+    // ── Supabase (recomendado) ─────────────────────
+    if (sbUrl && sbKey) {
+      try {
+        const res = await fetch(sbUrl + "/rest/v1/student_progress", {
+          method : "POST",
+          headers: {
+            "apikey"       : sbKey,
+            "Authorization": "Bearer " + sbKey,
+            "Content-Type" : "application/json",
+            "Prefer"       : "resolution=merge-duplicates"
+          },
+          body: JSON.stringify({
+            student_name    : state.nombre         || "Anónimo",
+            student_id      : state.id_estudiante  || "desconocido",
+            semana          : state.semana,
+            xp              : state.xp             || 0,
+            quiz_answers    : state.quiz_respuestas || {},
+            quiz_score      : state.quiz_puntaje    || 0,
+            hti_done        : !!state.hti_entregado,
+            activity_done   : !!state.actividad_completada,
+            updated_at      : new Date().toISOString()
+          })
+        });
+        if (res.ok || res.status === 201) {
+          synced = true;
+          msg("✅ Guardado en Supabase ☁️", "lightgreen");
+        } else {
+          msg("❌ Supabase: error " + res.status, "salmon");
+        }
+      } catch(e) {
+        msg("❌ Sin conexión (Supabase). Local guardado.", "salmon");
+      }
+    }
+
+    // ── Google Sheets (opcional adicional) ─────────
+    if (sheetsUrl) {
+      try {
+        const resp = await fetch(sheetsUrl, {
+          method : "POST",
+          headers: { "Content-Type": "text/plain" },
+          body   : JSON.stringify(state)
+        });
+        const json = await resp.json();
+        if (json.ok) {
+          synced = true;
+          msg(sbUrl ? "✅ Guardado en Supabase + Sheets" : "✅ Guardado en Google Sheets", "lightgreen");
+        } else {
+          if (!synced) msg("❌ Sheets: " + (json.error || "Error"), "salmon");
+        }
+      } catch(e) {
+        if (!synced) msg("❌ Sin conexión. Solo guardado local.", "salmon");
+      }
+    }
+  }
+
+  // ── Exportar código de progreso ────────────────────
+  function exportCode() {
+    save();
+    const code = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+    const ta = document.createElement("textarea");
+    ta.value = code;
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy");
+    document.body.removeChild(ta);
+    msg("📋 ¡Código copiado! Guárdalo en Google Drive o OneDrive.", "#fff9c4");
+    // También abrir como descarga
+    const a = document.createElement("a");
+    a.href     = "data:text/plain;charset=utf-8," + encodeURIComponent(code);
+    a.download = "progreso_tga05_s1_" + (state.id_estudiante || "estudiante") + ".txt";
+    a.click();
+  }
+
+  // ── Importar desde código ──────────────────────────
+  function importCode() {
+    const code = prompt("Pega tu código de progreso:");
+    if (!code) return;
+    try {
+      const decoded = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+      Object.assign(state, decoded);
+      save();
+      msg("✅ Progreso restaurado correctamente.", "lightgreen");
+    } catch(e) {
+      msg("❌ Código inválido.", "salmon");
+    }
+  }
+
+  // ── Toggle widget ──────────────────────────────────
+  function toggle() {
+    const w = document.getElementById("pt-widget");
+    const t = document.getElementById("pt-toggle");
+    if (w) w.classList.toggle("collapsed");
+    if (t) t.textContent = w && w.classList.contains("collapsed") ? "▼" : "▲";
+  }
+
+  // ── Mensaje en widget ──────────────────────────────
+  function msg(text, color) {
+    const el = document.getElementById("pt-msg");
+    if (!el) return;
+    el.textContent = text;
+    el.style.color = color || "#fff";
+    setTimeout(() => { if (el.textContent === text) el.textContent = ""; }, 4000);
+  }
+
+  // ── Init ───────────────────────────────────────────
+  function init() {
+    load();
+    render();
+
+    // XP por visitar la semana (solo una vez por semana)
+    const visitKey = `tga05_visited_s1`;
+    if (!localStorage.getItem(visitKey)) {
+      localStorage.setItem(visitKey, "1");
+      addXP(15, "Material de Semana 1 abierto");
+    }
+
+    // Hacer quiz interactivo si hay preguntas con clase .quiz-q
+    document.querySelectorAll(".quiz-q").forEach((qEl, qi) => {
+      const answers = qEl.querySelectorAll("li");
+      // Buscar la respuesta oculta (.quiz-answer)
+      const answerEl = qEl.querySelector(".quiz-answer");
+      const correctText = answerEl ? answerEl.textContent : "";
+      const correctLetter = correctText.match(/^✅\s*([a-d])/i);
+      const correctIdx = correctLetter
+        ? ["a","b","c","d"].indexOf(correctLetter[1].toLowerCase())
+        : -1;
+
+      answers.forEach((li, ai) => {
+        li.style.cursor = "pointer";
+        li.style.borderRadius = "6px";
+        li.style.padding = "3px 8px";
+        li.style.transition = "background .2s";
+        li.addEventListener("mouseenter", () => {
+          if (!li.dataset.answered) li.style.background = "rgba(25,118,210,.15)";
+        });
+        li.addEventListener("mouseleave", () => {
+          if (!li.dataset.answered) li.style.background = "";
+        });
+        li.addEventListener("click", () => {
+          const key = "q" + qi;
+          if (state.quiz_respuestas[key] !== undefined) return; // ya respondida
+          answers.forEach(a => { a.dataset.answered = "1"; });
+          if (ai === correctIdx) {
+            li.style.background = "#2e7d32";
+            li.style.color = "#fff";
+            addXP(10, "Respuesta correcta en quiz");
+            state.quiz_puntaje = (state.quiz_puntaje || 0) + 1;
+          } else {
+            li.style.background = "#c62828";
+            li.style.color = "#fff";
+            if (correctIdx >= 0) {
+              answers[correctIdx].style.background = "#2e7d32";
+              answers[correctIdx].style.color = "#fff";
+            }
+          }
+          state.quiz_respuestas[key] = ai;
+          if (answerEl) answerEl.style.display = "block";
+          save();
+        });
+      });
+
+      // Restaurar estado previo
+      const prevKey = "q" + qi;
+      if (state.quiz_respuestas[prevKey] !== undefined) {
+        const prev = state.quiz_respuestas[prevKey];
+        answers.forEach(a => { a.dataset.answered = "1"; });
+        if (prev === correctIdx && correctIdx >= 0) {
+          answers[prev].style.background = "#2e7d32";
+          answers[prev].style.color = "#fff";
+        } else {
+          if (prev < answers.length) {
+            answers[prev].style.background = "#c62828";
+            answers[prev].style.color = "#fff";
+          }
+          if (correctIdx >= 0) {
+            answers[correctIdx].style.background = "#2e7d32";
+            answers[correctIdx].style.color = "#fff";
+          }
+        }
+        if (answerEl) answerEl.style.display = "block";
+      }
+    });
+
+    // XP por configurar nombre
+    const nombreInp = document.getElementById("pt-nombre");
+    if (nombreInp) {
+      nombreInp.addEventListener("blur", () => {
+        if (nombreInp.value.trim() && !state._nombre_xp) {
+          state._nombre_xp = true;
+          addXP(5, "Perfil configurado");
+        }
+      });
+    }
+  }
+
+  return {
+    init,
+    addXP,
+    save  : save,
+    sync  : syncCloud,
+    export: exportCode,
+    import: importCode,
+    toggle,
+    state : () => state
+  };
+})();
+
+// ── Exponer funciones para botones HTML ────────────────────
+function ptSaveLocal()  { PT.save(); }
+function ptSyncCloud()  { PT.sync(); }
+function ptExportCode() { PT.export(); }
+function ptImportCode() { PT.import(); }
+function ptToggle()     { PT.toggle(); }
+
+// ── Inicializar cuando cargue el DOM ───────────────────────
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", PT.init);
+} else {
+  PT.init();
+}
+</script>
+
+<!-- ── WELCOME MODAL ── -->
+<style id="welcome-modal-css">
+#pt-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeIn .3s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+#pt-modal-box{
+  background:linear-gradient(160deg,#1E2843,#1E2843 70%,#2d3a5e);
+  color:#fff;border-radius:20px;padding:2rem 2rem 1.5rem;
+  width:min(94vw,400px);box-shadow:0 20px 60px rgba(0,0,0,.5);
+  position:relative;animation:slideUp .35s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+#pt-modal-box h2{font-size:1.25rem;font-weight:900;margin-bottom:.3rem}
+#pt-modal-box .sub{opacity:.75;font-size:.85rem;margin-bottom:1.3rem}
+#pt-modal-box .field{margin-bottom:.9rem}
+#pt-modal-box label{display:block;font-size:.78rem;font-weight:700;
+  opacity:.85;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em}
+#pt-modal-box input{
+  width:100%;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.35);
+  border-radius:10px;padding:.6rem .9rem;color:#fff;font-size:.95rem;outline:none;
+}
+#pt-modal-box input::placeholder{color:rgba(255,255,255,.45)}
+#pt-modal-box input:focus{border-color:rgba(249,168,37,.9)}
+#pt-modal-btn{
+  width:100%;padding:.7rem;border:none;border-radius:12px;
+  background:linear-gradient(135deg,#FFDF2D,#FFDF2D);
+  color:#1E2843;font-weight:900;font-size:1rem;cursor:pointer;
+  margin-top:.4rem;transition:opacity .15s;
+}
+#pt-modal-btn:hover{opacity:.9}
+#pt-modal-error{color:#ff8a80;font-size:.8rem;margin-top:.5rem;min-height:1em}
+#pt-modal-xp{
+  text-align:center;font-size:.78rem;opacity:.7;margin-top:.7rem;
+}
+</style>
+
+<div id="pt-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="pt-modal-title">
+  <div id="pt-modal-box">
+    <h2 id="pt-modal-title">👋 ¡Bienvenido a TGA05!</h2>
+    <p class="sub">NeuroBiz S.A.S. · Estructura de Datos para los Negocios</p>
+    <div class="field">
+      <label for="pt-modal-nombre">Tu nombre completo *</label>
+      <input id="pt-modal-nombre" type="text" placeholder="Ej: María García López"
+        autocomplete="name" autofocus
+        onkeydown="if(event.key==='Enter')ptModalSetup()" />
+    </div>
+    <div class="field">
+      <label for="pt-modal-grupo">Grupo / Paralelo</label>
+      <input id="pt-modal-grupo" type="text" placeholder="Ej: GA-01" />
+    </div>
+    <button id="pt-modal-btn" onclick="ptModalSetup()">¡Empezar! 🚀</button>
+    <div id="pt-modal-error"></div>
+    <p id="pt-modal-xp">⭐ Recibirás +5 XP por configurar tu perfil</p>
+  </div>
+</div>
+
+<script id="welcome-modal-js">
+(function () {
+  function shouldShowModal() {
+    try {
+      var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
+      return !g.nombre || g.nombre.trim().length < 2;
+    } catch(e) { return true; }
+  }
+
+  function showModal() {
+    var overlay = document.getElementById("pt-overlay");
+    if (overlay) {
+      overlay.style.display = "flex";
+      var inp = document.getElementById("pt-modal-nombre");
+      // Pre-fill if there's a partial name saved
+      try {
+        var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
+        if (g.nombre && inp) inp.value = g.nombre;
+        var gInp = document.getElementById("pt-modal-grupo");
+        if (g.grupo && gInp) gInp.value = g.grupo;
+      } catch(e) {}
+      if (inp) setTimeout(function(){ inp.focus(); }, 100);
+    }
+  }
+
+  window.ptModalSetup = function() {
+    var nombreInp = document.getElementById("pt-modal-nombre");
+    var grupoInp  = document.getElementById("pt-modal-grupo");
+    var errEl     = document.getElementById("pt-modal-error");
+    var nombre    = nombreInp ? nombreInp.value.trim() : "";
+    var grupo     = grupoInp  ? grupoInp.value.trim()  : "";
+
+    if (!nombre || nombre.length < 3) {
+      if (errEl) errEl.textContent = "Por favor escribe tu nombre completo (mínimo 3 caracteres).";
+      if (nombreInp) nombreInp.focus();
+      return;
+    }
+
+    // Build / update global profile
+    var profile = {};
+    try { profile = JSON.parse(localStorage.getItem("tga05_global") || "{}"); } catch(e) {}
+
+    profile.nombre = nombre;
+    if (grupo) profile.grupo = grupo;
+    if (!profile.id_estudiante) {
+      profile.id_estudiante = nombre.toLowerCase()
+        .replace(/\s+/g, "_").replace(/[^a-z0-9_áéíóúñ]/g, "")
+        .substring(0, 22) + "_" + Math.random().toString(36).substr(2, 4);
+    }
+    localStorage.setItem("tga05_global", JSON.stringify(profile));
+
+    // Sync into the PT widget name input
+    var ptInp = document.getElementById("pt-nombre");
+    if (ptInp) { ptInp.value = nombre; ptInp.dispatchEvent(new Event("input")); }
+
+    // XP reward
+    if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
+      PT.addXP(5, "Perfil configurado ✨");
+    }
+
+    // Close modal
+    var overlay = document.getElementById("pt-overlay");
+    if (overlay) {
+      overlay.style.opacity = "0";
+      overlay.style.transition = "opacity .2s";
+      setTimeout(function(){ overlay.style.display = "none"; overlay.style.opacity = ""; }, 200);
+    }
+
+    // Auto-sync to Supabase after a short delay
+    setTimeout(function(){
+      if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
+    }, 800);
+  };
+
+  // Show on load if no name
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function(){
+      if (shouldShowModal()) showModal();
+    });
+  } else {
+    if (shouldShowModal()) showModal();
+  }
+})();
+</script>
+
+</body>
+</html>

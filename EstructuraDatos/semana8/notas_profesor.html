@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="es"><head><link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Notas del profesor — Semana 8 | TGA05</title><style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f7fbf4;
+  color: #1f2937;
+  line-height: 1.7;
+}
+:root {
+  --primary: #1b5e20;
+  --accent: #2e7d32;
+  --gold:      #FFDF2D;
+  --light: #f1f8e9;
+  --border: #c8e6c9;
+  --warn: #ef6c00;
+  --warn-bg: #fff3e0;
+  --blue: #1565c0;
+  --blue-bg: #e3f2fd;
+  --purple: #8e24aa;
+  --purple-bg: #f3e5f5;
+  --red: #b71c1c;
+  --red-bg: #ffebee;
+  --ink: #1f2937;
+  --muted: #546e7a;
+  --card: #ffffff;
+  --radius: 16px;
+  --shadow: 0 12px 30px rgba(27,94,32,.08);
+}
+header {
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+  color: #fff;
+  padding: 2.3rem 1.2rem 1.8rem;
+  position: relative;
+  overflow: hidden;
+}
+header::before,
+header::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+}
+header::before { width: 220px; height: 220px; top: -90px; right: -50px; }
+header::after { width: 170px; height: 170px; bottom: -80px; left: -60px; }
+.header-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .35rem .9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.14);
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+header h1 { margin: .8rem 0 .4rem; font-size: clamp(1.7rem, 3vw, 2.7rem); }
+header p { margin: 0; max-width: 860px; color: rgba(255,255,255,.93); }
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 8px 22px rgba(27,94,32,.08);
+}
+.nav-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: .7rem 1rem;
+  display: flex;
+  gap: .55rem;
+  flex-wrap: wrap;
+}
+nav a {
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: .84rem;
+  padding: .42rem .72rem;
+  border-radius: 10px;
+}
+nav a:hover { background: #edf7ee; }
+main { max-width: 1180px; margin: 1.8rem auto 0; padding: 0 1rem 3rem; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.3rem;
+  margin-bottom: 1.4rem;
+}
+.card h2 {
+  margin: 0 0 1rem;
+  color: var(--primary);
+  font-size: 1.3rem;
+  border-left: 5px solid var(--gold);
+  padding-left: .85rem;
+}
+.card h3 { color: var(--accent); margin: 1rem 0 .55rem; }
+.lead { color: #374151; }
+.grid-2, .grid-3, .meta-grid, .scenario-grid {
+  display: grid;
+  gap: 1rem;
+}
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.meta-grid { grid-template-columns: 1.1fr .9fr; align-items: start; }
+.box {
+  display: flex;
+  align-items: flex-start;
+  gap: .8rem;
+  padding: 1rem 1.05rem;
+  border-radius: 14px;
+}
+.box.ok { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+.box.warn { background: #fff3e0; border-left: 5px solid #ef6c00; }
+.box.blue { background: #e3f2fd; border-left: 5px solid #1565c0; }
+.box.brain { background: #f3e5f5; border-left: 5px solid #8e24aa; }
+.box.red { background: #ffebee; border-left: 5px solid #c62828; }
+.box .ico { font-size: 1.25rem; }
+.box p { margin: 0; }
+.checklist { list-style: none; padding: 0; margin: 0; }
+.checklist li {
+  display: flex;
+  gap: .75rem;
+  align-items: flex-start;
+  padding: .55rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.checklist li:last-child { border-bottom: none; }
+.check {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 2px solid var(--accent);
+  border-radius: 5px;
+  margin-top: .2rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: .9rem 0;
+  font-size: .92rem;
+}
+th {
+  background: var(--primary);
+  color: #fff;
+  text-align: left;
+  padding: .75rem .9rem;
+}
+td {
+  padding: .72rem .9rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: #f9fcf7; }
+.timeline {
+  position: relative;
+  margin-left: .4rem;
+  padding-left: 1.4rem;
+  border-left: 3px solid #c8e6c9;
+}
+.tl-item {
+  position: relative;
+  padding: .2rem 0 1rem 1.2rem;
+  border-bottom: 1px dashed #d7ead7;
+}
+.tl-item:last-child { border-bottom: none; padding-bottom: 0; }
+.tl-dot {
+  position: absolute;
+  left: -12px;
+  top: .45rem;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.tl-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  align-items: center;
+  margin-bottom: .35rem;
+}
+.tl-time {
+  font-size: .77rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: .04em;
+}
+.tl-title { font-size: 1rem; font-weight: 800; color: var(--primary); }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 800;
+}
+.tag.habla { background: #e3f2fd; color: #0d47a1; }
+.tag.silencio { background: #fce4ec; color: #880e4f; }
+.tag.monit { background: #fff8e1; color: #8d6e00; }
+.tag.dojo { background: #f3e5f5; color: #6a1b9a; }
+.tl-body { font-size: .93rem; }
+.tl-body ul { padding-left: 1.2rem; margin: .35rem 0; }
+.tl-body li { margin-bottom: .35rem; }
+.tl-guion {
+  margin-top: .55rem;
+  background: #f1f8e9;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  padding: .7rem .9rem;
+  font-style: italic;
+}
+.qa {
+  border-radius: 14px;
+  padding: 1rem;
+  background: #eef7ee;
+  border: 1px solid var(--border);
+  margin-bottom: .8rem;
+}
+.qa h4 { margin: 0 0 .45rem; color: var(--primary); }
+.correct { font-weight: 800; color: var(--primary); }
+.scenario {
+  border: 2px solid;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.scenario.a { border-color: #2e7d32; }
+.scenario.b { border-color: #ef6c00; }
+.scenario-header {
+  padding: .8rem 1rem;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.scenario.a .scenario-header { background: #e8f5e9; color: #1b5e20; }
+.scenario.b .scenario-header { background: #fff3e0; color: #e65100; }
+.scenario-body { padding: 1rem 1.05rem; }
+.note-table td:first-child { font-weight: 700; color: var(--primary); width: 28%; }
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: .82rem;
+  padding: 1.8rem 1rem 2.2rem;
+}
+@media (max-width: 900px) {
+  .meta-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .card { padding: 1rem; }
+  .timeline { padding-left: 1rem; }
+  .tl-item { padding-left: 1rem; }
+  table { font-size: .86rem; }
+}
+</style></head><body><header><div class="header-inner"><div class="badge">🔒 USO EXCLUSIVO DOCENTE · Semana 8 · TGA05</div><h1>Notas del Profesor — Listas Enlazadas Simples I</h1><p>Guía docente detallada para la sesión de 4 horas presenciales del módulo Estructura de Datos para los Negocios, con enfoque GAME, Bloom explícito y narrativa NeuroBiz.</p></div></header><nav><div class="nav-wrap"><a href="#meta">🎯 Meta</a><a href="#checklist">✅ Checklist</a><a href="#secuencia">⏱ Secuencia</a><a href="#dojo">🏆 ClassDojo</a><a href="#quiz">🎮 Quiz</a><a href="#hti">🏠 HTI</a><a href="#neuro">🧠 Neurodivergencia</a><a href="#contingencias">🚨 Contingencias</a><a href="#observacion">👁 Observación</a></div></nav><main><section id="meta" class="card"><h2>🎯 Meta de la sesión</h2><div class="meta-grid"><div><p class="lead">Al finalizar la sesión, el estudiante reconoce la estructura de una lista enlazada simple, implementa las clases base y recorre el historial terapéutico de un paciente de NeuroBiz.</p><div class="box ok"><div class="ico">📌</div><p><strong>Recordatorio metodológico:</strong> Python opera aquí como lenguaje de apoyo a la inteligencia de negocios. La comprensión de la estructura y su relación con el caso es más importante que escribir código velozmente.</p></div><div class="box blue"><div class="ico">🎮</div><p><strong>Framework GAME:</strong> guía con ejemplo inicial, articula teoría-caso-código, motiva con narrativa y puntos visibles, y evalúa con evidencia concreta, quiz y retroalimentación formativa.</p></div></div><div><div class="table-wrap"><table><thead><tr><th>RA</th><th>CE</th><th>Bloom</th><th>Meta observable</th></tr></thead><tbody><tr><td>RA2</td><td>CE1 · CE2</td><td>Recordar → Comprender</td><td>Selecciona el modelo y desarrolla la base estructural para representar un historial dinámico.</td></tr></tbody></table></div></div></div></section><section id="checklist" class="card"><h2>✅ Checklist pre-clase</h2><div class="grid-2"><div><h3>Pedagógico</h3><ul class="checklist"><li><span class="check"></span><span>Llevar preparado un diagrama grande de nodo y enlaces para trabajar primero sin código.</span></li><li><span class="check"></span><span>Definir una historia de paciente con tres sesiones para convertirla en lista viva durante la clase.</span></li><li><span class="check"></span><span>Preparar comparación explícita con arreglos: qué gana y qué pierde cada estructura.</span></li><li><span class="check"></span><span>Tener preguntas de sondeo sobre cabeza, recorrido y final de lista.</span></li><li><span class="check"></span><span>Organizar duplas donde una persona dibuja y la otra traduce a código para reforzar articulación visual-lógica.</span></li></ul></div><div><h3>Tecnológico</h3><ul class="checklist"><li><span class="check"></span><span>Verificar que Colab muestre correctamente la indentación de clases y métodos.</span></li><li><span class="check"></span><span>Tener el código base de Nodo listo para copiar solo si el grupo se bloquea; prioriza que lo escriban.</span></li><li><span class="check"></span><span>Preparar Quizizz con distractores sobre nodo, cabeza, siguiente y recorrido.</span></li><li><span class="check"></span><span>Configurar ClassDojo para valorar dibujo conceptual además del código.</span></li><li><span class="check"></span><span>Tener una versión impresa del diagrama por si falla la proyección.</span></li></ul></div></div><h3>ClassDojo — categorías sugeridas</h3><div class="table-wrap"><table><thead><tr><th>Categoría</th><th>Puntos</th><th>Cuándo aplicar</th></tr></thead><tbody><tr><td>🧩 Representación</td><td>+1</td><td>Dibuja nodo, cabeza y enlace correctamente</td></tr><tr><td>💻 Estructura base</td><td>+2</td><td>Implementa Nodo y ListaEnlazada</td></tr><tr><td>🔁 Recorrido</td><td>+2</td><td>Recorre e imprime la lista sin romper enlaces</td></tr><tr><td>🗣️ Explicación</td><td>+1</td><td>Explica ventaja frente a un arreglo</td></tr><tr><td>🤝 Apoyo</td><td>+1</td><td>Ayuda a otro equipo a ubicar un error estructural</td></tr></tbody></table></div></section><section id="secuencia" class="card"><h2>⏱ Secuencia minuto a minuto completa (240 min)</h2><p class="lead">La siguiente línea de tiempo está pensada para 2 horas HAD + 2 horas HP. Incluye guion sugerido en momentos clave, observables y microdecisiones de acompañamiento.</p><div class="timeline"><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">0–15 min</span><span class="tl-title">Memorando y visualización del problema</span><span class="tag habla">🎙️ Habla docente</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Presenta el caso de sesión retroactiva y pregunta por qué un arreglo puede incomodar en este contexto.</li><li>Recuerda el rol de Analista de Datos Estratégico y la necesidad de historiales flexibles.</li></ul><div class="tl-guion">Hoy no vamos a “llenar casillas”: vamos a construir una estructura que se adapta cuando la historia del paciente cambia.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">15–35 min</span><span class="tl-title">Activación con diagrama físico</span><span class="tag habla">🎙️ Habla docente</span><span class="tag monit">👀 Monitoreo</span></div><div class="tl-body"><ul><li>Dibuja tres tarjetas como nodos y conecta con flechas.</li><li>Pregunta qué pasa si agregas una sesión antes de la primera.</li><li>Haz que un estudiante sostenga la tarjeta “cabeza” para volver tangible el concepto.</li></ul><div class="tl-guion">Si entiendo el dibujo, el código deja de ser una receta misteriosa.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">35–55 min</span><span class="tl-title">Mini-lección conceptual</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Define lista enlazada, nodo y referencia.</li><li>Compara brevemente con arreglos.</li><li>Parafrasea a Joyanes y Cairó & Guardati para destacar la naturaleza dinámica de la estructura.</li></ul><div class="tl-guion">La palabra clave es enlace: no se trata solo del dato, sino de cómo se conecta con el siguiente.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">55–80 min</span><span class="tl-title">Construcción colectiva de Nodo</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Proyecta y escribe la clase Nodo con el grupo.</li><li>Explica por qué <code>siguiente</code> inicia en <code>None</code>.</li><li>Verifica que comprendan la diferencia entre el dato y la referencia.</li></ul><div class="tl-guion">Un nodo no conoce toda la lista; solo conoce su dato y hacia dónde continuar.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">80–105 min</span><span class="tl-title">Construcción colectiva de ListaEnlazada</span><span class="tag habla">🎙️ Habla docente</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Añade la cabeza y el método insertar al inicio.</li><li>Pregunta qué cambia cuando la lista está vacía.</li><li>Completa insertar al final y recorre paso a paso el while.</li></ul><div class="tl-guion">Cada condición del método responde a un estado real de la estructura.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">105–120 min</span><span class="tl-title">Chequeo rápido de comprensión</span><span class="tag monit">👀 Monitoreo</span></div><div class="tl-body"><ul><li>Pide a cada equipo escribir qué significa cabeza y qué significa final de lista.</li><li>Corrige confusiones antes del descanso.</li></ul><div class="tl-guion">Si el vocabulario no está claro, las operaciones de la próxima semana se vuelven mecánicas.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">120–130 min</span><span class="tl-title">Pausa activa</span><span class="tag silencio">✍️ Trabajo silencioso</span></div><div class="tl-body"><ul><li>Descanso breve; invita a mirar lejos de la pantalla y volver con una pregunta anotada.</li></ul><div class="tl-guion">Volvemos para convertir el diagrama en historial funcional.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">130–160 min</span><span class="tl-title">Trabajo por duplas: diseño y codificación</span><span class="tag silencio">✍️ Trabajo silencioso</span><span class="tag monit">👀 Monitoreo</span></div><div class="tl-body"><ul><li>Una persona dibuja la estructura objetivo; la otra la implementa en Colab.</li><li>Después cambian roles y verifican juntos el recorrido.</li></ul><div class="tl-guion">Dibujar antes de codificar es una estrategia profesional, no una pérdida de tiempo.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">160–190 min</span><span class="tl-title">Laboratorio principal</span><span class="tag monit">👀 Monitoreo</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Insertan sesiones reales del caso NeuroBiz al inicio y al final.</li><li>Prueban el recorrido y verifican orden lógico del historial.</li><li>Apoya a quienes olvidan actualizar referencias.</li></ul><div class="tl-guion">Cada error de enlace nos enseña algo sobre la estructura; no lo oculten, léanlo.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">190–210 min</span><span class="tl-title">Socialización corta y comparación con arreglos</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Pide a dos equipos explicar dónde vieron la ventaja de la lista enlazada.</li><li>Recoge ejemplos de errores administrativos que la estructura ayuda a resolver.</li></ul><div class="tl-guion">La estructura importa porque el negocio se mueve; los datos no siempre llegan en el orden ideal.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">210–225 min</span><span class="tl-title">Quizizz formativo</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Ejecuta el quiz y comenta errores frecuentes.</li><li>Usa respuestas para decidir si refuerzas cabeza, nodo o recorrido.</li></ul><div class="tl-guion">Si entiendes la imagen de la estructura, el resto de operaciones será una extensión natural.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">225–240 min</span><span class="tl-title">HTI y proyección a operaciones CRUD</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Explica HTI A y HTI B dejando explícito que el Escenario B NO BLOQUEA la siguiente clase.</li><li>Anuncia que la semana siguiente se eliminarán, insertarán e invertirán nodos.</li></ul><div class="tl-guion">Hoy construimos la estructura; la próxima semana aprenderemos a operarla con criterio.</div></div></article></div></section><section id="dojo" class="card"><h2>🏆 Integración ClassDojo</h2><p class="lead">Registra los puntos en el momento exacto en que la evidencia aparece. Evita asignaciones ambiguas; la claridad de criterios mejora la percepción de justicia y la motivación.</p><div class="table-wrap"><table><thead><tr><th>Momento</th><th>Criterio concreto</th><th>Puntos</th></tr></thead><tbody><tr><td>Inicio</td><td>Dibuja correctamente nodo y enlace</td><td class="points">+1</td></tr><tr><td>Modelado</td><td>Construye las clases base sin errores estructurales</td><td class="points">+2</td></tr><tr><td>Práctica</td><td>Inserta sesiones al inicio y final con éxito</td><td class="points">+2</td></tr><tr><td>Comprensión</td><td>Explica diferencia con arreglo</td><td class="points">+1</td></tr><tr><td>Cierre</td><td>Participa en el quiz o en la socialización final</td><td class="points">+1</td></tr></tbody></table></div><div class="box warn"><div class="ico">📝</div><p><strong>Sugerencia:</strong> verbaliza el criterio cada vez que otorgues puntos. Ejemplo: “sumo +2 porque identificaste el caso límite y además lo probaste con evidencia”.</p></div></section><section id="quiz" class="card"><h2>🎮 Quiz Quizizz — preguntas y respuestas correctas</h2><p class="lead">Usa el quiz como evaluación formativa de cierre. Si el puntaje promedio del grupo queda bajo, retoma solo la idea crítica antes de terminar; no intentes reenseñar toda la sesión en los últimos 10 minutos.</p><div class="qa"><h4>Pregunta 1</h4><p><strong>¿Qué contiene un nodo en una lista enlazada simple?</strong></p><ol><li>Solo un índice</li><li>Dato y referencia al siguiente nodo</li><li>Solo un puntero al inicio</li><li>Un arreglo completo</li></ol><p class="correct">Respuesta correcta: El nodo combina la información útil y la referencia que mantiene la cadena.</p></div><div class="qa"><h4>Pregunta 2</h4><p><strong>¿Qué representa la cabeza de la lista?</strong></p><ol><li>El último nodo</li><li>La mitad de la lista</li><li>El primer nodo desde donde inicia el recorrido</li><li>Una copia de todos los nodos</li></ol><p class="correct">Respuesta correcta: La cabeza es el punto de entrada a toda la estructura.</p></div><div class="qa"><h4>Pregunta 3</h4><p><strong>¿Qué ventaja clave ofrece frente a un arreglo para el caso de NeuroBiz?</strong></p><ol><li>Siempre accede más rápido por posición</li><li>Permite insertar elementos dinámicamente sin mover todos los registros</li><li>No necesita recorrido</li><li>Evita cualquier error de lógica</li></ol><p class="correct">Respuesta correcta: La flexibilidad de inserción es la idea central del caso.</p></div><div class="qa"><h4>Pregunta 4</h4><p><strong>¿Cómo se recorre una lista enlazada simple?</strong></p><ol><li>Saltando directamente al índice deseado</li><li>Siguiendo la referencia de cada nodo hasta llegar a None</li><li>Ordenándola primero</li><li>Con búsqueda binaria</li></ol><p class="correct">Respuesta correcta: El recorrido es secuencial, nodo por nodo, hasta el final.</p></div><div class="qa"><h4>Pregunta 5</h4><p><strong>Si una sesión retroactiva aparece al inicio del historial, una lista enlazada simple…</strong></p><ol><li>puede insertarla actualizando la cabeza</li><li>no puede representarla</li><li>debe convertirla en tupla</li><li>pierde todos los nodos</li></ol><p class="correct">Respuesta correcta: Cambiar la cabeza es una operación natural en la estructura.</p></div></section><section id="hti" class="card"><h2>🏠 HTI — cómo elegir Escenario A vs B</h2><p class="lead">Escenario A es adecuado para quien ya recorrió correctamente la lista y puede ampliar funcionalidades. Escenario B conviene si aún requiere consolidar la representación visual; mantiene continuidad y NO BLOQUEA la siguiente clase.</p><div class="scenario-grid"><div class="scenario a"><div class="scenario-header"><span>Escenario A · profundización</span><span>60–90 min · entrega digital</span></div><div class="scenario-body"><p>Extiende la clase <code>ListaEnlazada</code> para incluir un método <code>buscar(id_sesion)</code> y otro <code>longitud()</code>.</p><p>Prueba tus métodos con al menos cinco nodos de sesiones NeuroBiz y documenta qué devuelve cada uno cuando encuentra o no encuentra el id solicitado.</p><p>Entrega: notebook funcional, captura de resultados y una nota breve sobre cómo estas operaciones apoyan la gestión del historial.</p><div class="box ok"><div class="ico">✅</div><p><strong>Consecuencia pedagógica:</strong> ofrece evidencia más robusta del desempeño y prepara mejor el siguiente contenido.</p></div></div></div><div class="scenario b"><div class="scenario-header"><span>Escenario B · bajo umbral</span><span>20–30 min · cuaderno/papel</span></div><div class="scenario-body"><p>Representa una lista enlazada con 5 nodos de sesiones NeuroBiz. Cada nodo debe incluir fecha, número de sesión y estado.</p><p>Marca visualmente la cabeza, las referencias al siguiente nodo y el final de la lista.</p><p>Este escenario es de bajo umbral y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>; busca fijar la imagen mental de la estructura.</p><div class="box warn"><div class="ico">🟠</div><p><strong>Consecuencia pedagógica:</strong> sostiene continuidad conceptual para estudiantes con menos tiempo, conectividad o seguridad técnica. <strong>NO BLOQUEA la siguiente clase</strong>.</p></div></div></div></div><div class="table-wrap"><table class="note-table"><tbody><tr><td>Si elige A</td><td>Obtiene una práctica más profunda, evidencia digital más sólida y mejor preparación para transferir el concepto a nuevos algoritmos.</td></tr><tr><td>Si elige B</td><td>Refuerza la imagen mental o el paso a paso sin convertir la tarea en barrera. Útil para nivelación o recuperación de confianza.</td></tr><tr><td>Qué debe decir el docente</td><td>“Ambas rutas suman al proceso; A profundiza más, B mantiene continuidad. La no realización de B no impide comprender la siguiente sesión”.</td></tr></tbody></table></div></section><section id="neuro" class="card"><h2>🧠 Nota de neurodivergencia (máx. 1 minuto)</h2><div class="box brain"><div class="ico">🧠</div><p>Frase sugerida: “Cuando hablamos de historiales de personas neurodivergentes, el dato debe servir para acompañar mejor, no para reducir a la persona a una etiqueta clínica”.</p></div><div class="box blue"><div class="ico">⏱</div><p><strong>Sugerencia de uso:</strong> di esta frase durante el aterrizaje del caso o antes del laboratorio. No la conviertas en discurso largo; basta una mención breve, respetuosa y natural.</p></div></section><section id="contingencias" class="card"><h2>🚨 Contingencias</h2><div class="box warn"><div class="ico">⚠️</div><p><strong>Falla técnica:</strong> Trabaja la lista enlazada con tarjetas físicas y pseudocódigo. El valor conceptual de nodo y enlace puede sostenerse sin computador.</p></div><div class="box warn"><div class="ico">⚠️</div><p><strong>Bajo engagement:</strong> Transforma el recorrido en reto: cada equipo debe narrar el viaje de la cabeza al final de la lista como si fuera la historia del paciente.</p></div><div class="box warn"><div class="ico">⚠️</div><p><strong>Falta de tiempo:</strong> Prioriza Nodo, insertar al inicio y recorrer. Deja insertar al final como demostración docente o refuerzo para HTI A.</p></div></section><section id="observacion" class="card"><h2>👁 Indicadores de observación docente</h2><ul><li>Identifica la cabeza y el final de la lista con seguridad.</li><li>Distingue entre dato del nodo y referencia al siguiente.</li><li>Puede explicar una ventaja concreta frente al arreglo.</li><li>No confunde recorrer con acceder por índice.</li><li>Relaciona la estructura con el caso del historial terapéutico.</li></ul><div class="box ok"><div class="ico">🎤</div><p><strong>Cierre sugerido:</strong> Cierre sugerido: “Una lista enlazada simple nos obliga a pensar en relaciones entre datos. En negocios reales, esa mirada es clave cuando la información cambia y debe mantenerse coherente.”</p></div></section></main><footer>TGA05 · Notas del profesor · Semana 8 · Uso exclusivo docente · Caso NeuroBiz S.A.S.</footer></body></html>

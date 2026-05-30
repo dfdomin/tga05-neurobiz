@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notas del Profesor — Semana 1 | TGA05</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary:  #1b5e20;
+      --accent:   #388e3c;
+      --gold:      #FFDF2D;
+      --warn:     #e65100;
+      --blue:     #1565c0;
+      --red:      #b71c1c;
+      --light:    #f1f8e9;
+      --border:   #c8e6c9;
+      --text:     #212121;
+      --muted:    #546e7a;
+      --radius:   12px;
+    }
+    body { font-family: 'Open Sans', Arial, sans-serif; background: #f9fbe7; color: var(--text); line-height: 1.7; }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #1b5e20, #2e7d32);
+      color: #fff;
+      padding: 2rem 2rem 1.5rem;
+      position: relative;
+    }
+    header::after {
+      content:''; position:absolute; bottom:-2px; left:0; right:0; height:35px;
+      background:#f9fbe7; clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .badge { display:inline-block; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.3);
+      border-radius:20px; padding:.25rem 1rem; font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; margin-bottom:.6rem; }
+    header h1 { font-size:1.8rem; font-weight:800; }
+    header p  { opacity:.85; font-size:.95rem; margin-top:.4rem; }
+
+    /* NAV */
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:.5rem 1.5rem;
+      display:flex; gap:.5rem; flex-wrap:wrap; position:sticky; top:0; z-index:99;
+      box-shadow:0 2px 6px rgba(0,0,0,.06); }
+    nav a { color:var(--accent); text-decoration:none; font-size:.83rem; font-weight:700;
+      padding:.25rem .65rem; border-radius:8px; transition:background .2s; }
+    nav a:hover { background:var(--border); }
+
+    /* LAYOUT */
+    main { max-width:960px; margin:2rem auto; padding:0 1.2rem 4rem; }
+
+    /* CARD */
+    .card { background:#fff; border-radius:var(--radius); border:1px solid var(--border);
+      padding:1.8rem 2rem; margin-bottom:2rem; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .card h2 { font-size:1.25rem; color:var(--primary); border-left:5px solid var(--gold);
+      padding-left:.8rem; margin-bottom:1.2rem; }
+    .card h3 { font-size:1rem; color:var(--accent); margin:1.2rem 0 .6rem; }
+
+    /* CHECKLIST */
+    .checklist { list-style:none; padding:0; }
+    .checklist li { display:flex; align-items:flex-start; gap:.7rem; padding:.5rem 0;
+      border-bottom:1px solid var(--border); font-size:.93rem; }
+    .checklist li:last-child { border-bottom:none; }
+    .checklist .check { width:20px; height:20px; border:2px solid var(--accent); border-radius:4px;
+      flex-shrink:0; margin-top:.2rem; cursor:pointer; }
+
+    /* TIMELINE */
+    .timeline { border-left:3px solid var(--border); margin-left:.8rem; }
+    .tl-item { position:relative; padding:.8rem 0 .8rem 2rem; border-bottom:1px dashed var(--border); }
+    .tl-item:last-child { border-bottom:none; }
+    .tl-dot { position:absolute; left:-9px; top:1rem; width:16px; height:16px;
+      border-radius:50%; background:var(--accent); border:3px solid #fff; box-shadow:0 0 0 2px var(--accent); }
+    .tl-time { font-size:.78rem; font-weight:800; color:var(--muted); text-transform:uppercase; margin-bottom:.2rem; }
+    .tl-title { font-weight:700; color:var(--primary); margin-bottom:.3rem; }
+    .tl-body { font-size:.9rem; }
+    .tl-guion { background:#f1f8e9; border-left:4px solid var(--accent); border-radius:0 8px 8px 0;
+      padding:.6rem 1rem; margin:.5rem 0; font-style:italic; font-size:.88rem; }
+    .tl-guion::before { content:'"'; font-size:1.3rem; color:var(--accent); }
+    .tl-guion::after  { content:'"'; font-size:1.3rem; color:var(--accent); }
+
+    /* TAGS */
+    .tag { display:inline-block; padding:.15rem .6rem; border-radius:20px; font-size:.72rem; font-weight:700; margin:.1rem; }
+    .tag.habla    { background:#e3f2fd; color:#0d47a1; border:1px solid #90caf9; }
+    .tag.silencio { background:#fce4ec; color:#880e4f; border:1px solid #f48fb1; }
+    .tag.monit    { background:#fff9c4; color:#5d4037; border:1px solid #FFDF2D; }
+    .tag.descansa { background:#f3e5f5; color:#4a148c; border:1px solid #ce93d8; }
+
+    /* DOJO TABLE */
+    table { width:100%; border-collapse:collapse; font-size:.88rem; margin:.8rem 0; }
+    th { background:var(--primary); color:#fff; padding:.6rem .9rem; text-align:left; }
+    td { padding:.55rem .9rem; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:nth-child(even) td { background:var(--light); }
+
+    /* INFO BOXES */
+    .box { border-radius:10px; padding:1rem 1.3rem; margin:.8rem 0; display:flex; gap:.8rem; align-items:flex-start; }
+    .box.warn  { background:#fff3e0; border-left:4px solid #ef6c00; }
+    .box.red   { background:#ffebee; border-left:4px solid #c62828; }
+    .box.brain { background:#f3e5f5; border-left:4px solid #8e24aa; }
+    .box.ok    { background:#e8f5e9; border-left:4px solid #2e7d32; }
+    .box .ico  { font-size:1.3rem; flex-shrink:0; }
+    .box p     { margin:0; font-size:.9rem; }
+
+    /* QUIZ ANSWERS */
+    .qa { background:#e8f5e9; border-radius:10px; padding:1rem 1.3rem; margin:.8rem 0; }
+    .qa h4 { color:var(--primary); margin-bottom:.6rem; }
+    .qa ol { padding-left:1.4rem; }
+    .qa li { margin-bottom:.4rem; font-size:.9rem; }
+    .qa .correct { font-weight:700; color:var(--primary); }
+
+    /* SCENARIO CARDS */
+    .scenario { border:2px solid; border-radius:var(--radius); overflow:hidden; margin:1rem 0; }
+    .scenario.a { border-color:#388e3c; }
+    .scenario.b { border-color:#ef6c00; }
+    .scenario-header { padding:.8rem 1.2rem; font-weight:700; display:flex; align-items:center; gap:.6rem; }
+    .scenario.a .scenario-header { background:#e8f5e9; color:var(--primary); }
+    .scenario.b .scenario-header { background:#fff3e0; color:var(--warn); }
+    .scenario-body { padding:1.2rem 1.5rem; font-size:.92rem; }
+    .scenario-body ul { padding-left:1.4rem; }
+    .scenario-body li { margin-bottom:.4rem; }
+
+    footer { text-align:center; padding:2rem; font-size:.8rem; color:var(--muted);
+      border-top:1px solid var(--border); margin-top:2rem; }
+
+    @media (max-width:640px) {
+      header h1 { font-size:1.3rem; }
+      .card { padding:1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">🔒 USO EXCLUSIVO DOCENTE · TGA05 · Semana 1</div>
+  <h1>📋 Notas del Profesor — Semana 1</h1>
+  <p>Estructuras de Datos Elementales · Tipos de datos · Arreglos · NeuroBiz S.A.S.</p>
+</header>
+
+<nav>
+  <a href="#meta">🎯 Meta</a>
+  <a href="#checklist">✅ Checklist</a>
+  <a href="#secuencia">⏱ Secuencia</a>
+  <a href="#dojo">🏆 ClassDojo</a>
+  <a href="#quiz">🎮 Quiz</a>
+  <a href="#hti">🏠 HTI</a>
+  <a href="#neuro">🧠 Neurodivergencia</a>
+  <a href="#contingencias">🚨 Contingencias</a>
+  <a href="#observacion">👁 Observación</a>
+</nav>
+
+<main>
+
+  <!-- META -->
+  <section id="meta" class="card">
+    <h2>🎯 Meta de la Sesión</h2>
+    <p>
+      Al finalizar las 4 horas presenciales, el estudiante debe ser capaz de 
+      <strong>identificar el tipo de dato correcto para cada indicador de NeuroBiz</strong> 
+      y construir un arreglo básico en Python que genere un reporte de eficiencia operativa.
+    </p>
+    <table style="margin-top:1rem">
+      <thead><tr><th>Resultado de Aprendizaje</th><th>Criterio de evaluación</th><th>Bloom</th></tr></thead>
+      <tbody>
+        <tr><td>RA1 — Programar soluciones usando estructuras adecuadas</td><td>CE1: Identifica tipo correcto de variable según problema organizacional</td><td>Recordar → Comprender</td></tr>
+        <tr><td>RA1 — Programar soluciones usando estructuras adecuadas</td><td>CE2: Desarrolla solución algorítmica básica con arreglos</td><td>Aplicar</td></tr>
+      </tbody>
+    </table>
+    <div class="box ok" style="margin-top:1rem">
+      <span class="ico">📌</span>
+      <p><strong>Recuerda:</strong> Esta semana Python es una herramienta de análisis, no el objeto de estudio. 
+      El foco es que el estudiante entienda <em>por qué</em> el tipo de dato importa para los reportes de gestión de NeuroBiz, 
+      no memorizar sintaxis.</p>
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section id="checklist" class="card">
+    <h2>✅ Checklist Pre-Clase</h2>
+
+    <h3>Pedagógico</h3>
+    <ul class="checklist">
+      <li><span class="check"></span>Revisar sección de Teoría del material de estudio (index.html de Semana 1).</li>
+      <li><span class="check"></span>Tener claro el guion de 1 minuto sobre neurodivergencia y cómo se relaciona con los KPIs de NeuroBiz.</li>
+      <li><span class="check"></span>Preparar en tablero o diapositiva el fragmento de "datos sucios" para el diagnóstico inicial.</li>
+      <li><span class="check"></span>Definir los grupos de 3 con anticipación (evitar reagrupaciones que quitan tiempo).</li>
+      <li><span class="check"></span>Tener ejemplos adicionales de errores de tipado listos por si el grupo es avanzado.</li>
+    </ul>
+
+    <h3>Tecnológico</h3>
+    <ul class="checklist">
+      <li><span class="check"></span>Abrir <strong>Google Colab</strong> y verificar que carga correctamente en el proyector.</li>
+      <li><span class="check"></span>Tener los 2 bloques de código de Semana 1 en un Colab compartido con enlace corto.</li>
+      <li><span class="check"></span>Crear quiz en <strong>Quizizz</strong> con las 5 preguntas (ver Sección Quiz abajo). Modo: Playground.</li>
+      <li><span class="check"></span>Abrir <strong>ClassDojo</strong> y verificar que la clase TGA05 está activa con las 5 categorías.</li>
+      <li><span class="check"></span>Probar audio, proyector e internet <em>antes</em> de que lleguen los estudiantes.</li>
+      <li><span class="check"></span>Tener el plan de contingencia B (quiz en papel) impreso.</li>
+    </ul>
+
+    <h3>ClassDojo — Categorías requeridas</h3>
+    <table>
+      <thead><tr><th>Categoría</th><th>Puntos</th><th>Cuándo aplicar</th></tr></thead>
+      <tbody>
+        <tr><td>⏰ Puntualidad</td><td>+1</td><td>Llega listo al minuto 5</td></tr>
+        <tr><td>🙋 Participación</td><td>+1 a +2</td><td>Aporta ejemplo correcto o explica concepto</td></tr>
+        <tr><td>📋 Entregó actividad</td><td>+2</td><td>Muestra código funcional o ficha completa</td></tr>
+        <tr><td>🤝 Trabajo en equipo</td><td>+1</td><td>Colabora activamente en el grupo</td></tr>
+        <tr><td>💡 Curiosidad</td><td>+1</td><td>Hace una pregunta de calidad conceptual</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- SECUENCIA -->
+  <section id="secuencia" class="card">
+    <h2>⏱ Secuencia Minuto a Minuto (4 horas · 240 min)</h2>
+    <p style="font-size:.85rem; color:var(--muted); margin-bottom:1.2rem;">
+      Bloque HAD (2h) + descanso 10 min + Bloque HP (2h). 
+      La actividad presencial abarca ambos bloques de forma continua.
+    </p>
+
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">00:00 – 05:00 · 5 min <span class="tag habla">HABLA</span></div>
+        <div class="tl-title">Recepción, asistencia y encuadre</div>
+        <div class="tl-body">
+          <div class="tl-guion">Buenos días. Tomamos asistencia mientras se ubican. Hoy arrancamos con un caso real: 
+          NeuroBiz tiene los datos de sus pacientes regados en hojas de Excel mal configuradas. 
+          Nuestro trabajo es entender por qué eso es un problema técnico.</div>
+          Registrar Puntualidad (+1) en ClassDojo a quienes estén listos al minuto 5.
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">05:00 – 10:00 · 5 min <span class="tag habla">HABLA</span></div>
+        <div class="tl-title">Presentación del módulo, Framework GAME y ClassDojo</div>
+        <div class="tl-body">
+          Explicar en 3 minutos qué es el Framework GAME: Guiar, Articular, Motivar, Evaluar. 
+          Mostrar las categorías ClassDojo y el sistema de XP.
+          <div class="tl-guion">Las reglas son simples: los puntos reconocen lo que se puede ver. 
+          Puntualidad, participar con evidencia, entregar lo acordado. No hay puntos por simpatía.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">10:00 – 25:00 · 15 min <span class="tag habla">HABLA</span></div>
+        <div class="tl-title">Teoría: Tipos de datos y almacenamiento en memoria</div>
+        <div class="tl-body">
+          Presentar la tabla de tipos de datos del material (int, float, str, bool, list, dict) 
+          con ejemplos de NeuroBiz. No más de 15 minutos de explicación magistral continua.
+          <div class="tl-guion">Pregunta diagnóstica al aire: ¿Qué creen que pasa si guardamos el número 847 
+          entre comillas? ¿Podemos sumarle 10? Dénme 30 segundos para pensar.</div>
+          Dar <strong>Participación (+1)</strong> a 2–3 respuestas con justificación.
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">25:00 – 45:00 · 20 min <span class="tag descansa">DESCANSA VOZ</span></div>
+        <div class="tl-title">Bloque 1 en Colab: KPIs de NeuroBiz</div>
+        <div class="tl-body">
+          Mostrar el Bloque 1 del material. Ejecutarlo en vivo. Luego dejar 10 min para que 
+          los estudiantes lo repliquen y modifiquen los valores. Circular por los puestos.
+          <div class="tl-guion">Ejecuten este bloque y cambien los valores de sesiones_asistidas y sede. 
+          Quiero ver el output en su pantalla cuando pase por el puesto.</div>
+          Dar <strong>Entregó actividad (+2)</strong> a quien muestre el output modificado.
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">45:00 – 60:00 · 15 min <span class="tag habla">HABLA</span></div>
+        <div class="tl-title">Teoría: Arreglos — concepto, índices y complejidad</div>
+        <div class="tl-body">
+          Explicar arreglo con la analogía del archivador. Introducir O(1) vs O(n) con ejemplos 
+          de NeuroBiz. NO profundizar en Big-O aún — solo intuición.
+          <div class="tl-guion">Si el archivador tiene 847 carpetas numeradas, ¿cuánto tarda en buscar la 200? 
+          Un segundo. ¿Y si las carpetas están en desorden? Eso es la diferencia entre O(1) y O(n).</div>
+          <strong>Curiosidad (+1)</strong> a quien pregunte por diferencia entre list y array en Python.
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">60:00 – 80:00 · 20 min <span class="tag descansa">DESCANSA VOZ</span></div>
+        <div class="tl-title">Bloque 2 en Colab: Arreglo de sesiones</div>
+        <div class="tl-body">
+          Ejecutar Bloque 2. Estudiantes lo replican y agregan una 5ª semana con valor inventado. 
+          Verificar que el loop funciona correctamente con el nuevo elemento.
+          Dar <strong>Trabajo en equipo (+1)</strong> a grupos que se ayuden a depurar errores.
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">80:00 – 90:00 · 10 min <span class="tag habla">HABLA</span> DESCANSO</div>
+        <div class="tl-title">Pausa + instrucciones para actividad principal</div>
+        <div class="tl-body">
+          Explicar la actividad "Auditoría de Datos" antes del descanso para que los grupos 
+          se organicen durante la pausa. Los 10 minutos de descanso son sagrados — no reducir.
+          <div class="tl-guion">En 10 minutos regresamos con la actividad central. Busquen a sus 
+          compañeros de grupo antes de salir.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">100:00 – 175:00 · 75 min <span class="tag monit">MONITOREA</span></div>
+        <div class="tl-title">Actividad "Auditoría de Datos NeuroBiz" (Bloque HP)</div>
+        <div class="tl-body">
+          <strong>Paso 1 (20 min):</strong> Proyectar datos sucios. Grupos diagnostican en papel. Circular sin dar respuestas.<br>
+          <strong>Paso 2 (30 min):</strong> Corrección en Google Colab con comentarios. Docente guía solo cuando hay bloqueo total.<br>
+          <strong>Paso 3 (20 min):</strong> Generación del reporte de eficiencia. Comparar outputs entre grupos.<br>
+          <div class="tl-guion">No vengo a darles la respuesta. Vengo a preguntarles: ¿qué tipo 
+          tiene este dato y cómo lo saben?</div>
+          Registrar <strong>Entregó actividad (+2)</strong> a grupos con código funcional.
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">175:00 – 200:00 · 25 min <span class="tag habla">HABLA</span> + <span class="tag monit">MONITOREA</span></div>
+        <div class="tl-title">Socialización + Quiz Quizizz</div>
+        <div class="tl-body">
+          <strong>Socialización (10 min):</strong> 2–3 grupos exponen su solución. Retroalimentación positiva + corrección directa si hay errores.<br>
+          <strong>Quiz (10 min):</strong> Lanzar Quizizz en modo Playground. Docente en silencio.<br>
+          <strong>Cierre (5 min):</strong> Mensaje de cierre + anuncio de HTI.
+          <div class="tl-guion">Si hoy se llevan una sola idea: en gestión de datos, el tipo no es un detalle, 
+          es la base de todo cálculo correcto. La próxima semana subiremos un peldaño: Pilas y Colas.</div>
+          <strong>Participación (+1 a +2)</strong> a quienes completan el Quizizz hasta el final.
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">200:00 – 210:00 · 10 min</div>
+        <div class="tl-title">Buffer / Margen de seguridad</div>
+        <div class="tl-body">
+          Si la actividad termina antes, usar este tiempo para responder preguntas individuales. 
+          Si se excedió, recortar la socialización a 5 min y mantener el quiz.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DOJO -->
+  <section id="dojo" class="card">
+    <h2>🏆 Integración ClassDojo — Registro de la Sesión</h2>
+    <table>
+      <thead><tr><th>Momento</th><th>Acción</th><th>Criterio concreto</th><th>Pts</th></tr></thead>
+      <tbody>
+        <tr><td>Min 00–05</td><td>Puntualidad</td><td>Ubicado y listo al minuto 5</td><td>+1</td></tr>
+        <tr><td>Min 10–25</td><td>Participación</td><td>Responde la pregunta diagnóstica con justificación</td><td>+1</td></tr>
+        <tr><td>Min 25–60</td><td>Entregó actividad</td><td>Muestra output modificado de Colab bloques 1 y 2</td><td>+2</td></tr>
+        <tr><td>Min 45–60</td><td>Curiosidad</td><td>Pregunta conceptual de calidad (ej. list vs array)</td><td>+1</td></tr>
+        <tr><td>Min 100–175</td><td>Trabajo en equipo</td><td>Apoya a un compañero a depurar su código</td><td>+1</td></tr>
+        <tr><td>Min 100–175</td><td>Entregó actividad</td><td>Código de auditoría funcional completo</td><td>+2</td></tr>
+        <tr><td>Min 175–200</td><td>Participación</td><td>Expone solución al grupo o completa Quizizz</td><td>+1 a +2</td></tr>
+      </tbody>
+    </table>
+    <div class="box ok">
+      <span class="ico">📌</span>
+      <p><strong>Máximo posible esta sesión: ~10 puntos.</strong> No todos los estudiantes los obtendrán. 
+      Está diseñado así intencionalmente para mantener la motivación durante semanas.</p>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="card">
+    <h2>🎮 Quiz Quizizz — Preguntas y Respuestas Correctas</h2>
+    <p style="font-size:.85rem; color:var(--muted); margin-bottom:1rem;">
+      Cargar en Quizizz antes de clase. Modo: <strong>Playground / Wayground</strong>. 
+      Duración: 8–10 min. Formativo, no calificativo.
+    </p>
+
+    <div class="qa">
+      <h4>Preguntas + respuestas correctas (marcadas con ✅)</h4>
+      <ol>
+        <li><strong>P1:</strong> <code>sesiones_asistidas = "847"</code> — Si calculas <code>sesiones_asistidas + 10</code>, Python…
+          <ul><li>a) Devuelve 857</li><li>b) ✅ <span class="correct">Genera un TypeError</span></li><li>c) Devuelve "84710"</li><li>d) Redondea al entero más cercano</li></ul>
+        </li>
+        <li><strong>P2:</strong> ¿Qué operación sobre un arreglo de 1.000 sesiones es O(1)?
+          <ul><li>a) Buscar la sesión con mayor índice</li><li>b) Eliminar el primer elemento</li><li>c) ✅ <span class="correct">Acceder a <code>sesiones[499]</code></span></li><li>d) Recorrer todo el arreglo para el promedio</li></ul>
+        </li>
+        <li><strong>P3:</strong> ¿Cuál tipo es más apropiado para <code>tasa_retencion = 0.78</code>?
+          <ul><li>a) int</li><li>b) str</li><li>c) ✅ <span class="correct">float</span></li><li>d) bool</li></ul>
+        </li>
+        <li><strong>P4:</strong> Para saber si una sesión fue completada (sí/no), el tipo más eficiente es…
+          <ul><li>a) int con 0 o 1</li><li>b) ✅ <span class="correct">bool con True/False</span></li><li>c) str con "si"/"no"</li><li>d) Cualquiera es igual</li></ul>
+        </li>
+        <li><strong>P5:</strong> Principal ventaja del arreglo sobre variables separadas para 847 sesiones…
+          <ul><li>a) Las variables separadas son más rápidas</li><li>b) ✅ <span class="correct">El arreglo permite tratar todos los datos con un índice</span></li><li>c) El arreglo siempre ocupa menos memoria</li><li>d) Las variables separadas permiten más tipos</li></ul>
+        </li>
+      </ol>
+    </div>
+
+    <div class="box warn">
+      <span class="ico">⚠️</span>
+      <p>Si menos del 60% responde bien la P1 y P3, dedica 5 min adicionales al tema de tipos 
+      antes de continuar con Semana 2. Es el fundamento de todo lo que sigue.</p>
+    </div>
+  </section>
+
+  <!-- HTI -->
+  <section id="hti" class="card">
+    <h2>🏠 HTI — Gestión de los Dos Escenarios</h2>
+    <p style="font-size:.88rem; color:var(--muted); margin-bottom:1rem;">
+      Elige el escenario según el comportamiento del grupo durante la sesión presencial.
+    </p>
+
+    <div class="scenario a">
+      <div class="scenario-header">✅ Escenario A — Grupo con alta motivación y bajo índice de quejas</div>
+      <div class="scenario-body">
+        <p><strong>Asignar:</strong> "Ampliando el Dashboard NeuroBiz" (ver material de estudio).</p>
+        <ul>
+          <li>Tiempo estimado: 60–90 minutos individual.</li>
+          <li>Entrega: Enlace Google Colab compartido o archivo <code>.py</code> antes de la próxima sesión.</li>
+          <li>La próxima clase inicia con 10 min de revisión rápida de los resultados (3 voluntarios exponen).</li>
+          <li>Dar <strong>Entregó actividad (+2)</strong> + <strong>Participación (+1)</strong> en ClassDojo al inicio de Semana 2.</li>
+        </ul>
+        <p style="margin-top:.8rem; font-size:.85rem;">
+          <em>Esta versión alimenta directamente la competencia RA1/CE2 y anticipa el contenido de Semana 2 (Pilas y Colas).</em>
+        </p>
+      </div>
+    </div>
+
+    <div class="scenario b">
+      <div class="scenario-header">🟡 Escenario B — Grupo con resistencia o alta carga académica</div>
+      <div class="scenario-body">
+        <p><strong>Asignar:</strong> "Ficha de Tipos de Datos NeuroBiz" (completar tabla en cuaderno).</p>
+        <ul>
+          <li>Tiempo estimado: 20–30 minutos. Sin entrega digital obligatoria.</li>
+          <li><strong>No bloquea el inicio de Semana 2</strong>: la clase comienza igual con o sin la ficha hecha.</li>
+          <li>Quien la haga, la menciona brevemente al inicio de Semana 2 (2 min), gana <strong>+2 puntos ClassDojo</strong>.</li>
+          <li>Quien no la haga: no pierde puntos ni acceso a contenidos. No hay impacto negativo.</li>
+        </ul>
+        <div class="box warn" style="margin-top:.8rem">
+          <span class="ico">⚠️</span>
+          <p><strong>Clave:</strong> La ficha es refuerzo de comprensión básica, no ampliación. 
+          Si el grupo no la hace, Semana 2 no tiene ninguna precondición rota. 
+          Puedes iniciar la clase con la pregunta diagnóstica de tipos sin referirte a la tarea.</p>
+        </div>
+        <p style="margin-top:.8rem; font-size:.85rem; color:var(--muted);">
+          Usa el Escenario B si: más del 30% del grupo expresó sobrecarga, hay evaluaciones parciales 
+          en otras materias esa semana, o la participación en clase fue notoriamente baja.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEURODIVERGENCIA -->
+  <section id="neuro" class="card">
+    <h2>🧠 Nota sobre Neurodivergencia — Cómo introducirla naturalmente</h2>
+    <div class="box brain">
+      <span class="ico">🧠</span>
+      <p>
+        <strong>Duración máxima en clase: 1 minuto.</strong> No convertirlo en conferencia aparte. 
+        Insertar naturalmente cuando se menciona el campo <code>nivel_hiperfoco</code> del KPI.
+      </p>
+    </div>
+    <p>
+      <strong>Frase sugerida (insertar en Min 10–25):</strong>
+    </p>
+    <div style="background:#f3e5f5; border-left:4px solid #8e24aa; border-radius:0 8px 8px 0; padding:1rem 1.3rem; margin:.8rem 0; font-style:italic;">
+      "NeuroBiz existe porque muchas personas procesan, aprenden o se concentran de manera diferente. 
+      A eso lo llamamos neurodivergencia. En sus datos verán variables como <code>nivel_hiperfoco</code> 
+      para TDAH o <code>reconocimiento_patrones</code> para TEA. No son etiquetas: son indicadores 
+      que ayudan a personalizar las sesiones. Detrás de cada dato hay una persona real."
+    </div>
+    <p style="font-size:.88rem; color:var(--muted);">
+      Evitar: diagnósticos en aula, preguntas intrusivas a estudiantes sobre sus propias condiciones, 
+      lenguaje patologizante ("sufre de TDAH"). Lenguaje sugerido: "persona con TDAH" o "persona neurodivergente".
+    </p>
+  </section>
+
+  <!-- CONTINGENCIAS -->
+  <section id="contingencias" class="card">
+    <h2>🚨 Plan de Contingencias</h2>
+
+    <h3>🔌 Si falla el proyector o internet</h3>
+    <ul style="padding-left:1.4rem; font-size:.92rem;">
+      <li>Escribe en el tablero los 6 tipos de datos (int, float, str, bool, list, dict) con un ejemplo de NeuroBiz cada uno.</li>
+      <li>La actividad "Auditoría de Datos" se hace en papel: proyecta el fragmento de datos sucios desde el teléfono o dicta los valores.</li>
+      <li>El Quizizz se convierte en quiz oral: lanzas las 5 preguntas verbalmente, estudiantes votan levantando 1, 2, 3 o 4 dedos.</li>
+      <li>ClassDojo: anota puntos en papel y los subes después de clase. Avisa al grupo que lo actualizarás.</li>
+    </ul>
+
+    <h3>😴 Si los estudiantes no se enganchan</h3>
+    <ul style="padding-left:1.4rem; font-size:.92rem;">
+      <li>Reduce la explicación magistral del siguiente bloque a <strong>3 minutos máximo</strong>.</li>
+      <li>Pasa inmediatamente a la pregunta: <em>"Si NeuroBiz pierde datos por tipado incorrecto, ¿cuánto 
+          podrían costar esas decisiones mal tomadas?"</em></li>
+      <li>Activa puntos de <strong>Curiosidad</strong> y <strong>Participación</strong> en vivo para reforzar conducta deseada.</li>
+      <li>Si el problema persiste: reduce el Bloque HP a solo el paso 2 (corrección) y deja el paso 3 como HTI Escenario A.</li>
+    </ul>
+
+    <h3>⏰ Si se acaba el tiempo</h3>
+    <ul style="padding-left:1.4rem; font-size:.92rem;">
+      <li>Prioridad 1 — No eliminar: concepto de tipos, Bloque 1 en Colab, Quiz final.</li>
+      <li>Prioridad 2 — Recortar: socialización de 10 a 5 min, arreglos solo conceptual sin Bloque 2.</li>
+      <li>Bloque 2 puede moverse como primer bloque de Semana 2 sin romper la secuencia.</li>
+    </ul>
+  </section>
+
+  <!-- OBSERVACIÓN -->
+  <section id="observacion" class="card">
+    <h2>👁 Indicadores de Observación Docente</h2>
+    <p style="font-size:.88rem; color:var(--muted); margin-bottom:1rem;">
+      Al finalizar la sesión, respóndete mentalmente estas preguntas:
+    </p>
+    <ul style="padding-left:1.4rem; font-size:.92rem; line-height:2;">
+      <li>¿El grupo distingue int, float, str y bool sin mezclarlos?</li>
+      <li>¿Comprenden por qué un tipo incorrecto rompe un cálculo (TypeError)?</li>
+      <li>¿Al menos el 70% logró ejecutar correctamente el Bloque 1 en Colab?</li>
+      <li>¿El grupo entendió la diferencia entre O(1) y O(n) de forma intuitiva?</li>
+      <li>¿El ritmo de la clase fue adecuado o algún bloque se extendió demasiado?</li>
+      <li>¿Qué porcentaje del grupo completó el Quizizz hasta el final?</li>
+      <li>¿Hubo señales de resistencia a las HTI? (→ elegir Escenario B para la siguiente semana)</li>
+    </ul>
+    <div class="box ok" style="margin-top:1rem">
+      <span class="ico">📝</span>
+      <p>Anota 3 observaciones rápidas en tu cuaderno docente antes de salir del aula. 
+      Serán la base para ajustar la Semana 2.</p>
+    </div>
+
+    <h3>Cierre sugerido</h3>
+    <div style="background:#e8f5e9; border-left:4px solid #2e7d32; border-radius:0 10px 10px 0; padding:1rem 1.3rem; font-style:italic; margin-top:.8rem;">
+      "Hoy dimos el primer paso: entender que en programación, el tipo de un dato no es un tecnicismo, 
+      es la diferencia entre una decisión correcta y un error silencioso en el sistema de NeuroBiz. 
+      La próxima sesión subimos un nivel: aprenderemos Pilas y Colas, que son la base para automatizar 
+      la asignación de terapeutas."
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  TGA05 · Notas del Profesor — Semana 1 · Institución Universitaria de Barranquilla (UIB)<br>
+  Documento de uso docente exclusivo · Caso NeuroBiz S.A.S. · Framework GAME
+</footer>
+
+</body>
+</html>

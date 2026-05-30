@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TGA05 Semana 5 - Notas del profesor</title>
+    <style>:root {
+    --primary: #1b5e20;
+    --primary-2: #2e7d32;
+    --accent: #FFDF2D;
+    --bg: #f2f7f2;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #526072;
+    --surface: #edf7ee;
+    --surface-2: #f7fbf7;
+    --warning: #fff8e1;
+    --warning-border: #FFDF2D;
+    --shadow: 0 16px 40px rgba(27, 94, 32, 0.10);
+    --radius: 20px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #f4faf4 0%, #eff8ef 100%);
+    color: var(--text);
+    line-height: 1.6;
+}
+.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+    color: white;
+    padding: 28px 20px 34px;
+}
+.hero-content { max-width: 1180px; margin: 0 auto; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.28);
+}
+.badge.docente { background: rgba(249, 168, 37, 0.16); border-color: rgba(249, 168, 37, 0.42); }
+h1 {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    line-height: 1.1;
+}
+.lead { max-width: 920px; color: rgba(255,255,255,0.94); margin: 0; }
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #dbe7dc;
+}
+.sticky-nav .inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 20px;
+}
+.sticky-nav a {
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #edf7ee;
+}
+main { max-width: 1180px; margin: 0 auto; padding: 24px 20px 60px; }
+.card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 26px;
+    margin-bottom: 22px;
+    border-left: 7px solid var(--accent);
+}
+.card h2 { margin-top: 0; color: var(--primary); }
+.section-intro { color: var(--muted); margin-top: -8px; margin-bottom: 18px; }
+.grid-2, .grid-3 {
+    display: grid;
+    gap: 16px;
+}
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.meta-box, .check-box, .warn-box, .note-box {
+    border-radius: 18px;
+    padding: 18px;
+}
+.meta-box { background: #edf7ee; border: 1px solid #c9e6cc; }
+.check-box { background: #f8fbf8; border: 1px solid #dbe7dc; }
+.warn-box { background: var(--warning); border: 1px solid var(--warning-border); }
+.note-box { background: #f4f8ff; border: 1px solid #dbe3ff; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    border-radius: 16px;
+    overflow: hidden;
+}
+th, td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #dfe7e1;
+    text-align: left;
+    vertical-align: top;
+}
+th { background: #edf7ee; color: var(--primary); }
+tr:nth-child(even) td { background: #fbfdfb; }
+.timeline {
+    position: relative;
+    margin-left: 12px;
+    padding-left: 24px;
+}
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--primary), #81c784);
+    border-radius: 999px;
+}
+.timeline-item {
+    position: relative;
+    margin-bottom: 18px;
+    background: var(--surface-2);
+    border: 1px solid #dbe7dc;
+    border-radius: 18px;
+    padding: 18px 18px 18px 20px;
+}
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -24px;
+    top: 22px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 4px solid white;
+    box-shadow: 0 0 0 2px rgba(249, 168, 37, 0.35);
+}
+.time-badge, .mode-badge {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+.time-badge { background: #e8f5e9; color: var(--primary); }
+.mode-badge { background: #fff8e1; color: #7c4d00; }
+.dojo-panel {
+    background: #0f172a;
+    color: #f9e7a0;
+    border-radius: 18px;
+    padding: 20px;
+    border: 1px solid #334155;
+}
+.dojo-panel h3 { color: #FFDF2D; margin-top: 0; }
+.quiz-card {
+    background: #f4f8ff;
+    border: 1px solid #dbe3ff;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 14px;
+}
+.quiz-card h3 { margin-top: 0; color: #1d4ed8; }
+.correcta {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #e8f5e9;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+.footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.92rem;
+    padding: 16px 20px 34px;
+}
+@media (max-width: 920px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    main { padding-inline: 16px; }
+    .card { padding: 20px; }
+    .sticky-nav .inner { padding-inline: 16px; }
+    .timeline { margin-left: 0; padding-left: 18px; }
+    .timeline-item::before { left: -18px; }
+}</style>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge-row">
+                <span class="badge docente">USO EXCLUSIVO DOCENTE</span>
+                <span class="badge">TGA05 · Estructura de Datos para los Negocios</span>
+                <span class="badge">Semana 5 de 14</span>
+            </div>
+            <h1>Colas circulares, colas dobles y repaso integrador RA1 · Guía docente</h1>
+            <p class="lead">Secuencia detallada para conducir la sesión con Framework GAME, Bloom explícito, gamificación ClassDojo + Quizizz y decisiones contextualizadas en NeuroBiz S.A.S.</p>
+        </div>
+    </header>
+
+    <nav class="sticky-nav">
+        <div class="inner">
+            <a href="#meta">Meta</a>
+            <a href="#checklist">Checklist</a>
+            <a href="#secuencia">Secuencia 240 min</a>
+            <a href="#dojo">ClassDojo</a>
+            <a href="#quiz">Quiz</a>
+            <a href="#hti">HTI</a>
+            <a href="#neuro">Neurodivergencia</a>
+            <a href="#contingencias">Contingencias</a>
+            <a href="#observacion">Observación</a>
+        </div>
+    </nav>
+
+    <main>
+        <section id="meta" class="card">
+            <h2>Meta de sesión</h2>
+            <p class="section-intro">Defina al inicio de la clase qué se espera que el estudiantado comprenda, haga y justifique al cierre.</p>
+            <div class="meta-box">
+    <table>
+        <thead><tr><th>Componente</th><th>Formulación sugerida</th></tr></thead>
+        <tbody>
+            <tr><td>RA</td><td>RA1: analiza, selecciona e implementa estructuras lineales de acuerdo con las necesidades de un proceso de negocio.</td></tr>
+            <tr><td>CE</td><td>CE1: compara pila, cola, cola circular y deque. CE2: selecciona la estructura adecuada para un caso de NeuroBiz. CE3: defiende la elección con prototipo y argumento.</td></tr>
+            <tr><td>Bloom</td><td>Analizar → Evaluar. El estudiante examina variantes y emite un juicio sustentado sobre la conveniencia de cada estructura.</td></tr>
+            <tr><td>Meta de sesión</td><td>Al cierre, cada equipo resuelve un problema de negocio con la estructura adecuada y argumenta por qué otras opciones serían menos pertinentes.</td></tr>
+        </tbody>
+    </table>
+</div>
+            <div class="warn-box">
+    <strong>Recuerdo docente:</strong> Python se usa como herramienta analítica para representar decisiones de negocio; el foco evaluativo no es memorizar sintaxis, sino justificar por qué la estructura elegida resuelve mejor el problema de NeuroBiz y cómo se comunica esa decisión con evidencia observable.
+</div>
+        </section>
+
+        <section id="checklist" class="card">
+            <h2>Checklist pre-clase</h2>
+            <p class="section-intro">Revise condiciones pedagógicas y tecnológicas antes de iniciar para que la experiencia no dependa solo del software.</p>
+            <div class="grid-3">
+    <div class="check-box">
+        <h3>Pedagógico</h3>
+        <ul>
+            <li>Preparar cuatro tarjetas de caso: historial, espera, rotación y urgencia.</li>
+            <li>Definir una matriz de decisión visible con patrón dominante, estructura sugerida y descarte razonado.</li>
+            <li>Recordar al grupo que esta semana importa la justificación comparativa, no solo la ejecución.</li>
+            <li>Conectar explícitamente la sesión con el repaso previo al parcial de RA1.</li>
+        </ul>
+    </div>
+    <div class="check-box">
+        <h3>Tecnológico</h3>
+        <ul>
+            <li>Abrir notebooks con ejemplos de cola circular y deque listos para demostración.</li>
+            <li>Verificar que el código proyectado permita distinguir frente, rear y tamaño.</li>
+            <li>Tener plan B con esquemas en tablero para explicar circularidad sin computador.</li>
+            <li>Probar el acceso a Quizizz o preparar versión oral del quiz.</li>
+        </ul>
+    </div>
+    <div class="check-box">
+        <h3>Categorías ClassDojo</h3>
+        <ul>
+            <li>Análisis del patrón (+2)</li>
+            <li>Selección argumentada (+2)</li>
+            <li>Prototipo funcional (+3)</li>
+            <li>Descarte razonado (+2)</li>
+            <li>Caso borde o mejora (+1)</li>
+        </ul>
+    </div>
+</div>
+        </section>
+
+        <section id="secuencia" class="card">
+            <h2>Secuencia minuto a minuto completa (240 min)</h2>
+            <p class="section-intro">La sesión está pensada para 2 horas HAD y 2 horas HP. Cada bloque incluye propósito, acción, guion sugerido y evidencia observable.</p>
+            <div class="timeline">
+            <div class="timeline-item">
+                <span class="time-badge">0-10 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Apertura integradora</h3>
+                <p><strong>Propósito:</strong> Mostrar que distintas preguntas de negocio exigen distintas estructuras.</p>
+                <p><strong>Acción docente:</strong> Presentar los cuatro escenarios de NeuroBiz y pedir una primera hipótesis de estructura para cada uno.</p>
+                <p><strong>Guion sugerido:</strong> Llegamos a un punto clave del módulo: ya no basta con conocer estructuras por separado. Ahora necesitamos decidir cuál conviene según el problema que NeuroBiz quiere resolver.</p>
+                <p><strong>Evidencia observable:</strong> Hipótesis iniciales y comparación espontánea entre estructuras.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">10-25 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Activación comparativa</h3>
+                <p><strong>Propósito:</strong> Recuperar aprendizajes de semanas 2 a 4 y abrir el terreno para variantes.</p>
+                <p><strong>Acción docente:</strong> Construir un mapa rápido en tablero: pila para historial, cola para espera, y preguntar qué pasaría si el flujo exigiera rotación o doble extremo.</p>
+                <p><strong>Guion sugerido:</strong> Piensen en la pregunta dominante del caso. Si la pregunta cambia, la estructura también puede cambiar. Nuestro trabajo hoy es detectar esa diferencia con criterio.</p>
+                <p><strong>Evidencia observable:</strong> Los estudiantes vinculan estructuras previas con preguntas del negocio.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">25-45 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Conceptualización de cola circular y deque</h3>
+                <p><strong>Propósito:</strong> Presentar las variantes y su sentido organizacional.</p>
+                <p><strong>Acción docente:</strong> Explicar circularidad con un arreglo y deque con ejemplos de urgencia por el frente.</p>
+                <p><strong>Guion sugerido:</strong> No aprendan estas variantes como rarezas técnicas. Apréndanlas como respuestas a restricciones nuevas: rotación de recursos y atención por ambos extremos.</p>
+                <p><strong>Evidencia observable:</strong> El grupo comprende por qué no todo se resuelve con cola simple o pila.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">45-65 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Demostración en Python</h3>
+                <p><strong>Propósito:</strong> Mostrar prototipos mínimos para cola circular y deque.</p>
+                <p><strong>Acción docente:</strong> Ejecutar ambos ejemplos y comparar salidas con la matriz de decisión.</p>
+                <p><strong>Guion sugerido:</strong> Miren primero el problema y luego el código. Si el prototipo funciona pero no responde a la necesidad real, no es todavía una buena solución de negocio.</p>
+                <p><strong>Evidencia observable:</strong> Observaciones sobre cuándo usar cada variante.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">65-85 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Matriz de decisión guiada</h3>
+                <p><strong>Propósito:</strong> Pasar de la comprensión técnica al juicio argumentado.</p>
+                <p><strong>Acción docente:</strong> Completar con el grupo una tabla de problema, patrón dominante, estructura sugerida y estructura descartada.</p>
+                <p><strong>Guion sugerido:</strong> Analizar no es enumerar definiciones; es relacionar patrón y estructura. Evaluar es justificar por qué una alternativa sirve mejor que otra.</p>
+                <p><strong>Evidencia observable:</strong> Matrices con argumentos explícitos, no solo nombres de estructuras.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">85-100 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Pausa y metacognición breve</h3>
+                <p><strong>Propósito:</strong> Reducir carga cognitiva y reforzar criterio de selección.</p>
+                <p><strong>Acción docente:</strong> Pedir una regla breve por pareja: “Si la pregunta es…, la estructura probablemente es…”.</p>
+                <p><strong>Guion sugerido:</strong> En una sola frase, intenten condensar el criterio. Esa frase servirá como andamio durante la práctica autónoma y el repaso del parcial.</p>
+                <p><strong>Evidencia observable:</strong> Reglas heurísticas útiles y corregibles.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">100-120 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Lanzamiento del reto de decisión</h3>
+                <p><strong>Propósito:</strong> Dejar claras consignas, criterios y producto del bloque HP.</p>
+                <p><strong>Acción docente:</strong> Asignar a cada equipo uno de los casos y explicar que deben defender su elección frente a otra estructura posible.</p>
+                <p><strong>Guion sugerido:</strong> Hoy el código solo vale si viene acompañado de una defensa. Necesito ver una elección consciente, no un ejemplo copiado que casualmente funcione.</p>
+                <p><strong>Evidencia observable:</strong> Equipos con caso, estructura tentativa y plan de trabajo.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">120-135 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Organización de prototipos</h3>
+                <p><strong>Propósito:</strong> Iniciar la construcción con enfoque claro.</p>
+                <p><strong>Acción docente:</strong> Entregar plantilla de matriz de decisión y recordar el caso borde obligatorio.</p>
+                <p><strong>Guion sugerido:</strong> Antes de programar, escriban la razón de su elección. Esa frase será la brújula para no perder el sentido del caso durante la implementación.</p>
+                <p><strong>Evidencia observable:</strong> Matrices completadas en borrador y división de roles.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">135-165 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Construcción del prototipo</h3>
+                <p><strong>Propósito:</strong> Aplicar la estructura elegida al caso asignado.</p>
+                <p><strong>Acción docente:</strong> Circular por el aula preguntando por frente, cima, circularidad o extremos según corresponda.</p>
+                <p><strong>Guion sugerido:</strong> Si su estructura tiene circularidad, muéstrenme dónde vuelve al inicio. Si es deque, expliquen por qué una urgencia entra por el frente. Si es pila, justifiquen la recencia. La explicación debe seguir al comportamiento.</p>
+                <p><strong>Evidencia observable:</strong> Prototipos con comportamiento coherente y casos de prueba.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">165-190 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Defensa comparativa</h3>
+                <p><strong>Propósito:</strong> Evaluar opciones y fortalecer juicio de diseño.</p>
+                <p><strong>Acción docente:</strong> Pedir a cada equipo que descarte razonadamente una estructura alternativa.</p>
+                <p><strong>Guion sugerido:</strong> No quiero solo oír por qué su opción sirve; quiero oír por qué otra opción sería menos conveniente. Esa comparación es la señal más clara de evaluación crítica.</p>
+                <p><strong>Evidencia observable:</strong> Argumentos comparativos con fundamento en el problema.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">190-210 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Socialización tipo parcial</h3>
+                <p><strong>Propósito:</strong> Practicar la defensa oral breve antes de la evaluación formal de RA1.</p>
+                <p><strong>Acción docente:</strong> Dar 2 minutos por equipo para explicar problema, estructura y argumento principal.</p>
+                <p><strong>Guion sugerido:</strong> Piensen este momento como ensayo de parcial: problema, estructura, razón, caso borde. Si pueden decirlo en dos minutos con claridad, van por buen camino.</p>
+                <p><strong>Evidencia observable:</strong> Presentaciones breves, precisas y comparativas.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">210-225 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Quizizz de repaso</h3>
+                <p><strong>Propósito:</strong> Fijar ideas clave sobre variantes y selección de estructura.</p>
+                <p><strong>Acción docente:</strong> Aplicar quiz y comentar respuestas, especialmente la relación entre patrón del caso y estructura elegida.</p>
+                <p><strong>Guion sugerido:</strong> Cada pregunta es una mini decisión de diseño. Úsenlas para revisar si su criterio de selección ya es estable o todavía depende del ejemplo visto en clase.</p>
+                <p><strong>Evidencia observable:</strong> Retroalimentación rápida orientada a preparación parcial.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">225-235 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Asignación de HTI</h3>
+                <p><strong>Propósito:</strong> Cerrar el bloque con una ruta integradora o de consolidación comparativa.</p>
+                <p><strong>Acción docente:</strong> Enviar al Escenario A a quienes ya argumentan con solvencia y al B a quienes requieren reforzar comparación básica.</p>
+                <p><strong>Guion sugerido:</strong> Si ya justificas con seguridad, integra pila y cola en un mini-sistema. Si aún necesitas afinar criterio, la tabla comparativa te dará una base sólida y no bloqueará la próxima sesión.</p>
+                <p><strong>Evidencia observable:</strong> Ruta HTI asignada según desempeño real.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">235-240 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Cierre evaluativo</h3>
+                <p><strong>Propósito:</strong> Fijar la idea de estructura como decisión de diseño.</p>
+                <p><strong>Acción docente:</strong> Solicitar una frase final: “Elegir estructura en NeuroBiz significa…”.</p>
+                <p><strong>Guion sugerido:</strong> Quiero cerrar con esta idea: programar estructuras es diseñar reglas de acceso a la información. La mejor elección es la que mejor cuida el proceso que queremos sostener.</p>
+                <p><strong>Evidencia observable:</strong> Síntesis con lenguaje de análisis y evaluación.</p>
+            </div>
+            </div>
+        </section>
+
+        <section id="dojo" class="card">
+            <h2>Integración ClassDojo</h2>
+            <p class="section-intro">Asigne puntos con criterios concretos, visibles y coherentes con el verbo Bloom de la semana. Evite premiar solo velocidad.</p>
+            <div class="dojo-panel"><h3>Tabla sugerida de asignación</h3>
+<table>
+    <thead><tr><th>Momento</th><th>Acción</th><th>Criterio concreto</th><th>Puntos</th></tr></thead>
+    <tbody>
+        <tr><td>Análisis inicial</td><td>Identifica el patrón dominante del problema</td><td>Relaciona caso y necesidad operativa</td><td>+2</td></tr>
+        <tr><td>Selección</td><td>Elige estructura adecuada</td><td>Decisión coherente y justificada</td><td>+2</td></tr>
+        <tr><td>Programación</td><td>Construye prototipo funcional</td><td>Código ejecutable y alineado al caso</td><td>+3</td></tr>
+        <tr><td>Comparación</td><td>Descarta otra estructura con argumento</td><td>Juicio evaluativo claro</td><td>+2</td></tr>
+        <tr><td>Profundización</td><td>Incluye un caso borde relevante</td><td>Comprensión de límites y variantes</td><td>+1</td></tr>
+    </tbody>
+</table>
+<p><strong>Nota de uso:</strong> en esta semana el puntaje debe favorecer especialmente la argumentación comparativa, no solo la ejecución técnica.</p></div>
+        </section>
+
+        <section id="quiz" class="card">
+            <h2>Quiz formativo</h2>
+            <p class="section-intro">Use estas preguntas para Quizizz o como cierre oral rápido. Las respuestas correctas están marcadas para facilitar la moderación.</p>
+            
+            <article class="quiz-card">
+                <h3>Pregunta 1</h3>
+                <p><strong>¿Qué ventaja principal ofrece una cola circular?</strong></p>
+                <ul><li>a) Convierte una cola en pila</li><li>b) Permite reutilizar posiciones cuando el índice llega al final</li><li>c) Elimina la necesidad de frente</li><li>d) Ordena automáticamente los elementos</li></ul>
+                <p><span class="correcta">Correcta</span> b) Permite reutilizar posiciones cuando el índice llega al final</p>
+                <p><strong>Justificación didáctica:</strong> Verifica comprensión de la idea de circularidad, no solo la implementación.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 2</h3>
+                <p><strong>¿Qué estructura permite insertar o extraer por ambos extremos?</strong></p>
+                <ul><li>a) Pila</li><li>b) Cola simple</li><li>c) Deque</li><li>d) Arreglo estático</li></ul>
+                <p><span class="correcta">Correcta</span> c) Deque</p>
+                <p><strong>Justificación didáctica:</strong> Comprueba reconocimiento de la cola doble como variante flexible.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 3</h3>
+                <p><strong>Si el problema es recuperar lo último ocurrido en el expediente de un paciente, ¿qué estructura conviene más?</strong></p>
+                <ul><li>a) Cola</li><li>b) Cola circular</li><li>c) Pila</li><li>d) Heap</li></ul>
+                <p><span class="correcta">Correcta</span> c) Pila</p>
+                <p><strong>Justificación didáctica:</strong> Obliga a conectar estructura con patrón dominante del problema.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 4</h3>
+                <p><strong>¿Cuál caso de NeuroBiz se ajusta mejor a una cola circular?</strong></p>
+                <ul><li>a) Historial terapéutico</li><li>b) Rotación de terapeutas disponibles</li><li>c) Verificación de paréntesis</li><li>d) Registro de notas deshechas</li></ul>
+                <p><span class="correcta">Correcta</span> b) Rotación de terapeutas disponibles</p>
+                <p><strong>Justificación didáctica:</strong> Evalúa transferencia del concepto a un escenario operativo concreto.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 5</h3>
+                <p><strong>En esta semana, el nivel Bloom central exige principalmente:</strong></p>
+                <ul><li>a) Solo recordar definiciones</li><li>b) Analizar casos y evaluar la estructura más adecuada</li><li>c) Copiar código sin justificar</li><li>d) Memorizar sintaxis avanzada de Python</li></ul>
+                <p><span class="correcta">Correcta</span> b) Analizar casos y evaluar la estructura más adecuada</p>
+                <p><strong>Justificación didáctica:</strong> Hace explícita la expectativa cognitiva de la sesión.</p>
+            </article>
+            
+        </section>
+
+        <section id="hti" class="card">
+            <h2>HTI: elección de Escenario A o B</h2>
+            <p class="section-intro">La decisión de ruta debe responder al desempeño observado y a la autorregulación del estudiante, no a castigo o premio arbitrario.</p>
+            <div class="grid-2">
+    <div class="note-box">
+        <h3>Escenario A</h3>
+        <ul>
+            <li>Para estudiantes que ya diferencian con seguridad pila, cola y variantes.</li>
+            <li>Ideal si el equipo logró descartar otra estructura con argumentos sólidos.</li>
+            <li>Permite integrar aprendizajes del RA1 en un mini-sistema con sentido.</li>
+        </ul>
+        <p><strong>Consecuencia:</strong> fortalece preparación para evaluación parcial y transferencia a problemas más complejos.</p>
+    </div>
+    <div class="warn-box">
+        <h3>Escenario B</h3>
+        <ul>
+            <li>Para estudiantes que aún dudan al comparar casos de uso.</li>
+            <li>Útil cuando la carga principal debe ir a consolidar criterio antes de integrar código adicional.</li>
+            <li>Enfatiza reglas heurísticas y ejemplos claros.</li>
+        </ul>
+        <p><strong>Consecuencia:</strong> consolida lo esencial y <strong>NO BLOQUEA la siguiente clase</strong>; úselo como apoyo estratégico de repaso.</p>
+    </div>
+</div>
+        </section>
+
+        <section id="neuro" class="card">
+            <h2>Nota breve de neurodivergencia (máx. 1 min)</h2>
+            <p class="section-intro">Incluya una frase explícita de validación y estructura para reducir incertidumbre sin sobreextender el tiempo de clase.</p>
+            <div class="meta-box">
+    <p><strong>Frase sugerida:</strong> “Si comparar varias estructuras te abruma, vuelve a una sola pregunta a la vez: ¿qué dato necesito primero? Desde ahí podemos decidir sin correr. Está bien resolver el caso paso a paso y no todo al mismo tiempo”.</p>
+</div>
+        </section>
+
+        <section id="contingencias" class="card">
+            <h2>Contingencias</h2>
+            <p class="section-intro">Plan de respuesta ante falla técnica, baja participación o compresión de tiempo.</p>
+            <div class="grid-3">
+    <div class="check-box">
+        <h3>Si falla la tecnología</h3>
+        <p>Use matrices de decisión impresas o en tablero y pida prototipos en pseudocódigo. La defensa comparativa puede sostenerse aun si no se ejecuta Python en vivo.</p>
+    </div>
+    <div class="check-box">
+        <h3>Si hay baja participación</h3>
+        <p>Asigne a cada integrante una parte de la defensa: problema, estructura elegida, estructura descartada, caso borde. Distribuir la responsabilidad mejora implicación y reduce silencios prolongados.</p>
+    </div>
+    <div class="check-box">
+        <h3>Si el tiempo se reduce</h3>
+        <p>Priorice la matriz de decisión y un prototipo mínimo por equipo. La integración más amplia puede pasar al HTI A sin perder el foco en análisis y evaluación.</p>
+    </div>
+</div>
+        </section>
+
+        <section id="observacion" class="card">
+            <h2>Indicadores de observación docente + cierre sugerido</h2>
+            <p class="section-intro">Observe evidencias en proceso y cierre con una síntesis verbal conectada al caso NeuroBiz.</p>
+            <table>
+    <thead><tr><th>Indicador</th><th>Señal positiva</th><th>Alerta</th></tr></thead>
+    <tbody>
+        <tr><td>Lectura del problema</td><td>Identifica patrón dominante antes de programar.</td><td>Elige estructura por costumbre o copia.</td></tr>
+        <tr><td>Comparación de estructuras</td><td>Descarta alternativas con razones claras.</td><td>Solo afirma que una “sirve” sin comparar.</td></tr>
+        <tr><td>Implementación</td><td>El prototipo refleja la estructura elegida.</td><td>El código contradice el argumento.</td></tr>
+        <tr><td>Juicio evaluativo</td><td>Usa lenguaje de conveniencia, equidad, recencia o circularidad según el caso.</td><td>La justificación se queda en la sintaxis.</td></tr>
+        <tr><td>Preparación parcial</td><td>Sintetiza en poco tiempo problema, estructura y razón.</td><td>Necesita demasiado apoyo para explicar su elección.</td></tr>
+    </tbody>
+</table>
+<div class="meta-box">
+    <p><strong>Cierre sugerido:</strong> “Hoy consolidamos que una estructura de datos es una decisión de diseño para el negocio. En NeuroBiz, elegir entre pila, cola o sus variantes significa decidir cómo se prioriza la información, el servicio y la continuidad operativa”.</p>
+</div>
+        </section>
+    </main>
+
+    <footer class="footer">UIB · TGA05 · Semana 5 · Guía docente exclusiva · Caso transversal NeuroBiz S.A.S.</footer>
+</body>
+</html>

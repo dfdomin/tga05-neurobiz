@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TGA05 Semana 3 - Notas del profesor</title>
+    <style>:root {
+    --primary: #1b5e20;
+    --primary-2: #2e7d32;
+    --accent: #FFDF2D;
+    --bg: #f2f7f2;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #526072;
+    --surface: #edf7ee;
+    --surface-2: #f7fbf7;
+    --warning: #fff8e1;
+    --warning-border: #FFDF2D;
+    --shadow: 0 16px 40px rgba(27, 94, 32, 0.10);
+    --radius: 20px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #f4faf4 0%, #eff8ef 100%);
+    color: var(--text);
+    line-height: 1.6;
+}
+.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+    color: white;
+    padding: 28px 20px 34px;
+}
+.hero-content { max-width: 1180px; margin: 0 auto; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.28);
+}
+.badge.docente { background: rgba(249, 168, 37, 0.16); border-color: rgba(249, 168, 37, 0.42); }
+h1 {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    line-height: 1.1;
+}
+.lead { max-width: 920px; color: rgba(255,255,255,0.94); margin: 0; }
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #dbe7dc;
+}
+.sticky-nav .inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 20px;
+}
+.sticky-nav a {
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #edf7ee;
+}
+main { max-width: 1180px; margin: 0 auto; padding: 24px 20px 60px; }
+.card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 26px;
+    margin-bottom: 22px;
+    border-left: 7px solid var(--accent);
+}
+.card h2 { margin-top: 0; color: var(--primary); }
+.section-intro { color: var(--muted); margin-top: -8px; margin-bottom: 18px; }
+.grid-2, .grid-3 {
+    display: grid;
+    gap: 16px;
+}
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.meta-box, .check-box, .warn-box, .note-box {
+    border-radius: 18px;
+    padding: 18px;
+}
+.meta-box { background: #edf7ee; border: 1px solid #c9e6cc; }
+.check-box { background: #f8fbf8; border: 1px solid #dbe7dc; }
+.warn-box { background: var(--warning); border: 1px solid var(--warning-border); }
+.note-box { background: #f4f8ff; border: 1px solid #dbe3ff; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    border-radius: 16px;
+    overflow: hidden;
+}
+th, td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #dfe7e1;
+    text-align: left;
+    vertical-align: top;
+}
+th { background: #edf7ee; color: var(--primary); }
+tr:nth-child(even) td { background: #fbfdfb; }
+.timeline {
+    position: relative;
+    margin-left: 12px;
+    padding-left: 24px;
+}
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--primary), #81c784);
+    border-radius: 999px;
+}
+.timeline-item {
+    position: relative;
+    margin-bottom: 18px;
+    background: var(--surface-2);
+    border: 1px solid #dbe7dc;
+    border-radius: 18px;
+    padding: 18px 18px 18px 20px;
+}
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -24px;
+    top: 22px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 4px solid white;
+    box-shadow: 0 0 0 2px rgba(249, 168, 37, 0.35);
+}
+.time-badge, .mode-badge {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+.time-badge { background: #e8f5e9; color: var(--primary); }
+.mode-badge { background: #fff8e1; color: #7c4d00; }
+.dojo-panel {
+    background: #0f172a;
+    color: #f9e7a0;
+    border-radius: 18px;
+    padding: 20px;
+    border: 1px solid #334155;
+}
+.dojo-panel h3 { color: #FFDF2D; margin-top: 0; }
+.quiz-card {
+    background: #f4f8ff;
+    border: 1px solid #dbe3ff;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 14px;
+}
+.quiz-card h3 { margin-top: 0; color: #1d4ed8; }
+.correcta {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #e8f5e9;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+.footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.92rem;
+    padding: 16px 20px 34px;
+}
+@media (max-width: 920px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    main { padding-inline: 16px; }
+    .card { padding: 20px; }
+    .sticky-nav .inner { padding-inline: 16px; }
+    .timeline { margin-left: 0; padding-left: 18px; }
+    .timeline-item::before { left: -18px; }
+}</style>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge-row">
+                <span class="badge docente">USO EXCLUSIVO DOCENTE</span>
+                <span class="badge">TGA05 · Estructura de Datos para los Negocios</span>
+                <span class="badge">Semana 3 de 14</span>
+            </div>
+            <h1>Aplicaciones de pilas y notación de expresiones · Guía docente</h1>
+            <p class="lead">Secuencia detallada para conducir la sesión con Framework GAME, Bloom explícito, gamificación ClassDojo + Quizizz y decisiones contextualizadas en NeuroBiz S.A.S.</p>
+        </div>
+    </header>
+
+    <nav class="sticky-nav">
+        <div class="inner">
+            <a href="#meta">Meta</a>
+            <a href="#checklist">Checklist</a>
+            <a href="#secuencia">Secuencia 240 min</a>
+            <a href="#dojo">ClassDojo</a>
+            <a href="#quiz">Quiz</a>
+            <a href="#hti">HTI</a>
+            <a href="#neuro">Neurodivergencia</a>
+            <a href="#contingencias">Contingencias</a>
+            <a href="#observacion">Observación</a>
+        </div>
+    </nav>
+
+    <main>
+        <section id="meta" class="card">
+            <h2>Meta de sesión</h2>
+            <p class="section-intro">Defina al inicio de la clase qué se espera que el estudiantado comprenda, haga y justifique al cierre.</p>
+            <div class="meta-box">
+    <table>
+        <thead><tr><th>Componente</th><th>Formulación sugerida</th></tr></thead>
+        <tbody>
+            <tr><td>RA</td><td>RA1: utiliza estructuras lineales para modelar y automatizar problemas de negocio en contextos analíticos.</td></tr>
+            <tr><td>CE</td><td>CE1: convierte expresiones entre notaciones básicas. CE2: evalúa expresiones postfijas con pila. CE3: valida fórmulas con paréntesis balanceados antes de su ejecución.</td></tr>
+            <tr><td>Bloom</td><td>Aplicar → Analizar. El estudiante usa la estructura y además explica el cambio del estado durante el procesamiento simbólico.</td></tr>
+            <tr><td>Meta de sesión</td><td>Al cierre, cada equipo presenta una pequeña calculadora o un verificador de fórmulas para KPIs de NeuroBiz y argumenta por qué la pila facilita la interpretación de expresiones.</td></tr>
+        </tbody>
+    </table>
+</div>
+            <div class="warn-box">
+    <strong>Recuerdo docente:</strong> Python se usa como herramienta analítica para representar decisiones de negocio; el foco evaluativo no es memorizar sintaxis, sino justificar por qué la estructura elegida resuelve mejor el problema de NeuroBiz y cómo se comunica esa decisión con evidencia observable.
+</div>
+        </section>
+
+        <section id="checklist" class="card">
+            <h2>Checklist pre-clase</h2>
+            <p class="section-intro">Revise condiciones pedagógicas y tecnológicas antes de iniciar para que la experiencia no dependa solo del software.</p>
+            <div class="grid-3">
+    <div class="check-box">
+        <h3>Pedagógico</h3>
+        <ul>
+            <li>Llevar al menos 5 fórmulas impresas o proyectadas con distintos niveles de complejidad.</li>
+            <li>Definir un ejemplo incorrecto con paréntesis desbalanceados para usar como contraste.</li>
+            <li>Preparar una tabla visible de precedencia básica de operadores.</li>
+            <li>Recordar que la meta no es “ser compilador”, sino entender la pila como apoyo al análisis.</li>
+        </ul>
+    </div>
+    <div class="check-box">
+        <h3>Tecnológico</h3>
+        <ul>
+            <li>Abrir notebook con funciones base para evaluar y validar.</li>
+            <li>Verificar que el teclado proyectado permita ver claramente paréntesis, corchetes y llaves.</li>
+            <li>Tener una alternativa offline en diapositiva o pizarra con tokens recortables.</li>
+            <li>Comprobar acceso a Quizizz o plan B de preguntas orales.</li>
+        </ul>
+    </div>
+    <div class="check-box">
+        <h3>Categorías ClassDojo</h3>
+        <ul>
+            <li>Análisis token a token (+2)</li>
+            <li>Conversión correcta (+2)</li>
+            <li>Validación de fórmulas (+2)</li>
+            <li>Exactitud del cálculo (+3)</li>
+            <li>Argumentación colaborativa (+1)</li>
+        </ul>
+    </div>
+</div>
+        </section>
+
+        <section id="secuencia" class="card">
+            <h2>Secuencia minuto a minuto completa (240 min)</h2>
+            <p class="section-intro">La sesión está pensada para 2 horas HAD y 2 horas HP. Cada bloque incluye propósito, acción, guion sugerido y evidencia observable.</p>
+            <div class="timeline">
+            <div class="timeline-item">
+                <span class="time-badge">0-10 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Apertura con problema analítico</h3>
+                <p><strong>Propósito:</strong> Situar la necesidad de automatizar fórmulas de KPI en NeuroBiz.</p>
+                <p><strong>Acción docente:</strong> Presentar una fórmula real y preguntar cómo podría procesarla un sistema sin interpretar visualmente el texto como una persona.</p>
+                <p><strong>Guion sugerido:</strong> Hoy el reto no es guardar sesiones sino entender fórmulas. Una persona mira una expresión y la resuelve; un sistema necesita reglas claras para procesarla. ¿Cómo logramos eso con una pila?</p>
+                <p><strong>Evidencia observable:</strong> Intervenciones que distinguen cálculo humano de procesamiento estructurado.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">10-25 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Activación y recuperación</h3>
+                <p><strong>Propósito:</strong> Recuperar lo aprendido sobre pilas y trasladarlo a símbolos.</p>
+                <p><strong>Acción docente:</strong> Pedir que recuerden qué significa apilar y desapilar, pero ahora usando números, variables y operadores.</p>
+                <p><strong>Guion sugerido:</strong> La estructura no cambió; cambió el tipo de elemento que cargamos. En vez de sesiones, hoy apilaremos tokens. ¿Qué se mantiene y qué se transforma?</p>
+                <p><strong>Evidencia observable:</strong> El grupo reconoce continuidad entre la semana 2 y la aplicación simbólica.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">25-45 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Conceptualización de notaciones</h3>
+                <p><strong>Propósito:</strong> Diferenciar infija, prefija y postfija con ejemplos sencillos.</p>
+                <p><strong>Acción docente:</strong> Construir una tabla en el tablero y convertir una fórmula simple de asistencia a las tres notaciones.</p>
+                <p><strong>Guion sugerido:</strong> No busquen memorizar por repetición. Piensen en qué cambia la posición del operador y por qué la notación postfija reduce la dependencia de paréntesis durante la evaluación.</p>
+                <p><strong>Evidencia observable:</strong> Los estudiantes pueden leer las tres representaciones y señalar la ubicación del operador.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">45-65 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Demostración de evaluación postfija</h3>
+                <p><strong>Propósito:</strong> Modelar paso a paso el algoritmo de pila sobre una fórmula de KPI.</p>
+                <p><strong>Acción docente:</strong> Ejecutar el evaluador mostrando el estado de la pila tras cada token.</p>
+                <p><strong>Guion sugerido:</strong> Aquí no quiero magia. Después de cada token, detengámonos a mirar la pila. Si no podemos explicar el estado actual, el resultado final pierde valor pedagógico.</p>
+                <p><strong>Evidencia observable:</strong> Registros del estado de la pila y predicciones acertadas o corregidas.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">65-85 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Validación de paréntesis</h3>
+                <p><strong>Propósito:</strong> Relacionar pila con control de calidad de fórmulas.</p>
+                <p><strong>Acción docente:</strong> Mostrar una fórmula correcta y otra incorrecta, y analizar qué ocurre al abrir y cerrar símbolos.</p>
+                <p><strong>Guion sugerido:</strong> Antes de calcular hay que validar. Si un paréntesis se abre y nunca se cierra, el problema no es matemático sino estructural. La pila nos lo revela rápidamente.</p>
+                <p><strong>Evidencia observable:</strong> El grupo identifica fórmulas inválidas antes de intentar evaluarlas.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">85-100 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Pausa activa y síntesis parcial</h3>
+                <p><strong>Propósito:</strong> Reducir saturación simbólica y consolidar vocabulario técnico.</p>
+                <p><strong>Acción docente:</strong> Pedir que cada equipo escriba en una tarjeta dos verbos: apilar y operar, y luego hacer una síntesis oral rápida.</p>
+                <p><strong>Guion sugerido:</strong> Respiremos y simplifiquemos: al leer un operando, apilamos; al leer un operador, combinamos. Esa frase debe quedar clara antes de pasar a la práctica autónoma.</p>
+                <p><strong>Evidencia observable:</strong> Tarjetas o frases de síntesis con la lógica correcta.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">100-120 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Puente a HP</h3>
+                <p><strong>Propósito:</strong> Dejar claras tareas, producto y criterios de la calculadora de KPIs.</p>
+                <p><strong>Acción docente:</strong> Explicar el reto por equipos y asignar fórmulas con distintos niveles de complejidad.</p>
+                <p><strong>Guion sugerido:</strong> En la siguiente fase necesitarán demostrar análisis, no solo ejecución. Si su programa calcula un KPI, pero ustedes no explican la pila, el aprendizaje queda incompleto.</p>
+                <p><strong>Evidencia observable:</strong> Equipos entienden qué deben convertir, validar y evaluar.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">120-135 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Organización de insumos</h3>
+                <p><strong>Propósito:</strong> Distribuir fórmulas, roles y objetivo técnico de cada equipo.</p>
+                <p><strong>Acción docente:</strong> Asignar a algunos equipos el verificador de paréntesis y a otros el evaluador postfijo, según avance observado.</p>
+                <p><strong>Guion sugerido:</strong> Elijan un foco claro. Quien avance más rápido puede integrar ambas funciones; quien aún consolida puede centrarse primero en validar. Lo importante es que haya evidencia sólida.</p>
+                <p><strong>Evidencia observable:</strong> Roles definidos y foco de trabajo explícito.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">135-165 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Desarrollo de la calculadora</h3>
+                <p><strong>Propósito:</strong> Aplicar el algoritmo a un conjunto real de datos y fórmulas.</p>
+                <p><strong>Acción docente:</strong> Acompañar con preguntas de andamiaje sobre tokens, precedencia y estados intermedios.</p>
+                <p><strong>Guion sugerido:</strong> Muéstrenme dónde está la pila en su solución. Si su respuesta es solo ‘aquí imprime el resultado’, todavía falta hacer visible el proceso analítico.</p>
+                <p><strong>Evidencia observable:</strong> Código funcional con trazas o comentarios de estado.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">165-190 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Análisis y depuración</h3>
+                <p><strong>Propósito:</strong> Elevar la discusión desde la exactitud hacia la comprensión del procedimiento.</p>
+                <p><strong>Acción docente:</strong> Pedir a cada equipo un caso de error intencional: fórmula mal balanceada o expresión postfija incompleta.</p>
+                <p><strong>Guion sugerido:</strong> La mejor prueba de que entendieron el algoritmo es que sepan hacerlo fallar con sentido y explicar por qué falló. Un analista robusto también diseña casos de borde.</p>
+                <p><strong>Evidencia observable:</strong> Equipos generan y explican errores de forma controlada.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">190-210 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Socialización cruzada</h3>
+                <p><strong>Propósito:</strong> Compartir estrategias de validación y evaluación.</p>
+                <p><strong>Acción docente:</strong> Cruzar equipos para que un grupo explique la fórmula a otro sin mostrar inicialmente el código.</p>
+                <p><strong>Guion sugerido:</strong> Primero expliquen la lógica; luego muestren el programa. Quiero comprobar si su solución se sostiene conceptualmente antes de verla ejecutarse.</p>
+                <p><strong>Evidencia observable:</strong> Explicaciones transferibles entre pares y preguntas de aclaración.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">210-225 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Quizizz formativo</h3>
+                <p><strong>Propósito:</strong> Verificar conceptos clave de notación, evaluación y validación.</p>
+                <p><strong>Acción docente:</strong> Aplicar el quiz y comentar inmediatamente las respuestas más erradas.</p>
+                <p><strong>Guion sugerido:</strong> Las preguntas rápidas nos ayudan a detectar si todavía hay confusión entre convertir una expresión y calcularla. Escuchen la retroalimentación como mapa para la semana siguiente.</p>
+                <p><strong>Evidencia observable:</strong> Patrones de error identificados y corregidos en caliente.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">225-235 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Asignación de HTI</h3>
+                <p><strong>Propósito:</strong> Diferenciar profundización y consolidación.</p>
+                <p><strong>Acción docente:</strong> Indicar Escenario A a quienes ya validan y explican; Escenario B a quienes necesitan fortalecer conversión manual.</p>
+                <p><strong>Guion sugerido:</strong> No es una clasificación de capacidad, sino de siguiente paso. Si ya automatizas, profundiza; si aún necesitas visualizar, consolida con papel sin que eso te bloquee la próxima sesión.</p>
+                <p><strong>Evidencia observable:</strong> Cada estudiante recibe ruta coherente con su nivel de desempeño.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">235-240 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Cierre metacognitivo</h3>
+                <p><strong>Propósito:</strong> Amarrar el valor de la pila en problemas analíticos.</p>
+                <p><strong>Acción docente:</strong> Solicitar una frase final: “La pila ayuda a interpretar fórmulas porque…”.</p>
+                <p><strong>Guion sugerido:</strong> No se vayan solo con un número calculado. Llévense la idea de que una estructura también organiza el pensamiento analítico del sistema.</p>
+                <p><strong>Evidencia observable:</strong> Síntesis orales que conectan pila, fórmulas y control de calidad.</p>
+            </div>
+            </div>
+        </section>
+
+        <section id="dojo" class="card">
+            <h2>Integración ClassDojo</h2>
+            <p class="section-intro">Asigne puntos con criterios concretos, visibles y coherentes con el verbo Bloom de la semana. Evite premiar solo velocidad.</p>
+            <div class="dojo-panel"><h3>Tabla sugerida de asignación</h3>
+<table>
+    <thead><tr><th>Momento</th><th>Acción</th><th>Criterio concreto</th><th>Puntos</th></tr></thead>
+    <tbody>
+        <tr><td>Conversión</td><td>Pasa una expresión de infija a postfija</td><td>Orden correcto de tokens</td><td>+2</td></tr>
+        <tr><td>Validación</td><td>Detecta fórmula inválida</td><td>Explica dónde se rompe el balance</td><td>+2</td></tr>
+        <tr><td>Programación</td><td>Evalúa una expresión postfija</td><td>Resultado correcto y trazable</td><td>+3</td></tr>
+        <tr><td>Análisis</td><td>Describe el estado de la pila</td><td>Lenguaje técnico preciso</td><td>+2</td></tr>
+        <tr><td>Socialización</td><td>Conecta el algoritmo con la analítica de KPIs</td><td>Justificación contextual clara</td><td>+1</td></tr>
+    </tbody>
+</table>
+<p><strong>Nota de uso:</strong> privilegie precisión conceptual sobre rapidez al responder el quiz o construir el evaluador.</p></div>
+        </section>
+
+        <section id="quiz" class="card">
+            <h2>Quiz formativo</h2>
+            <p class="section-intro">Use estas preguntas para Quizizz o como cierre oral rápido. Las respuestas correctas están marcadas para facilitar la moderación.</p>
+            
+            <article class="quiz-card">
+                <h3>Pregunta 1</h3>
+                <p><strong>¿Cuál notación coloca el operador después de los operandos?</strong></p>
+                <ul><li>a) Infija</li><li>b) Prefija</li><li>c) Postfija</li><li>d) Circular</li></ul>
+                <p><span class="correcta">Correcta</span> c) Postfija</p>
+                <p><strong>Justificación didáctica:</strong> Verifica la identificación básica de las tres representaciones.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 2</h3>
+                <p><strong>Al evaluar una expresión postfija, ¿qué se hace al encontrar un operando?</strong></p>
+                <ul><li>a) Se elimina de inmediato</li><li>b) Se apila</li><li>c) Se ignora</li><li>d) Se ordena alfabéticamente</li></ul>
+                <p><span class="correcta">Correcta</span> b) Se apila</p>
+                <p><strong>Justificación didáctica:</strong> Comprueba comprensión del algoritmo elemental de evaluación.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 3</h3>
+                <p><strong>¿Qué detecta un verificador de paréntesis balanceados?</strong></p>
+                <ul><li>a) Si el KPI es alto o bajo</li><li>b) Si la fórmula tiene operadores de más</li><li>c) Si la estructura de apertura y cierre es coherente</li><li>d) Si la variable está en mayúscula</li></ul>
+                <p><span class="correcta">Correcta</span> c) Si la estructura de apertura y cierre es coherente</p>
+                <p><strong>Justificación didáctica:</strong> Diferencia validación sintáctica básica del valor numérico del KPI.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 4</h3>
+                <p><strong>¿Por qué la postfija reduce ambigüedad?</strong></p>
+                <ul><li>a) Porque elimina todos los operandos</li><li>b) Porque obliga a usar solo enteros</li><li>c) Porque la secuencia define cuándo operar sin depender tanto de paréntesis</li><li>d) Porque siempre produce el mismo orden que la infija</li></ul>
+                <p><span class="correcta">Correcta</span> c) Porque la secuencia define cuándo operar sin depender tanto de paréntesis</p>
+                <p><strong>Justificación didáctica:</strong> Apunta a la comprensión analítica del valor de la notación.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 5</h3>
+                <p><strong>Si aparece un paréntesis de cierre sin uno de apertura previo, el verificador debe reportar:</strong></p>
+                <ul><li>a) Expresión válida</li><li>b) Underflow o desbalance</li><li>c) Overflow</li><li>d) Resultado cero</li></ul>
+                <p><span class="correcta">Correcta</span> b) Underflow o desbalance</p>
+                <p><strong>Justificación didáctica:</strong> Conecta la lógica de pila con el caso de error al desapilar sin apertura correspondiente.</p>
+            </article>
+            
+        </section>
+
+        <section id="hti" class="card">
+            <h2>HTI: elección de Escenario A o B</h2>
+            <p class="section-intro">La decisión de ruta debe responder al desempeño observado y a la autorregulación del estudiante, no a castigo o premio arbitrario.</p>
+            <div class="grid-2">
+    <div class="note-box">
+        <h3>Escenario A</h3>
+        <ul>
+            <li>Para estudiantes que ya convierten y validan expresiones con mínima ayuda.</li>
+            <li>Recomendado si el equipo explicó correctamente el recorrido token a token.</li>
+            <li>Potencia transferencia hacia control de calidad en fórmulas más complejas.</li>
+        </ul>
+        <p><strong>Consecuencia:</strong> fortalece autonomía analítica y prepara mejor la comprensión de procesamiento de colas en semanas posteriores.</p>
+    </div>
+    <div class="warn-box">
+        <h3>Escenario B</h3>
+        <ul>
+            <li>Para estudiantes que aún confunden ubicación del operador o el sentido de apilar/desapilar.</li>
+            <li>Úselo cuando la visualización manual sea más útil que una nueva sobrecarga de código.</li>
+            <li>Sirve para consolidar antes de automatizar.</li>
+        </ul>
+        <p><strong>Consecuencia:</strong> mantiene el avance y <strong>NO BLOQUEA la siguiente clase</strong>; es un refuerzo conceptual de bajo umbral.</p>
+    </div>
+</div>
+        </section>
+
+        <section id="neuro" class="card">
+            <h2>Nota breve de neurodivergencia (máx. 1 min)</h2>
+            <p class="section-intro">Incluya una frase explícita de validación y estructura para reducir incertidumbre sin sobreextender el tiempo de clase.</p>
+            <div class="meta-box">
+    <p><strong>Frase sugerida:</strong> “Si hoy las fórmulas te saturan visualmente, puedes separar el problema en pasos pequeños: leer un token, decidir si se apila o se opera, y seguir. No necesitas resolver toda la expresión de una vez para comprenderla”.</p>
+</div>
+        </section>
+
+        <section id="contingencias" class="card">
+            <h2>Contingencias</h2>
+            <p class="section-intro">Plan de respuesta ante falla técnica, baja participación o compresión de tiempo.</p>
+            <div class="grid-3">
+    <div class="check-box">
+        <h3>Si falla la conectividad</h3>
+        <p>Trabaje con tarjetas que representen tokens y use una pila física en el escritorio. La conversión infija-postfija y el balanceo de paréntesis pueden resolverse manualmente sin perder el núcleo conceptual.</p>
+    </div>
+    <div class="check-box">
+        <h3>Si hay baja participación</h3>
+        <p>Divida el algoritmo: una persona lee tokens, otra mueve la pila, otra registra el estado y otra explica el paso. La segmentación por roles mejora foco y reduce evasión.</p>
+    </div>
+    <div class="check-box">
+        <h3>Si falta tiempo</h3>
+        <p>Priorice validación de paréntesis y una sola expresión postfija bien analizada. La conversión adicional puede quedar como ampliación o HTI A.</p>
+    </div>
+</div>
+        </section>
+
+        <section id="observacion" class="card">
+            <h2>Indicadores de observación docente + cierre sugerido</h2>
+            <p class="section-intro">Observe evidencias en proceso y cierre con una síntesis verbal conectada al caso NeuroBiz.</p>
+            <table>
+    <thead><tr><th>Indicador</th><th>Señal positiva</th><th>Alerta</th></tr></thead>
+    <tbody>
+        <tr><td>Diferenciación de notaciones</td><td>Reconoce dónde aparece el operador en cada formato.</td><td>Confunde postfija con prefija o mantiene el orden infijo.</td></tr>
+        <tr><td>Estado de la pila</td><td>Explica el cambio después de cada token.</td><td>Solo menciona resultado final.</td></tr>
+        <tr><td>Validación sintáctica</td><td>Detecta desbalance antes de calcular.</td><td>Intenta evaluar expresiones inválidas sin filtrar.</td></tr>
+        <tr><td>Transferencia al negocio</td><td>Relaciona fórmula y KPI con decisiones operativas.</td><td>Trata la actividad como ejercicio puramente matemático.</td></tr>
+        <tr><td>Autorregulación</td><td>Elige HTI coherente con su necesidad.</td><td>Requiere orientación extra para identificar siguiente paso.</td></tr>
+    </tbody>
+</table>
+<div class="meta-box">
+    <p><strong>Cierre sugerido:</strong> “Hoy usamos la pila para pensar cómo procesa un sistema las fórmulas que sustentan decisiones de negocio. Validar, convertir y evaluar expresiones es también una forma de cuidar la calidad de los datos que guían a NeuroBiz”.</p>
+</div>
+        </section>
+    </main>
+
+    <footer class="footer">UIB · TGA05 · Semana 3 · Guía docente exclusiva · Caso transversal NeuroBiz S.A.S.</footer>
+</body>
+</html>

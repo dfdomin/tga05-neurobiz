@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía de Parciales y Proyecto Final | IUB — GOL06</title>
+  <style>
+    /* ── Reset y base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --iub-blue:       #003087;
+      --iub-blue-mid:   #0056B3;
+      --iub-blue-light: #E8F0FE;
+      --iub-gold:       #F5A000;
+      --iub-gold-light: #FFF3CD;
+      --iub-white:      #FFFFFF;
+      --iub-bg:         #F4F7FC;
+      --iub-text:       #1A2744;
+      --iub-muted:      #5A6A8A;
+      --iub-border:     #C8D7F0;
+      --iub-code-bg:    #0F1E3D;
+      --iub-code-text:  #E8F0FE;
+      --radius:         8px;
+      --shadow:         0 2px 8px rgba(0,48,135,.12);
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--iub-bg);
+      color: var(--iub-text);
+      line-height: 1.7;
+      padding-bottom: 3rem;
+    }
+
+    /* ── Header institucional ── */
+    .iub-header {
+      background: linear-gradient(135deg, var(--iub-blue) 0%, var(--iub-blue-mid) 100%);
+      color: var(--iub-white);
+      padding: 0;
+      box-shadow: 0 4px 16px rgba(0,48,135,.3);
+    }
+    .iub-header-top {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1rem 2rem;
+      border-bottom: 3px solid var(--iub-gold);
+    }
+    .iub-logo {
+      width: 60px; height: 60px;
+      background: var(--iub-white);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--iub-blue);
+      letter-spacing: -1px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    }
+    .iub-institution { font-size: .8rem; opacity: .85; }
+    .iub-institution strong { font-size: 1.05rem; display: block; opacity: 1; }
+    .iub-header-meta {
+      background: rgba(0,0,0,.18);
+      padding: .55rem 2rem;
+      font-size: .82rem;
+      display: flex; flex-wrap: wrap; gap: .75rem 2rem;
+      opacity: .9;
+    }
+    .iub-header-meta span::before { content: "● "; font-size: .65rem; }
+
+    /* ── Barra de título del documento ── */
+    .doc-title-bar {
+      background: var(--iub-gold);
+      color: var(--iub-blue);
+      padding: .75rem 2rem;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: .02em;
+    }
+
+    /* ── Contenedor principal ── */
+    .content-wrap {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ── Tarjeta de contenido ── */
+    .content-card {
+      background: var(--iub-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2.5rem 2.75rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Tipografía ── */
+    h1 {
+      font-size: 1.8rem;
+      color: var(--iub-blue);
+      border-bottom: 3px solid var(--iub-gold);
+      padding-bottom: .5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 1.35rem;
+      color: var(--iub-blue);
+      margin: 2rem 0 .75rem;
+      padding-left: .75rem;
+      border-left: 4px solid var(--iub-gold);
+    }
+    h3 {
+      font-size: 1.1rem;
+      color: var(--iub-blue-mid);
+      margin: 1.5rem 0 .5rem;
+    }
+    h4 {
+      font-size: 1rem;
+      color: var(--iub-muted);
+      margin: 1.25rem 0 .4rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    p { margin-bottom: 1rem; }
+    strong { color: var(--iub-blue); }
+    em { color: var(--iub-muted); }
+
+    /* ── Listas ── */
+    ul, ol { margin: .5rem 0 1rem 1.5rem; }
+    li { margin-bottom: .3rem; }
+    ul li::marker { color: var(--iub-gold); }
+    ol li::marker { color: var(--iub-blue); font-weight: 700; }
+
+    /* ── Blockquote ── */
+    blockquote {
+      background: var(--iub-blue-light);
+      border-left: 5px solid var(--iub-blue-mid);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      color: var(--iub-text);
+    }
+    blockquote p { margin-bottom: .5rem; }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    /* ── Código inline ── */
+    code {
+      background: var(--iub-blue-light);
+      color: var(--iub-blue);
+      padding: .15em .4em;
+      border-radius: 4px;
+      font-size: .88em;
+      font-family: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+    }
+
+    /* ── Bloque de código ── */
+    pre {
+      background: var(--iub-code-bg);
+      color: var(--iub-code-text);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      font-size: .85rem;
+      line-height: 1.6;
+      border-left: 4px solid var(--iub-gold);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,.3);
+    }
+    pre code {
+      background: transparent;
+      color: var(--iub-code-text);
+      padding: 0;
+      font-size: inherit;
+    }
+
+    /* ── Tablas ── */
+    .table-wrap { overflow-x: auto; margin: 1.25rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+      min-width: 400px;
+    }
+    th {
+      background: var(--iub-blue);
+      color: var(--iub-white);
+      padding: .65rem 1rem;
+      text-align: left;
+      font-weight: 600;
+    }
+    th:first-child { border-radius: var(--radius) 0 0 0; }
+    th:last-child  { border-radius: 0 var(--radius) 0 0; }
+    td {
+      padding: .55rem 1rem;
+      border-bottom: 1px solid var(--iub-border);
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: var(--iub-blue-light); }
+    tr:hover td { background: var(--iub-gold-light); }
+
+    /* ── Separador ── */
+    hr {
+      border: none;
+      border-top: 2px solid var(--iub-border);
+      margin: 2rem 0;
+    }
+
+    /* ── Alerta / aviso ── */
+    .alert {
+      background: var(--iub-gold-light);
+      border-left: 5px solid var(--iub-gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: .85rem 1.1rem;
+      margin: 1rem 0;
+      font-size: .92rem;
+    }
+
+    /* ── Footer ── */
+    .iub-footer {
+      background: var(--iub-blue);
+      color: rgba(255,255,255,.75);
+      text-align: center;
+      padding: 1rem 2rem;
+      font-size: .8rem;
+      margin-top: 3rem;
+    }
+    .iub-footer strong { color: var(--iub-gold); }
+
+    /* ── Impresión ── */
+    @media print {
+      body { background: white; font-size: 11pt; }
+      .content-card { box-shadow: none; padding: 1rem; }
+      pre { background: #f0f0f0 !important; color: #000 !important;
+            border-left-color: #999; }
+      .iub-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .iub-footer { display: none; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .iub-header-top { padding: .75rem 1rem; }
+      .content-card { padding: 1.25rem 1rem; }
+      .iub-header-meta { padding: .4rem 1rem; }
+      .doc-title-bar { padding: .6rem 1rem; }
+    }
+</style>
+</head>
+<body>
+
+  <!-- ── Encabezado institucional ── -->
+  <header class="iub-header">
+    <div class="iub-header-top">
+      <div class="iub-logo">IUB</div>
+      <div>
+        <div class="iub-institution">
+          <strong>Institución Universitaria de Barranquilla</strong>
+          Facultad · Tecnología en Gestión de Operaciones Logísticas
+        </div>
+      </div>
+    </div>
+    <div class="iub-header-meta">
+      <span><strong>Módulo:</strong> GOL06 — Costos y Presupuestos</span>
+      <span><strong>Créditos:</strong> 2 | HAD 2 + HP 2 + HTI 5</span>
+      <span><strong>Período:</strong> 2024 – 2025</span>
+      <span><strong>Caso hilo:</strong> LOGÍSATL S.A.S.</span>
+    </div>
+    <div class="doc-title-bar">📝 Guía de Evaluaciones · Parcial 1, Parcial 2 y Proyecto Final</div>
+  </header>
+
+  <!-- ── Contenido ── -->
+  <main class="content-wrap">
+    <article class="content-card">
+      <h1>📝 GUÍAS DE PARCIALES — GOL06 Costos y Presupuestos</h1>
+<p><strong>Institución Universitaria de Barranquilla (IUB) | Tecnología en Gestión de Operaciones Logísticas</strong></p>
+<hr />
+<h1>PARCIAL 1 — Semana 5</h1>
+<p><strong>RA evaluado:</strong> RA1 — Elementos del costo (semanas 1–4)<br />
+<strong>Duración:</strong> 90 minutos | <strong>Peso:</strong> 30% | <strong>Permitido:</strong> Calculadora</p>
+<hr />
+<h2>Estructura</h2>
+<h3>Punto 1 — Clasificación (25 puntos)</h3>
+<p>Clasifica cada concepto en la columna correcta: MP / MO / CIF / Gasto / Pérdida</p>
+<p><em>(El docente usa la siguiente lista o varía según semestre)</em></p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>1. Combustible del camión asignado a la ruta del cliente Norte
+2. Stretch film usado en la orden #060 del cliente Puerto Industrial
+3. Salario del contador de LOGÍSATL
+4. Seguro de la flota de camiones
+5. Mercancía averiada en bodega por falla eléctrica
+6. Aceite de mantenimiento del montacargas
+7. Salario del operador asignado a la orden #060
+8. Arriendo mensual de la bodega principal
+9. Depreciación de los montacargas
+10. Publicidad en redes sociales para captar clientes
+</code></pre></div>
+
+<hr />
+<h3>Punto 2 — Kárdex y valoración de inventarios (30 puntos)</h3>
+<p><strong>Datos del mes de marzo 2024 — Stretch Film (rollos):</strong></p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>01-mar: Saldo inicial: 90 rollos a $8.545
+07-mar: Compra: 180 rollos a $8.800
+12-mar: Requisición Orden #061: 65 rollos
+18-mar: Compra: 120 rollos a $9.100
+24-mar: Requisición Orden #062: 80 rollos
+28-mar: Requisición Orden #063: 45 rollos
+</code></pre></div>
+
+<p>Preguntas (método Promedio Ponderado):<br />
+a) Construir el Kárdex completo (15 pts)<br />
+b) ¿Cuál es el saldo final en unidades y valor? (5 pts)<br />
+c) ¿Cuánto fue el total de MP usada en el mes? (5 pts)<br />
+d) Si la Orden #061 facturó $1.200.000 al cliente, ¿cuánto fue el costo de MP de esa orden? ¿Es rentable solo con ese elemento? (5 pts)</p>
+<hr />
+<h3>Punto 3 — Mano de Obra y factor prestacional (25 puntos)</h3>
+<p><strong>Operadora Luz Marina Díaz — LOGÍSATL</strong><br />
+- Salario básico: $1.950.000<br />
+- Factor prestacional: 1.538<br />
+- Horas trabajadas en marzo: 192 (24 días × 8h)</p>
+<p>Distribución de tiempo (tarjeta de tiempo):<br />
+- Orden #061: 24 horas (MOD)<br />
+- Orden #062: 20 horas (MOD)<br />
+- Orden #063: 18 horas (MOD)<br />
+- Supervisión general (no asignable): 14 horas (MOI)<br />
+- Capacitación: 8 horas (MOI)<br />
+- Incapacidad pagada: 16 horas (costo empresa)<br />
+- Tiempo improductivo esperas: 12 horas (MOI)</p>
+<p>Preguntas:<br />
+a) ¿Cuál es el costo mensual total de Luz Marina para la empresa? (5 pts)<br />
+b) ¿Cuál es el costo/hora? (5 pts)<br />
+c) ¿Cuánto carga a la Orden #061? ¿A la #062? ¿A la #063? (10 pts)<br />
+d) ¿Adónde van las horas de supervisión, capacitación y tiempo improductivo? (5 pts)</p>
+<hr />
+<h3>Punto 4 — CIF y Hoja de Costos (20 puntos)</h3>
+<p><strong>Datos adicionales:</strong><br />
+- CIF presupuestado del mes: $16.200.000<br />
+- Base de aplicación: horas MOD<br />
+- Horas MOD presupuestadas: 980 horas/mes</p>
+<p>Preguntas:<br />
+a) Calcular la tasa predeterminada de CIF (5 pts)<br />
+b) Calcular el CIF aplicado a la Orden #061 (las horas MOD de esa orden son las que calculaste en el punto anterior) (5 pts)<br />
+c) Construir la Hoja de Costos de la Orden #061:<br />
+   - MP (solo el stretch film calculado en punto 2)<br />
+   - MO directa de Luz Marina (punto 3)<br />
+   - CIF aplicado (literal b de este punto)<br />
+   (8 pts)<br />
+d) Si la Orden #061 facturó $1.200.000, ¿cuál es el margen bruto? (2 pts)</p>
+<hr />
+<h2>Criterios de calificación</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Puntos</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>90–100</td>
+<td>5.0</td>
+</tr>
+<tr>
+<td>80–89</td>
+<td>4.5</td>
+</tr>
+<tr>
+<td>70–79</td>
+<td>4.0</td>
+</tr>
+<tr>
+<td>60–69</td>
+<td>3.5</td>
+</tr>
+<tr>
+<td>&lt; 60</td>
+<td>&lt; 3.0</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<hr />
+<h1>PARCIAL 2 — Semana 10</h1>
+<p><strong>RA evaluado:</strong> RA2 — Sistemas de costeo y Estado de Costos (semanas 6–9)<br />
+<strong>Duración:</strong> 90 minutos | <strong>Peso:</strong> 30% | <strong>Permitido:</strong> Calculadora</p>
+<hr />
+<h2>Estructura</h2>
+<h3>Punto 1 — Sistemas de costeo (20 puntos)</h3>
+<p>Se describen 4 situaciones. Para cada una: a) indica el sistema de costeo apropiado (por órdenes / por procesos) y b) justifica en 2-3 líneas.</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>Situación 1: Empresa de impresión digital que produce 50.000 volantes 
+idénticos por día para distintos clientes, todos con el mismo diseño estándar.
+
+Situación 2: Constructora que edifica un edificio de 8 pisos de oficinas 
+para un cliente específico con diseño personalizado.
+
+Situación 3: Planta de agua purificada que produce 10.000 botellas diarias 
+todas con el mismo proceso y características.
+
+Situación 4: Agencia de eventos que organiza cada evento de manera diferente 
+(bodas, grados, lanzamientos) para clientes distintos.
+</code></pre></div>
+
+<hr />
+<h3>Punto 2 — Costeo por órdenes: Hoja de Costos completa (35 puntos)</h3>
+<p><strong>Empresa:</strong> DISTRIBUCIONES CARIBE S.A.S. <em>(empresa diferente a LOGÍSATL — evaluación de transferencia)</em><br />
+<strong>Servicio:</strong> Distribución de 600 cajas de producto farmacéutico en frío.</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>Materiales Directos (Requisición R-090):
+  Cajas isotérmicas:   25 unid × $18.500 = ?
+  Gel refrigerante:    60 unid × $4.200 = ?
+  Etiquetas:           600 × $180 = ?
+
+Mano de Obra Directa (Tarjeta de tiempo):
+  Técnico frío Carlos: 16h × $16.800/h = ?
+  Conductor Marta:     12h × $14.600/h = ?
+
+CIF (datos dados):
+  CIF presupuestado mensual: $18.500.000
+  Base: horas MOD
+  Horas MOD presupuestadas: 950 h/mes
+  Horas MOD de esta orden: 28 horas
+
+Precio facturado: $3.200.000
+</code></pre></div>
+
+<p>Preguntas:<br />
+a) Calcular la tasa predeterminada de CIF (5 pts)<br />
+b) Calcular CIF aplicado a la orden (5 pts)<br />
+c) Construir la Hoja de Costos completa (15 pts)<br />
+d) Calcular utilidad bruta y margen bruto (5 pts)<br />
+e) ¿Si los CIF reales del mes fueron $19.800.000, hubo sub o sobre-aplicación? ¿Por cuánto? (5 pts)</p>
+<hr />
+<h3>Punto 3 — Costeo por procesos (25 puntos)</h3>
+<p><strong>Empresa:</strong> EMPACK CARIBE — empaque estándar de frutas (no es LOGÍSATL)</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>Datos del mes de mayo:
+  Unidades inicio (en proceso al 40%): 200 cajas
+  Unidades ingresadas al proceso: 2.800 cajas
+  Unidades terminadas y entregadas: 2.600 cajas
+  Unidades en proceso al final (60%): 400 cajas
+
+Costos del mes:
+  MP: $5.200.000
+  MOD: $3.900.000
+  CIF: $2.340.000
+  Total: $11.440.000
+</code></pre></div>
+
+<p>Preguntas:<br />
+a) Calcular unidades equivalentes (8 pts)<br />
+b) Calcular costo unitario (7 pts)<br />
+c) Calcular costo del servicio completado (5 pts)<br />
+d) Calcular inventario en proceso al cierre (5 pts)</p>
+<hr />
+<h3>Punto 4 — Estado de Costos (20 puntos)</h3>
+<p><strong>Datos de LOGÍSATL — mayo 2024:</strong></p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>Inventario inicial MP:              $1.850.000
+Compras de MP:                      $4.500.000
+Devoluciones de MP:                  ($120.000)
+Inventario final MP:                $2.100.000
+MO Directa del mes:                 $5.120.000
+CIF del mes (reales):              $15.800.000
+No hay inventario en proceso
+Ingresos del mes:                  $25.000.000
+Gastos operacionales:               $2.800.000
+</code></pre></div>
+
+<p>Construir el Estado de Costos de Servicios Prestados completo y calcular:<br />
+a) Costo de servicios prestados (10 pts)<br />
+b) Utilidad Bruta (5 pts)<br />
+c) Utilidad Operacional (5 pts)</p>
+<hr />
+<hr />
+<h1>PROYECTO FINAL — Semana 13</h1>
+<p><strong>RA evaluado:</strong> RA3 (principal) + RA1 y RA2 integrados<br />
+<strong>Formato:</strong> Grupal (4–5 personas) | <strong>Peso:</strong> 30% | <strong>Presentación + documento</strong></p>
+<hr />
+<h2>Entregables</h2>
+<ol>
+<li><strong>Documento escrito</strong> (máx. 10 páginas): diagnóstico completo con todos los cálculos</li>
+<li><strong>Presentación</strong> (máx. 12 diapositivas): para sustentación tipo Shark Tank</li>
+</ol>
+<h2>Contenido obligatorio</h2>
+<ul>
+<li>[ ] Resumen del perfil operativo de LOGÍSATL</li>
+<li>[ ] Hoja de costos de mínimo 3 órdenes del segundo semestre 2024</li>
+<li>[ ] Análisis de rentabilidad por cliente (comparar mínimo 4 clientes)</li>
+<li>[ ] Estado de Costos del segundo semestre 2024</li>
+<li>[ ] Análisis de CIF: ¿hubo sub o sobre-aplicación? ¿Por qué?</li>
+<li>[ ] Presupuesto maestro para Q1 2025 (ene–mar)</li>
+<li>[ ] Mínimo 3 recomendaciones gerenciales con impacto cuantificado en COP</li>
+<li>[ ] Identificar el cliente menos rentable y proponer acción concreta</li>
+</ul>
+<h2>Rúbrica del proyecto final</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Criterio</th>
+<th>%</th>
+<th>🔴 En desarrollo</th>
+<th>🟡 Competente</th>
+<th>🟢 Avanzado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hojas de costos correctas</td>
+<td>20%</td>
+<td>Errores en estructura o cálculo</td>
+<td>Correctas con 1-2 errores menores</td>
+<td>Perfectas con análisis de rentabilidad</td>
+</tr>
+<tr>
+<td>Estado de Costos</td>
+<td>15%</td>
+<td>Estructura incorrecta</td>
+<td>Correcto sin análisis</td>
+<td>Correcto con análisis de variaciones</td>
+</tr>
+<tr>
+<td>Análisis de CIF</td>
+<td>15%</td>
+<td>No distingue aplicado vs. real</td>
+<td>Calcula la diferencia</td>
+<td>Calcula, clasifica y propone ajuste</td>
+</tr>
+<tr>
+<td>Presupuesto maestro Q1</td>
+<td>25%</td>
+<td>Incompleto o sin coherencia interna</td>
+<td>Completo con coherencia</td>
+<td>Completo, coherente y con análisis de sensibilidad</td>
+</tr>
+<tr>
+<td>Recomendaciones con COP</td>
+<td>15%</td>
+<td>Sin impacto cuantificado</td>
+<td>Con argumento parcial</td>
+<td>Con impacto cuantificado y acción específica</td>
+</tr>
+<tr>
+<td>Sustentación oral</td>
+<td>10%</td>
+<td>Dificultad respondiendo preguntas</td>
+<td>Responde con datos básicos</td>
+<td>Responde con datos cruzados y razonamiento gerencial</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<p><em>Guía de Parciales — IUB | GOL06 Costos y Presupuestos</em></p>
+    </article>
+  </main>
+
+  <footer class="iub-footer">
+    <strong>Institución Universitaria de Barranquilla — IUB</strong> ·
+    GOL06 Costos y Presupuestos · Material de apoyo académico · 2024–2025
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propuesta: Integración Moodle–Academusoft — IUB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:   #1E2843;
+      --navy2:  #2d3a5e;
+      --yellow: #FFDF2D;
+      --bg:     #FAFAFA;
+      --border: #DEDFE4;
+      --gray:   #E9EAED;
+      --green:  #1b5e20;
+      --red:    #b71c1c;
+      --text:   #212121;
+      --muted:  #546e7a;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Open Sans', Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+    /* PORTADA */
+    .cover {
+      background: linear-gradient(145deg, var(--navy) 0%, var(--navy2) 60%, #1a3a6e 100%);
+      color: #fff; min-height: 100vh; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; text-align: center;
+      padding: 3rem 2rem; position: relative; overflow: hidden;
+    }
+    .cover::before {
+      content: ''; position: absolute; top: -80px; right: -80px;
+      width: 350px; height: 350px; border-radius: 50%;
+      background: rgba(255,223,45,.08);
+    }
+    .cover::after {
+      content: ''; position: absolute; bottom: -60px; left: -60px;
+      width: 250px; height: 250px; border-radius: 50%;
+      background: rgba(255,223,45,.05);
+    }
+    .cover-badge {
+      background: var(--yellow); color: var(--navy); font-weight: 800;
+      font-size: .8rem; padding: .35rem 1.2rem; border-radius: 20px;
+      letter-spacing: .08em; text-transform: uppercase; margin-bottom: 2rem;
+    }
+    .cover h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; max-width: 700px; margin-bottom: 1rem; }
+    .cover h2 { font-size: 1.1rem; opacity: .8; max-width: 600px; font-weight: 400; margin-bottom: 3rem; }
+    .cover-meta { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; }
+    .cover-meta div { text-align: center; }
+    .cover-meta .label { font-size: .75rem; opacity: .6; text-transform: uppercase; letter-spacing: .05em; }
+    .cover-meta .value { font-weight: 700; font-size: .95rem; margin-top: .2rem; }
+    .scroll-hint { position: absolute; bottom: 2rem; opacity: .5; font-size: .85rem; animation: bounce 2s infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
+    /* SLIDE */
+    .slide {
+      max-width: 900px; margin: 4rem auto; padding: 0 1.5rem;
+    }
+    .slide-header {
+      display: flex; align-items: center; gap: .8rem;
+      margin-bottom: 1.5rem; padding-bottom: 1rem;
+      border-bottom: 3px solid var(--yellow);
+    }
+    .slide-num {
+      background: var(--navy); color: var(--yellow);
+      width: 2.5rem; height: 2.5rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: .95rem; flex-shrink: 0;
+    }
+    .slide-header h2 { font-size: 1.4rem; color: var(--navy); font-weight: 800; }
+
+    /* CARDS */
+    .card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
+    .card h3 { color: var(--navy); font-size: 1rem; margin-bottom: .6rem; }
+    .card p, .card li { color: #444; font-size: .92rem; }
+    .card ul { padding-left: 1.3rem; }
+    .card li { margin-bottom: .3rem; }
+
+    /* GRID */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    @media(max-width:640px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+    /* HIGHLIGHT CARD */
+    .card-highlight {
+      background: linear-gradient(135deg, var(--navy), var(--navy2));
+      color: #fff; border-radius: var(--radius); padding: 1.8rem;
+      margin-bottom: 1rem;
+    }
+    .card-highlight h3 { color: var(--yellow); font-size: 1.05rem; margin-bottom: .6rem; }
+    .card-highlight p, .card-highlight li { opacity: .9; font-size: .92rem; }
+    .card-highlight ul { padding-left: 1.3rem; }
+    .card-highlight li { margin-bottom: .3rem; }
+
+    /* PAIN POINTS */
+    .pain { border-left: 4px solid var(--red); background: #fff5f5; }
+    .solution { border-left: 4px solid var(--green); background: #f1f8e9; }
+    .neutral  { border-left: 4px solid var(--yellow); background: #fffde7; }
+
+    /* FLOW DIAGRAM */
+    .flow {
+      display: flex; gap: 0; align-items: stretch;
+      background: #fff; border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem;
+    }
+    .flow-step {
+      flex: 1; padding: 1.2rem 1rem; text-align: center;
+      border-right: 1px solid var(--border); position: relative;
+    }
+    .flow-step:last-child { border-right: none; }
+    .flow-step .icon { font-size: 1.8rem; margin-bottom: .4rem; }
+    .flow-step .title { font-weight: 700; font-size: .85rem; color: var(--navy); }
+    .flow-step .sub { font-size: .75rem; color: var(--muted); margin-top: .3rem; }
+    .flow-step.active { background: var(--navy); }
+    .flow-step.active .title, .flow-step.active .sub { color: #fff; }
+
+    /* COMPARISON */
+    .compare { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 1rem 0; }
+    .compare th { background: var(--navy); color: #fff; padding: .7rem 1rem; text-align: left; }
+    .compare td { padding: .65rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .compare tr:nth-child(even) td { background: var(--gray); }
+    .compare .tag-yes  { color: var(--green); font-weight: 700; }
+    .compare .tag-no   { color: var(--red); font-weight: 700; }
+    .compare .tag-part { color: #e65100; font-weight: 700; }
+
+    /* IMPACT */
+    .impact-num { font-size: 2.5rem; font-weight: 800; color: var(--navy); }
+    .impact-desc { font-size: .85rem; color: var(--muted); margin-top: .2rem; }
+
+    /* TIMELINE */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before { content:''; position:absolute; left:.65rem; top:0; bottom:0; width:2px; background:var(--border); }
+    .tl-item { position: relative; margin-bottom: 1.2rem; }
+    .tl-dot {
+      position: absolute; left: -2rem; width: 14px; height: 14px;
+      background: var(--yellow); border: 3px solid var(--navy);
+      border-radius: 50%; top: .4rem;
+    }
+    .tl-title { font-weight: 700; color: var(--navy); font-size: .95rem; }
+    .tl-desc { font-size: .87rem; color: #555; margin-top: .2rem; }
+    .tl-tag {
+      display: inline-block; font-size: .72rem; font-weight: 700; padding: .15rem .5rem;
+      border-radius: 10px; margin-left: .4rem; vertical-align: middle;
+    }
+    .tl-tag-1 { background: #bbdefb; color: #0d47a1; }
+    .tl-tag-2 { background: #c8e6c9; color: #1b5e20; }
+    .tl-tag-3 { background: var(--yellow); color: var(--navy); }
+
+    /* DIVIDER */
+    .section-divider {
+      text-align: center; padding: 2rem 0; color: var(--muted);
+      font-size: .85rem; letter-spacing: .1em; text-transform: uppercase;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy); color: rgba(255,255,255,.7);
+      text-align: center; padding: 2rem; font-size: .85rem; margin-top: 4rem;
+    }
+    footer strong { color: var(--yellow); }
+  </style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <div class="cover-badge">Propuesta para Vicerrectoría Académica · 2026</div>
+  <h1>Automatización del Registro de Calificaciones:<br>Moodle → Academusoft</h1>
+  <h2>Reducir carga operativa docente y garantizar trazabilidad del aprendizaje en tiempo real</h2>
+  <div class="cover-meta">
+    <div><div class="label">Presenta</div><div class="value">TGA05 — Estructura de Datos</div></div>
+    <div><div class="label">Institución</div><div class="value">IUB</div></div>
+    <div><div class="label">Estado</div><div class="value">Piloto en curso</div></div>
+  </div>
+  <div class="scroll-hint">▼ continuar</div>
+</div>
+
+<!-- SLIDE 1: EL PROBLEMA -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">1</div>
+    <h2>El problema actual</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card pain">
+      <h3>😓 Proceso manual hoy</h3>
+      <ul>
+        <li>Docente lleva registro en Excel propio</li>
+        <li>Al cierre del corte: exporta, consolida, corrige errores</li>
+        <li>Ingresa nota única manualmente a Academusoft</li>
+        <li>Riesgo de error humano en transcripción</li>
+        <li>Sin visibilidad del progreso en tiempo real</li>
+      </ul>
+    </div>
+    <div class="card pain">
+      <h3>📉 Costos ocultos</h3>
+      <ul>
+        <li>~2–4 horas por docente por corte en solo el registro</li>
+        <li>Inconsistencias entre Moodle y Academusoft frecuentes</li>
+        <li>Estudiantes sin retroalimentación oportuna</li>
+        <li>Coordinadores sin datos agregados para intervención temprana</li>
+        <li>Procrastinación por alta carga cognitiva en tarea repetitiva</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card neutral" style="margin-top:.5rem">
+    <h3>🔢 Escala del problema en IUB</h3>
+    <p>Si un docente dicta 2 cursos de 30 estudiantes con 3 cortes/semestre, se trata de <strong>180 notas manuales</strong> por docente al año solo en transcripción — sin contar la consolidación previa.</p>
+  </div>
+</div>
+
+<!-- SLIDE 2: LA SOLUCIÓN -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">2</div>
+    <h2>La solución propuesta</h2>
+  </div>
+
+  <div class="card-highlight">
+    <h3>🎯 Visión: Un solo clic del docente para cerrar el corte</h3>
+    <p>El sistema consolida automáticamente la nota formativa desde las actividades de Moodle. El docente solo ingresa la nota del parcial presencial. El sistema calcula la nota final y la envía a Academusoft.</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="icon">👨‍🎓</div>
+      <div class="title">Estudiante</div>
+      <div class="sub">Completa actividades, quizzes y material en Moodle/GitHub Pages</div>
+    </div>
+    <div class="flow-step active">
+      <div class="icon">☁️</div>
+      <div class="title">Supabase / Moodle</div>
+      <div class="sub">Registra automáticamente XP, quizzes, actividades en tiempo real</div>
+    </div>
+    <div class="flow-step">
+      <div class="icon">📊</div>
+      <div class="title">Dashboard Docente</div>
+      <div class="sub">Vista consolidada + ingreso nota parcial</div>
+    </div>
+    <div class="flow-step">
+      <div class="icon">📤</div>
+      <div class="title">Academusoft</div>
+      <div class="sub">Carga automática vía API o archivo compatible</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card solution">
+      <h3>✅ Lo que YA existe (piloto TGA05)</h3>
+      <ul>
+        <li>Material en GitHub Pages con tracking automático</li>
+        <li>Supabase guarda progreso de cada estudiante en tiempo real</li>
+        <li>Dashboard docente con notas formativas calculadas</li>
+        <li>Exportación a XLSX con fórmulas automáticas</li>
+        <li>Columna "Nota Parcial" para completar en 5 minutos</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🔧 Lo que se necesita agregar</h3>
+      <ul>
+        <li>Conexión API Moodle → Supabase (o directo a Academusoft)</li>
+        <li>Formato de importación compatble con Academusoft</li>
+        <li>Validación y flujo de aprobación de notas</li>
+        <li>Autenticación institucional (SSO con credenciales IUB)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: COMPARACIÓN -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">3</div>
+    <h2>Comparación: proceso actual vs. propuesto</h2>
+  </div>
+
+  <table class="compare">
+    <tr>
+      <th>Aspecto</th>
+      <th>Proceso Actual</th>
+      <th>Proceso Propuesto</th>
+    </tr>
+    <tr>
+      <td><strong>Tiempo docente por corte</strong></td>
+      <td class="tag-no">2–4 horas de consolidación manual</td>
+      <td class="tag-yes">~15 minutos: revisar + ingresar parcial</td>
+    </tr>
+    <tr>
+      <td><strong>Fuente de verdad</strong></td>
+      <td class="tag-no">Excel docente (no auditado, no centralizado)</td>
+      <td class="tag-yes">Supabase + Moodle (trazable, con timestamp)</td>
+    </tr>
+    <tr>
+      <td><strong>Visibilidad del estudiante</strong></td>
+      <td class="tag-no">Cero — se entera hasta la nota de corte</td>
+      <td class="tag-yes">Dashboard personal en tiempo real</td>
+    </tr>
+    <tr>
+      <td><strong>Detección temprana de riesgo</strong></td>
+      <td class="tag-no">No existe — solo se ve al cierre de corte</td>
+      <td class="tag-yes">Alerta automática: estudiante con XP < umbral</td>
+    </tr>
+    <tr>
+      <td><strong>Errores de transcripción</strong></td>
+      <td class="tag-no">Alta probabilidad (carga manual)</td>
+      <td class="tag-yes">Eliminados — fórmula auditada</td>
+    </tr>
+    <tr>
+      <td><strong>Costo de implementación</strong></td>
+      <td>—</td>
+      <td class="tag-yes">Bajo: Supabase gratuito, GitHub Pages gratuito</td>
+    </tr>
+    <tr>
+      <td><strong>Escalabilidad</strong></td>
+      <td class="tag-no">No escala — depende de cada docente</td>
+      <td class="tag-yes">Replicable a todos los módulos TGA en 1 semana</td>
+    </tr>
+  </table>
+</div>
+
+<!-- SLIDE 4: IMPACTO -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">4</div>
+    <h2>Impacto estimado — Piloto TGA05 → Escala IUB</h2>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:1rem">
+    <div class="card" style="text-align:center">
+      <div class="impact-num">80%</div>
+      <div class="impact-desc">Reducción del tiempo docente en consolidación de notas por corte</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div class="impact-num">~0</div>
+      <div class="impact-desc">Errores de transcripción — las fórmulas son auditables y reproducibles</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div class="impact-num">14</div>
+      <div class="impact-desc">Semanas de progreso del estudiante almacenadas y accesibles en tiempo real</div>
+    </div>
+  </div>
+
+  <div class="card solution">
+    <h3>🎮 El efecto secundario: gamificación aumenta el compromiso</h3>
+    <p>El sistema de XP, badges y quizzes (ya implementado) no solo registra — también <strong>motiva</strong>. En el piloto TGA05, el progreso es visible para el estudiante en todo momento. Esto reduce la deserción y la procrastinación en ambos lados: estudiante y docente.</p>
+  </div>
+</div>
+
+<!-- SLIDE 5: HOJA DE RUTA -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">5</div>
+    <h2>Hoja de ruta de implementación</h2>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-title">Fase 1 — Piloto activo <span class="tl-tag tl-tag-3">EN CURSO</span></div>
+      <div class="tl-desc">TGA05 con GitHub Pages + Supabase + Dashboard docente. Consolidación semi-automática: formativa calculada, parcial manual, exportación XLSX.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-title">Fase 2 — Integración Moodle Grades API <span class="tl-tag tl-tag-1">2–4 semanas</span></div>
+      <div class="tl-desc">Las actividades de Moodle alimentan Supabase automáticamente. El docente ve notas formativas actualizadas sin intervención. Requiere habilitar Web Services en Moodle de IUB.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-title">Fase 3 — Formato de importación Academusoft <span class="tl-tag tl-tag-1">1–2 semanas</span></div>
+      <div class="tl-desc">Generar automáticamente el archivo (CSV/Excel) en el formato exacto que Academusoft acepta para importación masiva. El docente solo descarga y sube.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-title">Fase 4 — Conexión directa Supabase → Academusoft <span class="tl-tag tl-tag-2">Requiere cooperación TI</span></div>
+      <div class="tl-desc">Si Academusoft expone una API REST o permite integración, el sistema enviará las notas automáticamente al cierre del corte. Elimina por completo la intervención manual.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-title">Fase 5 — Escalado a todos los módulos TGA <span class="tl-tag tl-tag-2">1 sprint de desarrollo</span></div>
+      <div class="tl-desc">Replicar la arquitectura a los demás módulos del programa. El material HTML se genera con IA en horas. La infraestructura ya está probada.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: LO QUE SE NECESITA -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">6</div>
+    <h2>Requerimientos para escalar</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🔑 De la Oficina de TI</h3>
+      <ul>
+        <li>Habilitar Web Services REST en Moodle institucional</li>
+        <li>Crear token de integración con permisos de lectura de calificaciones</li>
+        <li>Compartir el formato de importación de notas de Academusoft</li>
+        <li>(Opcional) Endpoint API de Academusoft si existe</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>📋 De Vicerrectoría Académica</h3>
+      <ul>
+        <li>Aprobación de la fórmula de calificación para uso en todos los módulos TGA</li>
+        <li>Definición de pesos formativa/parcial por tipo de módulo</li>
+        <li>Designar módulos piloto para Semestre 2026-2</li>
+        <li>Socialización con docentes interesados</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card-highlight" style="margin-top:.5rem">
+    <h3>💡 Costo de la solución</h3>
+    <p><strong>Infraestructura:</strong> $0 — Supabase (plan gratuito cubre hasta 50.000 filas), GitHub Pages (gratuito para repos públicos y organizaciones educativas).</p><br>
+    <p><strong>Desarrollo:</strong> Ya existe el 70% del sistema. Las fases 2 y 3 son estimadas en 3–6 semanas de trabajo con apoyo de IA (como se está haciendo en este piloto).</p>
+  </div>
+</div>
+
+<!-- SLIDE 7: LLAMADO A LA ACCIÓN -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">7</div>
+    <h2>Próximos pasos concretos</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card solution">
+      <h3>✅ Esta semana (inmediato)</h3>
+      <ul>
+        <li>Demo del dashboard docente con datos reales del piloto</li>
+        <li>Solicitar a TI el formato de importación de Academusoft</li>
+        <li>Identificar 2–3 docentes interesados en participar en el piloto extendido</li>
+      </ul>
+    </div>
+    <div class="card neutral">
+      <h3>📅 Este semestre</h3>
+      <ul>
+        <li>Completar Fase 1 con grupo TGA05 actual</li>
+        <li>Documentar resultados: tiempo ahorrado, errores evitados, participación</li>
+        <li>Presentar resultados al consejo de facultad</li>
+        <li>Iniciar Fase 2 si TI habilita Web Services Moodle</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center;padding:2rem;margin-top:1rem">
+    <p style="font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:.8rem">
+      "El objetivo no es que la tecnología reemplace al docente.<br>
+      Es que la tecnología elimine lo que no debería estar haciéndole el docente."
+    </p>
+    <p style="color:var(--muted);font-size:.9rem">— Principio de diseño del sistema TGA05 NeuroBiz</p>
+  </div>
+</div>
+
+<footer>
+  <strong>Institución Universitaria de Barranquilla — IUB</strong><br>
+  Propuesta elaborada con apoyo de IA · Módulo TGA05 · 2026<br>
+  <span style="opacity:.5;font-size:.8rem">Dashboard de notas disponible para demostración en vivo</span>
+</footer>
+
+</body>
+</html>

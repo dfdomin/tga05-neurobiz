@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="es"><head><link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Notas del profesor — Semana 9 | TGA05</title><style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f7fbf4;
+  color: #1f2937;
+  line-height: 1.7;
+}
+:root {
+  --primary: #1b5e20;
+  --accent: #2e7d32;
+  --gold:      #FFDF2D;
+  --light: #f1f8e9;
+  --border: #c8e6c9;
+  --warn: #ef6c00;
+  --warn-bg: #fff3e0;
+  --blue: #1565c0;
+  --blue-bg: #e3f2fd;
+  --purple: #8e24aa;
+  --purple-bg: #f3e5f5;
+  --red: #b71c1c;
+  --red-bg: #ffebee;
+  --ink: #1f2937;
+  --muted: #546e7a;
+  --card: #ffffff;
+  --radius: 16px;
+  --shadow: 0 12px 30px rgba(27,94,32,.08);
+}
+header {
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+  color: #fff;
+  padding: 2.3rem 1.2rem 1.8rem;
+  position: relative;
+  overflow: hidden;
+}
+header::before,
+header::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+}
+header::before { width: 220px; height: 220px; top: -90px; right: -50px; }
+header::after { width: 170px; height: 170px; bottom: -80px; left: -60px; }
+.header-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .35rem .9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.14);
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+header h1 { margin: .8rem 0 .4rem; font-size: clamp(1.7rem, 3vw, 2.7rem); }
+header p { margin: 0; max-width: 860px; color: rgba(255,255,255,.93); }
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 8px 22px rgba(27,94,32,.08);
+}
+.nav-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: .7rem 1rem;
+  display: flex;
+  gap: .55rem;
+  flex-wrap: wrap;
+}
+nav a {
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: .84rem;
+  padding: .42rem .72rem;
+  border-radius: 10px;
+}
+nav a:hover { background: #edf7ee; }
+main { max-width: 1180px; margin: 1.8rem auto 0; padding: 0 1rem 3rem; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.3rem;
+  margin-bottom: 1.4rem;
+}
+.card h2 {
+  margin: 0 0 1rem;
+  color: var(--primary);
+  font-size: 1.3rem;
+  border-left: 5px solid var(--gold);
+  padding-left: .85rem;
+}
+.card h3 { color: var(--accent); margin: 1rem 0 .55rem; }
+.lead { color: #374151; }
+.grid-2, .grid-3, .meta-grid, .scenario-grid {
+  display: grid;
+  gap: 1rem;
+}
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.meta-grid { grid-template-columns: 1.1fr .9fr; align-items: start; }
+.box {
+  display: flex;
+  align-items: flex-start;
+  gap: .8rem;
+  padding: 1rem 1.05rem;
+  border-radius: 14px;
+}
+.box.ok { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+.box.warn { background: #fff3e0; border-left: 5px solid #ef6c00; }
+.box.blue { background: #e3f2fd; border-left: 5px solid #1565c0; }
+.box.brain { background: #f3e5f5; border-left: 5px solid #8e24aa; }
+.box.red { background: #ffebee; border-left: 5px solid #c62828; }
+.box .ico { font-size: 1.25rem; }
+.box p { margin: 0; }
+.checklist { list-style: none; padding: 0; margin: 0; }
+.checklist li {
+  display: flex;
+  gap: .75rem;
+  align-items: flex-start;
+  padding: .55rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.checklist li:last-child { border-bottom: none; }
+.check {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 2px solid var(--accent);
+  border-radius: 5px;
+  margin-top: .2rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: .9rem 0;
+  font-size: .92rem;
+}
+th {
+  background: var(--primary);
+  color: #fff;
+  text-align: left;
+  padding: .75rem .9rem;
+}
+td {
+  padding: .72rem .9rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: #f9fcf7; }
+.timeline {
+  position: relative;
+  margin-left: .4rem;
+  padding-left: 1.4rem;
+  border-left: 3px solid #c8e6c9;
+}
+.tl-item {
+  position: relative;
+  padding: .2rem 0 1rem 1.2rem;
+  border-bottom: 1px dashed #d7ead7;
+}
+.tl-item:last-child { border-bottom: none; padding-bottom: 0; }
+.tl-dot {
+  position: absolute;
+  left: -12px;
+  top: .45rem;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.tl-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  align-items: center;
+  margin-bottom: .35rem;
+}
+.tl-time {
+  font-size: .77rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: .04em;
+}
+.tl-title { font-size: 1rem; font-weight: 800; color: var(--primary); }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 800;
+}
+.tag.habla { background: #e3f2fd; color: #0d47a1; }
+.tag.silencio { background: #fce4ec; color: #880e4f; }
+.tag.monit { background: #fff8e1; color: #8d6e00; }
+.tag.dojo { background: #f3e5f5; color: #6a1b9a; }
+.tl-body { font-size: .93rem; }
+.tl-body ul { padding-left: 1.2rem; margin: .35rem 0; }
+.tl-body li { margin-bottom: .35rem; }
+.tl-guion {
+  margin-top: .55rem;
+  background: #f1f8e9;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  padding: .7rem .9rem;
+  font-style: italic;
+}
+.qa {
+  border-radius: 14px;
+  padding: 1rem;
+  background: #eef7ee;
+  border: 1px solid var(--border);
+  margin-bottom: .8rem;
+}
+.qa h4 { margin: 0 0 .45rem; color: var(--primary); }
+.correct { font-weight: 800; color: var(--primary); }
+.scenario {
+  border: 2px solid;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.scenario.a { border-color: #2e7d32; }
+.scenario.b { border-color: #ef6c00; }
+.scenario-header {
+  padding: .8rem 1rem;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.scenario.a .scenario-header { background: #e8f5e9; color: #1b5e20; }
+.scenario.b .scenario-header { background: #fff3e0; color: #e65100; }
+.scenario-body { padding: 1rem 1.05rem; }
+.note-table td:first-child { font-weight: 700; color: var(--primary); width: 28%; }
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: .82rem;
+  padding: 1.8rem 1rem 2.2rem;
+}
+@media (max-width: 900px) {
+  .meta-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .card { padding: 1rem; }
+  .timeline { padding-left: 1rem; }
+  .tl-item { padding-left: 1rem; }
+  table { font-size: .86rem; }
+}
+</style></head><body><header><div class="header-inner"><div class="badge">🔒 USO EXCLUSIVO DOCENTE · Semana 9 · TGA05</div><h1>Notas del Profesor — Listas Enlazadas Simples II: Operaciones</h1><p>Guía docente detallada para la sesión de 4 horas presenciales del módulo Estructura de Datos para los Negocios, con enfoque GAME, Bloom explícito y narrativa NeuroBiz.</p></div></header><nav><div class="nav-wrap"><a href="#meta">🎯 Meta</a><a href="#checklist">✅ Checklist</a><a href="#secuencia">⏱ Secuencia</a><a href="#dojo">🏆 ClassDojo</a><a href="#quiz">🎮 Quiz</a><a href="#hti">🏠 HTI</a><a href="#neuro">🧠 Neurodivergencia</a><a href="#contingencias">🚨 Contingencias</a><a href="#observacion">👁 Observación</a></div></nav><main><section id="meta" class="card"><h2>🎯 Meta de la sesión</h2><div class="meta-grid"><div><p class="lead">Al finalizar la sesión, el estudiante implementa y verifica operaciones completas sobre una lista enlazada simple, gestionando historiales terapéuticos con criterio técnico y valor organizacional.</p><div class="box ok"><div class="ico">📌</div><p><strong>Recordatorio metodológico:</strong> Python opera aquí como lenguaje de apoyo a la inteligencia de negocios. La comprensión de la estructura y su relación con el caso es más importante que escribir código velozmente.</p></div><div class="box blue"><div class="ico">🎮</div><p><strong>Framework GAME:</strong> guía con ejemplo inicial, articula teoría-caso-código, motiva con narrativa y puntos visibles, y evalúa con evidencia concreta, quiz y retroalimentación formativa.</p></div></div><div><div class="table-wrap"><table><thead><tr><th>RA</th><th>CE</th><th>Bloom</th><th>Meta observable</th></tr></thead><tbody><tr><td>RA2</td><td>CE2 · CE3 · CE4</td><td>Aplicar → Analizar</td><td>Construye, prueba y explica operaciones sobre estructuras dinámicas simples con casos límite.</td></tr></tbody></table></div></div></div></section><section id="checklist" class="card"><h2>✅ Checklist pre-clase</h2><div class="grid-2"><div><h3>Pedagógico</h3><ul class="checklist"><li><span class="check"></span><span>Recuperar una clase base mínima de la semana 8 para no perder tiempo reconstruyendo todo desde cero.</span></li><li><span class="check"></span><span>Preparar casos límite visibles: eliminar cabeza, insertar en posición 0, buscar inexistente, invertir lista vacía.</span></li><li><span class="check"></span><span>Definir una secuencia de pruebas pequeñas antes del laboratorio grande.</span></li><li><span class="check"></span><span>Tener preguntas de análisis: “¿qué enlace cambió?”, “¿qué pasaría si olvidas actualizar cabeza?”.</span></li><li><span class="check"></span><span>Organizar equipos para que documenten errores y no solo soluciones.</span></li></ul></div><div><h3>Tecnológico</h3><ul class="checklist"><li><span class="check"></span><span>Abrir notebook base de lista enlazada con pruebas listas para activar según avance del grupo.</span></li><li><span class="check"></span><span>Verificar que Quizizz incluya casos límite y sentido administrativo de las operaciones.</span></li><li><span class="check"></span><span>Configurar ClassDojo para valorar depuración y análisis, no solo producto final.</span></li><li><span class="check"></span><span>Tener proyector listo para mostrar trazas de punteros paso a paso.</span></li><li><span class="check"></span><span>Guardar un ejemplo de historial con 5 nodos y estados variados (asistida, cancelada, seguimiento).</span></li></ul></div></div><h3>ClassDojo — categorías sugeridas</h3><div class="table-wrap"><table><thead><tr><th>Categoría</th><th>Puntos</th><th>Cuándo aplicar</th></tr></thead><tbody><tr><td>🧱 Base lista</td><td>+1</td><td>Recupera la estructura inicial de forma correcta</td></tr><tr><td>⚙️ Operaciones</td><td>+2</td><td>Implementa buscar, eliminar, insertar o invertir</td></tr><tr><td>🧪 Pruebas</td><td>+2</td><td>Prueba casos límite y documenta resultados</td></tr><tr><td>🗣️ Análisis</td><td>+1</td><td>Explica utilidad gerencial de la operación</td></tr><tr><td>🔧 Depuración</td><td>+1</td><td>Corrige un error de referencias con apoyo o evidencia</td></tr></tbody></table></div></section><section id="secuencia" class="card"><h2>⏱ Secuencia minuto a minuto completa (240 min)</h2><p class="lead">La siguiente línea de tiempo está pensada para 2 horas HAD + 2 horas HP. Incluye guion sugerido en momentos clave, observables y microdecisiones de acompañamiento.</p><div class="timeline"><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">0–15 min</span><span class="tl-title">Narrativa de saneamiento del historial</span><span class="tag habla">🎙️ Habla docente</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Presenta el memorando con los tres problemas: cancelar, insertar, invertir.</li><li>Pregunta qué error administrativo podría aparecer si una operación rompe el historial.</li></ul><div class="tl-guion">Hoy el reto es gobernar la estructura: si un enlace falla, el dato deja de ser confiable para la organización.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">15–35 min</span><span class="tl-title">Recuperación activa de la semana 8</span><span class="tag silencio">✍️ Trabajo silencioso</span><span class="tag monit">👀 Monitoreo</span></div><div class="tl-body"><ul><li>Pide a los equipos reconstruir en 10 minutos la clase base de Nodo y ListaEnlazada.</li><li>Revisa rápidamente cabeza y recorrido antes de avanzar.</li></ul><div class="tl-guion">No empezamos de cero: partimos de una estructura que ya comprendemos para poder operarla con criterio.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">35–55 min</span><span class="tl-title">Mini-lección de operaciones y casos límite</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Explica insertar, buscar, eliminar e invertir con diagramas.</li><li>Subraya que cada operación tiene casos especiales.</li><li>Relaciona con la necesidad de trazabilidad en negocios.</li></ul><div class="tl-guion">La operación correcta no es la que “parece funcionar”, sino la que también resiste los casos límite.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">55–80 min</span><span class="tl-title">Demostración: buscar y eliminar</span><span class="tag habla">🎙️ Habla docente</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Proyecta una lista pequeña y elimina un nodo intermedio.</li><li>Después elimina la cabeza para contrastar.</li><li>Pregunta qué referencia cambió en cada caso.</li></ul><div class="tl-guion">Si no puedes nombrar qué enlace cambió, todavía no has entendido la operación.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">80–105 min</span><span class="tl-title">Demostración: insertar en posición e invertir</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Modela inserción en posición 0 y en posición intermedia.</li><li>Luego invierte la lista paso a paso con variables anterior, actual y siguiente temporal.</li></ul><div class="tl-guion">Invertir no es magia; es una coreografía ordenada de referencias.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">105–120 min</span><span class="tl-title">Micro chequeo escrito</span><span class="tag monit">👀 Monitoreo</span></div><div class="tl-body"><ul><li>Pide a cada estudiante completar una tabla con: operación, enlace que cambia, caso límite.</li><li>Usa las respuestas para decidir el acompañamiento del segundo bloque.</li></ul><div class="tl-guion">Lo que no puedes explicar por escrito probablemente tampoco lo controlas aún en el código.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">120–130 min</span><span class="tl-title">Pausa activa</span><span class="tag silencio">✍️ Trabajo silencioso</span></div><div class="tl-body"><ul><li>Descanso breve y recordatorio: cada prueba debe ser pequeña y verificable.</li></ul><div class="tl-guion">Después del descanso vamos a probar, romper y corregir con propósito.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">130–160 min</span><span class="tl-title">Laboratorio guiado: operaciones base</span><span class="tag silencio">✍️ Trabajo silencioso</span><span class="tag monit">👀 Monitoreo</span></div><div class="tl-body"><ul><li>Los equipos implementan buscar y eliminar primero.</li><li>Exige prueba con id existente y no existente.</li><li>Revisa especialmente el tratamiento de cabeza.</li></ul><div class="tl-guion">Primero logro operaciones seguras; luego agrego sofisticación.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">160–190 min</span><span class="tl-title">Laboratorio ampliado: insertar e invertir</span><span class="tag monit">👀 Monitoreo</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Añaden insertar_en_posicion e invertir.</li><li>Solicita una tabla de pruebas con antes/después.</li><li>Da puntos extra por documentar un error y su corrección.</li></ul><div class="tl-guion">En desarrollo real, documentar cómo corregiste vale tanto como mostrar que ya funciona.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">190–210 min</span><span class="tl-title">Socialización de casos límite</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Cada equipo comparte un error típico que encontró.</li><li>Conviertes esos errores en lista de buenas prácticas para la clase.</li></ul><div class="tl-guion">Los fallos bien analizados se convierten en conocimiento transferible.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">210–225 min</span><span class="tl-title">Quizizz formativo</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Aplica el quiz y comenta por qué CRUD es una analogía útil aquí.</li><li>Refuerza la idea de que estructura y operación siempre van juntas.</li></ul><div class="tl-guion">El quiz nos ayuda a distinguir entre una ejecución mecánica y una comprensión estructural.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">225–240 min</span><span class="tl-title">HTI, observación final y proyección</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Explica HTI A y HTI B dejando claro que el Escenario B NO BLOQUEA la siguiente clase.</li><li>Cierra conectando la gestión del historial con futuros modelos más complejos.</li></ul><div class="tl-guion">Cuando una organización crece, no solo necesita datos: necesita estructuras que soporten cambios sin perder confiabilidad.</div></div></article></div></section><section id="dojo" class="card"><h2>🏆 Integración ClassDojo</h2><p class="lead">Registra los puntos en el momento exacto en que la evidencia aparece. Evita asignaciones ambiguas; la claridad de criterios mejora la percepción de justicia y la motivación.</p><div class="table-wrap"><table><thead><tr><th>Momento</th><th>Criterio concreto</th><th>Puntos</th></tr></thead><tbody><tr><td>Inicio</td><td>Recupera correctamente la estructura base de la semana 8</td><td class="points">+1</td></tr><tr><td>CRUD</td><td>Implementa al menos tres operaciones sin romper la lista</td><td class="points">+2</td></tr><tr><td>Casos límite</td><td>Maneja cabeza, lista vacía o id inexistente</td><td class="points">+2</td></tr><tr><td>Análisis</td><td>Explica utilidad gerencial de invertir o depurar la lista</td><td class="points">+1</td></tr><tr><td>Cierre</td><td>Documenta pruebas y participa en síntesis final</td><td class="points">+1</td></tr></tbody></table></div><div class="box warn"><div class="ico">📝</div><p><strong>Sugerencia:</strong> verbaliza el criterio cada vez que otorgues puntos. Ejemplo: “sumo +2 porque identificaste el caso límite y además lo probaste con evidencia”.</p></div></section><section id="quiz" class="card"><h2>🎮 Quiz Quizizz — preguntas y respuestas correctas</h2><p class="lead">Usa el quiz como evaluación formativa de cierre. Si el puntaje promedio del grupo queda bajo, retoma solo la idea crítica antes de terminar; no intentes reenseñar toda la sesión en los últimos 10 minutos.</p><div class="qa"><h4>Pregunta 1</h4><p><strong>¿Qué debe cuidarse al eliminar un nodo de una lista enlazada?</strong></p><ol><li>Cambiar el color del nodo</li><li>Actualizar la referencia del nodo anterior o la cabeza</li><li>Ordenar toda la lista</li><li>Crear una tupla</li></ol><p class="correct">Respuesta correcta: La operación crítica es reencadenar correctamente la lista.</p></div><div class="qa"><h4>Pregunta 2</h4><p><strong>¿Para qué sirve insertar en posición?</strong></p><ol><li>Para borrar todos los nodos</li><li>Para añadir una sesión en un punto específico del historial</li><li>Para evitar recorrer la lista</li><li>Para reemplazar la cabeza siempre</li></ol><p class="correct">Respuesta correcta: Permite ubicar seguimientos o correcciones en el punto adecuado.</p></div><div class="qa"><h4>Pregunta 3</h4><p><strong>Invertir una lista enlazada simple implica…</strong></p><ol><li>copiar los datos a una lista de Python obligatoriamente</li><li>cambiar la dirección de los enlaces entre nodos</li><li>eliminar la cabeza</li><li>usar búsqueda binaria</li></ol><p class="correct">Respuesta correcta: La inversión real ocurre al reorientar referencias.</p></div><div class="qa"><h4>Pregunta 4</h4><p><strong>¿Qué caso límite merece atención especial en eliminar?</strong></p><ol><li>Cuando el nodo está al inicio o la lista está vacía</li><li>Cuando la lista tiene texto</li><li>Cuando el computador es lento</li><li>Cuando se usa Quizizz</li></ol><p class="correct">Respuesta correcta: La cabeza y la lista vacía son casos límite centrales.</p></div><div class="qa"><h4>Pregunta 5</h4><p><strong>¿Por qué estas operaciones se asocian a una lógica CRUD?</strong></p><ol><li>Porque usan colores distintos</li><li>Porque crean, leen, actualizan e incluso eliminan elementos de una estructura</li><li>Porque son exclusivamente de bases de datos SQL</li><li>Porque solo sirven para pacientes</li></ol><p class="correct">Respuesta correcta: La analogía CRUD ayuda a vincular estructuras con flujos reales de información.</p></div></section><section id="hti" class="card"><h2>🏠 HTI — cómo elegir Escenario A vs B</h2><p class="lead">Escenario A es pertinente si el estudiante ya controló al menos tres operaciones y puede integrar dos listas. Escenario B conviene si aún necesita precisión visual en eliminar o reencadenar; sostiene continuidad y NO BLOQUEA la siguiente clase.</p><div class="scenario-grid"><div class="scenario a"><div class="scenario-header"><span>Escenario A · profundización</span><span>60–90 min · entrega digital</span></div><div class="scenario-body"><p>Implementa una función que reciba dos listas enlazadas de pacientes de dos sedes distintas y construya una sola lista consolidada.</p><p>Debes explicar si la fusión conserva el orden original o si requiere un criterio adicional. Incluye pruebas con al menos 3 nodos por lista.</p><p>Entrega: notebook funcional, esquema breve de la estrategia usada y comentario sobre el valor administrativo de consolidar sedes.</p><div class="box ok"><div class="ico">✅</div><p><strong>Consecuencia pedagógica:</strong> ofrece evidencia más robusta del desempeño y prepara mejor el siguiente contenido.</p></div></div></div><div class="scenario b"><div class="scenario-header"><span>Escenario B · bajo umbral</span><span>20–30 min · cuaderno/papel</span></div><div class="scenario-body"><p>Dibuja una lista de 5 nodos y muestra paso a paso la operación <code>eliminar</code> para un nodo intermedio.</p><p>Marca dónde están <em>anterior</em>, <em>actual</em> y qué referencia cambia cuando el nodo desaparece.</p><p>Este escenario es de bajo umbral y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>; su propósito es reforzar precisión visual sobre las referencias.</p><div class="box warn"><div class="ico">🟠</div><p><strong>Consecuencia pedagógica:</strong> sostiene continuidad conceptual para estudiantes con menos tiempo, conectividad o seguridad técnica. <strong>NO BLOQUEA la siguiente clase</strong>.</p></div></div></div></div><div class="table-wrap"><table class="note-table"><tbody><tr><td>Si elige A</td><td>Obtiene una práctica más profunda, evidencia digital más sólida y mejor preparación para transferir el concepto a nuevos algoritmos.</td></tr><tr><td>Si elige B</td><td>Refuerza la imagen mental o el paso a paso sin convertir la tarea en barrera. Útil para nivelación o recuperación de confianza.</td></tr><tr><td>Qué debe decir el docente</td><td>“Ambas rutas suman al proceso; A profundiza más, B mantiene continuidad. La no realización de B no impide comprender la siguiente sesión”.</td></tr></tbody></table></div></section><section id="neuro" class="card"><h2>🧠 Nota de neurodivergencia (máx. 1 minuto)</h2><div class="box brain"><div class="ico">🧠</div><p>Frase sugerida: “El historial terapéutico es una herramienta de cuidado; por eso nuestras operaciones sobre datos deben ser precisas y respetuosas con la trayectoria de cada paciente”.</p></div><div class="box blue"><div class="ico">⏱</div><p><strong>Sugerencia de uso:</strong> di esta frase durante el aterrizaje del caso o antes del laboratorio. No la conviertas en discurso largo; basta una mención breve, respetuosa y natural.</p></div></section><section id="contingencias" class="card"><h2>🚨 Contingencias</h2><div class="box warn"><div class="ico">⚠️</div><p><strong>Falla técnica:</strong> Trabaja con diagramas de nodos en papel y tarjetas para simular inserción, eliminación e inversión. La comprensión estructural puede validarse sin ejecutar código.</p></div><div class="box warn"><div class="ico">⚠️</div><p><strong>Bajo engagement:</strong> Convierte el laboratorio en misión de “auditoría”: cada equipo debe detectar y corregir un historial roto preparado por el docente.</p></div><div class="box warn"><div class="ico">⚠️</div><p><strong>Falta de tiempo:</strong> Prioriza buscar y eliminar con pruebas claras; deja invertir como demostración docente o como extensión sugerida en HTI A.</p></div></section><section id="observacion" class="card"><h2>👁 Indicadores de observación docente</h2><ul><li>Puede explicar qué referencia cambia en cada operación.</li><li>Controla casos límite sin depender por completo del docente.</li><li>Valida sus operaciones con pruebas pequeñas antes de escalar.</li><li>Relaciona la depuración con confiabilidad del historial terapéutico.</li><li>Analiza el valor ejecutivo de invertir o depurar la estructura.</li></ul><div class="box ok"><div class="ico">🎤</div><p><strong>Cierre sugerido:</strong> Cierre sugerido: “Cuando operamos bien una estructura, el dato se vuelve confiable para decidir. Ese es el puente entre la programación y la gestión administrativa basada en evidencia.”</p></div></section></main><footer>TGA05 · Notas del profesor · Semana 9 · Uso exclusivo docente · Caso NeuroBiz S.A.S.</footer></body></html>

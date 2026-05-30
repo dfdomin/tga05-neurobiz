@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configurar Supabase — TGA05 NeuroBiz</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --sb: #3ecf8e; --sb-dark: #1c7c4a; --primary: #1a237e;
+      --accent: #3949ab; --border: #d1fae5; --light: #f0fdf4;
+      --radius: 14px;
+    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--light); color: #212121; line-height: 1.75; }
+
+    header {
+      background: linear-gradient(135deg, #0f2027, #1c7c4a 60%, #3ecf8e);
+      color: #fff; padding: 2.8rem 2rem 3.2rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    header::after { content:''; position:absolute; bottom:-2px; left:0; right:0;
+      height:38px; background:var(--light); clip-path:ellipse(55% 100% at 50% 100%); }
+    header h1 { font-size: 2rem; font-weight: 900; }
+    header .sub { opacity: .85; margin-top:.4rem; }
+    .hbadge { display:inline-block; background:rgba(255,255,255,.15);
+      border:2px solid rgba(255,255,255,.4); border-radius:20px;
+      padding:.3rem 1rem; font-size:.78rem; font-weight:700; margin:.3rem .2rem; }
+    .hbadge.sb { background:rgba(62,207,142,.25); border-color:#3ecf8e; }
+
+    main { max-width: 880px; margin: 2rem auto; padding: 0 1.2rem 5rem; }
+
+    .sec-title { display:flex; align-items:center; gap:.7rem;
+      font-size:1.25rem; font-weight:800; color:var(--sb-dark);
+      border-bottom:3px solid var(--sb); padding-bottom:.5rem; margin:2.5rem 0 1rem; }
+
+    .card { background:#fff; border-radius:var(--radius);
+      border:1px solid #d1fae5; padding:1.6rem 1.8rem;
+      margin-bottom:1.2rem; box-shadow:0 2px 10px rgba(0,0,0,.05); }
+
+    /* COMPARISON TABLE */
+    .cmp { width:100%; border-collapse:collapse; font-size:.87rem; }
+    .cmp th { padding:.65rem 1rem; text-align:left; background:#064e3b; color:#fff; }
+    .cmp td { padding:.6rem 1rem; border-bottom:1px solid #d1fae5; vertical-align:top; }
+    .cmp tr:last-child td { border-bottom:none; }
+    .cmp tr:nth-child(even) td { background:#f0fdf4; }
+    .tag { display:inline-block; padding:.15rem .6rem; border-radius:12px;
+      font-size:.75rem; font-weight:700; }
+    .tag.yes  { background:#d1fae5; color:#065f46; }
+    .tag.no   { background:#fee2e2; color:#991b1b; }
+    .tag.part { background:#fef3c7; color:#92400e; }
+
+    /* STEPS */
+    .steps { display:flex; flex-direction:column; gap:0; }
+    .step  { display:flex; gap:1.2rem; padding:1.1rem 0;
+      border-bottom:1px solid #d1fae5; }
+    .step:last-child { border-bottom:none; }
+    .step-num { width:38px; height:38px; border-radius:50%;
+      background:linear-gradient(135deg,#1c7c4a,#3ecf8e);
+      color:#fff; font-weight:900; display:flex; align-items:center;
+      justify-content:center; flex-shrink:0; font-size:.95rem; }
+    .step-body strong { display:block; margin-bottom:.3rem; font-size:.97rem; }
+    .step-body p, .step-body li { font-size:.89rem; color:#374151; }
+    code { background:#ecfdf5; color:#065f46; padding:.1rem .45rem;
+      border-radius:5px; font-size:.82rem; font-family:'Courier New',monospace; }
+    pre { background:#1e2e27; color:#a7f3d0; border-radius:10px;
+      padding:1.2rem 1.5rem; font-size:.83rem; overflow-x:auto; line-height:1.8;
+      margin:.7rem 0; font-family:'Courier New',monospace; }
+    pre .c { color:#6b7280; } pre .k { color:#34d399; } pre .s { color:#fcd34d; }
+
+    .box { border-radius:10px; padding:.85rem 1.2rem; margin:.7rem 0;
+      display:flex; gap:.8rem; align-items:flex-start; font-size:.89rem; }
+    .box.ok   { background:#d1fae5; border-left:4px solid #059669; }
+    .box.warn { background:#fef3c7; border-left:4px solid #d97706; }
+    .box.tip  { background:#dbeafe; border-left:4px solid #2563eb; }
+    .box .ico { font-size:1.2rem; flex-shrink:0; }
+    .box p { margin:0; }
+
+    /* CONFIG FORM */
+    .form-row { margin:.6rem 0; }
+    .form-row label { display:block; font-size:.83rem; font-weight:700;
+      color:#064e3b; margin-bottom:.3rem; }
+    .form-row input { width:100%; padding:.65rem 1rem; border:2px solid #a7f3d0;
+      border-radius:8px; font-size:.9rem; font-family:'Courier New',monospace;
+      outline:none; }
+    .form-row input:focus { border-color:#059669; }
+    button.sb-btn { background:linear-gradient(135deg,#059669,#3ecf8e);
+      color:#fff; border:none; border-radius:8px; padding:.65rem 1.5rem;
+      font-size:.9rem; font-weight:700; cursor:pointer; margin-top:.5rem; }
+    button.sb-btn:hover { opacity:.9; }
+    #config-msg { margin-top:.6rem; font-size:.85rem; font-weight:600; }
+
+    /* VERIFY SECTION */
+    #verify-result { margin-top:.8rem; padding:1rem; border-radius:10px;
+      font-size:.85rem; display:none; }
+
+    table.data { width:100%; border-collapse:collapse; font-size:.85rem; }
+    table.data th { background:#064e3b; color:#fff; padding:.55rem .9rem; text-align:left; }
+    table.data td { padding:.5rem .9rem; border-bottom:1px solid #d1fae5; }
+
+    footer { text-align:center; padding:2rem; font-size:.8rem; color:#6b7280;
+      border-top:1px solid #d1fae5; }
+    @media(max-width:620px){ .cmp th,.cmp td{ padding:.4rem .5rem; font-size:.78rem; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>☁️ Supabase — Progreso en la Nube</h1>
+  <p class="sub">TGA05 · NeuroBiz S.A.S. · Configuración de persistencia</p>
+  <div style="margin-top:1rem">
+    <span class="hbadge sb">✅ Gratuito</span>
+    <span class="hbadge sb">🌐 Multi-dispositivo</span>
+    <span class="hbadge sb">📊 Dashboard docente</span>
+    <span class="hbadge">⚡ Sin servidor propio</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- COMPARATIVA -->
+  <div class="sec-title">📊 ¿Cuál opción usar?</div>
+  <div class="card">
+    <table class="cmp">
+      <thead>
+        <tr>
+          <th>Criterio</th>
+          <th>Solo Local<br><small>(ya activo)</small></th>
+          <th>Google Sheets<br><small>(Apps Script)</small></th>
+          <th style="background:#065f46">⭐ Supabase<br><small>(recomendado)</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Configuración</strong></td>
+          <td><span class="tag yes">Cero</span></td>
+          <td><span class="tag part">~15 min</span></td>
+          <td><span class="tag part">~10 min</span></td>
+        </tr>
+        <tr>
+          <td><strong>Multi-dispositivo</strong></td>
+          <td><span class="tag no">No</span></td>
+          <td><span class="tag yes">Sí</span></td>
+          <td><span class="tag yes">Sí</span></td>
+        </tr>
+        <tr>
+          <td><strong>Dashboard docente</strong></td>
+          <td><span class="tag no">No</span></td>
+          <td><span class="tag yes">Sí (Sheets)</span></td>
+          <td><span class="tag yes">Sí (web)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Sin perder si borra caché</strong></td>
+          <td><span class="tag no">Se pierde</span></td>
+          <td><span class="tag yes">Recuperable</span></td>
+          <td><span class="tag yes">Recuperable</span></td>
+        </tr>
+        <tr>
+          <td><strong>Velocidad de sync</strong></td>
+          <td><span class="tag yes">Instantáneo</span></td>
+          <td><span class="tag part">~2-3 seg</span></td>
+          <td><span class="tag yes">~0.5 seg</span></td>
+        </tr>
+        <tr>
+          <td><strong>Ver todos los estudiantes</strong></td>
+          <td><span class="tag no">No</span></td>
+          <td><span class="tag yes">Sí (Sheets)</span></td>
+          <td><span class="tag yes">Sí (SQL)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Costo</strong></td>
+          <td><span class="tag yes">Gratis</span></td>
+          <td><span class="tag yes">Gratis</span></td>
+          <td><span class="tag yes">Gratis</span></td>
+        </tr>
+        <tr>
+          <td><strong>¿Requiere Google?</strong></td>
+          <td><span class="tag yes">No</span></td>
+          <td><span class="tag no">Sí</span></td>
+          <td><span class="tag yes">No</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="box ok" style="margin-top:1rem">
+      <span class="ico">💡</span>
+      <p><strong>Recomendación:</strong> usa <strong>Supabase</strong> como destino principal. 
+      Si ya tienes Google Sheets configurado, funciona en paralelo — el widget intenta ambos y muestra 
+      confirmación del que responda primero.</p>
+    </div>
+  </div>
+
+  <!-- PASOS -->
+  <div class="sec-title">🚀 Configurar Supabase en 5 pasos</div>
+  <div class="card">
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Crear cuenta gratuita en Supabase</strong>
+          <p>Ve a <a href="https://supabase.com" target="_blank" style="color:#059669;font-weight:700">supabase.com</a> 
+          → <strong>Start your project</strong> → Inicia con GitHub o correo.<br>
+          El plan gratuito (Free) soporta <strong>500 MB de datos</strong> y 
+          <strong>hasta 50.000 filas</strong>. Más que suficiente para un semestre.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Crear un proyecto nuevo</strong>
+          <p>Clic en <strong>"New project"</strong>. Configura:</p>
+          <ul style="padding-left:1.4rem; margin:.5rem 0">
+            <li><strong>Name:</strong> <code>tga05-neurobiz</code></li>
+            <li><strong>Database password:</strong> cualquiera segura (la necesitarás solo para acceso directo)</li>
+            <li><strong>Region:</strong> <code>South America (São Paulo)</code> — más cerca de Colombia</li>
+          </ul>
+          <p>Espera ~2 minutos mientras el proyecto se aprovisiona.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Ejecutar el esquema SQL</strong>
+          <p>En el panel de tu proyecto: menú lateral <strong>SQL Editor</strong> → 
+          <strong>"New query"</strong>.<br>
+          Abre el archivo <code>setup/supabase_schema.sql</code> de esta carpeta, 
+          copia todo el contenido y pégalo en el editor.<br>
+          Clic en <strong>"Run"</strong> (o <kbd>Ctrl+Enter</kbd>).</p>
+          <div class="box ok" style="margin-top:.6rem">
+            <span class="ico">✅</span>
+            <p>Deberías ver: <em>"Tabla student_progress creada correctamente ✅"</em></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Obtener la URL y la clave anónima</strong>
+          <p>Menú lateral → <strong>Project Settings</strong> → <strong>API</strong>.</p>
+          <p>Copia estos dos valores:</p>
+          <table class="data" style="margin:.6rem 0">
+            <thead><tr><th>Campo</th><th>Dónde está</th><th>Ejemplo</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Project URL</strong></td>
+                <td>Sección "Project URL"</td>
+                <td><code>https://abcxyz.supabase.co</code></td>
+              </tr>
+              <tr>
+                <td><strong>anon / public key</strong></td>
+                <td>Sección "Project API keys"</td>
+                <td><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <span class="ico">⚠️</span>
+            <p>La clave <strong>anon/public</strong> es segura para incluir en HTML. 
+            Nunca uses la clave <code>service_role</code> en el frontend.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <strong>Configurar la URL y clave en los materiales</strong>
+          <p>Pega los valores aquí abajo y haz clic en <strong>"Guardar configuración"</strong>. 
+          Se almacenarán en <code>localStorage</code> de este navegador y activarán la sincronización 
+          en todos los materiales del módulo que estén en este mismo navegador.</p>
+        </div>
+      </div>
+
+    </div><!-- /steps -->
+  </div>
+
+  <!-- FORMULARIO DE CONFIGURACIÓN -->
+  <div class="sec-title">⚙️ Configuración rápida</div>
+  <div class="card">
+    <div class="form-row">
+      <label>🔗 Supabase Project URL</label>
+      <input type="url" id="sb-url" placeholder="https://xxxxxxxxxxxx.supabase.co" />
+    </div>
+    <div class="form-row">
+      <label>🔑 Supabase anon key (clave pública)</label>
+      <input type="text" id="sb-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." />
+    </div>
+    <button class="sb-btn" onclick="saveConfig()">💾 Guardar configuración Supabase</button>
+    <div id="config-msg"></div>
+
+    <hr style="border:none; border-top:1px solid #d1fae5; margin:1.3rem 0" />
+
+    <p style="font-size:.85rem; color:#6b7280; margin-bottom:.8rem">
+      <strong>¿Ya tienes configurado Google Sheets?</strong> También puedes mantenerlo — ambos funcionan en paralelo:
+    </p>
+    <div class="form-row">
+      <label>📊 Google Sheets URL (opcional, si ya la tienes)</label>
+      <input type="url" id="sheets-url" placeholder="https://script.google.com/macros/s/..." />
+    </div>
+    <button class="sb-btn" style="background:linear-gradient(135deg,#1a237e,#3949ab)"
+      onclick="saveSheets()">💾 Guardar URL Google Sheets</button>
+    <div id="sheets-msg"></div>
+
+    <hr style="border:none; border-top:1px solid #d1fae5; margin:1.3rem 0" />
+
+    <button class="sb-btn" style="background:linear-gradient(135deg,#0f2027,#059669)"
+      onclick="testConnection()">🧪 Probar conexión a Supabase</button>
+    <div id="verify-result"></div>
+  </div>
+
+  <!-- MENSAJE PARA ESTUDIANTES -->
+  <div class="sec-title">📢 Instrucciones para los estudiantes</div>
+  <div class="card">
+    <p style="font-size:.88rem; color:#374151; margin-bottom:.8rem">
+      Copia este mensaje y envíalo a tus estudiantes (WhatsApp, Moodle, email):
+    </p>
+    <div style="background:#f0fdf4; border:2px dashed #86efac; border-radius:10px;
+      padding:1.2rem 1.5rem; font-size:.9rem; line-height:1.9;">
+      <strong>📌 Cómo guardar tu progreso en TGA05:</strong><br><br>
+      1. Abre el material de la semana (el archivo que te compartió el profesor).<br>
+      2. En la esquina inferior derecha verás el widget azul 
+         <strong>📊 Mi Progreso TGA05</strong>.<br>
+      3. Escribe tu nombre completo — esto te identifica en el sistema.<br>
+      4. Haz clic en <strong>☁️ Guardar</strong> después de cada sesión. 
+         Tu progreso se sincroniza automáticamente.<br>
+      5. Si cambias de computador: abre el material en el nuevo equipo, 
+         escribe tu nombre y haz clic en <strong>☁️ Guardar</strong> — 
+         el sistema reconocerá tu historial.<br>
+      6. Si quieres un respaldo extra: clic en <strong>📋 Código</strong> 
+         y guarda el archivo <code>.txt</code> en tu OneDrive o Google Drive.
+    </div>
+  </div>
+
+  <!-- DASHBOARD DOCENTE -->
+  <div class="sec-title">📊 Ver progreso de todos los estudiantes</div>
+  <div class="card">
+    <h3 style="color:#059669; margin-bottom:.8rem">Opción A — Vista rápida en Supabase</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num" style="width:28px;height:28px;font-size:.8rem">1</div>
+        <div class="step-body">
+          <p>En tu proyecto Supabase → <strong>Table Editor</strong> → tabla <code>student_progress</code>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="width:28px;height:28px;font-size:.8rem">2</div>
+        <div class="step-body">
+          <p>O usa el <strong>SQL Editor</strong> con esta consulta de resumen:</p>
+          <pre><span class="k">SELECT</span> * <span class="k">FROM</span> resumen_docente <span class="k">ORDER BY</span> xp_total <span class="k">DESC</span>;</pre>
+          <p>Verás: estudiante, semanas visitadas, XP total, % de avance, última actividad.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="color:#059669; margin:1.2rem 0 .8rem">Opción B — Consultas útiles</h3>
+    <pre><span class="c">-- Estudiantes con menos del 30% de avance</span>
+<span class="k">SELECT</span> student_name, pct_avance, xp_total
+<span class="k">FROM</span> resumen_docente
+<span class="k">WHERE</span> pct_avance < <span class="s">30</span>
+<span class="k">ORDER BY</span> pct_avance;
+
+<span class="c">-- Quiz scores de la semana 3</span>
+<span class="k">SELECT</span> student_name, quiz_score, xp
+<span class="k">FROM</span> student_progress
+<span class="k">WHERE</span> semana = <span class="s">3</span>
+<span class="k">ORDER BY</span> quiz_score <span class="k">DESC</span>;
+
+<span class="c">-- Actividad por semana</span>
+<span class="k">SELECT</span> semana,
+       <span class="k">COUNT</span>(*) <span class="k">AS</span> estudiantes_activos,
+       <span class="k">AVG</span>(xp) <span class="k">AS</span> xp_promedio
+<span class="k">FROM</span> student_progress
+<span class="k">GROUP BY</span> semana
+<span class="k">ORDER BY</span> semana;</pre>
+  </div>
+
+</main>
+
+<footer>
+  TGA05 · Estructura de Datos para los Negocios · UIB · NeuroBiz S.A.S.<br>
+  <span style="opacity:.5">Supabase es una plataforma open-source. Plan gratuito permanente disponible en supabase.com</span>
+</footer>
+
+<script>
+function saveConfig() {
+  const url = document.getElementById("sb-url").value.trim();
+  const key = document.getElementById("sb-key").value.trim();
+  const msg = document.getElementById("config-msg");
+
+  if (!url.startsWith("https://") || !url.includes("supabase.co")) {
+    msg.style.color = "#dc2626";
+    msg.textContent = "❌ URL inválida. Debe ser https://xxxxxxxx.supabase.co";
+    return;
+  }
+  if (!key || key.length < 40) {
+    msg.style.color = "#dc2626";
+    msg.textContent = "❌ La clave anon parece incompleta.";
+    return;
+  }
+  localStorage.setItem("tga05_supabase_url", url);
+  localStorage.setItem("tga05_supabase_key", key);
+  msg.style.color = "#059669";
+  msg.textContent = "✅ Configuración guardada. El botón ☁️ Guardar en cada semana ya sincronizará con Supabase.";
+}
+
+function saveSheets() {
+  const url = document.getElementById("sheets-url").value.trim();
+  const msg = document.getElementById("sheets-msg");
+  if (url && !url.startsWith("https://script.google.com")) {
+    msg.style.color = "#dc2626";
+    msg.textContent = "❌ URL inválida. Debe empezar con https://script.google.com/macros/...";
+    return;
+  }
+  if (url) localStorage.setItem("tga05_sheets_url", url);
+  msg.style.color = "#059669";
+  msg.textContent = "✅ URL de Google Sheets guardada.";
+}
+
+async function testConnection() {
+  const url = localStorage.getItem("tga05_supabase_url") || document.getElementById("sb-url").value.trim();
+  const key = localStorage.getItem("tga05_supabase_key") || document.getElementById("sb-key").value.trim();
+  const res = document.getElementById("verify-result");
+
+  res.style.display = "block";
+  res.style.background = "#fef3c7";
+  res.style.border = "1px solid #d97706";
+  res.textContent = "⏳ Probando conexión…";
+
+  if (!url || !key) {
+    res.style.background = "#fee2e2";
+    res.style.border = "1px solid #dc2626";
+    res.textContent = "❌ Guarda la URL y la clave primero.";
+    return;
+  }
+
+  try {
+    const r = await fetch(url + "/rest/v1/student_progress?select=count&limit=1", {
+      headers: { "apikey": key, "Authorization": "Bearer " + key }
+    });
+    if (r.ok || r.status === 200) {
+      res.style.background = "#d1fae5";
+      res.style.border = "1px solid #059669";
+      res.textContent = "✅ Conexión exitosa. Supabase responde correctamente. ¡Listo para usar!";
+    } else {
+      res.style.background = "#fee2e2";
+      res.style.border = "1px solid #dc2626";
+      res.textContent = "❌ Error " + r.status + ". Verifica que la URL y la clave sean correctas y que el esquema SQL se ejecutó.";
+    }
+  } catch(e) {
+    res.style.background = "#fee2e2";
+    res.style.border = "1px solid #dc2626";
+    res.textContent = "❌ Sin conexión o URL incorrecta: " + e.message;
+  }
+}
+
+window.addEventListener("load", () => {
+  const u = localStorage.getItem("tga05_supabase_url");
+  const k = localStorage.getItem("tga05_supabase_key");
+  const s = localStorage.getItem("tga05_sheets_url");
+  if (u) document.getElementById("sb-url").value = u;
+  if (k) document.getElementById("sb-key").value = k;
+  if (s) document.getElementById("sheets-url").value = s;
+});
+</script>
+</body>
+</html>

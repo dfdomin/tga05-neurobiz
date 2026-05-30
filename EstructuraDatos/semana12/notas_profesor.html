@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Notas del profesor Semana 12 - Árboles Binarios</title>
+<style>
+:root{
+    --primary:#1b5e20;
+    --secondary:#2e7d32;
+    --gold:      #FFDF2D;
+    --bg:#f3f8f4;
+    --card:#ffffff;
+    --text:#17301a;
+    --muted:#4f6b54;
+    --surface:#eef7ef;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;line-height:1.62;background:linear-gradient(180deg,#eef7ef 0%,#f8fbf8 40%,#edf7ef 100%);color:var(--text)}
+header.hero{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:30px 20px 20px;box-shadow:0 12px 28px rgba(27,94,32,.24)}
+.header-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.4fr .8fr;gap:24px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);padding:8px 14px;border-radius:999px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.hero h1{margin:14px 0 8px;font-size:clamp(1.9rem,4vw,2.8rem)}
+.hero p{margin:0;color:#e8f5e9}
+.hero-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:18px;border-radius:18px}
+.hero-box strong{display:block;font-size:1.08rem;margin-bottom:8px}
+nav.sticky{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);box-shadow:0 8px 18px rgba(15,23,42,.08)}
+nav.sticky .nav-wrap{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;gap:10px;flex-wrap:wrap}
+nav.sticky a{text-decoration:none;color:#1b5e20;font-weight:800;padding:10px 14px;background:#eef7ef;border-radius:999px;border:1px solid #c8e6c9}
+main{max-width:1180px;margin:24px auto;padding:0 20px 48px}
+.card{background:var(--card);border-radius:22px;padding:26px;border-left:7px solid var(--gold);box-shadow:0 18px 38px rgba(15,23,42,.07);margin-bottom:24px}
+.card h2{margin-top:0;color:#1b5e20}
+.card h3{color:#2e7d32}
+.alert{display:inline-block;background:#c8e6c9;color:#1b5e20;padding:10px 16px;border-radius:999px;font-weight:900;margin:10px 0 4px}
+.two-col,.three-col{display:grid;gap:18px}
+.two-col{grid-template-columns:repeat(2,minmax(0,1fr))}
+.three-col{grid-template-columns:repeat(3,minmax(0,1fr))}
+.subcard{background:#f8fbf8;border:1px solid #dcedc8;border-radius:18px;padding:18px}
+.meta-table,.dojo-table,.rubric-table{width:100%;border-collapse:collapse;margin-top:16px;border-radius:16px;overflow:hidden}
+.meta-table th,.meta-table td,.dojo-table th,.dojo-table td,.rubric-table th,.rubric-table td{padding:12px 14px;border:1px solid #dcedc8;vertical-align:top}
+.meta-table th,.dojo-table th,.rubric-table th{background:#e8f5e9;color:#1b5e20;text-align:left}
+.check-list li,.observer-list li{margin-bottom:8px}
+.timeline{display:grid;gap:18px;margin-top:16px}
+.timeline-item{display:grid;grid-template-columns:150px 1fr;gap:14px}
+.timeline-time{background:#e8f5e9;border-radius:16px;padding:14px;font-weight:900;text-align:center;color:#1b5e20}
+.timeline-content{background:#f8fbf8;border:1px solid #dcedc8;border-radius:18px;padding:16px}
+.script{background:#fff8e1;border:1px solid #ffe082;border-radius:14px;padding:14px;margin-top:12px}
+.contingency{background:#fff;border:1px solid #dcedc8;border-radius:18px;padding:18px}
+.quiz-answer{background:#f1f8e9;border:1px solid #aed581;border-radius:14px;padding:12px;margin-top:12px}
+.tag{display:inline-block;background:#e8f5e9;color:#1b5e20;border-radius:999px;padding:6px 10px;font-weight:800;margin:0 8px 8px 0}
+@media (max-width:1024px){.header-grid,.two-col,.three-col,.timeline-item{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class='hero'>
+  <div class='header-grid'>
+    <div class='hero'>
+      <span class='badge'>🟢 USO EXCLUSIVO DOCENTE</span>
+      <h1>Semana 12 · Árboles Binarios</h1>
+      <p>Diagnóstico y organización jerárquica para decisiones terapéuticas en NeuroBiz.</p>
+      <div class='alert'>Uso exclusivo docente</div>
+    </div>
+    <aside class='hero-box'>
+      <strong>Meta rápida</strong>
+      <p>Sesión de 240 minutos con secuencia completa GAME, Bloom explícito, puntos ClassDojo, quiz de cierre y articulación permanente con KPI NeuroBiz.</p>
+      <p><strong>Entorno sugerido:</strong> Google Colab o Replit + tablero + equipos de 3 estudiantes.</p>
+    </aside>
+  </div>
+</header>
+<nav class='sticky'>
+  <div class='nav-wrap'>
+    <a href='#meta'>Meta</a>
+    <a href='#checklist'>Checklist</a>
+    <a href='#secuencia'>Secuencia</a>
+    <a href='#dojo'>ClassDojo</a>
+    <a href='#quiz'>Quiz</a>
+    <a href='#hti'>Decisión HTI</a>
+    <a href='#contingencias'>Contingencias</a>
+    <a href='#cierre'>Cierre</a>
+  </div>
+</nav>
+<main>
+  <section id='meta' class='card'>
+    <h2>🎯 Meta de sesión (RA + CE + Bloom)</h2>
+    <table class='meta-table'>
+      <tr><th>Resultado de aprendizaje</th><td>RA3 · Analiza estructuras de datos no lineales y su utilidad para representar decisiones y jerarquías.</td></tr>
+      <tr><th>Criterios de evaluación</th><td><span class="tag">CE1: identifica componentes del árbol</span><span class="tag">CE2: implementa recorridos</span><span class="tag">CE3: interpreta jerarquías y altura</span></td></tr>
+      <tr><th>Nivel Bloom</th><td>Recordar → Comprender → Aplicar</td></tr>
+      <tr><th>Meta observable</th><td>Al finalizar, el estudiante representa una evaluación inicial con un árbol binario, ejecuta tres recorridos y explica qué significado tiene cada uno dentro del caso NeuroBiz.</td></tr>
+    </table>
+  </section>
+
+  <section id='checklist' class='card'>
+    <h2>✅ Checklist pre-clase</h2>
+    <div class='three-col'><div class='subcard'><h3>Pedagógico</h3><ul class='check-list'><li>Diseñar árbol ejemplo de 7 nodos con etiquetas clínicas.</li><li>Preparar secuencia verbal: recordar → comprender → aplicar.</li><li>Planear pregunta detonante sobre jerarquías cotidianas.</li></ul></div><div class='subcard'><h3>Tecnológico</h3><ul class='check-list'><li>Notebook con clase NodoArbol preparada.</li><li>Capturas o diapositivas con tres recorridos.</li><li>Tablero disponible para dibujar el árbol completo.</li></ul></div><div class='subcard'><h3>Materiales</h3><ul class='check-list'><li>Tarjetas para nodos.</li><li>Flechas adhesivas o marcador de dos colores.</li><li>Hoja guía con terminología del árbol.</li></ul></div></div>
+  </section>
+
+  <section id='secuencia' class='card'>
+    <h2>⏱️ Secuencia minuto a minuto (240 min)</h2>
+    <div class='timeline'><article class='timeline-item'><div class='timeline-time'>0–20</div><div class='timeline-content'><h3>Activación del concepto</h3><p>Partir de organigramas o decisiones de sí/no para recordar la idea de jerarquía y niveles.</p><div class='script'><strong>Guion sugerido:</strong> “Antes de ver código, piensen en una estructura que tenga origen, ramas y finales. Eso ya es pensamiento arbóreo”.</div></div></article><article class='timeline-item'><div class='timeline-time'>20–45</div><div class='timeline-content'><h3>Terminología explícita</h3><p>Definir raíz, nodo, hoja, altura y profundidad con un ejemplo de NeuroBiz.</p><div class='script'><strong>Guion sugerido:</strong> “Quiero que nombren la estructura como si fueran analistas: raíz, ramas, hojas; sin vocabulario, no hay lectura técnica”.</div></div></article><article class='timeline-item'><div class='timeline-time'>45–75</div><div class='timeline-content'><h3>Construcción guiada en tablero</h3><p>Montar un árbol binario de 7 nodos y preguntar qué representa cada hoja.</p><div class='script'><strong>Guion sugerido:</strong> “Cada hoja debe cerrar una decisión. Si no sabemos qué significa, el árbol está mal diseñado”.</div></div></article><article class='timeline-item'><div class='timeline-time'>75–110</div><div class='timeline-content'><h3>Demostración Python</h3><p>Programar NodoArbol y el primer recorrido. Hacer que el grupo prediga la salida antes de ejecutar.</p><div class='script'><strong>Guion sugerido:</strong> “No adivinen por intuición: sigan visualmente el árbol y nombren el orden de visita”.</div></div></article><article class='timeline-item'><div class='timeline-time'>110–125</div><div class='timeline-content'><h3>Pausa activa</h3><p>Break corto y revisión del dibujo individual de árbol.</p><div class='script'><strong>Guion sugerido:</strong> “Al volver necesito ver en cada cuaderno dónde está la raíz y cuáles son las hojas”.</div></div></article><article class='timeline-item'><div class='timeline-time'>125–170</div><div class='timeline-content'><h3>Laboratorio por equipos</h3><p>Implementar los tres recorridos y la altura. Acompañar a quienes confundan el orden de visita.</p><div class='script'><strong>Guion sugerido:</strong> “Si te pierdes, vuelve al dibujo; el árbol visual manda sobre el código”.</div></div></article><article class='timeline-item'><div class='timeline-time'>170–205</div><div class='timeline-content'><h3>Interpretación del recorrido</h3><p>Solicitar a cada equipo explicar qué historia cuenta preorden, inorden y postorden.</p><div class='script'><strong>Guion sugerido:</strong> “La estructura ya corre; ahora quiero que hable: ¿qué nos dice cada recorrido sobre el caso?”</div></div></article><article class='timeline-item'><div class='timeline-time'>205–225</div><div class='timeline-content'><h3>Quizizz</h3><p>Aplicar cinco preguntas para consolidar vocabulario y función de cada recorrido.</p><div class='script'><strong>Guion sugerido:</strong> “Respondan pensando en el caso, no solo en la definición aislada”.</div></div></article><article class='timeline-item'><div class='timeline-time'>225–240</div><div class='timeline-content'><h3>Cierre y HTI</h3><p>Orientar el Escenario A o B y reforzar que el B no bloquea la continuidad de la semana 13.</p><div class='script'><strong>Guion sugerido:</strong> “Si ya dominas recorridos, ve al A. Si aún necesitas consolidar visualmente, el B es suficiente y no te bloquea”.</div></div></article></div>
+  </section>
+
+  <section id='dojo' class='card'>
+    <h2>🏅 Tabla ClassDojo</h2>
+    <table class='dojo-table'>
+      <thead><tr><th>Momento</th><th>Acción observable</th><th>Criterio</th><th>Puntos</th></tr></thead>
+      <tbody><tr><td>Inicio</td><td>Define correctamente raíz y hoja</td><td>Precisión conceptual</td><td>+2</td></tr><tr><td>Tablero</td><td>Relaciona nodos con decisiones del caso</td><td>Comprensión aplicada</td><td>+2</td></tr><tr><td>Laboratorio</td><td>Implementa recorridos y altura</td><td>Ejecución técnica</td><td>+3</td></tr><tr><td>Interpretación</td><td>Explica el sentido de cada recorrido</td><td>Comprensión profunda</td><td>+3</td></tr><tr><td>Cierre</td><td>Transfiere el árbol a una decisión de negocio</td><td>Aplicación contextual</td><td>+2</td></tr></tbody>
+    </table>
+  </section>
+
+  <section id='quiz' class='card'>
+    <h2>❓ Quiz con respuestas correctas marcadas</h2>
+    <div class='two-col'><div class='subcard'><h3>Pregunta 1</h3><p><strong>¿Qué es la raíz de un árbol?</strong></p><ol type='A'><li>El último nodo visitado.</li><li>El nodo inicial desde el que nace la estructura.</li><li>Un nodo sin dato.</li><li>La altura del árbol.</li></ol><div class='quiz-answer'>✅ Correcta: B. El nodo inicial desde el que nace la estructura.<br>La raíz es el punto de origen jerárquico.</div></div><div class='subcard'><h3>Pregunta 2</h3><p><strong>Una hoja es…</strong></p><ol type='A'><li>Un nodo sin hijos.</li><li>El nodo con más hijos.</li><li>Una cola especial.</li><li>Un puntero doble.</li></ol><div class='quiz-answer'>✅ Correcta: A. Un nodo sin hijos.<br>Las hojas representan finales de ruta.</div></div><div class='subcard'><h3>Pregunta 3</h3><p><strong>¿Qué recorrido visita primero la raíz?</strong></p><ol type='A'><li>Postorden.</li><li>Inorden.</li><li>Preorden.</li><li>Ninguno.</li></ol><div class='quiz-answer'>✅ Correcta: C. Preorden.<br>El preorden comienza por la raíz y luego baja a sus subárboles.</div></div><div class='subcard'><h3>Pregunta 4</h3><p><strong>La altura del árbol ayuda a…</strong></p><ol type='A'><li>Cambiar el tipo de dato.</li><li>Interpretar cuántos niveles tiene la decisión.</li><li>Eliminar todas las hojas.</li><li>Ordenar alfabéticamente.</li></ol><div class='quiz-answer'>✅ Correcta: B. Interpretar cuántos niveles tiene la decisión.<br>La altura resume profundidad y complejidad estructural.</div></div><div class='subcard'><h3>Pregunta 5</h3><p><strong>En NeuroBiz, una hoja puede representar…</strong></p><ol type='A'><li>Un diagnóstico final o recomendación.</li><li>Una variable vacía.</li><li>El teclado del computador.</li><li>Un ciclo infinito.</li></ol><div class='quiz-answer'>✅ Correcta: A. Un diagnóstico final o recomendación.<br>Las hojas cierran la ruta de evaluación.</div></div></div>
+  </section>
+
+  <section id='hti' class='card'>
+    <h2>🏠 Cómo elegir Escenario A vs B</h2>
+    <p>Use Escenario A con quienes ya ejecutan recorridos y pueden interpretar altura. Use Escenario B cuando aún se requiere afianzar el dibujo del árbol y el orden de visita. Recalque siempre que el Escenario B NO BLOQUEA la clase siguiente.</p>
+  </section>
+
+  <section class='card'>
+    <h2>🎮 Protocolo docente GAME para esta sesión</h2>
+    <div class='two-col'>
+      <div class='subcard'>
+        <h3>Guiar + Articular</h3>
+        <p>Abra la clase recordando que la estructura de datos no es un fin, sino una herramienta para tomar decisiones con impacto operativo. Durante la explicación, verbalice siempre la relación entre la estructura, la operación dominante y un KPI de NeuroBiz. Ese puente explícito ayuda a que el estudiantado no vea el contenido como programación aislada, sino como analítica aplicada a gestión administrativa.</p>
+        <p>Mientras circula por el aula, pida que los equipos nombren la estructura con vocabulario técnico y luego la traduzcan a lenguaje de negocio. Esta doble verbalización fortalece la articulación entre teoría, caso y evidencia observable.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Motivar + Evaluar</h3>
+        <p>Use ClassDojo como retroalimentación visible y no solo como premio final. Entregue puntos en momentos concretos: cuando el equipo detecta un error conceptual, cuando justifica una decisión estructural con evidencia o cuando apoya a otra mesa sin resolverle la tarea. Así la gamificación se convierte en una práctica de cultura académica.</p>
+        <p>En la evaluación de cierre, privilegie la explicación del porqué sobre la repetición mecánica del cómo. Un estudiante que argumenta con claridad la elección de la estructura y la conecta con KPI y proceso de negocio está mostrando un desempeño más sólido que quien solo ejecuta código sin justificarlo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>🧭 Preguntas de andamiaje y errores frecuentes</h2>
+    <div class='two-col'>
+      <div class='subcard'>
+        <h3>Preguntas de andamiaje</h3>
+        <ol class='check-list'><li>¿Qué representa la raíz en el árbol de evaluación de NeuroBiz y por qué no debería ser un dato ambiguo?</li><li>¿Qué cambia en la historia que cuenta el árbol cuando recorremos en preorden, inorden o postorden?</li><li>Si una hoja representa un diagnóstico final, ¿qué implicaría agregar más niveles al árbol en términos de complejidad del proceso?</li><li>¿Cómo explicarías la altura del árbol a alguien que no programa pero sí toma decisiones clínicas?</li><li>¿Qué evidencia te permite afirmar que dos estudiantes realmente comprendieron la diferencia entre nodo intermedio y hoja?</li><li>¿En qué otros procesos administrativos de la UIB o de NeuroBiz podrías reutilizar la lógica jerárquica de un árbol binario?</li></ol>
+      </div>
+      <div class='subcard'>
+        <h3>Errores frecuentes a vigilar</h3>
+        <ul class='check-list'><li>Confundir altura con número total de nodos y perder la lectura de niveles y profundidad.</li><li>Aprender de memoria el orden de un recorrido sin seguir visualmente la estructura, lo que lleva a respuestas automáticas pero frágiles.</li><li>Etiquetar hojas sin significado de negocio, convirtiendo el árbol en dibujo decorativo y no en ruta de decisión.</li><li>Construir árboles donde la raíz no representa el punto real de partida del caso, desordenando toda la narrativa.</li><li>Pensar que un recorrido es “mejor” que otro en abstracto, en lugar de preguntarse qué pregunta responde cada uno.</li><li>Programar la clase sin volver al dibujo cuando aparece confusión conceptual.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>📍 Cortes de evidencia y microintervenciones</h2>
+    <div class='three-col'><div class='subcard'><h3>Min 40</h3><p><strong>Evidencia esperada:</strong> La mayoría del grupo ya puede señalar raíz, hojas y altura en un árbol simple.</p><p><strong>Movimiento docente:</strong> Si persisten dudas, reduzca el árbol a tres nodos y reconstruya desde ese mínimo conceptual.</p></div><div class='subcard'><h3>Min 95</h3><p><strong>Evidencia esperada:</strong> Al menos un recorrido fue anticipado en tablero antes de ejecutarse en Python.</p><p><strong>Movimiento docente:</strong> Si el grupo espera solo la salida del computador, obligue a verbalizar el orden de visita paso a paso.</p></div><div class='subcard'><h3>Min 170</h3><p><strong>Evidencia esperada:</strong> Los tres recorridos corren y el equipo puede decir qué historia cuenta cada uno.</p><p><strong>Movimiento docente:</strong> Si solo listan nodos, reformule con preguntas de negocio: inicio, tránsito y cierre del proceso terapéutico.</p></div><div class='subcard'><h3>Min 230</h3><p><strong>Evidencia esperada:</strong> El estudiante distingue qué debe llevar al escenario A y qué basta para el escenario B.</p><p><strong>Movimiento docente:</strong> Si hay saturación, priorice claridad visual del árbol y recuerde que la opción B no bloquea la siguiente sesión.</p></div></div>
+    <div class='two-col' style='margin-top:18px;'>
+      <div class='subcard'>
+        <h3>Microintervenciones rápidas</h3>
+        <ul class='check-list'><li><strong>Cuando confunden recorridos:</strong> Devuelva siempre al árbol dibujado; leer con el dedo y nombrar la visita suele resolver mejor que repetir la definición.</li><li><strong>Cuando el árbol carece de sentido:</strong> Pida renombrar los nodos desde la lógica del caso hasta que cada hoja represente una recomendación concreta.</li><li><strong>Cuando la altura no se entiende:</strong> Conviértala en una pregunta de niveles de decisión: cuántos pasos máximos separan el inicio del cierre.</li><li><strong>Cuando terminan temprano:</strong> Invítelos a contar hojas e interpretar si el proceso parece demasiado simple o innecesariamente complejo.</li></ul>
+      </div>
+      <div class='subcard'>
+        <h3>Preguntas frecuentes del estudiantado</h3>
+        <ul class='check-list'><li><strong>“¿Para qué sirven tres recorridos si el árbol es el mismo?”</strong> Porque cada recorrido responde a una lectura distinta del mismo proceso; el valor está en la pregunta que se quiere contestar.</li><li><strong>“¿La altura siempre grande es mala?”</strong> No necesariamente. Puede expresar riqueza de decisión o, si no está justificada, complejidad innecesaria.</li><li><strong>“¿Las hojas siempre son diagnósticos?”</strong> En este caso sí pueden ser diagnósticos o recomendaciones finales, pero en otros contextos pueden ser cualquier resultado terminal.</li><li><strong>“¿Qué es más importante, el dibujo o el código?”</strong> Ambos, pero si el dibujo no tiene sentido el código solo automatiza una idea débil.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>📝 Matriz rápida de observación docente</h2>
+    <table class='rubric-table'>
+      <thead><tr><th>Aspecto</th><th>Evidencia a recoger</th><th>Si no aparece, intervención sugerida</th></tr></thead>
+      <tbody><tr><td>Terminología básica</td><td>Nombra correctamente raíz, nodo, hoja, altura y profundidad.</td><td>Hacer pausa de vocabulario con un árbol pequeño en tablero.</td></tr><tr><td>Representación jerárquica</td><td>El árbol construido refleja un proceso real y no solo un conjunto arbitrario de etiquetas.</td><td>Pedir justificar verbalmente qué decisión representa cada bifurcación.</td></tr><tr><td>Recorridos</td><td>Ejecuta y explica al menos dos recorridos sin apoyo total del docente.</td><td>Volver al dibujo y reconstruir una ruta mínima antes de generalizar.</td></tr><tr><td>Lectura de complejidad</td><td>Interpreta altura y número de hojas en términos del caso.</td><td>Usar preguntas puente sobre número de niveles y cantidad de finales posibles.</td></tr><tr><td>Transferencia</td><td>Relaciona la estructura con otro proceso de negocio o gestión.</td><td>Solicitar un ejemplo fuera del caso clínico pero dentro del entorno organizacional.</td></tr></tbody>
+    </table>
+  </section>
+ 
+  <section class='card'>
+    <h2>📚 Registro posclase y transferencia docente</h2>
+    <div class='three-col'>
+      <div class='subcard'>
+        <h3>Qué registrar al terminar</h3>
+        <p>Anote tres datos mínimos: qué estructura quedó consolidada, qué error persistente apareció y qué evidencia mostró transferencia al caso NeuroBiz. Ese registro breve ayuda a decidir si la siguiente sesión debe abrir con reactivación conceptual, con práctica guiada o con análisis de resultados. Evite registrar solo “les fue bien / mal”; documente qué operación concreta dominan y cuál aún requiere andamiaje.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Qué comunicar al grupo</h3>
+        <p>Cierre devolviendo una fortaleza observable y una mejora alcanzable. La retroalimentación más útil no es genérica, sino situada: “su estructura funciona, pero aún no está argumentada con KPI” o “la idea es correcta, pero deben verbalizar mejor la decisión de negocio”. Así la evaluación mantiene foco formativo y orienta el siguiente paso.</p>
+      </div>
+      <div class='subcard'>
+        <h3>Cómo transferir al programa</h3>
+        <p>Conecte la sesión con escenarios de gestión administrativa: trazabilidad de procesos, asignación de recursos, consulta eficiente de registros, organización de historiales y soporte a decisiones. Esta explicitación final evita que el módulo se perciba como ajeno al campo profesional y fortalece la pertinencia curricular del TGA05.</p>
+      </div>
+    </div>
+    <div class='subcard' style='margin-top:18px;'>
+      <h3>Bibliografía docente de apoyo</h3>
+      <p>Use estas referencias para sostener explicaciones, ejemplos y justificaciones pedagógicas durante el módulo.</p>
+      <p>Recomendación operativa: al terminar la clase, marque en su planeador qué decisión curricular tomará la semana siguiente con base en la evidencia recogida: reactivar, profundizar, diferenciar o cerrar. Esa nota de transición fortalece la continuidad del módulo y evita que cada sesión se perciba como un evento aislado.</p>
+      <ol><li>Cairó Battistutti, O. & Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li><li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill. ISBN: 9786071508188.</li><li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li><li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li><li>Google Colaboratory. (2024). https://colab.research.google.com</li><li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial. ISBN: 9788499640884.</li></ol>
+    </div>
+  </section>
+
+  <section class='card'>
+    <h2>🧠 Nota neurodivergencia (máx. 1 min)</h2>
+    <p>Mantenga visible el árbol todo el tiempo. Para algunos estudiantes, sostener la imagen del proceso reduce carga de memoria de trabajo. Si alguien se desorienta, invítelo a “leer el árbol con el dedo” antes de codificar.</p>
+  </section>
+
+  <section id='contingencias' class='card'>
+    <h2>🚨 Contingencias</h2>
+    <div class='three-col'><article class='contingency'><h3>Confusión con recorridos</h3><p>Reduzca momentáneamente el árbol a 3 nodos y reconstruya el orden antes de volver al árbol de 7.</p></article><article class='contingency'><h3>Tiempo de laboratorio insuficiente</h3><p>Priorice preorden e inorden en clase y deje postorden como reto breve guiado.</p></article><article class='contingency'><h3>Ansiedad ante la abstracción</h3><p>Ancle el árbol a una situación concreta: evaluación inicial → decisión clínica → recomendación.</p></article></div>
+  </section>
+
+  <section id='cierre' class='card'>
+    <h2>📌 Indicadores de observación + cierre</h2>
+    <div class='two-col'>
+      <div class='subcard'><h3>Indicadores</h3><ul class='observer-list'><li>Nombra con propiedad raíz, nodo y hoja.</li><li>Traza correctamente al menos un recorrido sin apoyo.</li><li>Implementa altura de forma funcional.</li><li>Interpreta la estructura como ruta de decisión.</li></ul></div>
+      <div class='subcard'><h3>Orientación de cierre</h3><p>Cierre con la idea de que un árbol no solo almacena datos: organiza decisiones. Si el grupo puede verbalizar qué representa cada hoja, el objetivo se logró.</p></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

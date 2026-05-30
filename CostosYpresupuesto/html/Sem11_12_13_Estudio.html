@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semanas 11–13 — Material de Estudio | IUB — GOL06</title>
+  <style>
+    /* ── Reset y base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --iub-blue:       #003087;
+      --iub-blue-mid:   #0056B3;
+      --iub-blue-light: #E8F0FE;
+      --iub-gold:       #F5A000;
+      --iub-gold-light: #FFF3CD;
+      --iub-white:      #FFFFFF;
+      --iub-bg:         #F4F7FC;
+      --iub-text:       #1A2744;
+      --iub-muted:      #5A6A8A;
+      --iub-border:     #C8D7F0;
+      --iub-code-bg:    #0F1E3D;
+      --iub-code-text:  #E8F0FE;
+      --radius:         8px;
+      --shadow:         0 2px 8px rgba(0,48,135,.12);
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--iub-bg);
+      color: var(--iub-text);
+      line-height: 1.7;
+      padding-bottom: 3rem;
+    }
+
+    /* ── Header institucional ── */
+    .iub-header {
+      background: linear-gradient(135deg, var(--iub-blue) 0%, var(--iub-blue-mid) 100%);
+      color: var(--iub-white);
+      padding: 0;
+      box-shadow: 0 4px 16px rgba(0,48,135,.3);
+    }
+    .iub-header-top {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1rem 2rem;
+      border-bottom: 3px solid var(--iub-gold);
+    }
+    .iub-logo {
+      width: 60px; height: 60px;
+      background: var(--iub-white);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--iub-blue);
+      letter-spacing: -1px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    }
+    .iub-institution { font-size: .8rem; opacity: .85; }
+    .iub-institution strong { font-size: 1.05rem; display: block; opacity: 1; }
+    .iub-header-meta {
+      background: rgba(0,0,0,.18);
+      padding: .55rem 2rem;
+      font-size: .82rem;
+      display: flex; flex-wrap: wrap; gap: .75rem 2rem;
+      opacity: .9;
+    }
+    .iub-header-meta span::before { content: "● "; font-size: .65rem; }
+
+    /* ── Barra de título del documento ── */
+    .doc-title-bar {
+      background: var(--iub-gold);
+      color: var(--iub-blue);
+      padding: .75rem 2rem;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: .02em;
+    }
+
+    /* ── Contenedor principal ── */
+    .content-wrap {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ── Tarjeta de contenido ── */
+    .content-card {
+      background: var(--iub-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2.5rem 2.75rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Tipografía ── */
+    h1 {
+      font-size: 1.8rem;
+      color: var(--iub-blue);
+      border-bottom: 3px solid var(--iub-gold);
+      padding-bottom: .5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 1.35rem;
+      color: var(--iub-blue);
+      margin: 2rem 0 .75rem;
+      padding-left: .75rem;
+      border-left: 4px solid var(--iub-gold);
+    }
+    h3 {
+      font-size: 1.1rem;
+      color: var(--iub-blue-mid);
+      margin: 1.5rem 0 .5rem;
+    }
+    h4 {
+      font-size: 1rem;
+      color: var(--iub-muted);
+      margin: 1.25rem 0 .4rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    p { margin-bottom: 1rem; }
+    strong { color: var(--iub-blue); }
+    em { color: var(--iub-muted); }
+
+    /* ── Listas ── */
+    ul, ol { margin: .5rem 0 1rem 1.5rem; }
+    li { margin-bottom: .3rem; }
+    ul li::marker { color: var(--iub-gold); }
+    ol li::marker { color: var(--iub-blue); font-weight: 700; }
+
+    /* ── Blockquote ── */
+    blockquote {
+      background: var(--iub-blue-light);
+      border-left: 5px solid var(--iub-blue-mid);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      color: var(--iub-text);
+    }
+    blockquote p { margin-bottom: .5rem; }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    /* ── Código inline ── */
+    code {
+      background: var(--iub-blue-light);
+      color: var(--iub-blue);
+      padding: .15em .4em;
+      border-radius: 4px;
+      font-size: .88em;
+      font-family: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+    }
+
+    /* ── Bloque de código ── */
+    pre {
+      background: var(--iub-code-bg);
+      color: var(--iub-code-text);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      font-size: .85rem;
+      line-height: 1.6;
+      border-left: 4px solid var(--iub-gold);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,.3);
+    }
+    pre code {
+      background: transparent;
+      color: var(--iub-code-text);
+      padding: 0;
+      font-size: inherit;
+    }
+
+    /* ── Tablas ── */
+    .table-wrap { overflow-x: auto; margin: 1.25rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+      min-width: 400px;
+    }
+    th {
+      background: var(--iub-blue);
+      color: var(--iub-white);
+      padding: .65rem 1rem;
+      text-align: left;
+      font-weight: 600;
+    }
+    th:first-child { border-radius: var(--radius) 0 0 0; }
+    th:last-child  { border-radius: 0 var(--radius) 0 0; }
+    td {
+      padding: .55rem 1rem;
+      border-bottom: 1px solid var(--iub-border);
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: var(--iub-blue-light); }
+    tr:hover td { background: var(--iub-gold-light); }
+
+    /* ── Separador ── */
+    hr {
+      border: none;
+      border-top: 2px solid var(--iub-border);
+      margin: 2rem 0;
+    }
+
+    /* ── Alerta / aviso ── */
+    .alert {
+      background: var(--iub-gold-light);
+      border-left: 5px solid var(--iub-gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: .85rem 1.1rem;
+      margin: 1rem 0;
+      font-size: .92rem;
+    }
+
+    /* ── Footer ── */
+    .iub-footer {
+      background: var(--iub-blue);
+      color: rgba(255,255,255,.75);
+      text-align: center;
+      padding: 1rem 2rem;
+      font-size: .8rem;
+      margin-top: 3rem;
+    }
+    .iub-footer strong { color: var(--iub-gold); }
+
+    /* ── Impresión ── */
+    @media print {
+      body { background: white; font-size: 11pt; }
+      .content-card { box-shadow: none; padding: 1rem; }
+      pre { background: #f0f0f0 !important; color: #000 !important;
+            border-left-color: #999; }
+      .iub-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .iub-footer { display: none; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .iub-header-top { padding: .75rem 1rem; }
+      .content-card { padding: 1.25rem 1rem; }
+      .iub-header-meta { padding: .4rem 1rem; }
+      .doc-title-bar { padding: .6rem 1rem; }
+    }
+</style>
+</head>
+<body>
+
+  <!-- ── Encabezado institucional ── -->
+  <header class="iub-header">
+    <div class="iub-header-top">
+      <div class="iub-logo">IUB</div>
+      <div>
+        <div class="iub-institution">
+          <strong>Institución Universitaria de Barranquilla</strong>
+          Facultad · Tecnología en Gestión de Operaciones Logísticas
+        </div>
+      </div>
+    </div>
+    <div class="iub-header-meta">
+      <span><strong>Módulo:</strong> GOL06 — Costos y Presupuestos</span>
+      <span><strong>Créditos:</strong> 2 | HAD 2 + HP 2 + HTI 5</span>
+      <span><strong>Período:</strong> 2024 – 2025</span>
+      <span><strong>Caso hilo:</strong> LOGÍSATL S.A.S.</span>
+    </div>
+    <div class="doc-title-bar">📖 Semanas 11–13 · Material de Estudio · RA3</div>
+  </header>
+
+  <!-- ── Contenido ── -->
+  <main class="content-wrap">
+    <article class="content-card">
+      <h1>📖 Semana 11 — Presupuesto: tipos, usos y pronóstico de ventas</h1>
+<p><strong>IUB | GOL06 Costos y Presupuestos | RA3</strong><br />
+<strong>Caso:</strong> LOGÍSATL S.A.S.</p>
+<hr />
+<h2>🎯 Objetivo de la semana</h2>
+<p>Identificar los tipos de presupuesto y su utilidad gerencial, y construir un pronóstico de ventas como punto de partida del presupuesto maestro.</p>
+<hr />
+<h2>🧩 Analogía: El presupuesto de una boda costeña</h2>
+<p>Organizar una boda en Barranquilla exige planear con meses de anticipación: ¿cuántos invitados? ¿cuánto cuesta por persona? ¿cuándo se paga el salón, el DJ, el fotógrafo? Si no tienes ese presupuesto, el día de la boda puede quedarte sin dinero a mitad de la fiesta.</p>
+<blockquote>
+<p>El <strong>presupuesto empresarial</strong> hace lo mismo: traduce los planes del negocio en números antes de que ocurran, para que la gerencia sepa si tiene con qué cumplir lo que prometió.</p>
+</blockquote>
+<hr />
+<h2>📚 Contenido teórico</h2>
+<h3>¿Qué es el presupuesto?</h3>
+<p>El presupuesto es un <strong>plan cuantificado</strong> de las actividades de la empresa para un período futuro. No es una predicción del futuro — es una <strong>decisión sobre el futuro</strong>.</p>
+<h3>Tipos de presupuesto</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>¿Qué planea?</th>
+<th>Ejemplo LOGÍSATL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Presupuesto de Ventas</strong></td>
+<td>Ingresos esperados</td>
+<td>$22.000.000 en órdenes de servicio para 2025</td>
+</tr>
+<tr>
+<td><strong>Presupuesto de Producción/Operación</strong></td>
+<td>Cuántas unidades/servicios producir</td>
+<td>280 órdenes de servicio mensuales</td>
+</tr>
+<tr>
+<td><strong>Presupuesto de MP</strong></td>
+<td>Cuánto material comprar</td>
+<td>$3.200.000/mes en materiales de embalaje</td>
+</tr>
+<tr>
+<td><strong>Presupuesto de MO</strong></td>
+<td>Cuántas horas y a qué costo</td>
+<td>1.080 horas MOD/mes × $14.416 = $15.569.280</td>
+</tr>
+<tr>
+<td><strong>Presupuesto de CIF</strong></td>
+<td>Costos indirectos del período</td>
+<td>$16.500.000/mes (actualizado 2025)</td>
+</tr>
+<tr>
+<td><strong>Presupuesto de Gastos Operacionales</strong></td>
+<td>Administración + ventas</td>
+<td>$2.600.000/mes</td>
+</tr>
+<tr>
+<td><strong>Presupuesto de Caja</strong></td>
+<td>Flujo de efectivo del período</td>
+<td>Entradas vs. salidas semana a semana</td>
+</tr>
+<tr>
+<td><strong>Presupuesto Maestro</strong></td>
+<td>Integración de todos los anteriores</td>
+<td>Estado de resultados y balance proyectados</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Ventajas del presupuesto</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Cómo ayuda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Planeación</strong></td>
+<td>Obliga a pensar antes de gastar</td>
+</tr>
+<tr>
+<td><strong>Control</strong></td>
+<td>Permite comparar real vs. presupuestado</td>
+</tr>
+<tr>
+<td><strong>Coordinación</strong></td>
+<td>Alinea todos los departamentos</td>
+</tr>
+<tr>
+<td><strong>Motivación</strong></td>
+<td>Las metas claras orientan el desempeño</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Pronóstico de ventas: el punto de partida</h3>
+<p><strong>Todo presupuesto comienza con el presupuesto de ventas.</strong> No se puede saber cuánto producir, comprar, contratar o gastar sin saber primero cuánto se va a vender.</p>
+<p><strong>Métodos de pronóstico:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Descripción</th>
+<th>Cuando usarlo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tendencia histórica</strong></td>
+<td>Proyectar la tendencia de los últimos períodos</td>
+<td>Mercado estable</td>
+</tr>
+<tr>
+<td><strong>Variación estacional</strong></td>
+<td>Ajustar por picos y valles del año</td>
+<td>Negocios con temporadas</td>
+</tr>
+<tr>
+<td><strong>Regresión estadística</strong></td>
+<td>Correlación con variables externas (PIB, importaciones)</td>
+<td>Mercado volátil</td>
+</tr>
+<tr>
+<td><strong>Juicio de expertos</strong></td>
+<td>Estimado del equipo de ventas</td>
+<td>Mercados nuevos o sin datos</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>🔢 Pronóstico de ventas LOGÍSATL 2025</h2>
+<p><strong>Datos históricos de órdenes de servicio:</strong></p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>Mes         2023 (órdenes)   2024 (órdenes)   Variación
+──────────────────────────────────────────────────────────
+Enero             185              210           +13.5%
+Febrero           192              218           +13.5%
+Marzo             198              225           +13.6%
+Abril             175              200           +14.3%
+Mayo              188              212           +12.8%
+Junio             165              188           +13.9%
+Julio             170              193           +13.5%
+Agosto            195              222           +13.8%
+Septiembre        200              228           +14.0%
+Octubre           210              240           +14.3%
+Noviembre         220              248           +12.7%
+Diciembre         240              272           +13.3%
+──────────────────────────────────────────────────────────
+TOTAL           2.338            2.656         Prom: +13.6%
+
+PRONÓSTICO 2025 (aplicando crecimiento del 12% — conservador):
+Mes proyectado = Mes 2024 × 1.12
+
+Enero 2025: 210 × 1.12 = 235 órdenes
+Valor promedio por orden (histórico 2024): $87.500
+Ingresos proyectados enero 2025: 235 × $87.500 = $20.562.500
+</code></pre></div>
+
+<hr />
+<h2>✅ Puntos clave para recordar</h2>
+<ol>
+<li>El presupuesto es un <strong>plan cuantificado</strong>, no una predicción</li>
+<li>El <strong>presupuesto de ventas</strong> es el punto de partida — todo lo demás depende de él</li>
+<li>Se construye <strong>de arriba hacia abajo:</strong> ventas → producción → recursos</li>
+<li>El <strong>control presupuestal</strong> compara real vs. presupuestado para detectar desviaciones</li>
+<li>Un presupuesto realista tiene en cuenta <strong>estacionalidad y ciclos</strong> del negocio</li>
+</ol>
+<hr />
+<h2>🧠 Pregunta de reflexión</h2>
+<blockquote>
+<p>Si LOGÍSATL proyecta un crecimiento del 12% en órdenes para 2025,<br />
+pero el mercado de importaciones en Barranquilla cae un 8%,<br />
+¿deberían ajustar el pronóstico? ¿A la baja o al alza?<br />
+¿Qué variables externas afectan la demanda de servicios logísticos en el Caribe?</p>
+</blockquote>
+<hr />
+<p><em>Material IUB | GOL06 | Semana 11 de 13</em></p>
+<h2>---</h2>
+<h1>📖 Semana 12 — Presupuesto Maestro: de la venta al recurso</h1>
+<p><strong>IUB | GOL06 Costos y Presupuestos | RA3</strong><br />
+<strong>Caso:</strong> LOGÍSATL S.A.S.</p>
+<hr />
+<h2>🎯 Objetivo de la semana</h2>
+<p>Construir el presupuesto maestro de LOGÍSATL integrando los presupuestos de ventas, operación, MP, MO y CIF.</p>
+<hr />
+<h2>🧩 Analogía: El plan de vuelo del piloto</h2>
+<p>Antes de despegar, el piloto no solo sabe el destino: sabe exactamente cuánto combustible necesita, cuáles rutas usará, qué altitud, cuánto tiempo. Si algo cambia en el vuelo (tormenta, viento contrario), tiene el plan como referencia para ajustar.</p>
+<blockquote>
+<p>El <strong>presupuesto maestro</strong> es el plan de vuelo de LOGÍSATL: antes de que empiece el año, ya sabe cuánto va a vender, cuánto va a gastar, cuántos materiales va a necesitar, y cuánto dinero va a quedar.</p>
+</blockquote>
+<hr />
+<h2>📚 Cadena del presupuesto maestro</h2>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>PRESUPUESTO DE VENTAS
+  ↓
+PRESUPUESTO DE PRODUCCIÓN/OPERACIÓN
+  ↓
+PRESUPUESTO DE MP ← (compras necesarias para cubrir operación)
+PRESUPUESTO DE MO ← (horas necesarias × costo/hora)
+PRESUPUESTO DE CIF ← (fijos + variables según volumen)
+  ↓
+COSTO PRESUPUESTADO DE SERVICIOS
+  ↓
+PRESUPUESTO DE GASTOS OPERACIONALES
+  ↓
+ESTADO DE RESULTADOS PRESUPUESTADO
+  ↓
+PRESUPUESTO DE CAJA
+  ↓
+BALANCE PROYECTADO
+</code></pre></div>
+
+<hr />
+<h2>🔢 Presupuesto Maestro LOGÍSATL — Enero 2025</h2>
+<h3>Paso 1: Ventas presupuestadas</h3>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>Órdenes proyectadas:        235 órdenes
+Ingreso promedio/orden:     $87.500
+VENTAS PRESUPUESTADAS:     $20.562.500
+</code></pre></div>
+
+<h3>Paso 2: Presupuesto de MP</h3>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>MP por orden (promedio):         $1.700
+MP total:  235 × $1.700 =      $399.500
+
+Política de inventario: mantener 20% del siguiente mes en bodega
+MP siguiente mes (febrero: 240 ord): 240 × $1.700 × 20% = $81.600
+
+Compras necesarias:
+  MP para uso:               $399.500
+  + Inventario final deseado: $81.600
+  − Inventario inicial:      ($68.000) ← saldo enero
+  = COMPRAS PRESUPUESTADAS:  $413.100
+</code></pre></div>
+
+<h3>Paso 3: Presupuesto de MO</h3>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>Horas MOD por orden:         4.6 horas (promedio histórico)
+Total horas MOD:             235 × 4.6 = 1.081 horas
+Costo/hora MOD (con prest.): $14.416
+PRESUPUESTO MOD:             1.081 × $14.416 = $15.583.696
+</code></pre></div>
+
+<h3>Paso 4: Presupuesto de CIF</h3>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>CIF FIJOS (no cambian con volumen):
+  MOI (supervisor + jefe):      $4.200.000
+  Arriendo bodega:              $5.500.000
+  Depreciación:                 $2.800.000
+  Seguros:                        $850.000
+  Subtotal fijos:              $13.350.000
+
+CIF VARIABLES (por hora MOD):
+  Servicios públicos:     1.081 h × $600/h =   $648.600
+  Mantenimiento:          1.081 h × $250/h =   $270.250
+  Materiales indirectos:  1.081 h × $380/h =   $410.780
+  Subtotal variables:                         $1.329.630
+
+TOTAL CIF PRESUPUESTADO:                    $14.679.630
+
+Tasa CIF 2025: $14.679.630 / 1.081 h = $13.580/h MOD
+</code></pre></div>
+
+<h3>Paso 5: Estado de Resultados Presupuestado</h3>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>LOGÍSATL S.A.S.
+ESTADO DE RESULTADOS PRESUPUESTADO
+Enero 2025
+
+Ventas:                                    $20.562.500
+
+Costo de servicios prestados:
+  MP:                     $399.500
+  MO Directa:          $15.583.696
+  CIF:                 $14.679.630
+  Total costo:                           ($30.662.826)
+
+UTILIDAD BRUTA:                           ($10.100.326) ← DÉFICIT ⚠️
+</code></pre></div>
+
+<blockquote>
+<p>⚠️ <strong>Alerta:</strong> El presupuesto revela que con 235 órdenes a $87.500 promedio, LOGÍSATL está perdiendo dinero. ¿Qué está pasando?</p>
+</blockquote>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>Análisis: El costo por orden es $30.662.826 / 235 = $130.480
+Pero el precio promedio es solo $87.500
+→ Cada orden genera una pérdida de $42.980
+
+CONCLUSIÓN: LOGÍSATL debe revisar su estructura de precios o reducir costos.
+Posibles acciones:
+  1. Subir precio promedio a mínimo $131.000/orden
+  2. Reducir MOD (¿hay ineficiencias en horas?)
+  3. Aumentar volumen para diluir CIF fijos
+  4. Renegociar arriendo de bodega
+</code></pre></div>
+
+<blockquote>
+<p><strong>Esta es la función más valiosa del presupuesto: detectar problemas ANTES de que ocurran.</strong></p>
+</blockquote>
+<hr />
+<h2>✅ Puntos clave para recordar</h2>
+<ol>
+<li>El presupuesto se construye <strong>desde las ventas hacia los recursos</strong></li>
+<li>El <strong>inventario deseado</strong> determina las compras de MP (no basta con saber cuánto se usa)</li>
+<li>Los <strong>CIF fijos</strong> son peligrosos en presupuesto: existen aunque el volumen baje</li>
+<li>Un <strong>Estado de Resultados presupuestado deficitario</strong> es una señal de acción inmediata</li>
+<li>El presupuesto no es una restricción — es una <strong>herramienta de decisión</strong></li>
+</ol>
+<hr />
+<p><em>Material IUB | GOL06 | Semana 12 de 13</em></p>
+<h2>---</h2>
+<h1>📖 Semana 13 — Integración Final: el gerente que rinde cuentas</h1>
+<p><strong>IUB | GOL06 Costos y Presupuestos | RA3</strong><br />
+<strong>Caso:</strong> LOGÍSATL S.A.S.</p>
+<hr />
+<h2>🎯 Objetivo de la semana</h2>
+<p>Integrar todos los conceptos del módulo en un diagnóstico de costos y presupuesto completo para LOGÍSATL, con recomendaciones fundamentadas.</p>
+<hr />
+<h2>🧩 Analogía: El gerente que rinde cuentas a la junta</h2>
+<p>Al final del año, el gerente de LOGÍSATL debe presentarle a los socios: ¿cuánto costó cada servicio? ¿Se cumplió el presupuesto? ¿Hay clientes no rentables? ¿Qué debe cambiar el próximo año?</p>
+<blockquote>
+<p>Los estudiantes <strong>son ese gerente</strong> en la semana 13. No se trata de memorizar fórmulas — se trata de <strong>contar una historia con números</strong> y proponer qué hacer.</p>
+</blockquote>
+<hr />
+<h2>📚 Framework de diagnóstico de costos — integración del módulo</h2>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>BLOQUE I — Elementos del costo (RA1):
+  ✓ Identificar MP, MO, CIF correctamente
+  ✓ Clasificar: directos/indirectos, fijos/variables
+  ✓ Construir kárdex y tarjetas de tiempo
+
+BLOQUE II — Sistemas de costeo (RA2):
+  ✓ Seleccionar el sistema adecuado (órdenes vs. procesos)
+  ✓ Construir hojas de costos completas
+  ✓ Calcular y presentar Estado de Costos
+
+BLOQUE III — Presupuesto (RA3):
+  ✓ Pronosticar ventas con fundamento
+  ✓ Presupuestar MP, MO, CIF en cascada
+  ✓ Construir Estado de Resultados presupuestado
+  ✓ Detectar alertas y proponer acciones
+</code></pre></div>
+
+<hr />
+<h2>🔢 Caso integrador final — LOGÍSATL segundo semestre 2024</h2>
+<p>Los grupos recibirán un paquete de datos con:<br />
+- Órdenes de servicio reales vs. presupuestadas (jun–dic 2024)<br />
+- Consumos de MP por orden<br />
+- Tarjetas de tiempo de los operadores<br />
+- CIF reales del período<br />
+- Precios facturados por cliente</p>
+<p><strong>Con esos datos deben:</strong></p>
+<ol>
+<li>Construir el <strong>Estado de Costos</strong> del segundo semestre</li>
+<li>Calcular la <strong>rentabilidad por cliente</strong> (top 5 clientes de LOGÍSATL)</li>
+<li>Comparar <strong>real vs. presupuestado</strong> e identificar desviaciones</li>
+<li>Identificar el <strong>cliente menos rentable</strong> y justificar si se debe conservar o renegociar</li>
+<li>Construir el <strong>presupuesto maestro</strong> para enero–marzo 2025</li>
+<li>Presentar <strong>3 recomendaciones gerenciales</strong> con impacto estimado en COP</li>
+</ol>
+<hr />
+<h2>✅ Puntos clave del módulo completo</h2>
+<ol>
+<li><strong>MP + MO + CIF = Costo del servicio</strong> — los tres siempre juntos</li>
+<li>El sistema de costeo debe ser coherente con el <strong>tipo de producción</strong></li>
+<li>La <strong>tasa de CIF predeterminada</strong> es la herramienta que distribuye los indirectos</li>
+<li>Un <strong>presupuesto bien construido</strong> detecta problemas antes de que ocurran</li>
+<li>El análisis de costos siempre termina en <strong>decisiones</strong>, no solo en cálculos</li>
+</ol>
+<hr />
+<p><em>Material IUB | GOL06 | Semana 13 de 13 — INTEGRACIÓN FINAL</em></p>
+    </article>
+  </main>
+
+  <footer class="iub-footer">
+    <strong>Institución Universitaria de Barranquilla — IUB</strong> ·
+    GOL06 Costos y Presupuestos · Material de apoyo académico · 2024–2025
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TGA05 Semana 2 - Notas del profesor</title>
+    <style>:root {
+    --primary: #1b5e20;
+    --primary-2: #2e7d32;
+    --accent: #FFDF2D;
+    --bg: #f2f7f2;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #526072;
+    --surface: #edf7ee;
+    --surface-2: #f7fbf7;
+    --warning: #fff8e1;
+    --warning-border: #FFDF2D;
+    --shadow: 0 16px 40px rgba(27, 94, 32, 0.10);
+    --radius: 20px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #f4faf4 0%, #eff8ef 100%);
+    color: var(--text);
+    line-height: 1.6;
+}
+.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+    color: white;
+    padding: 28px 20px 34px;
+}
+.hero-content { max-width: 1180px; margin: 0 auto; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.28);
+}
+.badge.docente { background: rgba(249, 168, 37, 0.16); border-color: rgba(249, 168, 37, 0.42); }
+h1 {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    line-height: 1.1;
+}
+.lead { max-width: 920px; color: rgba(255,255,255,0.94); margin: 0; }
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #dbe7dc;
+}
+.sticky-nav .inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 20px;
+}
+.sticky-nav a {
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #edf7ee;
+}
+main { max-width: 1180px; margin: 0 auto; padding: 24px 20px 60px; }
+.card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 26px;
+    margin-bottom: 22px;
+    border-left: 7px solid var(--accent);
+}
+.card h2 { margin-top: 0; color: var(--primary); }
+.section-intro { color: var(--muted); margin-top: -8px; margin-bottom: 18px; }
+.grid-2, .grid-3 {
+    display: grid;
+    gap: 16px;
+}
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.meta-box, .check-box, .warn-box, .note-box {
+    border-radius: 18px;
+    padding: 18px;
+}
+.meta-box { background: #edf7ee; border: 1px solid #c9e6cc; }
+.check-box { background: #f8fbf8; border: 1px solid #dbe7dc; }
+.warn-box { background: var(--warning); border: 1px solid var(--warning-border); }
+.note-box { background: #f4f8ff; border: 1px solid #dbe3ff; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    border-radius: 16px;
+    overflow: hidden;
+}
+th, td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #dfe7e1;
+    text-align: left;
+    vertical-align: top;
+}
+th { background: #edf7ee; color: var(--primary); }
+tr:nth-child(even) td { background: #fbfdfb; }
+.timeline {
+    position: relative;
+    margin-left: 12px;
+    padding-left: 24px;
+}
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--primary), #81c784);
+    border-radius: 999px;
+}
+.timeline-item {
+    position: relative;
+    margin-bottom: 18px;
+    background: var(--surface-2);
+    border: 1px solid #dbe7dc;
+    border-radius: 18px;
+    padding: 18px 18px 18px 20px;
+}
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -24px;
+    top: 22px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 4px solid white;
+    box-shadow: 0 0 0 2px rgba(249, 168, 37, 0.35);
+}
+.time-badge, .mode-badge {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+.time-badge { background: #e8f5e9; color: var(--primary); }
+.mode-badge { background: #fff8e1; color: #7c4d00; }
+.dojo-panel {
+    background: #0f172a;
+    color: #f9e7a0;
+    border-radius: 18px;
+    padding: 20px;
+    border: 1px solid #334155;
+}
+.dojo-panel h3 { color: #FFDF2D; margin-top: 0; }
+.quiz-card {
+    background: #f4f8ff;
+    border: 1px solid #dbe3ff;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 14px;
+}
+.quiz-card h3 { margin-top: 0; color: #1d4ed8; }
+.correcta {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #e8f5e9;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+.footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.92rem;
+    padding: 16px 20px 34px;
+}
+@media (max-width: 920px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    main { padding-inline: 16px; }
+    .card { padding: 20px; }
+    .sticky-nav .inner { padding-inline: 16px; }
+    .timeline { margin-left: 0; padding-left: 18px; }
+    .timeline-item::before { left: -18px; }
+}</style>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge-row">
+                <span class="badge docente">USO EXCLUSIVO DOCENTE</span>
+                <span class="badge">TGA05 · Estructura de Datos para los Negocios</span>
+                <span class="badge">Semana 2 de 14</span>
+            </div>
+            <h1>Pilas (Stack) para historial terapéutico · Guía docente</h1>
+            <p class="lead">Secuencia detallada para conducir la sesión con Framework GAME, Bloom explícito, gamificación ClassDojo + Quizizz y decisiones contextualizadas en NeuroBiz S.A.S.</p>
+        </div>
+    </header>
+
+    <nav class="sticky-nav">
+        <div class="inner">
+            <a href="#meta">Meta</a>
+            <a href="#checklist">Checklist</a>
+            <a href="#secuencia">Secuencia 240 min</a>
+            <a href="#dojo">ClassDojo</a>
+            <a href="#quiz">Quiz</a>
+            <a href="#hti">HTI</a>
+            <a href="#neuro">Neurodivergencia</a>
+            <a href="#contingencias">Contingencias</a>
+            <a href="#observacion">Observación</a>
+        </div>
+    </nav>
+
+    <main>
+        <section id="meta" class="card">
+            <h2>Meta de sesión</h2>
+            <p class="section-intro">Defina al inicio de la clase qué se espera que el estudiantado comprenda, haga y justifique al cierre.</p>
+            <div class="meta-box">
+    <table>
+        <thead>
+            <tr><th>Componente</th><th>Formulación sugerida</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>RA</td><td>RA1: modela e implementa estructuras de datos lineales básicas para resolver situaciones de negocio con apoyo de Python.</td></tr>
+            <tr><td>CE</td><td>CE1: reconoce la lógica LIFO en un proceso real. CE2: aplica operaciones push, pop, peek e isEmpty en una representación funcional del historial terapéutico. CE3: identifica condiciones de overflow y underflow como riesgos operativos.</td></tr>
+            <tr><td>Bloom</td><td>Recordar → Aplicar. El estudiante recuerda definiciones y luego construye un prototipo contextualizado.</td></tr>
+            <tr><td>Meta de sesión</td><td>Al cierre, cada equipo explica por qué el historial reciente de NeuroBiz se modela con una pila y presenta un prototipo operativo en Colab o Replit.</td></tr>
+        </tbody>
+    </table>
+</div>
+            <div class="warn-box">
+    <strong>Recuerdo docente:</strong> Python se usa como herramienta analítica para representar decisiones de negocio; el foco evaluativo no es memorizar sintaxis, sino justificar por qué la estructura elegida resuelve mejor el problema de NeuroBiz y cómo se comunica esa decisión con evidencia observable.
+</div>
+        </section>
+
+        <section id="checklist" class="card">
+            <h2>Checklist pre-clase</h2>
+            <p class="section-intro">Revise condiciones pedagógicas y tecnológicas antes de iniciar para que la experiencia no dependa solo del software.</p>
+            <div class="grid-3">
+    <div class="check-box">
+        <h3>Pedagógico</h3>
+        <ul>
+            <li>Preparar 1 ejemplo físico con tarjetas o notas adhesivas para representar base y cima.</li>
+            <li>Tener lista una pregunta disparadora: “¿Qué dato necesita primero el terapeuta?”</li>
+            <li>Definir roles de equipo: relator, trazador, programador y verificador.</li>
+            <li>Explicitar que el error es parte del proceso de depuración y no penaliza si se argumenta.</li>
+        </ul>
+    </div>
+    <div class="check-box">
+        <h3>Tecnológico</h3>
+        <ul>
+            <li>Abrir con anticipación el notebook en Google Colab y verificar conectividad.</li>
+            <li>Guardar una versión local o en PDF de las consignas por si falla internet.</li>
+            <li>Tener listo un dataset simple de sesiones NeuroBiz para copiar/pegar.</li>
+            <li>Comprobar proyector, zoom del navegador y visibilidad del código en modo oscuro.</li>
+        </ul>
+    </div>
+    <div class="check-box">
+        <h3>Categorías ClassDojo</h3>
+        <ul>
+            <li>Trazabilidad conceptual (+2)</li>
+            <li>Código funcional (+3)</li>
+            <li>Explicación de errores (+2)</li>
+            <li>Colaboración y apoyo (+1)</li>
+            <li>Justificación de negocio (+2)</li>
+        </ul>
+    </div>
+</div>
+        </section>
+
+        <section id="secuencia" class="card">
+            <h2>Secuencia minuto a minuto completa (240 min)</h2>
+            <p class="section-intro">La sesión está pensada para 2 horas HAD y 2 horas HP. Cada bloque incluye propósito, acción, guion sugerido y evidencia observable.</p>
+            <div class="timeline">
+            <div class="timeline-item">
+                <span class="time-badge">0-10 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Apertura inmersiva y encuadre</h3>
+                <p><strong>Propósito:</strong> Activar el rol de Analista de Datos Estratégico y situar el problema del historial terapéutico reciente.</p>
+                <p><strong>Acción docente:</strong> Presentar el memorando NB-02 y mostrar una tarjeta con tres sesiones reales del caso.</p>
+                <p><strong>Guion sugerido:</strong> Hoy no vamos a programar por programar. NeuroBiz nos pide algo puntual: cuando un terapeuta abra el expediente, debe ver primero la sesión más reciente. Piensen un minuto: ¿qué tipo de estructura prioriza lo último ocurrido?</p>
+                <p><strong>Evidencia observable:</strong> El grupo responde con hipótesis iniciales y empieza a usar vocabulario como último, reciente, cima o historial.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">10-25 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Activación de saberes previos</h3>
+                <p><strong>Propósito:</strong> Conectar arreglos, condicionales y ciclos con la nueva estructura.</p>
+                <p><strong>Acción docente:</strong> Pedir que comparen un arreglo común con una pila y que predigan qué cambia cuando la inserción y extracción ocurren en el mismo extremo.</p>
+                <p><strong>Guion sugerido:</strong> Ya saben guardar datos en arreglos. La diferencia hoy no es guardar, sino decidir desde dónde se atiende el dato. Si todo ocurre en un único extremo, ¿qué ventaja ganamos para consultar la última sesión?</p>
+                <p><strong>Evidencia observable:</strong> Los estudiantes nombran que sigue existiendo una colección, pero con reglas de acceso más estrictas.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">25-45 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Conceptualización guiada</h3>
+                <p><strong>Propósito:</strong> Formalizar LIFO, cima, base y operaciones esenciales.</p>
+                <p><strong>Acción docente:</strong> Explicar pila con apoyo visual, tabla de operaciones y analogía del historial clínico reciente.</p>
+                <p><strong>Guion sugerido:</strong> No memoricen push y pop como palabras aisladas. Piensen qué hace cada una en el caso: push registra una nueva sesión; pop retira el último evento; peek permite mirar sin borrar. La estructura cobra sentido cuando cada operación cuenta una historia del proceso.</p>
+                <p><strong>Evidencia observable:</strong> El estudiantado puede asociar cada operación con una acción del negocio y no solo con sintaxis.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">45-65 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Demostración en Google Colab</h3>
+                <p><strong>Propósito:</strong> Mostrar que Python lista puede comportarse como pila y preparar la transición a clase Stack.</p>
+                <p><strong>Acción docente:</strong> Ejecutar el bloque con list, comentar cada línea y detenerse antes de correr pop para pedir predicciones.</p>
+                <p><strong>Guion sugerido:</strong> Antes de ejecutar, quiero que me digan qué elemento quedará arriba. Si su predicción falla, no pasa nada; eso nos ayuda a entender la estructura. Programar sin anticipar estados impide depurar con criterio.</p>
+                <p><strong>Evidencia observable:</strong> Los equipos registran predicciones y comparan salida real con su traza manual.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">65-85 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Micropráctica guiada</h3>
+                <p><strong>Propósito:</strong> Verificar comprensión inmediata de push, pop, peek e isEmpty.</p>
+                <p><strong>Acción docente:</strong> Entregar tres secuencias cortas de operaciones para que cada equipo dibuje el estado final antes de programar.</p>
+                <p><strong>Guion sugerido:</strong> No escriban código todavía. Dibujen la pila y marquen cuál es la cima después de cada operación. Si la representación falla en papel, el programa también fallará, solo que más escondido.</p>
+                <p><strong>Evidencia observable:</strong> Trazas manuales correctas o corregidas mediante diálogo entre pares.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">85-100 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Errores frecuentes y pausa cognitiva</h3>
+                <p><strong>Propósito:</strong> Visibilizar underflow, overflow y reducir fatiga cognitiva.</p>
+                <p><strong>Acción docente:</strong> Mostrar un intento de pop sobre pila vacía y un ejemplo de capacidad limitada; luego hacer una pausa activa breve de 2 minutos.</p>
+                <p><strong>Guion sugerido:</strong> Un error no siempre significa que programamos mal; a veces significa que la regla del proceso no se respetó. ¿Qué debería hacer el sistema si el historial visible ya tiene su capacidad máxima?</p>
+                <p><strong>Evidencia observable:</strong> El grupo distingue error de sintaxis versus error de lógica operativa.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">100-120 min</span>
+                <span class="mode-badge">HAD</span>
+                <h3>Puente hacia la práctica autónoma</h3>
+                <p><strong>Propósito:</strong> Preparar el bloque HP dejando claros producto, roles y criterios de evaluación.</p>
+                <p><strong>Acción docente:</strong> Explicar entregables, criterios de éxito y puntos ClassDojo. Confirmar que cada equipo entiende el verbo Bloom: aplicar.</p>
+                <p><strong>Guion sugerido:</strong> En la siguiente parte ya no basta con repetir la definición. Necesito ver la pila funcionando y explicada con lenguaje de negocio. Su reto es que un terapeuta pueda confiar en su prototipo.</p>
+                <p><strong>Evidencia observable:</strong> Cada equipo define roles y comprende qué debe entregar.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">120-135 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Organización de equipos y dataset</h3>
+                <p><strong>Propósito:</strong> Arrancar la práctica con insumos claros.</p>
+                <p><strong>Acción docente:</strong> Distribuir el conjunto de sesiones y recordar que deben incluir al menos un caso de deshacer o corrección.</p>
+                <p><strong>Guion sugerido:</strong> Elijan rápidamente un paciente del caso y nombren las sesiones con datos verosímiles. Quien relate el caso debe vigilar que el código no se aleje del problema de negocio.</p>
+                <p><strong>Evidencia observable:</strong> Equipos con roles definidos y dataset listo para empezar.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">135-165 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Construcción del prototipo</h3>
+                <p><strong>Propósito:</strong> Aplicar la estructura en código funcional.</p>
+                <p><strong>Acción docente:</strong> Circular por el aula haciendo preguntas de diagnóstico: ¿cuál es la cima?, ¿cómo validan isEmpty?, ¿qué ocurre si supera la capacidad?</p>
+                <p><strong>Guion sugerido:</strong> Si me dicen que funciona, necesito que me muestren el estado antes y después de cada operación. Recuerden que un prototipo útil se puede explicar, no solo ejecutar.</p>
+                <p><strong>Evidencia observable:</strong> Prototipos avanzando con operaciones diferenciadas y comentarios de prueba.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">165-190 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Depuración y justificación</h3>
+                <p><strong>Propósito:</strong> Asegurar que cada decisión técnica tenga un argumento conceptual.</p>
+                <p><strong>Acción docente:</strong> Pedir una prueba de underflow u overflow y una comparación rápida con otra estructura posible.</p>
+                <p><strong>Guion sugerido:</strong> No me digan solo que eligieron una pila. Quiero escuchar por qué una cola no serviría igual para este caso. El valor está en la decisión, no en copiar un patrón.</p>
+                <p><strong>Evidencia observable:</strong> Los equipos articulan la lógica LIFO con el historial terapéutico y corrigen fallos de borde.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">190-210 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Socialización corta</h3>
+                <p><strong>Propósito:</strong> Compartir soluciones y detectar buenas prácticas transferibles.</p>
+                <p><strong>Acción docente:</strong> Seleccionar 3 equipos con soluciones distintas: lista simple, clase Stack y pila con deshacer.</p>
+                <p><strong>Guion sugerido:</strong> Escuchen cómo cada grupo nombra la misma estructura desde decisiones ligeramente distintas. Lo importante es que la estructura siga siendo comprensible para otro analista que llegue después.</p>
+                <p><strong>Evidencia observable:</strong> Comparación de enfoques con lenguaje técnico accesible.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">210-225 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Quizizz formativo</h3>
+                <p><strong>Propósito:</strong> Verificar comprensión rápida de conceptos y operaciones.</p>
+                <p><strong>Acción docente:</strong> Lanzar las cinco preguntas o leerlas oralmente si no hay conectividad.</p>
+                <p><strong>Guion sugerido:</strong> Respondan individualmente primero. Después discutiremos en equipo por qué una respuesta es más coherente con el caso NeuroBiz. El objetivo no es velocidad, sino comprensión precisa.</p>
+                <p><strong>Evidencia observable:</strong> Resultados del quiz y participación argumentada en la retroalimentación.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">225-235 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Asignación de HTI y autorregulación</h3>
+                <p><strong>Propósito:</strong> Orientar la continuidad del aprendizaje según desempeño observado.</p>
+                <p><strong>Acción docente:</strong> Indicar quién va a Escenario A y quién a Escenario B con criterio pedagógico transparente.</p>
+                <p><strong>Guion sugerido:</strong> Si ya lograste aplicar la estructura con soltura, tu siguiente paso es profundizar con undo. Si aún estás consolidando la representación, el escenario B te ayuda sin bloquear la próxima clase.</p>
+                <p><strong>Evidencia observable:</strong> Cada estudiante sabe qué ruta sigue y por qué.</p>
+            </div>
+            
+
+            <div class="timeline-item">
+                <span class="time-badge">235-240 min</span>
+                <span class="mode-badge">HP</span>
+                <h3>Cierre metacognitivo</h3>
+                <p><strong>Propósito:</strong> Consolidar el sentido de la estructura en lenguaje de negocio.</p>
+                <p><strong>Acción docente:</strong> Solicitar una frase de salida: “Una pila le sirve a NeuroBiz porque…”.</p>
+                <p><strong>Guion sugerido:</strong> Cierren con una idea breve y precisa. Si mañana un directivo les pregunta para qué sirvió esta estructura, deben poder responder sin mencionar primero el código.</p>
+                <p><strong>Evidencia observable:</strong> Frases finales que conectan LIFO con acceso rápido al historial reciente.</p>
+            </div>
+            </div>
+        </section>
+
+        <section id="dojo" class="card">
+            <h2>Integración ClassDojo</h2>
+            <p class="section-intro">Asigne puntos con criterios concretos, visibles y coherentes con el verbo Bloom de la semana. Evite premiar solo velocidad.</p>
+            <div class="dojo-panel"><h3>Tabla sugerida de asignación</h3>
+<table>
+    <thead>
+        <tr><th>Momento</th><th>Acción observable</th><th>Criterio concreto</th><th>Puntos</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Activación</td><td>Predice correctamente la cima tras una secuencia simple</td><td>Usa lenguaje LIFO sin apoyo docente</td><td>+2</td></tr>
+        <tr><td>Modelado</td><td>Dibuja base y cima con claridad</td><td>Representación coherente de estados</td><td>+2</td></tr>
+        <tr><td>Programación</td><td>Implementa push, pop, peek e isEmpty</td><td>Código ejecutable y entendible</td><td>+3</td></tr>
+        <tr><td>Depuración</td><td>Identifica underflow u overflow</td><td>Nombra el error y propone manejo</td><td>+2</td></tr>
+        <tr><td>Socialización</td><td>Justifica la estructura elegida</td><td>Relaciona LIFO con historial terapéutico</td><td>+1</td></tr>
+    </tbody>
+</table>
+<p><strong>Nota de uso:</strong> otorgue el punto final solo si la explicación se entiende sin recurrir a “porque así toca en Python”.</p></div>
+        </section>
+
+        <section id="quiz" class="card">
+            <h2>Quiz formativo</h2>
+            <p class="section-intro">Use estas preguntas para Quizizz o como cierre oral rápido. Las respuestas correctas están marcadas para facilitar la moderación.</p>
+            
+            <article class="quiz-card">
+                <h3>Pregunta 1</h3>
+                <p><strong>¿Qué describe mejor el comportamiento de una pila?</strong></p>
+                <ul><li>a) El primer elemento en entrar es el primero en salir.</li><li>b) El último elemento en entrar es el primero en salir.</li><li>c) Los elementos se extraen al azar.</li><li>d) Siempre se eliminan dos elementos a la vez.</li></ul>
+                <p><span class="correcta">Correcta</span> b) El último elemento en entrar es el primero en salir.</p>
+                <p><strong>Justificación didáctica:</strong> Permite comprobar si el estudiante identifica la regla LIFO sin confundirla con la lógica FIFO.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 2</h3>
+                <p><strong>En Python, ¿qué operación de lista se usa habitualmente como push?</strong></p>
+                <ul><li>a) append()</li><li>b) clear()</li><li>c) sort()</li><li>d) remove()</li></ul>
+                <p><span class="correcta">Correcta</span> a) append()</p>
+                <p><strong>Justificación didáctica:</strong> Verifica el puente mínimo entre la teoría y la implementación con listas nativas.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 3</h3>
+                <p><strong>¿Qué situación corresponde a underflow en NeuroBiz?</strong></p>
+                <ul><li>a) El historial supera la capacidad máxima definida.</li><li>b) Se consulta o extrae una sesión cuando no hay registros cargados.</li><li>c) Se agrega una sesión al final del día.</li><li>d) El KPI de retención aumenta.</li></ul>
+                <p><span class="correcta">Correcta</span> b) Se consulta o extrae una sesión cuando no hay registros cargados.</p>
+                <p><strong>Justificación didáctica:</strong> Diferencia el error por ausencia de datos del error por exceso de capacidad.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 4</h3>
+                <p><strong>¿Cuál operación permite ver la sesión más reciente sin eliminarla?</strong></p>
+                <ul><li>a) pop</li><li>b) peek</li><li>c) push</li><li>d) enqueue</li></ul>
+                <p><span class="correcta">Correcta</span> b) peek</p>
+                <p><strong>Justificación didáctica:</strong> Revisa si el estudiante distingue consulta versus extracción.</p>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 5</h3>
+                <p><strong>¿Por qué una pila es adecuada para el historial terapéutico reciente?</strong></p>
+                <ul><li>a) Porque respeta FIFO y garantiza equidad.</li><li>b) Porque siempre ordena de menor a mayor.</li><li>c) Porque prioriza el acceso al registro más reciente.</li><li>d) Porque almacena solo números enteros.</li></ul>
+                <p><span class="correcta">Correcta</span> c) Porque prioriza el acceso al registro más reciente.</p>
+                <p><strong>Justificación didáctica:</strong> Evalúa la justificación contextual, no solo el nombre de la estructura.</p>
+            </article>
+            
+        </section>
+
+        <section id="hti" class="card">
+            <h2>HTI: elección de Escenario A o B</h2>
+            <p class="section-intro">La decisión de ruta debe responder al desempeño observado y a la autorregulación del estudiante, no a castigo o premio arbitrario.</p>
+            <div class="grid-2">
+    <div class="note-box">
+        <h3>Cuándo elegir Escenario A</h3>
+        <ul>
+            <li>El estudiante ya representa la pila sin invertir base y cima.</li>
+            <li>El código funcional aparece antes del minuto 190 o con poca mediación.</li>
+            <li>Puede explicar por qué <em>undo</em> es una aplicación natural de la pila.</li>
+        </ul>
+        <p><strong>Consecuencia pedagógica:</strong> profundiza, gana transferencia y llega mejor preparado para aplicaciones de pilas en la semana 3.</p>
+    </div>
+    <div class="warn-box">
+        <h3>Cuándo elegir Escenario B</h3>
+        <ul>
+            <li>Persisten confusiones entre insertar y consultar.</li>
+            <li>El estudiante aún necesita afianzar la representación visual del estado.</li>
+            <li>La carga externa de tiempo sugiere una tarea breve de consolidación.</li>
+        </ul>
+        <p><strong>Consecuencia pedagógica:</strong> fortalece la base conceptual y <strong>NO BLOQUEA la siguiente clase</strong>; úselo como apoyo, no como sanción.</p>
+    </div>
+</div>
+        </section>
+
+        <section id="neuro" class="card">
+            <h2>Nota breve de neurodivergencia (máx. 1 min)</h2>
+            <p class="section-intro">Incluya una frase explícita de validación y estructura para reducir incertidumbre sin sobreextender el tiempo de clase.</p>
+            <div class="meta-box">
+    <p><strong>Frase sugerida (menos de 1 minuto):</strong> “Hoy pueden entender la pila de dos formas válidas: con tarjetas físicas o con código. Si necesitan visualizar primero, háganlo; si prefieren programar y luego volver al dibujo, también es válido. Lo importante es explicar el cambio de la cima después de cada operación”.</p>
+</div>
+        </section>
+
+        <section id="contingencias" class="card">
+            <h2>Contingencias</h2>
+            <p class="section-intro">Plan de respuesta ante falla técnica, baja participación o compresión de tiempo.</p>
+            <div class="grid-3">
+    <div class="check-box">
+        <h3>Si falla la tecnología</h3>
+        <p>Traslade la sesión a tarjetas físicas y tablero. Mantenga la secuencia de operaciones, pida trazas manuales y cierre con un pseudocódigo breve. El aprendizaje clave de la semana puede lograrse sin computador si la representación de estados permanece visible.</p>
+    </div>
+    <div class="check-box">
+        <h3>Si hay bajo engagement</h3>
+        <p>Convierta el reto en microcompetencia: cada equipo recibe una secuencia distinta de operaciones y gana puntos por detectar primero la cima final y justificarla. Rotar roles cada 10 minutos ayuda a redistribuir la participación.</p>
+    </div>
+    <div class="check-box">
+        <h3>Si el tiempo se comprime</h3>
+        <p>Priorice representación, operaciones esenciales y justificación LIFO. Deje la clase personalizada como extensión guiada o muestre solo el esqueleto, trasladando parte de la profundización al HTI A.</p>
+    </div>
+</div>
+        </section>
+
+        <section id="observacion" class="card">
+            <h2>Indicadores de observación docente + cierre sugerido</h2>
+            <p class="section-intro">Observe evidencias en proceso y cierre con una síntesis verbal conectada al caso NeuroBiz.</p>
+            <table>
+    <thead>
+        <tr><th>Indicador</th><th>Señal positiva</th><th>Alerta</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Reconocimiento de LIFO</td><td>Relaciona “último en entrar, primero en salir” con el historial reciente.</td><td>Confunde la lógica con una cola.</td></tr>
+        <tr><td>Representación visual</td><td>Marca con claridad base y cima.</td><td>Dibuja la pila sin diferenciar el extremo operativo.</td></tr>
+        <tr><td>Aplicación en Python</td><td>Usa append/pop o métodos equivalentes de forma coherente.</td><td>Extrae desde un extremo distinto al de inserción.</td></tr>
+        <tr><td>Tratamiento de errores</td><td>Nombra underflow/overflow y propone manejo.</td><td>Ignora casos de borde.</td></tr>
+        <tr><td>Transferencia al negocio</td><td>Explica por qué el terapeuta necesita la cima.</td><td>Describe solo sintaxis, sin caso.</td></tr>
+    </tbody>
+</table>
+<div class="meta-box">
+    <p><strong>Cierre sugerido:</strong> “Hoy aprendimos que una estructura de datos no se elige por moda sino por patrón de acceso. En NeuroBiz, la sesión más reciente es la clave de continuidad; por eso una pila permite consultar, corregir y comunicar el historial con rapidez y sentido”.</p>
+</div>
+        </section>
+    </main>
+
+    <footer class="footer">UIB · TGA05 · Semana 2 · Guía docente exclusiva · Caso transversal NeuroBiz S.A.S.</footer>
+</body>
+</html>

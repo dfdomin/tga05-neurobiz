@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="es"><head><link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Notas del profesor — Semana 6 | TGA05</title><style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f7fbf4;
+  color: #1f2937;
+  line-height: 1.7;
+}
+:root {
+  --primary: #1b5e20;
+  --accent: #2e7d32;
+  --gold:      #FFDF2D;
+  --light: #f1f8e9;
+  --border: #c8e6c9;
+  --warn: #ef6c00;
+  --warn-bg: #fff3e0;
+  --blue: #1565c0;
+  --blue-bg: #e3f2fd;
+  --purple: #8e24aa;
+  --purple-bg: #f3e5f5;
+  --red: #b71c1c;
+  --red-bg: #ffebee;
+  --ink: #1f2937;
+  --muted: #546e7a;
+  --card: #ffffff;
+  --radius: 16px;
+  --shadow: 0 12px 30px rgba(27,94,32,.08);
+}
+header {
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+  color: #fff;
+  padding: 2.3rem 1.2rem 1.8rem;
+  position: relative;
+  overflow: hidden;
+}
+header::before,
+header::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+}
+header::before { width: 220px; height: 220px; top: -90px; right: -50px; }
+header::after { width: 170px; height: 170px; bottom: -80px; left: -60px; }
+.header-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .35rem .9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.14);
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+header h1 { margin: .8rem 0 .4rem; font-size: clamp(1.7rem, 3vw, 2.7rem); }
+header p { margin: 0; max-width: 860px; color: rgba(255,255,255,.93); }
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 8px 22px rgba(27,94,32,.08);
+}
+.nav-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: .7rem 1rem;
+  display: flex;
+  gap: .55rem;
+  flex-wrap: wrap;
+}
+nav a {
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: .84rem;
+  padding: .42rem .72rem;
+  border-radius: 10px;
+}
+nav a:hover { background: #edf7ee; }
+main { max-width: 1180px; margin: 1.8rem auto 0; padding: 0 1rem 3rem; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.3rem;
+  margin-bottom: 1.4rem;
+}
+.card h2 {
+  margin: 0 0 1rem;
+  color: var(--primary);
+  font-size: 1.3rem;
+  border-left: 5px solid var(--gold);
+  padding-left: .85rem;
+}
+.card h3 { color: var(--accent); margin: 1rem 0 .55rem; }
+.lead { color: #374151; }
+.grid-2, .grid-3, .meta-grid, .scenario-grid {
+  display: grid;
+  gap: 1rem;
+}
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.meta-grid { grid-template-columns: 1.1fr .9fr; align-items: start; }
+.box {
+  display: flex;
+  align-items: flex-start;
+  gap: .8rem;
+  padding: 1rem 1.05rem;
+  border-radius: 14px;
+}
+.box.ok { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+.box.warn { background: #fff3e0; border-left: 5px solid #ef6c00; }
+.box.blue { background: #e3f2fd; border-left: 5px solid #1565c0; }
+.box.brain { background: #f3e5f5; border-left: 5px solid #8e24aa; }
+.box.red { background: #ffebee; border-left: 5px solid #c62828; }
+.box .ico { font-size: 1.25rem; }
+.box p { margin: 0; }
+.checklist { list-style: none; padding: 0; margin: 0; }
+.checklist li {
+  display: flex;
+  gap: .75rem;
+  align-items: flex-start;
+  padding: .55rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.checklist li:last-child { border-bottom: none; }
+.check {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 2px solid var(--accent);
+  border-radius: 5px;
+  margin-top: .2rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: .9rem 0;
+  font-size: .92rem;
+}
+th {
+  background: var(--primary);
+  color: #fff;
+  text-align: left;
+  padding: .75rem .9rem;
+}
+td {
+  padding: .72rem .9rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: #f9fcf7; }
+.timeline {
+  position: relative;
+  margin-left: .4rem;
+  padding-left: 1.4rem;
+  border-left: 3px solid #c8e6c9;
+}
+.tl-item {
+  position: relative;
+  padding: .2rem 0 1rem 1.2rem;
+  border-bottom: 1px dashed #d7ead7;
+}
+.tl-item:last-child { border-bottom: none; padding-bottom: 0; }
+.tl-dot {
+  position: absolute;
+  left: -12px;
+  top: .45rem;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.tl-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  align-items: center;
+  margin-bottom: .35rem;
+}
+.tl-time {
+  font-size: .77rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: .04em;
+}
+.tl-title { font-size: 1rem; font-weight: 800; color: var(--primary); }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 800;
+}
+.tag.habla { background: #e3f2fd; color: #0d47a1; }
+.tag.silencio { background: #fce4ec; color: #880e4f; }
+.tag.monit { background: #fff8e1; color: #8d6e00; }
+.tag.dojo { background: #f3e5f5; color: #6a1b9a; }
+.tl-body { font-size: .93rem; }
+.tl-body ul { padding-left: 1.2rem; margin: .35rem 0; }
+.tl-body li { margin-bottom: .35rem; }
+.tl-guion {
+  margin-top: .55rem;
+  background: #f1f8e9;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  padding: .7rem .9rem;
+  font-style: italic;
+}
+.qa {
+  border-radius: 14px;
+  padding: 1rem;
+  background: #eef7ee;
+  border: 1px solid var(--border);
+  margin-bottom: .8rem;
+}
+.qa h4 { margin: 0 0 .45rem; color: var(--primary); }
+.correct { font-weight: 800; color: var(--primary); }
+.scenario {
+  border: 2px solid;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.scenario.a { border-color: #2e7d32; }
+.scenario.b { border-color: #ef6c00; }
+.scenario-header {
+  padding: .8rem 1rem;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.scenario.a .scenario-header { background: #e8f5e9; color: #1b5e20; }
+.scenario.b .scenario-header { background: #fff3e0; color: #e65100; }
+.scenario-body { padding: 1rem 1.05rem; }
+.note-table td:first-child { font-weight: 700; color: var(--primary); width: 28%; }
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: .82rem;
+  padding: 1.8rem 1rem 2.2rem;
+}
+@media (max-width: 900px) {
+  .meta-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .card { padding: 1rem; }
+  .timeline { padding-left: 1rem; }
+  .tl-item { padding-left: 1rem; }
+  table { font-size: .86rem; }
+}
+</style></head><body><header><div class="header-inner"><div class="badge">🔒 USO EXCLUSIVO DOCENTE · Semana 6 · TGA05</div><h1>Notas del Profesor — Recursividad I</h1><p>Guía docente detallada para la sesión de 4 horas presenciales del módulo Estructura de Datos para los Negocios, con enfoque GAME, Bloom explícito y narrativa NeuroBiz.</p></div></header><nav><div class="nav-wrap"><a href="#meta">🎯 Meta</a><a href="#checklist">✅ Checklist</a><a href="#secuencia">⏱ Secuencia</a><a href="#dojo">🏆 ClassDojo</a><a href="#quiz">🎮 Quiz</a><a href="#hti">🏠 HTI</a><a href="#neuro">🧠 Neurodivergencia</a><a href="#contingencias">🚨 Contingencias</a><a href="#observacion">👁 Observación</a></div></nav><main><section id="meta" class="card"><h2>🎯 Meta de la sesión</h2><div class="meta-grid"><div><p class="lead">Al finalizar la sesión, el estudiante identifica la lógica de una definición recursiva, diferencia caso base y caso recursivo, y construye una primera solución funcional para el cálculo acumulado del <code>indice_progreso</code> de NeuroBiz.</p><div class="box ok"><div class="ico">📌</div><p><strong>Recordatorio metodológico:</strong> Python opera aquí como lenguaje de apoyo a la inteligencia de negocios. La comprensión de la estructura y su relación con el caso es más importante que escribir código velozmente.</p></div><div class="box blue"><div class="ico">🎮</div><p><strong>Framework GAME:</strong> guía con ejemplo inicial, articula teoría-caso-código, motiva con narrativa y puntos visibles, y evalúa con evidencia concreta, quiz y retroalimentación formativa.</p></div></div><div><div class="table-wrap"><table><thead><tr><th>RA</th><th>CE</th><th>Bloom</th><th>Meta observable</th></tr></thead><tbody><tr><td>RA2</td><td>CE1 · CE2 · CE3</td><td>Recordar → Comprender</td><td>Reconoce, modela y verifica una solución recursiva simple basada en sesiones terapéuticas.</td></tr></tbody></table></div></div></div></section><section id="checklist" class="card"><h2>✅ Checklist pre-clase</h2><div class="grid-2"><div><h3>Pedagógico</h3><ul class="checklist"><li><span class="check"></span><span>Releer la narrativa del memorando y decidir qué ejemplo local de paciente usarás para activar la clase.</span></li><li><span class="check"></span><span>Preparar en tablero dos versiones del mismo problema: una sumatoria manual y una definición recursiva.</span></li><li><span class="check"></span><span>Tener listas preguntas de sondeo: “¿dónde termina?”, “¿qué se repite?”, “¿qué cambia en cada llamada?”.</span></li><li><span class="check"></span><span>Acordar cómo nombrarás el caso base para evitar tecnicismos excesivos en los primeros 30 minutos.</span></li><li><span class="check"></span><span>Definir parejas de apoyo para que nadie enfrente solo el primer ejercicio de trazado.</span></li></ul></div><div><h3>Tecnológico</h3><ul class="checklist"><li><span class="check"></span><span>Abrir Google Colab y verificar que el notebook de la semana cargue con los tres bloques de código.</span></li><li><span class="check"></span><span>Probar proyector, conexión y fuente grande en pantalla para que las indentaciones del árbol de llamadas sean legibles.</span></li><li><span class="check"></span><span>Configurar Quizizz en modo formativo con retroalimentación inmediata.</span></li><li><span class="check"></span><span>Tener ClassDojo abierto con categorías visibles: preparación, análisis, código funcional, explicación y reflexión.</span></li><li><span class="check"></span><span>Guardar una copia local del código base en caso de intermitencia de internet.</span></li></ul></div></div><h3>ClassDojo — categorías sugeridas</h3><div class="table-wrap"><table><thead><tr><th>Categoría</th><th>Puntos</th><th>Cuándo aplicar</th></tr></thead><tbody><tr><td>🟢 Preparación</td><td>+1</td><td>Llega con cuaderno, equipo y material abierto antes del minuto 10</td></tr><tr><td>🧠 Análisis conceptual</td><td>+2</td><td>Reconoce correctamente caso base y caso recursivo</td></tr><tr><td>💻 Código funcional</td><td>+2</td><td>Entrega función recursiva operativa con prueba</td></tr><tr><td>🗣️ Explicación</td><td>+1</td><td>Puede verbalizar por qué la recursividad termina</td></tr><tr><td>🔁 Mejora</td><td>+1</td><td>Corrige un error a partir de retroalimentación del docente o de pares</td></tr></tbody></table></div></section><section id="secuencia" class="card"><h2>⏱ Secuencia minuto a minuto completa (240 min)</h2><p class="lead">La siguiente línea de tiempo está pensada para 2 horas HAD + 2 horas HP. Incluye guion sugerido en momentos clave, observables y microdecisiones de acompañamiento.</p><div class="timeline"><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">0–15 min</span><span class="tl-title">Aterrizaje narrativo y encuadre de misión</span><span class="tag habla">🎙️ Habla docente</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Da la bienvenida, proyecta el memorando y conecta el problema con el rol de Analista de Datos Estratégico.</li><li>Pregunta qué significa “acumular progreso” cuando una terapia ocurre en varias sesiones.</li><li>Aclara que Python es solo la herramienta para expresar una lógica del negocio.</li></ul><div class="tl-guion">Hoy vamos a aprender una forma de pensar: una regla que se explica a sí misma, pero que siempre sabe cuándo detenerse.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">15–35 min</span><span class="tl-title">Activación de saberes previos</span><span class="tag habla">🎙️ Habla docente</span><span class="tag monit">👀 Monitoreo</span></div><div class="tl-body"><ul><li>Presenta una lista corta de progresos y pide sumar manualmente desde la sesión 4 hasta la 1.</li><li>Anota respuestas del grupo y pregunta qué parte del procedimiento se repite.</li><li>Premia con ClassDojo a quien verbalice la idea de “problema más pequeño”.</li></ul><div class="tl-guion">Si para calcular 4 sesiones necesito saber 3, y para 3 necesito saber 2, entonces estamos frente a una estructura que se encadena.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">35–55 min</span><span class="tl-title">Mini-lección: caso base vs caso recursivo</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Define ambos conceptos con lenguaje llano.</li><li>Usa tarjetas o tablero para mostrar qué ocurre si falta el caso base.</li><li>Relaciona con Joyanes (2014) y Cairó & Guardati (2006) sin leer citas extensas: parafrasea la idea central.</li></ul><div class="tl-guion">Una función recursiva no es magia: es una regla con una puerta de entrada y una salida segura.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">55–80 min</span><span class="tl-title">Árbol de llamadas guiado</span><span class="tag silencio">✍️ Trabajo silencioso</span><span class="tag monit">👀 Monitoreo</span></div><div class="tl-body"><ul><li>Dibuja factorial(4) en el tablero y marca llamadas y retornos con colores distintos.</li><li>Pide al grupo copiar la traza y escribir una frase que explique el retorno.</li><li>Circula verificando que diferencien “llamar” de “devolver”.</li></ul><div class="tl-guion">No basta con ver las flechas hacia abajo; necesitamos entender el momento en que cada llamada regresa con un valor.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">80–105 min</span><span class="tl-title">Demostración en Colab</span><span class="tag habla">🎙️ Habla docente</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Ejecuta el bloque de factorial con indentación.</li><li>Muestra cómo un <code>print</code> bien ubicado hace visible el árbol de llamadas.</li><li>Invita a anticipar qué línea aparecerá después antes de ejecutarla.</li></ul><div class="tl-guion">Piensen como auditores: si yo registro cada llamada, puedo explicar el algoritmo incluso a alguien que no lo programó.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">105–120 min</span><span class="tl-title">Transición al caso NeuroBiz</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Sustituye números abstractos por una lista de índices de progreso.</li><li>Construye con el grupo la firma de la función y acuerda el caso base.</li><li>Haz pausa metacognitiva: “¿qué se mantiene, qué cambia?”</li></ul><div class="tl-guion">La sintaxis cambió un poco, pero la idea profunda es la misma: reducir el problema hasta llegar a cero sesiones.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">120–130 min</span><span class="tl-title">Pausa activa</span><span class="tag silencio">✍️ Trabajo silencioso</span></div><div class="tl-body"><ul><li>Descanso breve y respiración guiada; propone estiramiento de 1 minuto.</li><li>Recuerda la meta de la segunda mitad: pasar de comprender a explicar con evidencia.</li></ul><div class="tl-guion">Volvemos con una sola pregunta en mente: ¿cómo pruebo que mi función sí hace lo que promete?</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">130–160 min</span><span class="tl-title">Práctica por parejas: borrador del algoritmo</span><span class="tag monit">👀 Monitoreo</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Las parejas escriben primero pseudocódigo o pasos numerados.</li><li>Antes de teclear, deben mostrar al docente el caso base en papel.</li><li>Acompaña especialmente a quienes confunden índice de lista con número de sesiones.</li></ul><div class="tl-guion">Primero pienso y luego codifico. Un minuto de diseño aquí ahorra diez minutos de depuración después.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">160–190 min</span><span class="tl-title">Laboratorio principal en Colab</span><span class="tag silencio">✍️ Trabajo silencioso</span><span class="tag monit">👀 Monitoreo</span></div><div class="tl-body"><ul><li>Cada pareja implementa la función recursiva del progreso acumulado.</li><li>Solicita dos pruebas: una lista corta y una lista con decimales.</li><li>Pide añadir una impresión con sangría para visualizar la profundidad.</li></ul><div class="tl-guion">Tu evidencia no es solo que corra; es que puedas explicar cada línea y cada retorno.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">190–210 min</span><span class="tl-title">Socialización y retroalimentación cruzada</span><span class="tag habla">🎙️ Habla docente</span><span class="tag dojo">🏆 ClassDojo</span></div><div class="tl-body"><ul><li>Dos parejas comparten pantalla o leen su código.</li><li>El grupo identifica fortalezas y una mejora posible.</li><li>Otorga puntos por explicación clara, no solo por respuesta correcta.</li></ul><div class="tl-guion">Cuando otro entiende tu algoritmo, tu solución empieza a ser útil para la organización.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">210–225 min</span><span class="tl-title">Quizizz formativo</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Aplica las 5 preguntas del quiz.</li><li>Comenta rápidamente por qué cada distractor podría confundir a alguien.</li><li>Usa el resultado para decidir si el cierre enfatiza caso base o árbol de llamadas.</li></ul><div class="tl-guion">El quiz no es castigo; es una radiografía rápida para ver qué debemos fijar antes de irnos.</div></div></article><article class="tl-item"><div class="tl-dot"></div><div class="tl-head"><span class="tl-time">225–240 min</span><span class="tl-title">Cierre, HTI y transferencia</span><span class="tag habla">🎙️ Habla docente</span></div><div class="tl-body"><ul><li>Resume con tres ideas en el tablero: detener, reducir, retornar.</li><li>Explica diferencias entre HTI A y HTI B; deja explícito que el Escenario B NO BLOQUEA la siguiente clase.</li><li>Pide escribir una frase final: “La recursividad me sirve cuando…”</li></ul><div class="tl-guion">Si hoy puedes explicar por qué la función termina, ya diste el paso más importante de la semana.</div></div></article></div></section><section id="dojo" class="card"><h2>🏆 Integración ClassDojo</h2><p class="lead">Registra los puntos en el momento exacto en que la evidencia aparece. Evita asignaciones ambiguas; la claridad de criterios mejora la percepción de justicia y la motivación.</p><div class="table-wrap"><table><thead><tr><th>Momento</th><th>Criterio concreto</th><th>Puntos</th></tr></thead><tbody><tr><td>Inicio</td><td>Trae abierto Colab y copia el dataset base de NeuroBiz</td><td class="points">+1</td></tr><tr><td>Diagnóstico</td><td>Identifica correctamente caso base y caso recursivo</td><td class="points">+2</td></tr><tr><td>Laboratorio</td><td>Código funcional con indentación visible en el árbol</td><td class="points">+2</td></tr><tr><td>Explicación</td><td>Justifica oralmente por qué la función termina</td><td class="points">+1</td></tr><tr><td>Cierre</td><td>Participa en el Quizizz y registra reflexión final</td><td class="points">+1</td></tr></tbody></table></div><div class="box warn"><div class="ico">📝</div><p><strong>Sugerencia:</strong> verbaliza el criterio cada vez que otorgues puntos. Ejemplo: “sumo +2 porque identificaste el caso límite y además lo probaste con evidencia”.</p></div></section><section id="quiz" class="card"><h2>🎮 Quiz Quizizz — preguntas y respuestas correctas</h2><p class="lead">Usa el quiz como evaluación formativa de cierre. Si el puntaje promedio del grupo queda bajo, retoma solo la idea crítica antes de terminar; no intentes reenseñar toda la sesión en los últimos 10 minutos.</p><div class="qa"><h4>Pregunta 1</h4><p><strong>¿Qué condición detiene una función recursiva?</strong></p><ol><li>El bucle for</li><li>El caso base</li><li>La variable global</li><li>La indentación</li></ol><p class="correct">Respuesta correcta: El caso base evita que la función siga llamándose indefinidamente.</p></div><div class="qa"><h4>Pregunta 2</h4><p><strong>En NeuroBiz, ¿qué expresa mejor un caso recursivo?</strong></p><ol><li>Restar siempre 1 al resultado final</li><li>Tomar la sesión actual y sumarla al acumulado previo</li><li>Ordenar la lista antes de sumar</li><li>Crear un diccionario vacío</li></ol><p class="correct">Respuesta correcta: La lógica de negocio es “sesión actual + acumulado anterior”.</p></div><div class="qa"><h4>Pregunta 3</h4><p><strong>¿Para qué sirve un árbol de llamadas?</strong></p><ol><li>Para decorar el cuaderno</li><li>Para medir memoria RAM exacta</li><li>Para visualizar el orden de las invocaciones y retornos</li><li>Para reemplazar el caso base</li></ol><p class="correct">Respuesta correcta: El árbol hace visible la secuencia de llamadas y retornos.</p></div><div class="qa"><h4>Pregunta 4</h4><p><strong>¿Cuál ejemplo clásico muestra crecimiento rápido de llamadas repetidas?</strong></p><ol><li>Factorial</li><li>Suma lineal</li><li>Fibonacci</li><li>Promedio</li></ol><p class="correct">Respuesta correcta: Fibonacci permite observar la repetición de subproblemas y abrir el debate sobre eficiencia.</p></div><div class="qa"><h4>Pregunta 5</h4><p><strong>Si eliminas el caso base en una función recursiva, lo más probable es que…</strong></p><ol><li>termine más rápido</li><li>genere llamadas infinitas o error por profundidad</li><li>ordene mejor la lista</li><li>desaparezca el árbol</li></ol><p class="correct">Respuesta correcta: Sin caso base no existe condición formal de parada.</p></div></section><section id="hti" class="card"><h2>🏠 HTI — cómo elegir Escenario A vs B</h2><p class="lead">Elige Escenario A cuando el estudiante ya logró una función básica en clase y dispone de conectividad. Elige Escenario B cuando aún necesita consolidar la imagen mental del árbol de llamadas o tuvo dificultades de acceso; B mantiene continuidad y NO BLOQUEA la siguiente clase.</p><div class="scenario-grid"><div class="scenario a"><div class="scenario-header"><span>Escenario A · profundización</span><span>60–90 min · entrega digital</span></div><div class="scenario-body"><p>Diseña una función recursiva que reciba una lista de índices de progreso y un número N. La salida debe ser el promedio móvil de las últimas N sesiones de un paciente de NeuroBiz.</p><p>Incluye un caso base claro, mínimo tres pruebas diferentes y una breve reflexión sobre cuándo la recursividad ayuda a comunicar mejor la lógica del cálculo.</p><p>Entrega: enlace o captura del Colab, explicación escrita de 8 a 10 líneas y comentario sobre cómo usarías el resultado para seguimiento clínico.</p><div class="box ok"><div class="ico">✅</div><p><strong>Consecuencia pedagógica:</strong> ofrece evidencia más robusta del desempeño y prepara mejor el siguiente contenido.</p></div></div></div><div class="scenario b"><div class="scenario-header"><span>Escenario B · bajo umbral</span><span>20–30 min · cuaderno/papel</span></div><div class="scenario-body"><p>Dibuja en el cuaderno el árbol de llamadas de <code>factorial(5)</code> y acompáñalo con un ejemplo inventado de cinco sesiones NeuroBiz.</p><p>Marca con color diferente el caso base, las llamadas activas y los retornos. Agrega una frase corta sobre por qué la recursividad “regresa” resultados al final.</p><p>Este escenario es de bajo umbral y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>; su objetivo es sostener continuidad conceptual, no penalizar.</p><div class="box warn"><div class="ico">🟠</div><p><strong>Consecuencia pedagógica:</strong> sostiene continuidad conceptual para estudiantes con menos tiempo, conectividad o seguridad técnica. <strong>NO BLOQUEA la siguiente clase</strong>.</p></div></div></div></div><div class="table-wrap"><table class="note-table"><tbody><tr><td>Si elige A</td><td>Obtiene una práctica más profunda, evidencia digital más sólida y mejor preparación para transferir el concepto a nuevos algoritmos.</td></tr><tr><td>Si elige B</td><td>Refuerza la imagen mental o el paso a paso sin convertir la tarea en barrera. Útil para nivelación o recuperación de confianza.</td></tr><tr><td>Qué debe decir el docente</td><td>“Ambas rutas suman al proceso; A profundiza más, B mantiene continuidad. La no realización de B no impide comprender la siguiente sesión”.</td></tr></tbody></table></div></section><section id="neuro" class="card"><h2>🧠 Nota de neurodivergencia (máx. 1 minuto)</h2><div class="box brain"><div class="ico">🧠</div><p>Frase sugerida: “En NeuroBiz analizamos datos de personas neurodivergentes con respeto; los indicadores no etiquetan a la persona, nos ayudan a entender cómo adaptar mejor el acompañamiento”.</p></div><div class="box blue"><div class="ico">⏱</div><p><strong>Sugerencia de uso:</strong> di esta frase durante el aterrizaje del caso o antes del laboratorio. No la conviertas en discurso largo; basta una mención breve, respetuosa y natural.</p></div></section><section id="contingencias" class="card"><h2>🚨 Contingencias</h2><div class="box warn"><div class="ico">⚠️</div><p><strong>Falla técnica:</strong> Si Colab o internet fallan, traslada la actividad a pseudocódigo y trazado manual del árbol de llamadas. Puedes usar el factorial en tablero y luego pasar al caso NeuroBiz en papel.</p></div><div class="box warn"><div class="ico">⚠️</div><p><strong>Bajo engagement:</strong> Convierte el caso en reto entre equipos: ¿quién explica mejor por qué una función sí termina? Premia la explicación, no solo el código.</p></div><div class="box warn"><div class="ico">⚠️</div><p><strong>Falta de tiempo:</strong> Prioriza caso base, función mínima y una sola prueba. Deja las impresiones con indentación como demostración docente o como extensión para HTI A.</p></div></section><section id="observacion" class="card"><h2>👁 Indicadores de observación docente</h2><ul><li>Distingue verbalmente entre caso base y caso recursivo sin leer del cuaderno.</li><li>Logra reducir el problema en cada llamada en vez de repetir el mismo estado.</li><li>Usa ejemplos del caso NeuroBiz para justificar el algoritmo.</li><li>Comprueba resultados con datos pequeños antes de asumir que la función está bien.</li><li>Puede explicar el retorno final sin confundirlo con el llamado inicial.</li></ul><div class="box ok"><div class="ico">🎤</div><p><strong>Cierre sugerido:</strong> Cierre sugerido: “Hoy aprendimos que una estructura elegante no sirve por sí sola: debe detenerse, reducir el problema y devolver un resultado entendible para el negocio. La próxima semana compararemos esta lógica con alternativas iterativas y con recursión indirecta.”</p></div></section></main><footer>TGA05 · Notas del profesor · Semana 6 · Uso exclusivo docente · Caso NeuroBiz S.A.S.</footer></body></html>

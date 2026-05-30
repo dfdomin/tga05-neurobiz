@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TGA05 Semana 2 - Pilas (Stack) para historial terapéutico</title>
+    <style>:root {
+    --primary:   #1E2843;
+    --primary-2: #2d3a5e;
+    --accent: #FFDF2D;
+    --bg: #f4f7fb;
+    --text: #1f2937;
+    --muted: #526072;
+    --card: #ffffff;
+    --code-bg: #1E2843;
+    --code-top: #11111b;
+    --code-border: #2d3a5e;
+    --surface: #eef3ff;
+    --green: #1b5e20;
+    --green-soft: #e8f5e9;
+    --orange: #ef6c00;
+    --orange-soft: #fff3e0;
+    --blue-soft: #e3f2fd;
+    --shadow: 0 16px 40px rgba(26, 35, 126, 0.10);
+    --radius: 20px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #f4f7fb 0%, #eef3ff 100%);
+    color: var(--text);
+    line-height: 1.6;
+}
+.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+    color: white;
+    padding: 28px 20px 36px;
+    position: relative;
+    overflow: hidden;
+}
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -120px -140px auto;
+    width: 320px;
+    height: 320px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+}
+.hero-content {
+    max-width: 1180px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+.badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.badge, .badge-outline, .week-chip, .micro-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+.badge { background: rgba(249, 168, 37, 0.18); border: 1px solid rgba(249, 168, 37, 0.45); }
+.badge-outline { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); }
+.week-chip { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); }
+.micro-chip {
+    background: rgba(255,255,255,0.10);
+    border: 1px dashed rgba(255,255,255,0.35);
+    font-size: 0.82rem;
+}
+h1 {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 4vw, 3.35rem);
+    line-height: 1.1;
+}
+.hero p.lead {
+    max-width: 900px;
+    margin: 0 0 18px;
+    font-size: 1.04rem;
+    color: rgba(255,255,255,0.92);
+}
+.xp-shell {
+    margin-top: 18px;
+    background: rgba(255,255,255,0.14);
+    border-radius: 999px;
+    padding: 6px;
+    border: 1px solid rgba(255,255,255,0.18);
+    max-width: 680px;
+}
+.xp-track {
+    width: 100%;
+    height: 18px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.14);
+    overflow: hidden;
+    position: relative;
+}
+.xp-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #FFDF2D, #FFDF2D);
+    border-radius: 999px;
+    position: relative;
+    transition: width 1.8s ease;
+}
+.xp-fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.38) 45%, rgba(255,255,255,0) 100%);
+    animation: shine 3s infinite;
+}
+@keyframes shine {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+}
+.xp-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.88rem;
+    margin-top: 10px;
+    color: rgba(255,255,255,0.92);
+}
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #dce4f5;
+}
+.sticky-nav .inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 14px 20px;
+}
+.sticky-nav a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: #eef2ff;
+}
+.sticky-nav a:hover { background: #dbe6ff; }
+main {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+}
+.card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 26px;
+    margin-bottom: 22px;
+    border-left: 7px solid var(--accent);
+}
+.card h2 {
+    margin-top: 0;
+    font-size: 1.7rem;
+    color: var(--primary);
+}
+.section-intro {
+    color: var(--muted);
+    margin-top: -8px;
+    margin-bottom: 18px;
+}
+.grid-2, .grid-3 {
+    display: grid;
+    gap: 16px;
+}
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.info-box, .memo-box, .ods-box, .framework-box, .note-box {
+    border-radius: 18px;
+    padding: 18px;
+    margin: 16px 0;
+}
+.memo-box { background: #eef2ff; border: 1px solid #c7d2fe; }
+.ods-box { background: #e8f5e9; border: 1px solid #a5d6a7; }
+.framework-box { background: #fff8e1; border: 1px solid #ffe082; }
+.note-box { background: #f8fafc; border: 1px dashed #b0bec5; }
+.info-box { background: #f7f9ff; border: 1px solid #dbe3ff; }
+.bloom-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff8e1;
+    color: #7c4d00;
+    border: 1px solid #FFDF2D;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-weight: 700;
+    margin: 8px 0 18px;
+}
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+}
+.kpi-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    border-radius: 18px;
+    padding: 18px;
+    border: 1px solid #dbe3ff;
+    box-shadow: 0 10px 24px rgba(57, 73, 171, 0.06);
+}
+.kpi-card small { color: var(--muted); display: block; }
+.kpi-value {
+    margin: 8px 0 6px;
+    color: var(--primary);
+    font-size: 1.9rem;
+    font-weight: 800;
+}
+.pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+.pill {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: var(--primary);
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    overflow: hidden;
+    border-radius: 16px;
+}
+th, td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #dde5f3;
+    text-align: left;
+    vertical-align: top;
+}
+th { background: #eef2ff; color: var(--primary); }
+tr:nth-child(even) td { background: #fbfcff; }
+.code-window {
+    background: var(--code-bg);
+    color: #cdd6f4;
+    border-radius: 18px;
+    overflow: hidden;
+    margin: 20px 0;
+    border: 1px solid var(--code-border);
+    box-shadow: 0 16px 36px rgba(17, 17, 27, 0.28);
+}
+.code-topbar {
+    background: var(--code-top);
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    color: #bac2de;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--code-border);
+}
+.code-dots { display: inline-flex; gap: 8px; }
+.code-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.code-dots span:nth-child(1) { background: #f38ba8; }
+.code-dots span:nth-child(2) { background: #f9e2af; }
+.code-dots span:nth-child(3) { background: #a6e3a1; }
+pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; }
+.kw { color: #cba6f7; font-weight: 700; }
+.str { color: #a6e3a1; }
+.num { color: #fab387; }
+.cm { color: #6c7086; font-style: italic; }
+.op { color: #89dceb; }
+.var { color: #cdd6f4; }
+.activity-shell {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 18px;
+    margin-top: 18px;
+}
+.subcard {
+    background: #f8fbff;
+    border: 1px solid #d9e5ff;
+    border-radius: 18px;
+    padding: 18px;
+    height: 100%;
+}
+.subcard h3 { margin-top: 0; color: var(--primary); }
+.phase-label {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.had { background: #E9EAED; color: #1E2843; }
+.hp { background: #e3f2fd; color: #1565c0; }
+.dojo-panel {
+    background: #111827;
+    color: #f9e7a0;
+    border-radius: 18px;
+    padding: 20px;
+    border: 1px solid #374151;
+    box-shadow: 0 14px 28px rgba(17, 24, 39, 0.2);
+}
+.dojo-panel h3 { margin-top: 0; color: #FFDF2D; }
+.dojo-panel li { margin-bottom: 10px; }
+.scenario-a, .scenario-b {
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 16px;
+}
+.scenario-a { background: var(--green-soft); border: 1px solid #a5d6a7; }
+.scenario-b { background: var(--orange-soft); border: 1px solid #ffcc80; }
+.scenario-b strong { color: var(--orange); }
+.quiz-shell {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+.quiz-card {
+    background: var(--blue-soft);
+    border: 1px solid #bbdefb;
+    border-radius: 18px;
+    padding: 18px;
+    position: relative;
+    min-height: 230px;
+}
+.quiz-card h3 { margin-top: 0; color: #0d47a1; }
+.quiz-card ul { padding-left: 18px; }
+.quiz-answer {
+    margin-top: 14px;
+    padding: 12px;
+    background: rgba(255,255,255,0.92);
+    border-radius: 14px;
+    border: 1px dashed #64b5f6;
+    opacity: 0.08;
+    filter: blur(5px);
+    transition: all 0.25s ease;
+}
+.quiz-card:hover .quiz-answer {
+    opacity: 1;
+    filter: blur(0);
+}
+.foot-ref {
+    font-size: 0.92rem;
+    color: var(--muted);
+}
+.footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.92rem;
+    padding: 16px 20px 34px;
+}
+.callout-list li, .subcard li, .scenario-a li, .scenario-b li { margin-bottom: 8px; }
+.mini-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+.week-map {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+.week-map .map-card {
+    background: #f8fbff;
+    border-radius: 16px;
+    padding: 14px;
+    border: 1px solid #dde6f6;
+}
+.week-map h4 { margin: 0 0 8px; color: var(--primary); }
+blockquote {
+    margin: 16px 0;
+    padding: 14px 18px;
+    background: #f8fbff;
+    border-left: 4px solid var(--primary-2);
+    border-radius: 0 12px 12px 0;
+    color: var(--muted);
+}
+@media (max-width: 920px) {
+    .grid-2, .grid-3, .kpi-grid, .activity-shell, .quiz-shell, .mini-grid, .week-map { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    .hero { padding-inline: 16px; }
+    main { padding-inline: 16px; }
+    .card { padding: 20px; }
+    .sticky-nav .inner { padding-inline: 16px; }
+    h1 { font-size: 1.85rem; }
+    .badge-row { gap: 8px; }
+}</style>
+
+<style id="progress-tracker-css">
+/* ── Progress Tracker Widget ── */
+#pt-widget{
+  position:fixed; bottom:20px; right:20px; z-index:9999;
+  background:linear-gradient(135deg,#1E2843,#1E2843);
+  color:#fff; border-radius:16px; padding:14px 18px;
+  min-width:240px; max-width:280px;
+  box-shadow:0 8px 32px rgba(0,0,0,.35);
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size:.85rem; transition:transform .3s;
+}
+#pt-widget.collapsed { transform:translateY(calc(100% - 42px)); }
+#pt-header{ display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+#pt-header strong{ font-size:.92rem; }
+#pt-toggle{ background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer; line-height:1; }
+#pt-body{ margin-top:10px; }
+#pt-nombre{ width:100%; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3);
+  border-radius:8px; color:#fff; padding:5px 10px; font-size:.82rem; margin-bottom:8px; }
+#pt-nombre::placeholder{ color:rgba(255,255,255,.5); }
+#pt-xp-bar-wrap{ background:rgba(255,255,255,.2); border-radius:20px; height:10px; overflow:hidden; }
+#pt-xp-bar{ height:100%; background:linear-gradient(90deg,#FFDF2D,#fff176); border-radius:20px;
+  transition:width .8s ease; }
+#pt-xp-label{ display:flex; justify-content:space-between; font-size:.75rem; opacity:.8; margin-top:4px; }
+#pt-btns{ display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.pt-btn{ flex:1; padding:5px 8px; border:none; border-radius:8px; font-size:.75rem;
+  font-weight:700; cursor:pointer; transition:opacity .2s; }
+.pt-btn:hover{ opacity:.85; }
+#pt-btn-save  { background:#43a047; color:#fff; }
+#pt-btn-export{ background:#FFDF2D; color:#1E2843; }
+#pt-btn-load  { background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.3); }
+#pt-msg{ font-size:.72rem; margin-top:6px; min-height:16px; opacity:.85; text-align:center; }
+#pt-quiz-panel{ margin-top:1rem; }
+#pt-quiz-panel .pq{ margin-bottom:.8rem; }
+#pt-quiz-panel .pq p{ font-weight:600; font-size:.88rem; margin-bottom:.4rem; }
+#pt-quiz-panel .pq button{ display:block; width:100%; text-align:left; margin-bottom:3px;
+  padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08); color:#fff; cursor:pointer; font-size:.8rem;
+  transition:background .2s; }
+#pt-quiz-panel .pq button:hover  { background:rgba(255,255,255,.18); }
+#pt-quiz-panel .pq button.correct{ background:#2e7d32; border-color:#43a047; }
+#pt-quiz-panel .pq button.wrong  { background:#c62828; border-color:#e57373; }
+#pt-quiz-panel .pq button:disabled{ opacity:.7; cursor:default; }
+</style>
+
+  <script src="../js/supabase-config.js"></script>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge-row">
+                <span class="badge">TGA05 · Estructura de Datos para los Negocios</span>
+                <span class="badge-outline">Programa: Tecnología en Gestión Administrativa</span>
+                <span class="week-chip">Semana 2 de 14</span>
+                <span class="micro-chip">Rol activo: Analista de Datos Estratégico</span>
+            </div>
+            <h1>Pilas (Stack) para historial terapéutico</h1>
+            <p class="lead">Concepto, representación, operaciones push / pop / peek / isEmpty, overflow y underflow mediante el caso del historial de sesiones de un paciente en NeuroBiz.</p>
+            <div class="xp-shell">
+                <div class="xp-track"><div class="xp-fill" data-progress="36%"></div></div>
+                <div class="xp-label"><span>XP acumulada del módulo</span><span>540 / 1500 XP · Nivel Explorador de RA1</span></div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sticky-nav">
+        <div class="inner">
+            <a href="#memorando">Memorando</a>
+            <a href="#teoria">Teoría</a>
+            <a href="#python">Python BI</a>
+            <a href="#actividad">Actividad presencial</a>
+            <a href="#hti">HTI</a>
+            <a href="#quiz">Quizizz</a>
+            <a href="#bibliografia">Bibliografía</a>
+        </div>
+    </nav>
+
+    <main>
+
+<!-- ── PROGRESS TRACKER WIDGET ── -->
+<div id="pt-widget">
+  <div id="pt-header" onclick="ptToggle()">
+    <strong>📊 Mi Progreso TGA05</strong>
+    <button id="pt-toggle">▲</button>
+  </div>
+  <div id="pt-body">
+    <input id="pt-nombre" type="text" placeholder="Tu nombre completo…" oninput="ptSaveLocal()" />
+    <div id="pt-xp-bar-wrap"><div id="pt-xp-bar" style="width:0%"></div></div>
+    <div id="pt-xp-label"><span id="pt-semana-label">Semana —</span><span id="pt-xp-count">0 XP</span></div>
+    <div id="pt-btns" style="display:flex;gap:5px;align-items:center">
+      <button class="pt-btn" id="pt-btn-save" onclick="ptSyncCloud()" style="flex:1">☁️ Guardar</button>
+      <button class="pt-btn" id="pt-btn-opts"
+        title="Opciones de respaldo"
+        onclick="(function(){var a=document.getElementById('pt-advanced');a.style.display=a.style.display==='block'?'none':'block';})()"
+        style="width:32px;flex-shrink:0;padding:0;font-size:.8rem">⚙️</button>
+    </div>
+    <div id="pt-advanced" style="display:none;margin-top:5px">
+      <button class="pt-btn" onclick="ptExportCode()" style="width:100%;margin-bottom:3px;font-size:.72rem">📋 Exportar código de respaldo</button>
+      <button class="pt-btn" onclick="ptImportCode()" style="width:100%;font-size:.72rem">📥 Cargar desde código</button>
+    </div>
+    <div id="pt-msg"></div>
+  </div>
+</div>
+
+        <section id="memorando" class="card">
+            <h2>Memorando NeuroBiz</h2>
+            <p class="section-intro">Narrativa inmersiva para activar el caso transversal de la asignatura.</p>
+            <div class="bloom-badge">Bloom visible de la semana: Recordar → Aplicar</div>
+            <div class="memo-box"><p><strong>Memorando interno NB-02.</strong> El comité clínico-operativo de <strong>NeuroBiz S.A.S.</strong> detectó que los terapeutas están perdiendo tiempo buscando en registros dispersos cuál fue la última intervención aplicada a cada paciente. En tu rol de <strong>Analista de Datos Estratégico</strong>, debes proponer una estructura que permita recuperar con rapidez el evento más reciente, sin recorrer todo el historial.</p>
+<p>La gerencia pide un prototipo sencillo en Google Colab para representar el historial de sesiones de un paciente neurodivergente. La regla es clara: <strong>la última sesión registrada debe ser la primera en consultarse</strong> cuando el terapeuta necesita continuidad inmediata. Eso convierte el problema en una decisión de estructura, no solo de código.</p>
+<div class="mini-grid">
+    <div class="info-box">
+        <strong>Misión operativa:</strong>
+        <ul class="callout-list">
+            <li>Identificar la lógica LIFO en un proceso real de NeuroBiz.</li>
+            <li>Aplicar operaciones de pila para registrar, consultar y deshacer.</li>
+            <li>Reconocer cuándo aparecen underflow y overflow como riesgos de negocio.</li>
+        </ul>
+    </div>
+    <div class="info-box">
+        <strong>Productos esperados hoy:</strong>
+        <ul class="callout-list">
+            <li>Traza manual del estado de una pila.</li>
+            <li>Prototipo en Python con <code>list</code> y con clase <code>Stack</code>.</li>
+            <li>Justificación verbal de por qué la pila sirve mejor que una cola para este caso.</li>
+        </ul>
+    </div>
+</div></div>
+            <div class="ods-box">
+                <strong>Conexión con ODS 7 y 13:</strong> Una pila bien implementada evita reabrir archivos innecesarios, reduce reprocesos administrativos y mejora la trazabilidad clínica. En términos de ODS 7 y 13, esto apoya el uso eficiente de recursos digitales y disminuye desplazamientos o llamadas repetidas por falta de información actualizada.
+            </div>
+            <div class="note-box">
+                <strong>Recuerda:</strong> Python se usa aquí como herramienta de Business Intelligence para modelar decisiones, inspeccionar estados de la estructura y comunicar hallazgos operativos; no se evalúa como fin aislado.
+            </div>
+            <h3>KPIs operativos que acompañan el caso</h3>
+            <div class="kpi-grid">
+        <div class="kpi-card">
+            <small>sesiones_asistidas</small>
+            <div class="kpi-value">184</div>
+            <p>Cantidad de sesiones efectivamente realizadas; ayuda a alimentar el historial terapéutico real.</p>
+            <div class="pill-row"><span class="pill">entero</span><span class="pill">seguimiento</span><span class="pill">servicio</span></div>
+        </div>
+        
+
+        <div class="kpi-card">
+            <small>sesiones_fallidas</small>
+            <div class="kpi-value">16</div>
+            <p>Eventos fallidos o inasistencias que también pueden registrarse como incidentes recientes.</p>
+            <div class="pill-row"><span class="pill">entero</span><span class="pill">ausencia</span><span class="pill">riesgo</span></div>
+        </div>
+        
+
+        <div class="kpi-card">
+            <small>tasa_retencion</small>
+            <div class="kpi-value">0.88</div>
+            <p>Indicador para revisar si el seguimiento continuo del paciente se sostiene en el tiempo.</p>
+            <div class="pill-row"><span class="pill">float</span><span class="pill">continuidad</span><span class="pill">fidelización</span></div>
+        </div>
+        
+
+        <div class="kpi-card">
+            <small>indice_progreso</small>
+            <div class="kpi-value">7.2</div>
+            <p>Puntaje agregado que el terapeuta consulta desde la sesión más reciente hacia atrás.</p>
+            <div class="pill-row"><span class="pill">float</span><span class="pill">avance</span><span class="pill">analítica</span></div>
+        </div>
+        
+
+        <div class="kpi-card">
+            <small>nivel_hiperfoco</small>
+            <div class="kpi-value">8.1</div>
+            <p>Dato clínico útil para pacientes con TDAH al comparar últimas intervenciones.</p>
+            <div class="pill-row"><span class="pill">float</span><span class="pill">TDAH</span><span class="pill">contexto</span></div>
+        </div>
+        
+
+        <div class="kpi-card">
+            <small>reconocimiento_patrones</small>
+            <div class="kpi-value">7.4</div>
+            <p>Variable de seguimiento para TEA que puede cambiar entre sesiones consecutivas.</p>
+            <div class="pill-row"><span class="pill">float</span><span class="pill">TEA</span><span class="pill">comparación</span></div>
+        </div>
+        </div>
+            <div class="framework-box">
+    <h3>Framework GAME aplicado esta semana</h3>
+    <div class="week-map">
+        <div class="map-card">
+            <h4>Guiar</h4>
+            <p>Se parte de una pregunta concreta: ¿qué sesión necesita ver primero el terapeuta cuando entra al expediente?</p>
+        </div>
+        <div class="map-card">
+            <h4>Articular</h4>
+            <p>La pila conecta el lenguaje técnico LIFO con la continuidad del tratamiento, la analítica de sesiones y el seguimiento de KPIs.</p>
+        </div>
+        <div class="map-card">
+            <h4>Motivar</h4>
+            <p>La misión se enmarca como un encargo real de NeuroBiz, con puntos ClassDojo por trazabilidad, explicación y código funcional.</p>
+        </div>
+        <div class="map-card">
+            <h4>Evaluar</h4>
+            <p>Se verifica si el equipo representa el estado de la pila, ejecuta operaciones correctas y justifica overflow/underflow en lenguaje de negocio.</p>
+        </div>
+    </div>
+</div>
+        </section>
+
+        <section id="teoria" class="card">
+            <h2>Teoría aplicada a negocios</h2>
+            <p class="section-intro">La teoría se construye con base en literatura clásica de estructuras de datos y se traduce al lenguaje operativo de NeuroBiz.</p>
+            <h3>1. ¿Qué es una pila y por qué importa en negocios?</h3>
+<p>Cairó Battistutti y Guardati Bueno (2006) describen la pila como una estructura lineal donde las inserciones y extracciones se realizan sobre un mismo extremo. Esa idea, traducida al contexto de NeuroBiz, significa que el dato más reciente queda en la <em>cima</em> y es el primero en consultarse. Joyanes Aguilar (2014) insiste en que la elección de la estructura condiciona la eficiencia del algoritmo; por eso, antes de programar, conviene identificar la lógica del proceso.</p>
+<p>En un historial terapéutico, el terapeuta normalmente no empieza por la primera sesión histórica, sino por la más reciente. El comportamiento esperado es <strong>LIFO</strong> (<em>Last In, First Out</em>): el último dato que entra es el primero en salir. Weiss (2014) explica que esta organización facilita resolver problemas donde la recencia es crítica, como deshacer acciones, retroceder estados o inspeccionar eventos recientes.</p>
+<table>
+    <thead>
+        <tr><th>Lenguaje técnico</th><th>Traducción en NeuroBiz</th><th>Pregunta operativa asociada</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Pila / Stack</td><td>Historial de sesiones de un paciente</td><td>¿Cuál fue la última intervención registrada?</td></tr>
+        <tr><td>Cima / Top</td><td>Sesión más reciente</td><td>¿Qué evento está listo para consulta inmediata?</td></tr>
+        <tr><td>Base</td><td>Sesión más antigua todavía conservada</td><td>¿Qué registro permanece más al fondo?</td></tr>
+    </tbody>
+</table>
+
+<h3>2. Representación y operaciones esenciales</h3>
+<p>Joyanes Aguilar (2014) presenta las operaciones de una pila como acciones controladas sobre un único extremo. En Python, una lista puede comportarse como pila porque <code>append()</code> agrega en el extremo derecho y <code>pop()</code> retira desde ese mismo extremo; la documentación oficial de Python Software Foundation (2024) confirma ese comportamiento de las listas como secuencias mutables.</p>
+<p>Desde la perspectiva de negocio, no basta con saber el nombre de la operación; es necesario entender qué decisión habilita. <strong>push</strong> registra una nueva sesión, <strong>pop</strong> retira la más reciente, <strong>peek</strong> consulta sin eliminar y <strong>isEmpty</strong> previene errores cuando aún no existe historial cargado. El valor pedagógico está en vincular cada operación con una acción concreta del sistema.</p>
+<table>
+    <thead>
+        <tr><th>Operación</th><th>Sentido computacional</th><th>Uso en NeuroBiz</th><th>Complejidad esperada</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>push</td><td>Inserta en la cima</td><td>Registrar una nueva sesión terapéutica</td><td>O(1) amortizado</td></tr>
+        <tr><td>pop</td><td>Extrae la cima</td><td>Deshacer la última carga errónea</td><td>O(1)</td></tr>
+        <tr><td>peek</td><td>Consulta la cima sin eliminar</td><td>Ver el último reporte antes de atender</td><td>O(1)</td></tr>
+        <tr><td>isEmpty</td><td>Verifica ausencia de datos</td><td>Evitar consulta a un expediente sin sesiones</td><td>O(1)</td></tr>
+    </tbody>
+</table>
+
+<h3>3. Overflow y underflow como riesgos de negocio</h3>
+<p>En textos clásicos, el <strong>overflow</strong> aparece cuando una pila de capacidad fija intenta recibir un nuevo elemento sin espacio disponible; el <strong>underflow</strong>, cuando se intenta retirar un dato de una pila vacía (Cairó Battistutti &amp; Guardati Bueno, 2006). Aunque la lista de Python crece dinámicamente, en los sistemas de negocio suele existir una política de capacidad, por ejemplo: conservar solo las últimas <strong>N</strong> sesiones visibles para consulta rápida.</p>
+<p>Esto es importante didácticamente: la herramienta técnica puede permitir más datos, pero el proceso organizacional puede imponer límites. Por ello, en esta semana se programará una clase <code>Stack</code> con <code>max_size</code>; así, el estudiante entiende que los errores no solo dependen del lenguaje, sino también de reglas de operación diseñadas por la empresa.</p>
+<div class="info-box">
+    <strong>Lectura aplicada:</strong> si un terapeuta intenta consultar una pila vacía, el problema no es solo un mensaje de error; implica que no hay evidencia inmediata para dar continuidad al caso. Si se excede la capacidad definida, el sistema debe decidir si rechaza, archiva o rota información según una política explícita.
+</div>
+
+<h3>4. ¿Por qué una pila y no otra estructura?</h3>
+<p>Weiss (2014) recuerda que una estructura se selecciona por el patrón de acceso dominante. En el caso del historial terapéutico, el patrón dominante es la recencia. No es razonable buscar el dato reciente con una lógica FIFO ni recorrer siempre todo el arreglo. La pila ofrece una representación mental clara: lo último ocurrido está arriba.</p>
+<p>Esta claridad conceptual reduce la carga cognitiva en el aula. El estudiante puede <strong>recordar</strong> la definición y luego <strong>aplicar</strong> la estructura al caso, que es precisamente la transición de Bloom esperada esta semana. Moreno Pérez (2012) aporta además que la programación debe partir del análisis del problema, no del impulso de escribir código sin modelo previo.</p>
+<blockquote>Cuando la pregunta operativa es “¿qué pasó de último?”, la estructura más natural suele ser una pila. Esa intuición de negocio es la puerta de entrada para formalizar el concepto LIFO.</blockquote>
+
+<h3>5. Trazado manual del estado de la estructura</h3>
+<p>Antes de ejecutar Python, conviene representar manualmente la pila. Ese paso permite ver cómo cambia la cima tras cada operación y prepara al estudiante para depurar. Un ejemplo sencillo para NeuroBiz sería: push sesión de lenguaje, push sesión sensorial, push sesión de seguimiento TDAH, pop por carga errónea, push sesión de retroalimentación familiar. La representación visual evita que la programación se vuelva mecánica.</p>
+<table>
+    <thead>
+        <tr><th>Paso</th><th>Operación</th><th>Estado de la pila (base → cima)</th><th>Interpretación</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td>push Lenguaje</td><td>[Lenguaje]</td><td>Primera sesión registrada.</td></tr>
+        <tr><td>2</td><td>push Integración sensorial</td><td>[Lenguaje, Integración]</td><td>La nueva cima es Integración.</td></tr>
+        <tr><td>3</td><td>push Seguimiento TDAH</td><td>[Lenguaje, Integración, Seguimiento TDAH]</td><td>La sesión más reciente queda arriba.</td></tr>
+        <tr><td>4</td><td>pop</td><td>[Lenguaje, Integración]</td><td>Se retira el último registro cargado.</td></tr>
+        <tr><td>5</td><td>peek</td><td>[Lenguaje, Integración]</td><td>Se consulta Integración sin borrar.</td></tr>
+    </tbody>
+</table>
+        </section>
+
+        <section id="python" class="card">
+            <h2>Python como herramienta analítica (Google Colab)</h2>
+            <p class="section-intro">Ejecuta cada bloque en Colab o Replit, documenta el comportamiento observado y conecta la salida con una decisión de negocio.</p>
+            <blockquote>Empieza por predecir el estado de la pila antes de ejecutar cada bloque. El objetivo no es solo obtener una salida, sino justificar por qué cambia la cima después de cada operación.</blockquote>
+            
+            <div class="code-window">
+                <div class="code-topbar">
+                    <span><strong>Bloque 1:</strong> Pila básica con list de Python</span>
+                    <span>colab_stack_list.py</span>
+                    <span class="code-dots"><span></span><span></span><span></span></span>
+                </div>
+                <pre><code># Historial de sesiones de un paciente NeuroBiz usando list como stack
+                    sesiones_iniciales = [
+                        {&quot;fecha&quot;: &quot;2026-02-03&quot;, &quot;tipo&quot;: &quot;Lenguaje&quot;, &quot;indice_progreso&quot;: 6.8},
+                        {&quot;fecha&quot;: &quot;2026-02-10&quot;, &quot;tipo&quot;: &quot;Integración sensorial&quot;, &quot;indice_progreso&quot;: 7.1},
+                        {&quot;fecha&quot;: &quot;2026-02-17&quot;, &quot;tipo&quot;: &quot;Seguimiento TDAH&quot;, &quot;indice_progreso&quot;: 7.4},
+                    ]
+
+                    historial = []
+
+                    def push_sesion(stack, sesion):
+                        stack.append(sesion)
+                        print(f&quot;Registrada: {sesion[&#x27;tipo&#x27;]} -&gt; tamaño actual {len(stack)}&quot;)
+
+                    def pop_sesion(stack):
+                        if not stack:
+                            print(&quot;Underflow: no hay sesiones para retirar&quot;)
+                            return None
+                        sesion = stack.pop()
+                        print(f&quot;Retirada: {sesion[&#x27;tipo&#x27;]} -&gt; tamaño actual {len(stack)}&quot;)
+                        return sesion
+
+                    def peek_sesion(stack):
+                        if not stack:
+                            print(&quot;La pila está vacía&quot;)
+                            return None
+                        return stack[-1]
+
+                    for sesion in sesiones_iniciales:
+                        push_sesion(historial, sesion)
+
+                    print(&quot;
+Última sesión visible para el terapeuta:&quot;)
+                    print(peek_sesion(historial))
+
+                    print(&quot;
+Se detecta una carga duplicada y se deshace:&quot;)
+                    pop_sesion(historial)
+
+                    print(&quot;
+Nueva cima después del ajuste:&quot;)
+                    print(peek_sesion(historial))</code></pre>
+            </div>
+            <div class="info-box">
+                <strong>Uso pedagógico:</strong> Sirve para que el estudiante relacione rápidamente la teoría con operaciones reales usando una lista como pila LIFO en Colab.
+            </div>
+            
+
+            <div class="code-window">
+                <div class="code-topbar">
+                    <span><strong>Bloque 2:</strong> Clase Stack con capacidad máxima y validaciones</span>
+                    <span>colab_stack_class.py</span>
+                    <span class="code-dots"><span></span><span></span><span></span></span>
+                </div>
+                <pre><code><span class="kw">class</span> <span class="num">Stack</span><span class="op">:</span>
+    <span class="kw">def</span> <span class="num">__init__</span><span class="op">(</span><span class="var">self</span><span class="op">,</span> <span class="var">max_size</span><span class="op">=</span><span class="num">5</span><span class="op">)</span><span class="op">:</span>
+        <span class="var">self</span><span class="op">.</span><span class="var">_items</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span>
+        <span class="var">self</span><span class="op">.</span><span class="var">max_size</span> <span class="op">=</span> <span class="var">max_size</span>
+
+    <span class="kw">def</span> <span class="num">is_empty</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
+        <span class="kw">return</span> <span class="var">len</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">)</span> <span class="op">==</span> <span class="num">0</span>
+
+    <span class="kw">def</span> <span class="num">is_full</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
+        <span class="kw">return</span> <span class="var">len</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="var">self</span><span class="op">.</span><span class="var">max_size</span>
+
+    <span class="kw">def</span> <span class="num">push</span><span class="op">(</span><span class="var">self</span><span class="op">,</span> <span class="var">item</span><span class="op">)</span><span class="op">:</span>
+        <span class="kw">if</span> <span class="var">self</span><span class="op">.</span><span class="var">is_full</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>
+            <span class="kw">raise</span> <span class="var">OverflowError</span><span class="op">(</span><span class="str">&quot;Overflow: se alcanzó la capacidad visible del historial&quot;</span><span class="op">)</span>
+        <span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">.</span><span class="var">append</span><span class="op">(</span><span class="var">item</span><span class="op">)</span>
+
+    <span class="kw">def</span> <span class="num">pop</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
+        <span class="kw">if</span> <span class="var">self</span><span class="op">.</span><span class="var">is_empty</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>
+            <span class="kw">raise</span> <span class="var">IndexError</span><span class="op">(</span><span class="str">&quot;Underflow: no existen sesiones para retirar&quot;</span><span class="op">)</span>
+        <span class="kw">return</span> <span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">.</span><span class="var">pop</span><span class="op">(</span><span class="op">)</span>
+
+    <span class="kw">def</span> <span class="num">peek</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
+        <span class="kw">if</span> <span class="var">self</span><span class="op">.</span><span class="var">is_empty</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>
+            <span class="kw">return</span> <span class="kw">None</span>
+        <span class="kw">return</span> <span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">[</span><span class="op">-</span><span class="num">1</span><span class="op">]</span>
+
+    <span class="kw">def</span> <span class="num">snapshot</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
+        <span class="kw">return</span> <span class="var">list</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">)</span>
+
+    <span class="kw">def</span> <span class="num">__len__</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
+        <span class="kw">return</span> <span class="var">len</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">)</span>
+
+<span class="var">historial</span> <span class="op">=</span> <span class="var">Stack</span><span class="op">(</span><span class="var">max_size</span><span class="op">=</span><span class="num">3</span><span class="op">)</span>
+
+<span class="kw">for</span> <span class="var">sesion</span> <span class="kw">in</span> <span class="op">[</span>
+    <span class="op">{</span><span class="str">&quot;fecha&quot;</span><span class="op">:</span> <span class="str">&quot;2026-02-03&quot;</span><span class="op">,</span> <span class="str">&quot;tipo&quot;</span><span class="op">:</span> <span class="str">&quot;Lenguaje&quot;</span><span class="op">}</span><span class="op">,</span>
+    <span class="op">{</span><span class="str">&quot;fecha&quot;</span><span class="op">:</span> <span class="str">&quot;2026-02-10&quot;</span><span class="op">,</span> <span class="str">&quot;tipo&quot;</span><span class="op">:</span> <span class="str">&quot;TEA - patrones&quot;</span><span class="op">}</span><span class="op">,</span>
+    <span class="op">{</span><span class="str">&quot;fecha&quot;</span><span class="op">:</span> <span class="str">&quot;2026-02-17&quot;</span><span class="op">,</span> <span class="str">&quot;tipo&quot;</span><span class="op">:</span> <span class="str">&quot;TDAH - hiperfoco&quot;</span><span class="op">}</span><span class="op">,</span>
+<span class="op">]</span><span class="op">:</span>
+    <span class="var">historial</span><span class="op">.</span><span class="var">push</span><span class="op">(</span><span class="var">sesion</span><span class="op">)</span>
+
+<span class="var">print</span><span class="op">(</span><span class="str">&quot;Estado inicial:&quot;</span><span class="op">,</span> <span class="var">historial</span><span class="op">.</span><span class="var">snapshot</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="var">print</span><span class="op">(</span><span class="str">&quot;Cima actual:&quot;</span><span class="op">,</span> <span class="var">historial</span><span class="op">.</span><span class="var">peek</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+
+<span class="kw">try</span><span class="op">:</span>
+    <span class="var">historial</span><span class="op">.</span><span class="var">push</span><span class="op">(</span><span class="op">{</span><span class="str">&quot;fecha&quot;</span><span class="op">:</span> <span class="str">&quot;2026-02-24&quot;</span><span class="op">,</span> <span class="str">&quot;tipo&quot;</span><span class="op">:</span> <span class="str">&quot;Acompañamiento familiar&quot;</span><span class="op">}</span><span class="op">)</span>
+<span class="kw">except</span> <span class="var">OverflowError</span> <span class="kw">as</span> <span class="var">error</span><span class="op">:</span>
+    <span class="var">print</span><span class="op">(</span><span class="var">error</span><span class="op">)</span>
+
+<span class="var">print</span><span class="op">(</span><span class="str">&quot;Sesión retirada:&quot;</span><span class="op">,</span> <span class="var">historial</span><span class="op">.</span><span class="var">pop</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="var">print</span><span class="op">(</span><span class="str">&quot;Nueva cima:&quot;</span><span class="op">,</span> <span class="var">historial</span><span class="op">.</span><span class="var">peek</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre>
+            </div>
+            <div class="info-box">
+                <strong>Uso pedagógico:</strong> Hace visible la noción de overflow y underflow, mostrando que una restricción de negocio también se programa.
+            </div>
+            
+
+            <div class="code-window">
+                <div class="code-topbar">
+                    <span><strong>Bloque 3:</strong> Pila de acciones para función deshacer (undo)</span>
+                    <span>colab_stack_undo.py</span>
+                    <span class="code-dots"><span></span><span></span><span></span></span>
+                </div>
+                <pre><code><span class="kw">class</span> <span class="num">AgendaUndo</span><span class="op">:</span>
+    <span class="kw">def</span> <span class="num">__init__</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
+        <span class="var">self</span><span class="op">.</span><span class="var">historial_acciones</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span>
+        <span class="var">self</span><span class="op">.</span><span class="var">agenda</span> <span class="op">=</span> <span class="op">{</span>
+            <span class="str">&quot;paciente&quot;</span><span class="op">:</span> <span class="str">&quot;Camila&quot;</span><span class="op">,</span>
+            <span class="str">&quot;sesion_activa&quot;</span><span class="op">:</span> <span class="str">&quot;Lenguaje&quot;</span><span class="op">,</span>
+            <span class="str">&quot;terapeuta&quot;</span><span class="op">:</span> <span class="str">&quot;Laura Pérez&quot;</span><span class="op">,</span>
+        <span class="op">}</span>
+
+    <span class="kw">def</span> <span class="num">registrar_accion</span><span class="op">(</span><span class="var">self</span><span class="op">,</span> <span class="var">descripcion</span><span class="op">,</span> <span class="var">cambios</span><span class="op">)</span><span class="op">:</span>
+        <span class="var">self</span><span class="op">.</span><span class="var">historial_acciones</span><span class="op">.</span><span class="var">append</span><span class="op">(</span><span class="op">{</span>
+            <span class="str">&quot;descripcion&quot;</span><span class="op">:</span> <span class="var">descripcion</span><span class="op">,</span>
+            <span class="str">&quot;cambios&quot;</span><span class="op">:</span> <span class="var">cambios</span><span class="op">,</span>
+        <span class="op">}</span><span class="op">)</span>
+        <span class="var">self</span><span class="op">.</span><span class="var">agenda</span><span class="op">.</span><span class="var">update</span><span class="op">(</span><span class="var">cambios</span><span class="op">)</span>
+
+    <span class="kw">def</span> <span class="num">deshacer</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
+        <span class="kw">if</span> <span class="kw">not</span> <span class="var">self</span><span class="op">.</span><span class="var">historial_acciones</span><span class="op">:</span>
+            <span class="var">print</span><span class="op">(</span><span class="str">&quot;No hay acciones para deshacer&quot;</span><span class="op">)</span>
+            <span class="kw">return</span>
+        <span class="var">ultima</span> <span class="op">=</span> <span class="var">self</span><span class="op">.</span><span class="var">historial_acciones</span><span class="op">.</span><span class="var">pop</span><span class="op">(</span><span class="op">)</span>
+        <span class="var">print</span><span class="op">(</span>f&quot;Se deshace: <span class="op">{</span><span class="var">ultima</span><span class="op">[</span><span class="str">&#x27;descripcion&#x27;</span><span class="op">]</span><span class="op">}</span>&quot;<span class="op">)</span>
+        <span class="cm"># reconstrucción mínima del estado usando una copia base</span>
+        <span class="var">self</span><span class="op">.</span><span class="var">agenda</span> <span class="op">=</span> <span class="op">{</span>
+            <span class="str">&quot;paciente&quot;</span><span class="op">:</span> <span class="str">&quot;Camila&quot;</span><span class="op">,</span>
+            <span class="str">&quot;sesion_activa&quot;</span><span class="op">:</span> <span class="str">&quot;Lenguaje&quot;</span><span class="op">,</span>
+            <span class="str">&quot;terapeuta&quot;</span><span class="op">:</span> <span class="str">&quot;Laura Pérez&quot;</span><span class="op">,</span>
+        <span class="op">}</span>
+        <span class="kw">for</span> <span class="var">accion</span> <span class="kw">in</span> <span class="var">self</span><span class="op">.</span><span class="var">historial_acciones</span><span class="op">:</span>
+            <span class="var">self</span><span class="op">.</span><span class="var">agenda</span><span class="op">.</span><span class="var">update</span><span class="op">(</span><span class="var">accion</span><span class="op">[</span><span class="str">&quot;cambios&quot;</span><span class="op">]</span><span class="op">)</span>
+
+    <span class="kw">def</span> <span class="num">estado</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
+        <span class="kw">return</span> <span class="op">{</span>
+            <span class="str">&quot;agenda&quot;</span><span class="op">:</span> <span class="var">dict</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">agenda</span><span class="op">)</span><span class="op">,</span>
+            <span class="str">&quot;acciones_pendientes&quot;</span><span class="op">:</span> <span class="var">len</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">historial_acciones</span><span class="op">)</span><span class="op">,</span>
+        <span class="op">}</span>
+
+<span class="var">sistema</span> <span class="op">=</span> <span class="var">AgendaUndo</span><span class="op">(</span><span class="op">)</span>
+<span class="var">sistema</span><span class="op">.</span><span class="var">registrar_accion</span><span class="op">(</span><span class="str">&quot;Cambio de terapeuta&quot;</span><span class="op">,</span> <span class="op">{</span><span class="str">&quot;terapeuta&quot;</span><span class="op">:</span> <span class="str">&quot;Carlos Rojas&quot;</span><span class="op">}</span><span class="op">)</span>
+<span class="var">sistema</span><span class="op">.</span><span class="var">registrar_accion</span><span class="op">(</span><span class="str">&quot;Cambio de sesión&quot;</span><span class="op">,</span> <span class="op">{</span><span class="str">&quot;sesion_activa&quot;</span><span class="op">:</span> <span class="str">&quot;Seguimiento TDAH&quot;</span><span class="op">}</span><span class="op">)</span>
+
+<span class="var">print</span><span class="op">(</span><span class="str">&quot;Antes de deshacer:&quot;</span><span class="op">)</span>
+<span class="var">print</span><span class="op">(</span><span class="var">sistema</span><span class="op">.</span><span class="var">estado</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+
+<span class="var">sistema</span><span class="op">.</span><span class="var">deshacer</span><span class="op">(</span><span class="op">)</span>
+<span class="var">print</span><span class="op">(</span><span class="str">&quot;Después de deshacer una acción:&quot;</span><span class="op">)</span>
+<span class="var">print</span><span class="op">(</span><span class="var">sistema</span><span class="op">.</span><span class="var">estado</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre>
+            </div>
+            <div class="info-box">
+                <strong>Uso pedagógico:</strong> Conecta la pila con una aplicación cercana al negocio: revertir la última modificación en la agenda o en el historial clínico.
+            </div>
+            
+        </section>
+
+        <section id="actividad" class="card">
+            <h2>Actividad presencial HAD + HP (4 horas)</h2>
+            <p class="section-intro">Actividad central de la semana con verbo Bloom explícito, evidencias y puntos ClassDojo.</p>
+            <div class="activity-shell">
+    <div class="subcard">
+        <h3>Sistema de Historial Terapéutico</h3>
+        <p><strong>Verbo Bloom explícito:</strong> <strong>Aplicar</strong> una pila para registrar, consultar y corregir el historial reciente de un paciente NeuroBiz.</p>
+        <p><strong>Reto:</strong> cada equipo recibe un conjunto de sesiones de un paciente y debe construir una solución que permita al terapeuta acceder a la sesión más reciente, deshacer una carga equivocada y explicar cómo se protege el sistema frente a underflow y overflow.</p>
+        <div class="mini-grid">
+            <div class="subcard">
+                <span class="phase-label had">HAD · 120 min</span>
+                <ul>
+                    <li>Activación guiada: identificar en tarjetas físicas qué significa LIFO dentro del historial de sesiones.</li>
+                    <li>Modelado docente: representar la pila en tablero y anticipar el efecto de <em>push</em>, <em>pop</em> y <em>peek</em>.</li>
+                    <li>Demostración en Colab: implementar primero con <code>list</code> y luego con una clase personalizada.</li>
+                    <li>Mini-chequeo oral: cada equipo responde qué ocurriría si el terapeuta consulta una pila vacía.</li>
+                </ul>
+            </div>
+            <div class="subcard">
+                <span class="phase-label hp">HP · 120 min</span>
+                <ul>
+                    <li>Construcción del prototipo por equipos con dataset pequeño de NeuroBiz.</li>
+                    <li>Prueba de escritorio y validación con cinco operaciones secuenciales mínimas.</li>
+                    <li>Socialización breve: justificar por qué la pila responde mejor que una cola al problema planteado.</li>
+                    <li>Registro final en ClassDojo y captura del código / traza como evidencia digital.</li>
+                </ul>
+            </div>
+        </div>
+        <h3>Entregables mínimos</h3>
+        <ul>
+            <li>Traza manual del estado de la pila después de al menos 6 operaciones.</li>
+            <li>Código funcional con inserción, extracción, consulta de cima y verificación de pila vacía.</li>
+            <li>Explicación corta: “Este caso usa pila porque…”.</li>
+            <li>Referencia explícita a un KPI o dato del caso NeuroBiz.</li>
+        </ul>
+        <h3>Criterios de éxito visibles</h3>
+        <table>
+            <thead>
+                <tr><th>Criterio</th><th>Qué se observa</th><th>Evidencia</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Comprensión conceptual</td><td>Diferencia base, cima y comportamiento LIFO</td><td>Explicación oral + traza</td></tr>
+                <tr><td>Aplicación en Python</td><td>Implementa push, pop, peek e isEmpty</td><td>Notebook o captura de ejecución</td></tr>
+                <tr><td>Lectura del negocio</td><td>Conecta la pila con el historial terapéutico</td><td>Justificación contextualizada</td></tr>
+                <tr><td>Evaluación de errores</td><td>Reconoce overflow y underflow</td><td>Caso de prueba o comentario analítico</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <aside class="dojo-panel">
+        <h3>Panel ClassDojo</h3>
+        <ul>
+            <li><strong>+2 puntos</strong> por representar correctamente la pila antes de programar.</li>
+            <li><strong>+2 puntos</strong> por explicar con vocabulario técnico qué significa LIFO.</li>
+            <li><strong>+3 puntos</strong> por código funcional sin confundir la cima con la base.</li>
+            <li><strong>+2 puntos</strong> por detectar y comunicar un caso de underflow u overflow.</li>
+            <li><strong>+1 punto</strong> por apoyo claro a un compañero durante depuración.</li>
+        </ul>
+        <p><strong>Total sugerido:</strong> 10 puntos.</p>
+        <p><strong>Integración sostenible:</strong> promueva entregas digitales y simulaciones en Colab para evitar reprocesos impresos y reforzar la alineación con ODS 7 y 13.</p>
+    </aside>
+</div>
+        </section>
+
+        <section id="hti" class="card">
+            <h2>HTI - Trabajo independiente</h2>
+            <p class="section-intro">Selecciona la ruta de trabajo indicada por tu docente. Ambas se conectan con el mismo resultado de aprendizaje, pero con distinta profundidad y carga.</p>
+            <div class="scenario-a">
+    <h3>HTI Escenario A · Profundización (60-90 min, entrega digital)</h3>
+    <p><strong>Producto:</strong> implementar una pila que gestione sesiones con función <em>undo</em> para el sistema de agenda de NeuroBiz.</p>
+    <ul>
+        <li>Crear una clase <code>Stack</code> o reutilizar la diseñada en clase.</li>
+        <li>Registrar al menos 5 acciones de agenda: cambio de terapeuta, reasignación de sesión, cancelación, corrección de KPI y nota clínica.</li>
+        <li>Programar una operación <code>deshacer()</code> que revierta la última acción realizada.</li>
+        <li>Entregar captura del código, salida de ejecución y una explicación de 8 a 10 líneas donde se indique por qué una pila es adecuada para “deshacer”.</li>
+    </ul>
+    <p><strong>Énfasis Bloom:</strong> aplicar y comenzar a transferir el concepto a un subproblema nuevo.</p>
+</div>
+<div class="scenario-b">
+    <h3>HTI Escenario B · Bajo umbral (20-30 min, cuaderno/papel)</h3>
+    <p><strong>Producto:</strong> dibujar en el cuaderno el estado de una pila después de 5 operaciones <em>push</em> y 2 <em>pop</em> usando datos de NeuroBiz.</p>
+    <ul>
+        <li>Nombrar cada elemento con una sesión o evento real del caso.</li>
+        <li>Marcar claramente base y cima en cada paso.</li>
+        <li>Escribir una frase final que indique cuál sesión quedaría disponible para consulta inmediata.</li>
+    </ul>
+    <p><strong>Importante:</strong> este escenario <strong>NO BLOQUEA la siguiente clase</strong> si no se realiza; funciona como refuerzo de bajo umbral para consolidar la representación mental de la pila.</p>
+</div>
+        </section>
+
+        <section id="quiz" class="card">
+            <h2>Quiz formativo tipo Quizizz</h2>
+            <p class="section-intro">Responde primero sin mirar la solución. Luego pasa el cursor sobre cada tarjeta para contrastar tu elección.</p>
+            <div class="quiz-shell">
+            <article class="quiz-card">
+                <h3>Pregunta 1</h3>
+                <p><strong>¿Qué describe mejor el comportamiento de una pila?</strong></p>
+                <ul><li>a) El primer elemento en entrar es el primero en salir.</li><li>b) El último elemento en entrar es el primero en salir.</li><li>c) Los elementos se extraen al azar.</li><li>d) Siempre se eliminan dos elementos a la vez.</li></ul>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) El último elemento en entrar es el primero en salir.</div>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 2</h3>
+                <p><strong>En Python, ¿qué operación de lista se usa habitualmente como push?</strong></p>
+                <ul><li>a) append()</li><li>b) clear()</li><li>c) sort()</li><li>d) remove()</li></ul>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> a) append()</div>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 3</h3>
+                <p><strong>¿Qué situación corresponde a underflow en NeuroBiz?</strong></p>
+                <ul><li>a) El historial supera la capacidad máxima definida.</li><li>b) Se consulta o extrae una sesión cuando no hay registros cargados.</li><li>c) Se agrega una sesión al final del día.</li><li>d) El KPI de retención aumenta.</li></ul>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) Se consulta o extrae una sesión cuando no hay registros cargados.</div>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 4</h3>
+                <p><strong>¿Cuál operación permite ver la sesión más reciente sin eliminarla?</strong></p>
+                <ul><li>a) pop</li><li>b) peek</li><li>c) push</li><li>d) enqueue</li></ul>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) peek</div>
+            </article>
+            
+
+            <article class="quiz-card">
+                <h3>Pregunta 5</h3>
+                <p><strong>¿Por qué una pila es adecuada para el historial terapéutico reciente?</strong></p>
+                <ul><li>a) Porque respeta FIFO y garantiza equidad.</li><li>b) Porque siempre ordena de menor a mayor.</li><li>c) Porque prioriza el acceso al registro más reciente.</li><li>d) Porque almacena solo números enteros.</li></ul>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> c) Porque prioriza el acceso al registro más reciente.</div>
+            </article>
+            </div>
+        </section>
+
+        <section id="bibliografia" class="card">
+            <h2>Bibliografía base en formato APA</h2>
+            <p class="section-intro">Fuentes base del módulo, usadas para fundamentar la conceptualización y la traducción al contexto organizacional.</p>
+            <ol>
+    <li>Cairó Battistutti, O. &amp; Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li>
+    <li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill. ISBN: 9786071508188.</li>
+    <li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li>
+    <li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li>
+    <li>Google Colaboratory. (2024). https://colab.research.google.com</li>
+    <li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial. ISBN: 9788499640884.</li>
+</ol>
+            <p class="foot-ref">Las referencias impresas se interpretan de forma aplicada; las referencias digitales se emplean para validar la implementación en Python y la ejecución en entornos de notebook.</p>
+        </section>
+    </main>
+
+    <footer class="footer">UIB · TGA05 · Semana 2 · Material autónomo para estudiante · Caso transversal NeuroBiz S.A.S.</footer>
+    <script>document.addEventListener('DOMContentLoaded', () => {
+  const bar = document.querySelector('.xp-fill');
+  if (bar) {
+    requestAnimationFrame(() => {
+      bar.style.width = bar.dataset.progress || '50%';
+    });
+  }
+});</script>
+
+<script id="progress-tracker-js">
+// ════════════════════════════════════════════════════
+//  NeuroBiz Progress Tracker · Semana 2
+// ════════════════════════════════════════════════════
+
+const PT = (function() {
+  const SEMANA       = 2;
+  const XP_BASE      = 10;          // XP base por abrir el material
+  const XP_MAX       = 100;
+  const LS_KEY       = `tga05_s2`;
+  const LS_GLOBAL    = "tga05_global";
+
+  // URL del Apps Script — reemplaza con tu URL al configurar
+  // Ver: EstructuraDatos/setup/CONFIGURAR_PROGRESO.html
+  const SHEETS_URL = localStorage.getItem("tga05_sheets_url") || "";
+
+  let state = {
+    nombre          : "",
+    id_estudiante   : "",
+    semana          : SEMANA,
+    xp              : XP_BASE,
+    quiz_respuestas : {},
+    quiz_puntaje    : 0,
+    hti_entregado   : false,
+    actividad_completada: false,
+    dispositivo     : navigator.userAgent.substring(0, 80)
+  };
+
+  // ── Cargar desde localStorage ──────────────────────
+  function load() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (raw) Object.assign(state, JSON.parse(raw));
+
+      // Cargar nombre/id del perfil global si no está en esta semana
+      const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
+      if (!state.nombre       && global.nombre)        state.nombre        = global.nombre;
+      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante;
+    } catch(e) { console.warn("PT load error:", e); }
+  }
+
+  // ── Guardar en localStorage ────────────────────────
+  function save() {
+    // Capturar nombre del input
+    const inp = document.getElementById("pt-nombre");
+    if (inp && inp.value.trim()) {
+      state.nombre = inp.value.trim();
+      // Generar ID si no existe
+      if (!state.id_estudiante) {
+        state.id_estudiante = state.nombre.toLowerCase()
+          .replace(/\s+/g,"_").replace(/[^a-z0-9_]/g,"")
+          .substring(0,20) + "_" + Math.random().toString(36).substr(2,4);
+      }
+      // Guardar perfil global
+      const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
+      global.nombre = state.nombre;
+      global.id_estudiante = state.id_estudiante;
+      localStorage.setItem(LS_GLOBAL, JSON.stringify(global));
+    }
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+    render();
+  }
+
+  // ── Renderizar widget ──────────────────────────────
+  function render() {
+    const xpBar   = document.getElementById("pt-xp-bar");
+    const xpCount = document.getElementById("pt-xp-count");
+    const semLbl  = document.getElementById("pt-semana-label");
+    const inp     = document.getElementById("pt-nombre");
+
+    if (xpBar)   xpBar.style.width   = Math.min(state.xp, XP_MAX) + "%";
+    if (xpCount) xpCount.textContent = state.xp + " XP";
+    if (semLbl)  semLbl.textContent  = "Semana " + SEMANA;
+    if (inp && !inp.value && state.nombre) inp.value = state.nombre;
+
+    // Sync original XP bars in the page
+    document.querySelectorAll(".xp-fill,[data-target]").forEach(el => {
+      el.style.width = Math.min(state.xp, XP_MAX) + "%";
+    });
+    const xpCounters = document.querySelectorAll("#xpCount,.xp-row strong");
+    xpCounters.forEach(el => { el.textContent = state.xp + " XP"; });
+  }
+
+  // ── Sumar XP ──────────────────────────────────────
+  function addXP(pts, motivo) {
+    state.xp = Math.min(state.xp + pts, XP_MAX);
+    msg("✨ +" + pts + " XP — " + motivo, "lime");
+    save();
+  }
+
+  // ── Sincronizar con Supabase + Google Sheets ──────
+  async function syncCloud() {
+    save();
+    const sheetsUrl = localStorage.getItem("tga05_sheets_url") || "";
+    const sbUrl     = localStorage.getItem("tga05_supabase_url") || "";
+    const sbKey     = localStorage.getItem("tga05_supabase_key") || "";
+
+    if (!sheetsUrl && !sbUrl) {
+      msg("⚠️ Sin destino configurado. Ver CONFIGURAR_SUPABASE.html", "orange");
+      return;
+    }
+
+    msg("⏳ Sincronizando…", "#fff9c4");
+    let synced = false;
+
+    // ── Supabase (recomendado) ─────────────────────
+    if (sbUrl && sbKey) {
+      try {
+        const res = await fetch(sbUrl + "/rest/v1/student_progress", {
+          method : "POST",
+          headers: {
+            "apikey"       : sbKey,
+            "Authorization": "Bearer " + sbKey,
+            "Content-Type" : "application/json",
+            "Prefer"       : "resolution=merge-duplicates"
+          },
+          body: JSON.stringify({
+            student_name    : state.nombre         || "Anónimo",
+            student_id      : state.id_estudiante  || "desconocido",
+            semana          : state.semana,
+            xp              : state.xp             || 0,
+            quiz_answers    : state.quiz_respuestas || {},
+            quiz_score      : state.quiz_puntaje    || 0,
+            hti_done        : !!state.hti_entregado,
+            activity_done   : !!state.actividad_completada,
+            updated_at      : new Date().toISOString()
+          })
+        });
+        if (res.ok || res.status === 201) {
+          synced = true;
+          msg("✅ Guardado en Supabase ☁️", "lightgreen");
+        } else {
+          msg("❌ Supabase: error " + res.status, "salmon");
+        }
+      } catch(e) {
+        msg("❌ Sin conexión (Supabase). Local guardado.", "salmon");
+      }
+    }
+
+    // ── Google Sheets (opcional adicional) ─────────
+    if (sheetsUrl) {
+      try {
+        const resp = await fetch(sheetsUrl, {
+          method : "POST",
+          headers: { "Content-Type": "text/plain" },
+          body   : JSON.stringify(state)
+        });
+        const json = await resp.json();
+        if (json.ok) {
+          synced = true;
+          msg(sbUrl ? "✅ Guardado en Supabase + Sheets" : "✅ Guardado en Google Sheets", "lightgreen");
+        } else {
+          if (!synced) msg("❌ Sheets: " + (json.error || "Error"), "salmon");
+        }
+      } catch(e) {
+        if (!synced) msg("❌ Sin conexión. Solo guardado local.", "salmon");
+      }
+    }
+  }
+
+  // ── Exportar código de progreso ────────────────────
+  function exportCode() {
+    save();
+    const code = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+    const ta = document.createElement("textarea");
+    ta.value = code;
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy");
+    document.body.removeChild(ta);
+    msg("📋 ¡Código copiado! Guárdalo en Google Drive o OneDrive.", "#fff9c4");
+    // También abrir como descarga
+    const a = document.createElement("a");
+    a.href     = "data:text/plain;charset=utf-8," + encodeURIComponent(code);
+    a.download = "progreso_tga05_s2_" + (state.id_estudiante || "estudiante") + ".txt";
+    a.click();
+  }
+
+  // ── Importar desde código ──────────────────────────
+  function importCode() {
+    const code = prompt("Pega tu código de progreso:");
+    if (!code) return;
+    try {
+      const decoded = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+      Object.assign(state, decoded);
+      save();
+      msg("✅ Progreso restaurado correctamente.", "lightgreen");
+    } catch(e) {
+      msg("❌ Código inválido.", "salmon");
+    }
+  }
+
+  // ── Toggle widget ──────────────────────────────────
+  function toggle() {
+    const w = document.getElementById("pt-widget");
+    const t = document.getElementById("pt-toggle");
+    if (w) w.classList.toggle("collapsed");
+    if (t) t.textContent = w && w.classList.contains("collapsed") ? "▼" : "▲";
+  }
+
+  // ── Mensaje en widget ──────────────────────────────
+  function msg(text, color) {
+    const el = document.getElementById("pt-msg");
+    if (!el) return;
+    el.textContent = text;
+    el.style.color = color || "#fff";
+    setTimeout(() => { if (el.textContent === text) el.textContent = ""; }, 4000);
+  }
+
+  // ── Init ───────────────────────────────────────────
+  function init() {
+    load();
+    render();
+
+    // XP por visitar la semana (solo una vez por semana)
+    const visitKey = `tga05_visited_s2`;
+    if (!localStorage.getItem(visitKey)) {
+      localStorage.setItem(visitKey, "1");
+      addXP(15, "Material de Semana 2 abierto");
+    }
+
+    // Hacer quiz interactivo si hay preguntas con clase .quiz-q
+    document.querySelectorAll(".quiz-q").forEach((qEl, qi) => {
+      const answers = qEl.querySelectorAll("li");
+      // Buscar la respuesta oculta (.quiz-answer)
+      const answerEl = qEl.querySelector(".quiz-answer");
+      const correctText = answerEl ? answerEl.textContent : "";
+      const correctLetter = correctText.match(/^✅\s*([a-d])/i);
+      const correctIdx = correctLetter
+        ? ["a","b","c","d"].indexOf(correctLetter[1].toLowerCase())
+        : -1;
+
+      answers.forEach((li, ai) => {
+        li.style.cursor = "pointer";
+        li.style.borderRadius = "6px";
+        li.style.padding = "3px 8px";
+        li.style.transition = "background .2s";
+        li.addEventListener("mouseenter", () => {
+          if (!li.dataset.answered) li.style.background = "rgba(25,118,210,.15)";
+        });
+        li.addEventListener("mouseleave", () => {
+          if (!li.dataset.answered) li.style.background = "";
+        });
+        li.addEventListener("click", () => {
+          const key = "q" + qi;
+          if (state.quiz_respuestas[key] !== undefined) return; // ya respondida
+          answers.forEach(a => { a.dataset.answered = "1"; });
+          if (ai === correctIdx) {
+            li.style.background = "#2e7d32";
+            li.style.color = "#fff";
+            addXP(10, "Respuesta correcta en quiz");
+            state.quiz_puntaje = (state.quiz_puntaje || 0) + 1;
+          } else {
+            li.style.background = "#c62828";
+            li.style.color = "#fff";
+            if (correctIdx >= 0) {
+              answers[correctIdx].style.background = "#2e7d32";
+              answers[correctIdx].style.color = "#fff";
+            }
+          }
+          state.quiz_respuestas[key] = ai;
+          if (answerEl) answerEl.style.display = "block";
+          save();
+        });
+      });
+
+      // Restaurar estado previo
+      const prevKey = "q" + qi;
+      if (state.quiz_respuestas[prevKey] !== undefined) {
+        const prev = state.quiz_respuestas[prevKey];
+        answers.forEach(a => { a.dataset.answered = "1"; });
+        if (prev === correctIdx && correctIdx >= 0) {
+          answers[prev].style.background = "#2e7d32";
+          answers[prev].style.color = "#fff";
+        } else {
+          if (prev < answers.length) {
+            answers[prev].style.background = "#c62828";
+            answers[prev].style.color = "#fff";
+          }
+          if (correctIdx >= 0) {
+            answers[correctIdx].style.background = "#2e7d32";
+            answers[correctIdx].style.color = "#fff";
+          }
+        }
+        if (answerEl) answerEl.style.display = "block";
+      }
+    });
+
+    // XP por configurar nombre
+    const nombreInp = document.getElementById("pt-nombre");
+    if (nombreInp) {
+      nombreInp.addEventListener("blur", () => {
+        if (nombreInp.value.trim() && !state._nombre_xp) {
+          state._nombre_xp = true;
+          addXP(5, "Perfil configurado");
+        }
+      });
+    }
+  }
+
+  return {
+    init,
+    addXP,
+    save  : save,
+    sync  : syncCloud,
+    export: exportCode,
+    import: importCode,
+    toggle,
+    state : () => state
+  };
+})();
+
+// ── Exponer funciones para botones HTML ────────────────────
+function ptSaveLocal()  { PT.save(); }
+function ptSyncCloud()  { PT.sync(); }
+function ptExportCode() { PT.export(); }
+function ptImportCode() { PT.import(); }
+function ptToggle()     { PT.toggle(); }
+
+// ── Inicializar cuando cargue el DOM ───────────────────────
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", PT.init);
+} else {
+  PT.init();
+}
+</script>
+
+<!-- ── WELCOME MODAL ── -->
+<style id="welcome-modal-css">
+#pt-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeIn .3s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+#pt-modal-box{
+  background:linear-gradient(160deg,#1E2843,#1E2843 70%,#2d3a5e);
+  color:#fff;border-radius:20px;padding:2rem 2rem 1.5rem;
+  width:min(94vw,400px);box-shadow:0 20px 60px rgba(0,0,0,.5);
+  position:relative;animation:slideUp .35s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+#pt-modal-box h2{font-size:1.25rem;font-weight:900;margin-bottom:.3rem}
+#pt-modal-box .sub{opacity:.75;font-size:.85rem;margin-bottom:1.3rem}
+#pt-modal-box .field{margin-bottom:.9rem}
+#pt-modal-box label{display:block;font-size:.78rem;font-weight:700;
+  opacity:.85;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em}
+#pt-modal-box input{
+  width:100%;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.35);
+  border-radius:10px;padding:.6rem .9rem;color:#fff;font-size:.95rem;outline:none;
+}
+#pt-modal-box input::placeholder{color:rgba(255,255,255,.45)}
+#pt-modal-box input:focus{border-color:rgba(249,168,37,.9)}
+#pt-modal-btn{
+  width:100%;padding:.7rem;border:none;border-radius:12px;
+  background:linear-gradient(135deg,#FFDF2D,#FFDF2D);
+  color:#1E2843;font-weight:900;font-size:1rem;cursor:pointer;
+  margin-top:.4rem;transition:opacity .15s;
+}
+#pt-modal-btn:hover{opacity:.9}
+#pt-modal-error{color:#ff8a80;font-size:.8rem;margin-top:.5rem;min-height:1em}
+#pt-modal-xp{
+  text-align:center;font-size:.78rem;opacity:.7;margin-top:.7rem;
+}
+</style>
+
+<div id="pt-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="pt-modal-title">
+  <div id="pt-modal-box">
+    <h2 id="pt-modal-title">👋 ¡Bienvenido a TGA05!</h2>
+    <p class="sub">NeuroBiz S.A.S. · Estructura de Datos para los Negocios</p>
+    <div class="field">
+      <label for="pt-modal-nombre">Tu nombre completo *</label>
+      <input id="pt-modal-nombre" type="text" placeholder="Ej: María García López"
+        autocomplete="name" autofocus
+        onkeydown="if(event.key==='Enter')ptModalSetup()" />
+    </div>
+    <div class="field">
+      <label for="pt-modal-grupo">Grupo / Paralelo</label>
+      <input id="pt-modal-grupo" type="text" placeholder="Ej: GA-01" />
+    </div>
+    <button id="pt-modal-btn" onclick="ptModalSetup()">¡Empezar! 🚀</button>
+    <div id="pt-modal-error"></div>
+    <p id="pt-modal-xp">⭐ Recibirás +5 XP por configurar tu perfil</p>
+  </div>
+</div>
+
+<script id="welcome-modal-js">
+(function () {
+  function shouldShowModal() {
+    try {
+      var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
+      return !g.nombre || g.nombre.trim().length < 2;
+    } catch(e) { return true; }
+  }
+
+  function showModal() {
+    var overlay = document.getElementById("pt-overlay");
+    if (overlay) {
+      overlay.style.display = "flex";
+      var inp = document.getElementById("pt-modal-nombre");
+      // Pre-fill if there's a partial name saved
+      try {
+        var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
+        if (g.nombre && inp) inp.value = g.nombre;
+        var gInp = document.getElementById("pt-modal-grupo");
+        if (g.grupo && gInp) gInp.value = g.grupo;
+      } catch(e) {}
+      if (inp) setTimeout(function(){ inp.focus(); }, 100);
+    }
+  }
+
+  window.ptModalSetup = function() {
+    var nombreInp = document.getElementById("pt-modal-nombre");
+    var grupoInp  = document.getElementById("pt-modal-grupo");
+    var errEl     = document.getElementById("pt-modal-error");
+    var nombre    = nombreInp ? nombreInp.value.trim() : "";
+    var grupo     = grupoInp  ? grupoInp.value.trim()  : "";
+
+    if (!nombre || nombre.length < 3) {
+      if (errEl) errEl.textContent = "Por favor escribe tu nombre completo (mínimo 3 caracteres).";
+      if (nombreInp) nombreInp.focus();
+      return;
+    }
+
+    // Build / update global profile
+    var profile = {};
+    try { profile = JSON.parse(localStorage.getItem("tga05_global") || "{}"); } catch(e) {}
+
+    profile.nombre = nombre;
+    if (grupo) profile.grupo = grupo;
+    if (!profile.id_estudiante) {
+      profile.id_estudiante = nombre.toLowerCase()
+        .replace(/\s+/g, "_").replace(/[^a-z0-9_áéíóúñ]/g, "")
+        .substring(0, 22) + "_" + Math.random().toString(36).substr(2, 4);
+    }
+    localStorage.setItem("tga05_global", JSON.stringify(profile));
+
+    // Sync into the PT widget name input
+    var ptInp = document.getElementById("pt-nombre");
+    if (ptInp) { ptInp.value = nombre; ptInp.dispatchEvent(new Event("input")); }
+
+    // XP reward
+    if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
+      PT.addXP(5, "Perfil configurado ✨");
+    }
+
+    // Close modal
+    var overlay = document.getElementById("pt-overlay");
+    if (overlay) {
+      overlay.style.opacity = "0";
+      overlay.style.transition = "opacity .2s";
+      setTimeout(function(){ overlay.style.display = "none"; overlay.style.opacity = ""; }, 200);
+    }
+
+    // Auto-sync to Supabase after a short delay
+    setTimeout(function(){
+      if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
+    }, 800);
+  };
+
+  // Show on load if no name
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function(){
+      if (shouldShowModal()) showModal();
+    });
+  } else {
+    if (shouldShowModal()) showModal();
+  }
+})();
+</script>
+
+</body>
+</html>
