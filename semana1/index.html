@@ -965,36 +965,98 @@
           primer reporte de eficiencia operativa usando Python.
         </p>
 
-        <h3>Instrucciones (grupos de 3 personas):</h3>
-        <ol>
-          <li>
-            <strong>Diagnóstico (20 min):</strong> Se proyecta el siguiente fragmento. 
-            Identifica qué tipo de dato tiene cada variable y qué errores de tipado hay.
-            <div class="code-wrap" style="margin-top:.8rem">
-              <div class="code-title"><span>📄 datos_sucios_neurobiz.py — ARCHIVO A CORREGIR</span></div>
-              <pre><span class="var">sesiones_asistidas</span> <span class="kw">=</span> <span class="str">"847"</span>     <span class="cm"># ← ¿Problema?</span>
-<span class="var">tasa_retencion</span>     <span class="kw">=</span> <span class="str">"78%"</span>     <span class="cm"># ← ¿Problema?</span>
-<span class="var">sede</span>               <span class="kw">=</span> <span class="num">1</span>         <span class="cm"># ← ¿Problema?</span>
-<span class="var">contrato_activo</span>    <span class="kw">=</span> <span class="str">"True"</span>    <span class="cm"># ← ¿Problema?</span>
-<span class="var">nivel_hiperfoco</span>    <span class="kw">=</span> <span class="str">"7.2"</span>     <span class="cm"># ← ¿Problema?</span></pre>
-            </div>
-          </li>
-          <li>
-            <strong>Corrección (30 min):</strong> En Google Colab, declara cada variable 
-            con el tipo correcto y agrega un comentario explicando por qué.
-          </li>
-          <li>
-            <strong>Reporte (30 min):</strong> Calcula y muestra en consola:
-            <ul>
-              <li>Eficiencia operativa (sesiones asistidas / total sesiones × 100)</li>
-              <li>Sesiones por semana (divide el total entre 4)</li>
-              <li>Un mensaje de alerta si la tasa de retención baja de 75%</li>
-            </ul>
-          </li>
-          <li>
-            <strong>Socialización (20 min):</strong> Cada grupo expone su solución al curso.
-          </li>
-        </ol>
+        <h3>🧩 Paso 1 — Diagnóstico Interactivo: Corrige el tipo de cada variable</h3>
+        <p style="margin-bottom:1rem;font-size:.9rem;color:var(--muted);">
+          Cada variable tiene un error de tipo. Selecciona el tipo correcto en el menú desplegable 
+          y escribe el valor corregido. Haz clic en <strong>Verificar</strong> para comprobar tus respuestas.
+        </p>
+
+        <div class="audit-table" style="margin-bottom:1.5rem;">
+          <div style="display:grid;grid-template-columns:180px 70px 1fr 40px;gap:8px;align-items:center;font-family:'Courier New',monospace;font-size:.88rem;">
+            <strong style="font-family:'Open Sans',sans-serif;font-size:.8rem;color:var(--muted);">VARIABLE</strong>
+            <strong style="font-family:'Open Sans',sans-serif;font-size:.8rem;color:var(--muted);">TIPO</strong>
+            <strong style="font-family:'Open Sans',sans-serif;font-size:.8rem;color:var(--muted);">VALOR CORREGIDO</strong>
+            <span></span>
+
+            <!-- Variable 1 -->
+            <span style="color:var(--primary);font-weight:700;">sesiones_asistidas</span>
+            <select class="audit-type" data-correct="int" id="audit-type-1">
+              <option value="">?</option>
+              <option value="int">int</option>
+              <option value="float">float</option>
+              <option value="str">str</option>
+              <option value="bool">bool</option>
+            </select>
+            <input type="text" class="audit-value" data-correct="847" id="audit-val-1" placeholder="Escribe el valor correcto..." style="font-family:'Courier New',monospace;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:.85rem;width:100%;max-width:200px;">
+            <span class="audit-fb" id="audit-fb-1"></span>
+
+            <!-- Variable 2 -->
+            <span style="color:var(--primary);font-weight:700;">tasa_retencion</span>
+            <select class="audit-type" data-correct="float" id="audit-type-2">
+              <option value="">?</option>
+              <option value="int">int</option>
+              <option value="float">float</option>
+              <option value="str">str</option>
+              <option value="bool">bool</option>
+            </select>
+            <input type="text" class="audit-value" data-correct="0.78" id="audit-val-2" placeholder="Escribe el valor correcto..." style="font-family:'Courier New',monospace;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:.85rem;width:100%;max-width:200px;">
+            <span class="audit-fb" id="audit-fb-2"></span>
+
+            <!-- Variable 3 -->
+            <span style="color:var(--primary);font-weight:700;">sede</span>
+            <select class="audit-type" data-correct="str" id="audit-type-3">
+              <option value="">?</option>
+              <option value="int">int</option>
+              <option value="float">float</option>
+              <option value="str">str</option>
+              <option value="bool">bool</option>
+            </select>
+            <input type="text" class="audit-value" data-correct="'Barranquilla'" id="audit-val-3" placeholder="Escribe el valor correcto..." style="font-family:'Courier New',monospace;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:.85rem;width:100%;max-width:200px;">
+            <span class="audit-fb" id="audit-fb-3"></span>
+
+            <!-- Variable 4 -->
+            <span style="color:var(--primary);font-weight:700;">contrato_activo</span>
+            <select class="audit-type" data-correct="bool" id="audit-type-4">
+              <option value="">?</option>
+              <option value="int">int</option>
+              <option value="float">float</option>
+              <option value="str">str</option>
+              <option value="bool">bool</option>
+            </select>
+            <input type="text" class="audit-value" data-correct="True" id="audit-val-4" placeholder="Escribe el valor correcto..." style="font-family:'Courier New',monospace;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:.85rem;width:100%;max-width:200px;">
+            <span class="audit-fb" id="audit-fb-4"></span>
+
+            <!-- Variable 5 -->
+            <span style="color:var(--primary);font-weight:700;">nivel_hiperfoco</span>
+            <select class="audit-type" data-correct="float" id="audit-type-5">
+              <option value="">?</option>
+              <option value="int">int</option>
+              <option value="float">float</option>
+              <option value="str">str</option>
+              <option value="bool">bool</option>
+            </select>
+            <input type="text" class="audit-value" data-correct="7.2" id="audit-val-5" placeholder="Escribe el valor correcto..." style="font-family:'Courier New',monospace;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:.85rem;width:100%;max-width:200px;">
+            <span class="audit-fb" id="audit-fb-5"></span>
+          </div>
+
+          <div style="display:flex;gap:10px;align-items:center;margin-top:1rem;flex-wrap:wrap;">
+            <button onclick="verificarAuditoria()" style="background:var(--primary);color:#fff;border:none;padding:8px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.9rem;">🔍 Verificar Todo</button>
+            <button onclick="reiniciarAuditoria()" style="background:transparent;color:var(--muted);border:1px solid var(--border);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:.82rem;">🔄 Reiniciar</button>
+            <span id="audit-score" style="font-size:.85rem;color:var(--muted);margin-left:auto;"></span>
+          </div>
+        </div>
+
+        <div id="audit-result" style="display:none;padding:12px 16px;border-radius:8px;margin-bottom:1rem;font-weight:600;font-size:.9rem;"></div>
+
+        <h3>📝 Paso 2 — Código Corregido</h3>
+        <p style="margin-bottom:.5rem;font-size:.9rem;color:var(--muted);">
+          Cuando completes el paso 1, el código corregido aparecerá aquí automáticamente. 
+          También puedes ejecutarlo en la sección <a href="#interactivo" style="color:var(--accent);">🧪 Interactivo</a>.
+        </p>
+        <div class="code-wrap" style="margin-top:.8rem">
+          <div class="code-title"><span>📄 datos_corregidos_neurobiz.py — GENERADO AUTOMÁTICAMENTE</span></div>
+          <pre id="audit-code-output" style="min-height:100px;color:var(--muted);font-size:.82rem;">Completa el Paso 1 y haz clic en Verificar para generar el código corregido...</pre>
+        </div>
 
         <div class="dojo-panel">
           <h3>🏆 Puntos ClassDojo — Actividad Presencial</h3>
@@ -2298,6 +2360,127 @@ function checkAllFibCompleted() {
   } else {
     initDragDrop();
   }
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════
+     AUDITORÍA DE DATOS INTERACTIVA
+═══════════════════════════════════════════════════ -->
+<script>
+(function() {
+
+  window.verificarAuditoria = function() {
+    var correct = 0;
+    var total = 5;
+    var codeLines = [];
+
+    for (var i = 1; i <= total; i++) {
+      var typeEl = document.getElementById('audit-type-' + i);
+      var valEl  = document.getElementById('audit-val-' + i);
+      var fbEl   = document.getElementById('audit-fb-' + i);
+
+      var selType = typeEl ? typeEl.value : '';
+      var selVal  = valEl  ? valEl.value.trim() : '';
+      var expType = typeEl ? typeEl.getAttribute('data-correct') : '';
+      var expVal  = valEl  ? valEl.getAttribute('data-correct') : '';
+
+      var typeOk = (selType === expType);
+      // Value check: accept variations (e.g., "Barranquilla" or "'Barranquilla'")
+      var valOk = false;
+      if (selVal === expVal) {
+        valOk = true;
+      } else if (expVal === "'Barranquilla'" && (selVal === "Barranquilla" || selVal === "'Barranquilla'" || selVal === '"Barranquilla"')) {
+        valOk = true;
+      }
+
+      if (typeOk && valOk) {
+        correct++;
+        if (fbEl) { fbEl.textContent = '✅'; fbEl.style.color = '#2e7d32'; }
+      } else {
+        var msg = '';
+        if (!typeOk && !valOk) msg = '❌ tipo y valor';
+        else if (!typeOk) msg = '❌ tipo';
+        else msg = '❌ valor';
+        if (fbEl) { fbEl.textContent = msg; fbEl.style.color = '#c62828'; }
+      }
+
+      // Build corrected code line
+      var varNames = ['sesiones_asistidas','tasa_retencion','sede','contrato_activo','nivel_hiperfoco'];
+      var varName = varNames[i-1];
+      var displayVal = expVal;
+      if (expType === 'str' && expVal === "'Barranquilla'") displayVal = '"Barranquilla"';
+      codeLines.push(varName + ' = ' + displayVal + '  # ' + expType);
+    }
+
+    // Show score
+    var scoreEl = document.getElementById('audit-score');
+    if (scoreEl) scoreEl.textContent = correct + ' / ' + total + ' correctas';
+
+    // Show result banner
+    var resultEl = document.getElementById('audit-result');
+    if (resultEl) {
+      resultEl.style.display = 'block';
+      if (correct === total) {
+        resultEl.style.background = '#e8f5e9';
+        resultEl.style.color = '#2e7d32';
+        resultEl.style.border = '1px solid #a5d6a7';
+        resultEl.textContent = '🎉 ¡Auditoría completada! Las 5 variables están correctamente tipadas. +10 XP';
+        try { if (typeof PT !== 'undefined' && PT.addXP) PT.addXP(10, 'Auditoría de Datos completada'); } catch(e){}
+        try { if (typeof safeAddXP === 'function') safeAddXP(10, 'Auditoría de Datos completada'); } catch(e){}
+      } else if (correct >= 3) {
+        resultEl.style.background = '#fff9c4';
+        resultEl.style.color = '#f57f17';
+        resultEl.style.border = '1px solid #ffe082';
+        resultEl.textContent = '⚠️ Vas bien (' + correct + '/5). Revisa las marcadas en rojo y vuelve a intentarlo.';
+      } else {
+        resultEl.style.background = '#ffebee';
+        resultEl.style.color = '#c62828';
+        resultEl.style.border = '1px solid #ef9a9a';
+        resultEl.textContent = '❌ Solo ' + correct + '/5 correctas. Repasa la tabla de tipos de datos en la sección 📚 Teoría.';
+      }
+    }
+
+    // Update code output
+    var codeOut = document.getElementById('audit-code-output');
+    if (codeOut && codeLines.length > 0) {
+      codeOut.textContent = codeLines.join('\n');
+      codeOut.style.color = '#212121';
+    }
+
+    // Mark actividad as completed in progress tracker
+    try {
+      if (correct === total && typeof PT !== 'undefined' && PT.state) {
+        PT.state.actividad_completada = true;
+        if (typeof localStorage !== 'undefined') {
+          var key = 'tga05_s1';
+          var st = JSON.parse(localStorage.getItem(key) || '{}');
+          st.actividad_completada = true;
+          localStorage.setItem(key, JSON.stringify(st));
+        }
+      }
+    } catch(e){}
+  };
+
+  window.reiniciarAuditoria = function() {
+    for (var i = 1; i <= 5; i++) {
+      var typeEl = document.getElementById('audit-type-' + i);
+      var valEl  = document.getElementById('audit-val-' + i);
+      var fbEl   = document.getElementById('audit-fb-' + i);
+      if (typeEl) typeEl.value = '';
+      if (valEl)  valEl.value = '';
+      if (fbEl)   fbEl.textContent = '';
+    }
+    var scoreEl = document.getElementById('audit-score');
+    if (scoreEl) scoreEl.textContent = '';
+    var resultEl = document.getElementById('audit-result');
+    if (resultEl) resultEl.style.display = 'none';
+    var codeOut = document.getElementById('audit-code-output');
+    if (codeOut) {
+      codeOut.textContent = 'Completa el Paso 1 y haz clic en Verificar para generar el código corregido...';
+      codeOut.style.color = 'var(--muted)';
+    }
+  };
+
 })();
 </script>
 
