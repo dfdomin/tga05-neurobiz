@@ -1926,7 +1926,7 @@ function safeAddXP(pts, motivo) {
     }
   }
 
-  async function loadPyodide() {
+  async function initPyodide() {
     if (pyodideReady || pyodideLoading) return;
     pyodideLoading = true;
     disableRunBtns(true);
@@ -1943,20 +1943,25 @@ function safeAddXP(pts, motivo) {
         document.head.appendChild(script);
       });
 
-      if (typeof loadPyodide !== 'function') {
+      // Use window.loadPyodide to avoid collision with local function name
+      if (typeof window.loadPyodide !== 'function') {
         throw new Error('loadPyodide no está definido después de cargar el script');
       }
 
-      pyodide = await loadPyodide({
+      pyodide = await window.loadPyodide({
         indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/'
       });
 
       pyodideReady = true;
+      pyodideLoading = false;
       disableRunBtns(false);
       setStatus('✅ Python listo. Escribe código y presiona ▶ Run.', 'ready');
     } catch(err) {
       console.error('Pyodide load error:', err);
+      pyodideLoading = false;
+      pyodideReady = false;
       setStatus('⚠️ No se pudo cargar Pyodide: ' + err.message);
+      disableRunBtns(false);
       if (fallbackEl) fallbackEl.style.display = 'block';
     }
   }
@@ -1965,7 +1970,7 @@ function safeAddXP(pts, motivo) {
     if (!pyodideReady) {
       if (!pyodideLoading) {
         setStatus('⏳ Cargando Python... espera unos segundos.');
-        loadPyodide();
+        initPyodide();
       } else {
         setStatus('⏳ Python aún se está cargando. Espera un momento...');
       }
@@ -1994,6 +1999,11 @@ function safeAddXP(pts, motivo) {
     if (bodyDiv) bodyDiv.classList.add('ran');
 
     try {
+      // Safety check: pyodide must be fully loaded
+      if (!pyodide || typeof pyodide.setStdout !== 'function') {
+        pyodideReady = false;
+        throw new Error('Pyodide no está inicializado. Recarga la página.');
+      }
       // Capture stdout
       var output = '';
       pyodide.setStdout({
@@ -2034,10 +2044,10 @@ function safeAddXP(pts, motivo) {
   // Init Pyodide on page load
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(loadPyodide, 500);
+      setTimeout(initPyodide, 500);
     });
   } else {
-    setTimeout(loadPyodide, 500);
+    setTimeout(initPyodide, 500);
   }
 })();
 
