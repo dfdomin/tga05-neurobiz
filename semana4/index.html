@@ -24,6 +24,7 @@
     --orange: #ef6c00;
     --orange-soft: #fff3e0;
     --blue-soft: #e3f2fd;
+    --red: #c62828;
     --shadow: 0 16px 40px rgba(26, 35, 126, 0.10);
     --radius: 20px;
 }
@@ -355,7 +356,7 @@ code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monosp
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
 }
-.quiz-card {
+.quiz-card, .quiz-q {
     background: var(--blue-soft);
     border: 1px solid #bbdefb;
     border-radius: 18px;
@@ -363,21 +364,22 @@ code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monosp
     position: relative;
     min-height: 230px;
 }
-.quiz-card h3 { margin-top: 0; color: #0d47a1; }
-.quiz-card ul { padding-left: 18px; }
+.quiz-card h3, .quiz-q h3 { margin-top: 0; color: #0d47a1; }
+.quiz-card ul, .quiz-q ol { padding-left: 18px; }
+.quiz-q ol li { cursor: pointer; border-radius: 6px; padding: 3px 8px; transition: background .2s; margin-bottom: 3px; list-style: none; }
+.quiz-q ol li:hover { background: rgba(25,118,210,.15); }
+.quiz-q ol li.correct-answer { background: #2e7d32 !important; color: #fff !important; }
+.quiz-q ol li.wrong-answer { background: #c62828 !important; color: #fff !important; }
 .quiz-answer {
     margin-top: 14px;
     padding: 12px;
     background: rgba(255,255,255,0.92);
     border-radius: 14px;
     border: 1px dashed #64b5f6;
-    opacity: 0.08;
-    filter: blur(5px);
-    transition: all 0.25s ease;
+    display: none;
 }
 .quiz-card:hover .quiz-answer {
-    opacity: 1;
-    filter: blur(0);
+    display: block;
 }
 .foot-ref {
     font-size: 0.92rem;
@@ -416,8 +418,148 @@ blockquote {
     border-radius: 0 12px 12px 0;
     color: var(--muted);
 }
+
+/* ═══════════════════════════════════════════
+   QUEUE VISUALIZER STYLES
+   ═══════════════════════════════════════════ */
+.queue-viz { background: #1a1a2e; border-radius: 16px; padding: 1.2rem; margin: 1rem 0; border: 1px solid #2a2a4a; }
+.queue-viz h4 { color: #FFDF2D; margin: 0 0 .8rem; font-size: 1rem; }
+.queue-display { display: flex; align-items: center; gap: 6px; margin: .8rem 0; min-height: 60px; flex-wrap: wrap; padding: .5rem; background: rgba(255,255,255,.03); border-radius: 8px; }
+.queue-item { background: linear-gradient(90deg, #2d3a5e, #1E2843); color: #fff; padding: 8px 14px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: .82rem; border-left: 3px solid #89b4fa; transition: all .3s; white-space: nowrap; }
+.queue-item.front { border-left-color: #FFDF2D; background: linear-gradient(90deg, #3d5a7e, #2d3a5e); font-weight: 700; }
+.queue-item.popping { animation: popOut .4s ease; }
+.queue-item.entering { animation: slideIn .4s ease; }
+.queue-arrow { color: #89b4fa; font-weight: 700; font-size: 1.2rem; margin: 0 2px; }
+.queue-label { display: flex; justify-content: space-between; margin-bottom: .3rem; font-size: .75rem; color: #b0bec5; }
+.queue-label span { color: #89b4fa; font-weight: 600; }
+.queue-stats { display: flex; gap: 1.5rem; margin: .8rem 0; font-size: .85rem; color: #cdd6f4; }
+.queue-stats strong { color: #FFDF2D; }
+.queue-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: .8rem; }
+.queue-btn { padding: .45rem 1rem; border: none; border-radius: 8px; font-weight: 700; font-size: .82rem; cursor: pointer; transition: all .2s; }
+.queue-btn.enqueue { background: #1565c0; color: #fff; }
+.queue-btn.enqueue:hover { background: #1976d2; }
+.queue-btn.dequeue { background: #c62828; color: #fff; }
+.queue-btn.dequeue:hover { background: #d32f2f; }
+.queue-btn.peek { background: #2d3a5e; color: #fff; }
+.queue-btn.peek:hover { background: #3d5a7e; }
+.queue-btn.verificar { background: #43a047; color: #fff; }
+.queue-btn.verificar:hover { background: #2e7d32; }
+.queue-btn.reset { background: var(--muted); color: #fff; }
+.queue-btn:disabled { opacity: .5; cursor: default; }
+.queue-msg { font-size: .82rem; color: #a6e3a1; margin-top: .5rem; min-height: 1.2em; }
+
+@keyframes popOut { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(0.5) translateX(-30px); opacity: 0; } }
+@keyframes slideIn { 0% { transform: translateX(30px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+
+/* ═══════════════════════════════════════════
+   MINI CODE CELL STYLES
+   ═══════════════════════════════════════════ */
+.mini-cell { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 10px; margin: .8rem 0; overflow: hidden; }
+.mini-cell-header { display: flex; align-items: center; padding: .4rem .8rem; background: #16162a; border-bottom: 1px solid #2a2a4a; justify-content: space-between; }
+.mini-cell-label { color: #6c7086; font-family: 'Courier New', monospace; font-size: .75rem; font-weight: 700; }
+.mini-cell textarea { width: 100%; min-height: 80px; background: transparent; border: none; color: #cdd6f4; font-family: 'Courier New', monospace; font-size: .82rem; line-height: 1.5; resize: vertical; outline: none; padding: .8rem 1rem; }
+.mini-run-btn { background: var(--primary); color: #fff; border: none; padding: .3rem .7rem; border-radius: 6px; font-weight: 700; font-size: .72rem; cursor: pointer; transition: background .2s; }
+.mini-run-btn:hover { background: var(--primary-2); }
+.mini-run-btn:disabled { opacity: .5; cursor: default; }
+.mini-output { display: none; background: #0d1117; border-top: 1px solid #2a2a4a; padding: .6rem 1rem; }
+.mini-output.visible { display: block; }
+.mini-output pre { color: #c9d1d9; font-family: 'Courier New', monospace; font-size: .78rem; line-height: 1.5; margin: 0; white-space: pre-wrap; word-break: break-all; }
+.mini-output .colab-error { color: #f85149; }
+
+/* ═══════════════════════════════════════════
+   COLAB CELL STYLES
+   ═══════════════════════════════════════════ */
+.colab-section { margin: 1rem 0; }
+.colab-status { padding: .6rem 1rem; border-radius: 8px; font-size: .85rem; font-weight: 600; margin-bottom: 1rem; background: #fff8e1; color: #5d4037; }
+.colab-status.ready { background: #e8f5e9; color: #1b5e20; }
+.colab-cell { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 10px; margin-bottom: 1rem; overflow: hidden; transition: box-shadow 0.3s; }
+.colab-cell:hover { box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+.colab-cell-header { display: flex; align-items: center; padding: .5rem .8rem; background: #16162a; border-bottom: 1px solid #2a2a4a; }
+.colab-cell-index { color: #6c7086; font-family: 'Courier New', monospace; font-size: .78rem; font-weight: 700; min-width: 60px; }
+.colab-run-btn { background: var(--primary); color: #fff; border: none; padding: .35rem .8rem; border-radius: 6px; font-weight: 700; font-size: .75rem; cursor: pointer; margin-left: auto; transition: background .2s; }
+.colab-run-btn:hover { background: var(--primary-2); }
+.colab-run-btn:disabled { opacity: .5; cursor: default; }
+.colab-cell-body { padding: .8rem 1rem .8rem 3.2rem; position: relative; }
+.colab-cell-body::before { content: 'In [ ]:'; position: absolute; left: .8rem; top: .85rem; color: #6c7086; font-family: 'Courier New', monospace; font-size: .78rem; }
+.colab-cell-body.ran::before { content: 'In [*]:'; color: #89b4fa; }
+.colab-cell textarea { width: 100%; min-height: 80px; background: transparent; border: none; color: #cdd6f4; font-family: 'Courier New', monospace; font-size: .85rem; line-height: 1.6; resize: vertical; outline: none; padding: 0; }
+.colab-output { display: none; background: #0d1117; border-top: 1px solid #2a2a4a; padding: .8rem 1rem; }
+.colab-output.visible { display: block; }
+.colab-output pre { color: #c9d1d9; font-family: 'Courier New', monospace; font-size: .82rem; line-height: 1.5; margin: 0; white-space: pre-wrap; word-break: break-all; }
+.colab-output .colab-error { color: #f85149; }
+
+/* ═══════════════════════════════════════════
+   FILL IN THE BLANK STYLES
+   ═══════════════════════════════════════════ */
+.fib-exercise { background: #f8f9fa; border: 2px solid #dde5f3; border-radius: 18px; padding: 1.4rem 1.6rem; margin: 1.2rem 0; transition: border-color .3s; }
+.fib-exercise.correct { border-color: var(--green); background: #e8f5e9; }
+.fib-exercise.wrong   { border-color: #c62828; background: #ffebee; }
+.fib-exercise h4 { color: var(--primary); margin-bottom: .8rem; font-size: 1rem; }
+.fib-code-block { background: #1E2843; border-radius: 8px; padding: 1rem 1.3rem; font-family: 'Courier New', monospace; font-size: .85rem; line-height: 2; color: #cdd6f4; margin: .8rem 0; overflow-x: auto; white-space: pre-wrap; }
+.fib-input { background: rgba(255,223,45,.12); border: 1.5px solid rgba(255,223,45,.5); border-radius: 4px; color: var(--accent); font-family: 'Courier New', monospace; font-size: .85rem; padding: .15rem .4rem; width: 130px; outline: none; transition: border-color .2s; }
+.fib-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,223,45,.15); }
+.fib-input.correct-input { border-color: var(--green); background: rgba(46,125,50,.12); color: var(--green); }
+.fib-input.wrong-input   { border-color: #c62828; background: rgba(198,40,40,.12); color: #c62828; }
+.fib-feedback { margin-top: .6rem; padding: .5rem .9rem; border-radius: 6px; font-size: .85rem; font-weight: 600; display: none; }
+.fib-feedback.show { display: block; }
+.fib-feedback.success { background: #e8f5e9; color: var(--green); }
+.fib-feedback.error   { background: #ffebee; color: #c62828; }
+.fib-submit-btn { margin-top: .6rem; background: var(--primary); color: #fff; border: none; padding: .45rem 1.2rem; border-radius: 6px; font-weight: 700; font-size: .82rem; cursor: pointer; transition: background .2s; }
+.fib-submit-btn:hover { background: var(--primary-2); }
+.fib-submit-btn:disabled { opacity: .5; cursor: default; }
+
+/* ═══════════════════════════════════════════
+   DRAG AND DROP STYLES
+   ═══════════════════════════════════════════ */
+.dnd-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 1rem 0; }
+.dnd-column { background: #f8f9fa; border: 2px dashed #b0bec5; border-radius: 16px; padding: 1rem; min-height: 180px; transition: background .2s; }
+.dnd-column h4 { margin: 0 0 .8rem; font-size: .95rem; color: var(--primary); text-align: center; }
+.dnd-column.drag-over { background: #e8f5e9; border-color: var(--green); }
+.dnd-source { background: #fff8e1; border: 2px solid #ffe082; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
+.dnd-source h4 { margin: 0 0 .6rem; font-size: .9rem; color: var(--primary); }
+.dnd-item { background: var(--primary); color: #fff; padding: .5rem .8rem; border-radius: 8px; margin: .3rem 0; cursor: grab; font-family: 'Courier New', monospace; font-size: .85rem; font-weight: 600; transition: all .2s; user-select: none; }
+.dnd-item:hover { background: var(--primary-2); box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+.dnd-item.dragging { opacity: .5; }
+.dnd-item.placed { opacity: .4; cursor: default; background: var(--muted); }
+.dnd-drop-zone { background: rgba(0,0,0,.03); border: 2px dashed #ccc; border-radius: 8px; padding: .4rem; margin: .3rem 0; min-height: 36px; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+.dnd-drop-zone.drag-over { border-color: var(--accent); background: rgba(255,223,45,.1); }
+.dnd-drop-zone.correct-drop { border-color: var(--green); background: #e8f5e9; }
+.dnd-drop-zone.wrong-drop { border-color: var(--red); background: #ffebee; }
+.dnd-drop-value { font-family: 'Courier New', monospace; font-size: .82rem; color: var(--text); }
+.dnd-score { margin-top: .8rem; font-weight: 700; font-size: .92rem; color: var(--primary); display: flex; align-items: center; gap: 1rem; }
+.dnd-reset-btn { background: var(--muted); color: #fff; border: none; padding: .4rem 1rem; border-radius: 6px; font-weight: 700; font-size: .8rem; cursor: pointer; }
+
+/* ═══════════════════════════════════════════
+   HTI INTERACTIVE STYLES
+   ═══════════════════════════════════════════ */
+.hti-code-editor { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 10px; margin: 1rem 0; overflow: hidden; }
+.hti-code-header { display: flex; align-items: center; padding: .5rem .8rem; background: #16162a; border-bottom: 1px solid #2a2a4a; justify-content: space-between; }
+.hti-code-editor textarea { width: 100%; background: transparent; border: none; color: #cdd6f4; font-family: 'Courier New', monospace; font-size: .85rem; line-height: 1.6; resize: vertical; outline: none; padding: .8rem 1rem; }
+.hti-code-output { display: none; background: #0d1117; border-top: 1px solid #2a2a4a; padding: .8rem 1rem; }
+.hti-code-output.visible { display: block; }
+.hti-code-output pre { color: #c9d1d9; font-family: 'Courier New', monospace; font-size: .82rem; line-height: 1.5; margin: 0; white-space: pre-wrap; word-break: break-all; }
+.hti-btn { background: var(--green); color: #fff; border: none; padding: .5rem 1.2rem; border-radius: 8px; font-weight: 700; font-size: .85rem; cursor: pointer; transition: background .2s; }
+.hti-btn:hover { background: #1b5e20; }
+.hti-btn:disabled { background: var(--muted); cursor: default; }
+.hti-table-input { width: 100%; padding: .4rem .6rem; border: 2px solid #dde5f3; border-radius: 6px; font-family: 'Courier New', monospace; font-size: .85rem; outline: none; transition: border-color .2s; }
+.hti-table-input:focus { border-color: var(--accent); }
+
+/* ═══════════════════════════════════════════
+   QUIZ VERIFY BUTTON
+   ═══════════════════════════════════════════ */
+.quiz-controls { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+.quiz-verify-btn { background: var(--primary); color: #fff; border: none; padding: .6rem 1.5rem; border-radius: 10px; font-weight: 700; font-size: .9rem; cursor: pointer; transition: background .2s; }
+.quiz-verify-btn:hover { background: var(--primary-2); }
+.quiz-reset-btn { background: var(--muted); color: #fff; border: none; padding: .6rem 1.5rem; border-radius: 10px; font-weight: 700; font-size: .9rem; cursor: pointer; }
+.quiz-score-display { margin-top: .8rem; padding: .5rem 1rem; border-radius: 8px; font-weight: 700; font-size: .9rem; display: none; }
+.quiz-score-display.visible { display: block; }
+
 @media (max-width: 920px) {
     .grid-2, .grid-3, .kpi-grid, .activity-shell, .quiz-shell, .mini-grid, .week-map { grid-template-columns: 1fr; }
+    .dnd-container { grid-template-columns: 1fr; }
+    .colab-cell-body { padding: .8rem .8rem .8rem 2.6rem; }
+    .colab-cell-body::before { left: .4rem; font-size: .7rem; }
+    .fib-code-block { font-size: .78rem; }
 }
 @media (max-width: 640px) {
     .hero { padding-inline: 16px; }
@@ -426,7 +568,8 @@ blockquote {
     .sticky-nav .inner { padding-inline: 16px; }
     h1 { font-size: 1.85rem; }
     .badge-row { gap: 8px; }
-}</style>
+}
+</style>
 
 <style id="progress-tracker-css">
 /* ── Progress Tracker Widget ── */
@@ -497,6 +640,7 @@ blockquote {
             <a href="#memorando">Memorando</a>
             <a href="#teoria">Teoría</a>
             <a href="#python">Python BI</a>
+            <a href="#interactivo">🧪 Interactivo</a>
             <a href="#actividad">Actividad presencial</a>
             <a href="#hti">HTI</a>
             <a href="#quiz">Quizizz</a>
@@ -674,118 +818,411 @@ blockquote {
 
         <section id="python" class="card">
             <h2>Python como herramienta analítica (Google Colab)</h2>
-            <p class="section-intro">Ejecuta cada bloque en Colab o Replit, documenta el comportamiento observado y conecta la salida con una decisión de negocio.</p>
+            <p class="section-intro">Ejecuta cada bloque en vivo con el motor Pyodice integrado, documenta el comportamiento observado y conecta la salida con una decisión de negocio.</p>
             <blockquote>Antes de ejecutar, imagina quién debe quedar al frente de la cola. Si tu predicción no coincide con la salida, revisa si cambiaste accidentalmente la lógica FIFO.</blockquote>
-            
-            <div class="code-window">
-                <div class="code-topbar">
-                    <span><strong>Bloque 1:</strong> Cola básica con collections.deque</span>
-                    <span>colab_queue_deque.py</span>
-                    <span class="code-dots"><span></span><span></span><span></span></span>
+
+            <!-- Mini Cell 1: Cola básica con deque -->
+            <div class="mini-cell">
+                <div class="mini-cell-header">
+                    <span class="mini-cell-label">Bloque 1: Cola básica con collections.deque</span>
+                    <button class="mini-run-btn" onclick="runMiniCell(1)" id="mini-run-1">▶ Run</button>
                 </div>
-                <pre><code>from collections import deque
+                <textarea id="mini-code-1" rows="11" spellcheck="false">from collections import deque
 
-                    cola_espera = deque()
+cola_espera = deque()
 
-                    def registrar_paciente(cola, nombre, necesidad):
-                        cola.append({&quot;paciente&quot;: nombre, &quot;necesidad&quot;: necesidad})
-                        print(f&quot;Ingresó {nombre}. Cola actual: {[item[&#x27;paciente&#x27;] for item in cola]}&quot;)
+def registrar_paciente(cola, nombre, necesidad):
+    cola.append({"paciente": nombre, "necesidad": necesidad})
+    print(f"Ingresó {nombre}. Cola actual: {[item['paciente'] for item in cola]}")
 
-                    def atender_siguiente(cola):
-                        if not cola:
-                            print(&quot;No hay pacientes en espera&quot;)
-                            return None
-                        paciente = cola.popleft()
-                        print(f&quot;Se atiende a {paciente[&#x27;paciente&#x27;]}&quot;)
-                        return paciente
+def atender_siguiente(cola):
+    if not cola:
+        print("No hay pacientes en espera")
+        return None
+    paciente = cola.popleft()
+    print(f"Se atiende a {paciente['paciente']}")
+    return paciente
 
-                    registrar_paciente(cola_espera, &quot;Samuel&quot;, &quot;Lenguaje&quot;)
-                    registrar_paciente(cola_espera, &quot;Valentina&quot;, &quot;Integración sensorial&quot;)
-                    registrar_paciente(cola_espera, &quot;Martín&quot;, &quot;Seguimiento TEA&quot;)
+registrar_paciente(cola_espera, "Samuel", "Lenguaje")
+registrar_paciente(cola_espera, "Valentina", "Integración sensorial")
+registrar_paciente(cola_espera, "Martín", "Seguimiento TEA")
 
-                    print(&quot;
-Paciente al frente:&quot;, cola_espera[0])
-                    atender_siguiente(cola_espera)
-                    print(&quot;Cola restante:&quot;, [item[&#x27;paciente&#x27;] for item in cola_espera])</code></pre>
+print("\nPaciente al frente:", cola_espera[0])
+atender_siguiente(cola_espera)
+print("Cola restante:", [item['paciente'] for item in cola_espera])</textarea>
+                <div class="mini-output" id="mini-out-1"><pre></pre></div>
             </div>
             <div class="info-box">
                 <strong>Uso pedagógico:</strong> Muestra de forma inmediata cómo se registra y atiende una lista de espera preservando el orden de llegada.
             </div>
-            
 
-            <div class="code-window">
-                <div class="code-topbar">
-                    <span><strong>Bloque 2:</strong> Simulación de asignación de terapeutas con cola de espera</span>
-                    <span>colab_queue_assignment.py</span>
-                    <span class="code-dots"><span></span><span></span><span></span></span>
+            <!-- Mini Cell 2: Simulación de asignación -->
+            <div class="mini-cell">
+                <div class="mini-cell-header">
+                    <span class="mini-cell-label">Bloque 2: Simulación de asignación de terapeutas</span>
+                    <button class="mini-run-btn" onclick="runMiniCell(2)" id="mini-run-2">▶ Run</button>
                 </div>
-                <pre><code>from collections import deque
+                <textarea id="mini-code-2" rows="11" spellcheck="false">from collections import deque
 
-                    pacientes = deque([
-                        {&quot;paciente&quot;: &quot;Samuel&quot;, &quot;servicio&quot;: &quot;Lenguaje&quot;},
-                        {&quot;paciente&quot;: &quot;Valentina&quot;, &quot;servicio&quot;: &quot;Sensorial&quot;},
-                        {&quot;paciente&quot;: &quot;Martín&quot;, &quot;servicio&quot;: &quot;TEA&quot;},
-                        {&quot;paciente&quot;: &quot;Lucía&quot;, &quot;servicio&quot;: &quot;TDAH&quot;},
-                    ])
+pacientes = deque([
+    {"paciente": "Samuel", "servicio": "Lenguaje"},
+    {"paciente": "Valentina", "servicio": "Sensorial"},
+    {"paciente": "Martín", "servicio": "TEA"},
+    {"paciente": "Lucía", "servicio": "TDAH"},
+])
 
-                    terapeutas_disponibles = [&quot;Laura&quot;, &quot;Carlos&quot;]
-                    asignaciones = []
+terapeutas_disponibles = ["Laura", "Carlos"]
+asignaciones = []
 
-                    while pacientes and terapeutas_disponibles:
-                        paciente = pacientes.popleft()
-                        terapeuta = terapeutas_disponibles.pop(0)
-                        asignaciones.append((paciente[&quot;paciente&quot;], terapeuta, paciente[&quot;servicio&quot;]))
-                        print(f&quot;Asignado {paciente[&#x27;paciente&#x27;]} a {terapeuta}&quot;)
+while pacientes and terapeutas_disponibles:
+    paciente = pacientes.popleft()
+    terapeuta = terapeutas_disponibles.pop(0)
+    asignaciones.append((paciente["paciente"], terapeuta, paciente["servicio"]))
+    print(f"Asignado {paciente['paciente']} a {terapeuta}")
 
-                    print(&quot;
-Asignaciones del bloque:&quot;)
-                    for asignacion in asignaciones:
-                        print(asignacion)
+print("\nAsignaciones del bloque:")
+for asignacion in asignaciones:
+    print(asignacion)
 
-                    print(&quot;Pacientes aún en cola:&quot;, [p[&quot;paciente&quot;] for p in pacientes])</code></pre>
+print("Pacientes aún en cola:", [p["paciente"] for p in pacientes])</textarea>
+                <div class="mini-output" id="mini-out-2"><pre></pre></div>
             </div>
             <div class="info-box">
                 <strong>Uso pedagógico:</strong> Integra la cola con una necesidad de negocio: asignar pacientes al siguiente recurso disponible.
             </div>
-            
 
-            <div class="code-window">
-                <div class="code-topbar">
-                    <span><strong>Bloque 3:</strong> Panel operativo para inspeccionar la cola</span>
-                    <span>colab_queue_dashboard.py</span>
-                    <span class="code-dots"><span></span><span></span><span></span></span>
+            <!-- Mini Cell 3: Panel operativo -->
+            <div class="mini-cell">
+                <div class="mini-cell-header">
+                    <span class="mini-cell-label">Bloque 3: Panel operativo para inspeccionar la cola</span>
+                    <button class="mini-run-btn" onclick="runMiniCell(3)" id="mini-run-3">▶ Run</button>
                 </div>
-                <pre><code><span class="kw">from</span> <span class="var">collections</span> <span class="kw">import</span> <span class="var">deque</span>
+                <textarea id="mini-code-3" rows="12" spellcheck="false">from collections import deque
 
-<span class="var">cola</span> <span class="op">=</span> <span class="var">deque</span><span class="op">(</span><span class="op">[</span>
-    <span class="op">{</span><span class="str">&quot;paciente&quot;</span><span class="op">:</span> <span class="str">&quot;Samuel&quot;</span><span class="op">,</span> <span class="str">&quot;espera_min&quot;</span><span class="op">:</span> <span class="num">12</span><span class="op">}</span><span class="op">,</span>
-    <span class="op">{</span><span class="str">&quot;paciente&quot;</span><span class="op">:</span> <span class="str">&quot;Valentina&quot;</span><span class="op">,</span> <span class="str">&quot;espera_min&quot;</span><span class="op">:</span> <span class="num">18</span><span class="op">}</span><span class="op">,</span>
-    <span class="op">{</span><span class="str">&quot;paciente&quot;</span><span class="op">:</span> <span class="str">&quot;Martín&quot;</span><span class="op">,</span> <span class="str">&quot;espera_min&quot;</span><span class="op">:</span> <span class="num">25</span><span class="op">}</span><span class="op">,</span>
-<span class="op">]</span><span class="op">)</span>
+cola = deque([
+    {"paciente": "Samuel", "espera_min": 12},
+    {"paciente": "Valentina", "espera_min": 18},
+    {"paciente": "Martín", "espera_min": 25},
+])
 
-<span class="kw">def</span> <span class="num">resumen_cola</span><span class="op">(</span><span class="var">cola_actual</span><span class="op">)</span><span class="op">:</span>
-    <span class="kw">if</span> <span class="kw">not</span> <span class="var">cola_actual</span><span class="op">:</span>
-        <span class="kw">return</span> <span class="op">{</span>
-            <span class="str">&quot;longitud&quot;</span><span class="op">:</span> <span class="num">0</span><span class="op">,</span>
-            <span class="str">&quot;frente&quot;</span><span class="op">:</span> <span class="kw">None</span><span class="op">,</span>
-            <span class="str">&quot;espera_promedio&quot;</span><span class="op">:</span> <span class="num">0</span><span class="op">,</span>
-        <span class="op">}</span>
+def resumen_cola(cola_actual):
+    if not cola_actual:
+        return {"longitud": 0, "frente": None, "espera_promedio": 0}
+    espera_promedio = sum(item["espera_min"] for item in cola_actual) / len(cola_actual)
+    return {
+        "longitud": len(cola_actual),
+        "frente": cola_actual[0]["paciente"],
+        "espera_promedio": round(espera_promedio, 2),
+    }
 
-    <span class="var">espera_promedio</span> <span class="op">=</span> <span class="var">sum</span><span class="op">(</span><span class="var">item</span><span class="op">[</span><span class="str">&quot;espera_min&quot;</span><span class="op">]</span> <span class="kw">for</span> <span class="var">item</span> <span class="kw">in</span> <span class="var">cola_actual</span><span class="op">)</span> <span class="op">/</span> <span class="var">len</span><span class="op">(</span><span class="var">cola_actual</span><span class="op">)</span>
-    <span class="kw">return</span> <span class="op">{</span>
-        <span class="str">&quot;longitud&quot;</span><span class="op">:</span> <span class="var">len</span><span class="op">(</span><span class="var">cola_actual</span><span class="op">)</span><span class="op">,</span>
-        <span class="str">&quot;frente&quot;</span><span class="op">:</span> <span class="var">cola_actual</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">[</span><span class="str">&quot;paciente&quot;</span><span class="op">]</span><span class="op">,</span>
-        <span class="str">&quot;espera_promedio&quot;</span><span class="op">:</span> <span class="var">round</span><span class="op">(</span><span class="var">espera_promedio</span><span class="op">,</span> <span class="num">2</span><span class="op">)</span><span class="op">,</span>
-    <span class="op">}</span>
-
-<span class="var">print</span><span class="op">(</span><span class="var">resumen_cola</span><span class="op">(</span><span class="var">cola</span><span class="op">)</span><span class="op">)</span>
-<span class="var">cola</span><span class="op">.</span><span class="var">popleft</span><span class="op">(</span><span class="op">)</span>
-<span class="var">print</span><span class="op">(</span><span class="var">resumen_cola</span><span class="op">(</span><span class="var">cola</span><span class="op">)</span><span class="op">)</span></code></pre>
+print(resumen_cola(cola))
+cola.popleft()
+print(resumen_cola(cola))</textarea>
+                <div class="mini-output" id="mini-out-3"><pre></pre></div>
             </div>
             <div class="info-box">
                 <strong>Uso pedagógico:</strong> Ayuda a convertir la estructura en una salida legible para la toma de decisiones.
             </div>
-            
+
+        </section>
+
+        <!-- ══════════════════════════════════════
+             INTERACTIVE EXERCISES SECTION
+        ══════════════════════════════════════════ -->
+        <section id="interactivo" class="card">
+            <h2>🧪 Ejercicios Interactivos</h2>
+            <p class="section-intro">Afianza tus habilidades con estos ejercicios interactivos. Ejecuta Python en vivo con el motor <strong>Pyodide</strong> (WebAssembly), completa los espacios en blanco, y clasifica operaciones. ¡Cada actividad te da XP!</p>
+
+            <!-- ══════════════════════════════════════
+                 GOOGLE COLAB INTERFACE (in-page)
+            ══════════════════════════════════════════ -->
+            <div class="colab-section">
+                <h3>🐍 Google Colab — En Vivo en la Página</h3>
+                <div id="colab-status" class="colab-status">
+                    <span>⏳</span> Iniciando motor Python (Pyodide)...
+                </div>
+
+                <!-- Cell 1: Queue class with collections.deque -->
+                <div class="colab-cell" id="colab-cell-1">
+                    <div class="colab-cell-header">
+                        <span class="colab-cell-index">[1]</span>
+                        <button class="colab-run-btn" onclick="runColabCell(1)" id="run-btn-1">▶ Run</button>
+                    </div>
+                    <div class="colab-cell-body" id="colab-body-1">
+                        <textarea id="colab-code-1" rows="16" spellcheck="false"># ── Clase Cola usando collections.deque ──
+from collections import deque
+
+class ColaNeuroBiz:
+    """Cola FIFO para pacientes de NeuroBiz"""
+    def __init__(self):
+        self._elementos = deque()
+
+    def enqueue(self, paciente):
+        self._elementos.append(paciente)
+        print(f"➕ Encolado: {paciente['nombre']}")
+
+    def dequeue(self):
+        if self.is_empty():
+            print("⚠️ Underflow: cola vacía")
+            return None
+        p = self._elementos.popleft()
+        print(f"➖ Atendido: {p['nombre']}")
+        return p
+
+    def front(self):
+        if self.is_empty():
+            return None
+        return self._elementos[0]
+
+    def is_empty(self):
+        return len(self._elementos) == 0
+
+    def __len__(self):
+        return len(self._elementos)
+
+# Probar la cola
+cola = ColaNeuroBiz()
+cola.enqueue({"nombre": "Samuel", "terapia": "Lenguaje"})
+cola.enqueue({"nombre": "Valentina", "terapia": "Sensorial"})
+cola.enqueue({"nombre": "Martín", "terapia": "TEA"})
+
+print(f"\n👁️ Frente: {cola.front()['nombre']}")
+print(f"📏 Longitud: {len(cola)}")
+cola.dequeue()
+print(f"Nuevo frente: {cola.front()['nombre']}")</textarea>
+                    </div>
+                    <div class="colab-output" id="colab-out-1"><pre></pre></div>
+                </div>
+
+                <!-- Cell 2: Patient waiting list simulation -->
+                <div class="colab-cell" id="colab-cell-2">
+                    <div class="colab-cell-header">
+                        <span class="colab-cell-index">[2]</span>
+                        <button class="colab-run-btn" onclick="runColabCell(2)" id="run-btn-2">▶ Run</button>
+                    </div>
+                    <div class="colab-cell-body" id="colab-body-2">
+                        <textarea id="colab-code-2" rows="16" spellcheck="false"># ── Simulación de lista de espera NeuroBiz ──
+from collections import deque
+
+cola_espera = deque()
+atendidos = []
+
+# Datos de pacientes
+pacientes_nuevos = [
+    {"nombre": "Samuel", "terapia": "Lenguaje", "urgencia": "baja"},
+    {"nombre": "Valentina", "terapia": "Sensorial", "urgencia": "media"},
+    {"nombre": "Martín", "terapia": "TEA", "urgencia": "alta"},
+    {"nombre": "Lucía", "terapia": "TDAH", "urgencia": "baja"},
+    {"nombre": "Felipe", "terapia": "Lenguaje", "urgencia": "media"},
+]
+
+# Encolar todos los pacientes
+for p in pacientes_nuevos:
+    cola_espera.append(p)
+    print(f"➕ {p['nombre']} registrado en espera")
+
+print(f"\n📏 Pacientes en cola: {len(cola_espera)}")
+
+# Atender los primeros 3
+for _ in range(3):
+    if cola_espera:
+        p = cola_espera.popleft()
+        atendidos.append(p)
+        print(f"➖ Atendido: {p['nombre']} ({p['terapia']})")
+
+print(f"\n✅ Atendidos: {[p['nombre'] for p in atendidos]}")
+print(f"⏳ En espera: {[p['nombre'] for p in cola_espera]}")</textarea>
+                    </div>
+                    <div class="colab-output" id="colab-out-2"><pre></pre></div>
+                </div>
+
+                <!-- Cell 3: Priority queue concept -->
+                <div class="colab-cell" id="colab-cell-3">
+                    <div class="colab-cell-header">
+                        <span class="colab-cell-index">[3]</span>
+                        <button class="colab-run-btn" onclick="runColabCell(3)" id="run-btn-3">▶ Run</button>
+                    </div>
+                    <div class="colab-cell-body" id="colab-body-3">
+                        <textarea id="colab-code-3" rows="16" spellcheck="false"># ── Comparación: Cola FIFO vs Cola con Prioridad ──
+from collections import deque
+import heapq
+
+# FIFO: orden de llegada
+pacientes_fifo = deque([
+    {"nombre": "Samuel", "urgencia": 1},
+    {"nombre": "Valentina", "urgencia": 3},
+    {"nombre": "Martín", "urgencia": 2},
+])
+print("=== FIFO (orden de llegada) ===")
+while pacientes_fifo:
+    p = pacientes_fifo.popleft()
+    print(f"  Atendido: {p['nombre']} (urgencia: {p['urgencia']})")
+
+# Prioridad: urgencia más alta primero
+pacientes_prio = [
+    (1, {"nombre": "Samuel", "urgencia": 1}),
+    (3, {"nombre": "Valentina", "urgencia": 3}),
+    (2, {"nombre": "Martín", "urgencia": 2}),
+]
+heapq.heapify(pacientes_prio)
+print("\n=== Prioridad (urgencia más alta) ===")
+while pacientes_prio:
+    prio, p = heapq.heappop(pacientes_prio)
+    print(f"  Atendido: {p['nombre']} (prioridad: {prio})")
+
+print("\n💡 La cola con prioridad rompe FIFO pero refleja criterio clínico.")</textarea>
+                    </div>
+                    <div class="colab-output" id="colab-out-3"><pre></pre></div>
+                </div>
+
+                <!-- Cell 4: Empty for experiments -->
+                <div class="colab-cell" id="colab-cell-4">
+                    <div class="colab-cell-header">
+                        <span class="colab-cell-index">[4]</span>
+                        <button class="colab-run-btn" onclick="runColabCell(4)" id="run-btn-4">▶ Run</button>
+                    </div>
+                    <div class="colab-cell-body" id="colab-body-4">
+                        <textarea id="colab-code-4" rows="8" spellcheck="false"># ── Tu espacio de experimentación ──
+# Crea tu propia simulación de cola para NeuroBiz.
+# Prueba diferentes escenarios: ¿qué pasa si hay más
+# pacientes que terapeutas? ¿Cómo afecta el orden?
+
+print("¡Escribe tu código arriba y presiona ▶ Run!")</textarea>
+                    </div>
+                    <div class="colab-output" id="colab-out-4"><pre></pre></div>
+                </div>
+
+                <div id="colab-fallback" style="display:none; padding:1rem; background:#fff8e1; border-radius:8px; margin-top:1rem; font-size:.88rem; color:#5d4037;">
+                    ⚠️ No se pudo cargar Pyodide. Puedes usar <a href="https://colab.research.google.com" target="_blank" style="color:var(--primary); font-weight:700;">Google Colab</a> directamente.
+                </div>
+            </div>
+
+            <hr style="margin:2rem 0 1.5rem; border:none; border-top:1px solid #dde5f3;">
+
+            <!-- ══════════════════════════════════════
+                 CODECADEMY-STYLE FILL-IN-THE-BLANK
+            ══════════════════════════════════════════ -->
+            <h3 style="color:var(--primary); margin-bottom:1rem;">✍️ Codecademy — Completa el Código</h3>
+
+            <!-- Exercise 1: Complete enqueue -->
+            <div class="fib-exercise" id="fib-ex-1">
+                <h4>Ejercicio 1: Completa el enqueue</h4>
+                <p style="font-size:.85rem; color:var(--muted); margin-bottom:.6rem;">
+                    Completa el método <code>enqueue</code> para agregar un paciente al <strong>final</strong> de la cola.
+                </p>
+                <div class="fib-code-block">
+                    <span style="color:#6c7086; font-style:italic;"># ── Método enqueue de la clase ColaNeuroBiz ──</span>
+class ColaNeuroBiz:
+    def __init__(self):
+        self._elementos = deque()
+
+    def enqueue(self, paciente):
+        self._elementos.<span id="fib-b1-wrap"><input type="text" class="fib-input" id="fib-b1" placeholder="método?" maxlength="10" autocomplete="off"></span>(paciente)
+
+    def dequeue(self):
+        if not self.is_empty():
+            return self._elementos.<span id="fib-b1b-wrap"><input type="text" class="fib-input" id="fib-b1b" placeholder="método?" maxlength="10" autocomplete="off"></span>()
+        return None
+                </div>
+                <button class="fib-submit-btn" onclick="checkFib1()">✅ Verificar</button>
+                <div class="fib-feedback" id="fib-fb-1"></div>
+            </div>
+
+            <!-- Exercise 2: Identify FIFO order -->
+            <div class="fib-exercise" id="fib-ex-2">
+                <h4>Ejercicio 2: Identifica el orden FIFO</h4>
+                <p style="font-size:.85rem; color:var(--muted); margin-bottom:.6rem;">
+                    Después de 3 enqueues en este orden: <strong>Ana → Bruno → Carla</strong>, ¿quién está al frente de la cola?
+                </p>
+                <div class="fib-code-block">
+                    <span style="color:#6c7086; font-style:italic;"># ── Orden de una cola después de 3 enqueues ──</span>
+cola = deque()
+cola.append("Ana")        # Primero en llegar
+cola.append("Bruno")      # Segundo en llegar
+cola.append("Carla")      # Tercero en llegar
+
+frente = cola[<span id="fib-b2-wrap"><input type="text" class="fib-input" id="fib-b2" placeholder="índice?" maxlength="5" autocomplete="off"></span>]  # ¿Qué índice?
+print(f"Frente: {frente}")  # Debe mostrar: <span id="fib-b2b-wrap"><input type="text" class="fib-input" id="fib-b2b" placeholder="nombre?" maxlength="10" autocomplete="off"></span>
+                </div>
+                <button class="fib-submit-btn" onclick="checkFib2()">✅ Verificar</button>
+                <div class="fib-feedback" id="fib-fb-2"></div>
+            </div>
+
+            <!-- Exercise 3: Complete underflow guard -->
+            <div class="fib-exercise" id="fib-ex-3">
+                <h4>Ejercicio 3: Protección contra underflow</h4>
+                <p style="font-size:.85rem; color:var(--muted); margin-bottom:.6rem;">
+                    Completa la cláusula de guarda antes de hacer dequeue para evitar error en cola vacía.
+                </p>
+                <div class="fib-code-block">
+                    <span style="color:#6c7086; font-style:italic;"># ── Protección contra underflow ──</span>
+def atender_paciente(cola):
+    <span style="color:#cba6f7;font-weight:700;">if</span> <span id="fib-b3-wrap"><input type="text" class="fib-input" id="fib-b3" placeholder="condición?" maxlength="20" autocomplete="off"></span>:
+        print("⚠️ No hay pacientes en espera")
+        <span style="color:#cba6f7;font-weight:700;">return</span> <span style="color:#fab387;">None</span>
+    paciente = cola.popleft()
+    print(f"Atendido: {paciente}")
+    return paciente
+                </div>
+                <button class="fib-submit-btn" onclick="checkFib3()">✅ Verificar</button>
+                <div class="fib-feedback" id="fib-fb-3"></div>
+            </div>
+
+            <hr style="margin:2rem 0 1.5rem; border:none; border-top:1px solid #dde5f3;">
+
+            <!-- ══════════════════════════════════════
+                 DRAG-AND-DROP: Pila vs Cola
+            ══════════════════════════════════════════ -->
+            <h3 style="color:var(--primary); margin-bottom:1rem;">🖱️ Pila vs Cola</h3>
+            <p style="font-size:.85rem; color:var(--muted); margin-bottom:.8rem;">
+                Arrastra cada operación a la columna correcta: ¿pertenece al mundo <strong>Pila (LIFO)</strong> o <strong>Cola (FIFO)</strong>?
+            </p>
+            <div class="dnd-source">
+                <h4>📦 Operaciones para clasificar</h4>
+                <div id="dnd-items" style="display:flex; flex-wrap:wrap; gap:8px;">
+                    <div class="dnd-item" draggable="true" data-value="push" data-col="pila">push</div>
+                    <div class="dnd-item" draggable="true" data-value="enqueue" data-col="cola">enqueue</div>
+                    <div class="dnd-item" draggable="true" data-value="pop" data-col="pila">pop</div>
+                    <div class="dnd-item" draggable="true" data-value="dequeue" data-col="cola">dequeue</div>
+                    <div class="dnd-item" draggable="true" data-value="peek (top)" data-col="pila">peek (top)</div>
+                    <div class="dnd-item" draggable="true" data-value="front" data-col="cola">front</div>
+                    <div class="dnd-item" draggable="true" data-value="LIFO" data-col="pila">LIFO</div>
+                    <div class="dnd-item" draggable="true" data-value="FIFO" data-col="cola">FIFO</div>
+                    <div class="dnd-item" draggable="true" data-value="append (lista)" data-col="pila">append (lista)</div>
+                    <div class="dnd-item" draggable="true" data-value="popleft" data-col="cola">popleft</div>
+                </div>
+            </div>
+            <div class="dnd-container">
+                <div class="dnd-column" id="dnd-col-pila" data-col="pila">
+                    <h4>📚 Pila (LIFO)</h4>
+                    <p style="font-size:.72rem; color:var(--muted); text-align:center;">Último en entrar, primero en salir</p>
+                    <div class="dnd-drop-zone" data-col="pila"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="pila"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="pila"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="pila"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="pila"><span class="dnd-drop-value"></span></div>
+                </div>
+                <div class="dnd-column" id="dnd-col-cola" data-col="cola">
+                    <h4>🚶 Cola (FIFO)</h4>
+                    <p style="font-size:.72rem; color:var(--muted); text-align:center;">Primero en entrar, primero en salir</p>
+                    <div class="dnd-drop-zone" data-col="cola"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="cola"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="cola"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="cola"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="cola"><span class="dnd-drop-value"></span></div>
+                </div>
+                <div class="dnd-column" id="dnd-col-ambas" data-col="ambas">
+                    <h4>🔄 Ambas</h4>
+                    <p style="font-size:.72rem; color:var(--muted); text-align:center;">Aplica a ambas estructuras</p>
+                    <div class="dnd-drop-zone" data-col="ambas"><span class="dnd-drop-value"></span></div>
+                </div>
+            </div>
+            <div class="dnd-score">
+                <span>🏆 Aciertos: <strong id="dnd-score">0</strong> / 10</span>
+                <button class="dnd-reset-btn" onclick="resetDragDrop()">🔄 Reiniciar</button>
+            </div>
+            <div style="font-size:.85rem; color:var(--muted); margin-top:.5rem;" id="dnd-feedback"></div>
+
         </section>
 
         <section id="actividad" class="card">
@@ -846,76 +1283,165 @@ Asignaciones del bloque:&quot;)
         <p><strong>ODS:</strong> insistir en que una espera organizada evita desplazamientos improductivos y reprocesos administrativos.</p>
     </aside>
 </div>
+
+            <!-- ══════════════════════════════════════
+                 QUEUE VISUALIZER
+            ══════════════════════════════════════════ -->
+            <hr style="margin:2rem 0 1.5rem; border:none; border-top:1px solid #dde5f3;">
+            <h3 style="color:var(--primary); margin-bottom:1rem;">👥 Visualizador de Cola — Lista de Espera NeuroBiz</h3>
+            <p style="font-size:.85rem; color:var(--muted);">Simula la lista de espera: encola pacientes, atiende al primero y consulta el frente sin remover. ¡Completa al menos 3 enqueues y 2 dequeues para ganar XP!</p>
+
+            <div class="queue-viz">
+                <div class="queue-label"><span>← FRENTE (primero en salir)</span><span>FINAL (último en llegar) →</span></div>
+                <div class="queue-display" id="queue-display">
+                    <div style="color:#b0bec5;font-size:.82rem;padding:5px;">(cola vacía)</div>
+                </div>
+                <div class="queue-stats">
+                    <span>✅ Atendidos: <strong id="q-served">0</strong></span>
+                    <span>⏳ En espera: <strong id="q-waiting">0</strong></span>
+                    <span>📊 Total operaciones: <strong id="q-ops">0</strong></span>
+                </div>
+                <div class="queue-controls">
+                    <button class="queue-btn enqueue" onclick="queueEnqueue()">➕ Enqueue</button>
+                    <button class="queue-btn dequeue" onclick="queueDequeue()">➖ Dequeue</button>
+                    <button class="queue-btn peek" onclick="queuePeek()">👁️ Front</button>
+                    <button class="queue-btn verificar" onclick="queueVerificar()">✅ Verificar</button>
+                    <button class="queue-btn reset" onclick="queueReiniciar()">🔄 Reiniciar</button>
+                </div>
+                <div class="queue-msg" id="queue-msg"></div>
+            </div>
         </section>
 
         <section id="hti" class="card">
             <h2>HTI - Trabajo independiente</h2>
             <p class="section-intro">Selecciona la ruta de trabajo indicada por tu docente. Ambas se conectan con el mismo resultado de aprendizaje, pero con distinta profundidad y carga.</p>
+
+            <!-- HTI A: Interactiva con Code Editor -->
             <div class="scenario-a">
-    <h3>HTI Escenario A · Profundización (60-90 min, entrega digital)</h3>
-    <p><strong>Producto:</strong> agregar prioridades a la cola usando <code>heapq</code> para casos críticos.</p>
-    <ul>
-        <li>Definir una prioridad numérica donde valores más bajos signifiquen atención más urgente.</li>
-        <li>Registrar al menos 6 pacientes y mostrar cómo cambia el orden de atención.</li>
-        <li>Explicar en 8 a 10 líneas por qué esta solución ya no es una cola FIFO pura.</li>
-        <li>Entregar código, salida y breve comentario sobre criterios éticos de prioridad.</li>
-    </ul>
-    <p><strong>Énfasis Bloom:</strong> aplicar con extensión y comenzar a distinguir variantes de la estructura base.</p>
-</div>
-<div class="scenario-b">
-    <h3>HTI Escenario B · Bajo umbral (20-30 min, cuaderno/papel)</h3>
-    <p><strong>Producto:</strong> elaborar un diagrama de una cola después de 5 operaciones <em>enqueue</em> y 3 <em>dequeue</em> con datos de pacientes NeuroBiz.</p>
-    <ul>
-        <li>Marcar frente y final después de cada paso.</li>
-        <li>Indicar quién sería el siguiente en ser atendido.</li>
-        <li>Escribir una frase final que explique por qué la estructura protege el orden de llegada.</li>
-    </ul>
-    <p><strong>Importante:</strong> este escenario <strong>NO BLOQUEA la siguiente clase</strong> si no se realiza; se usa como refuerzo visual y de baja carga.</p>
-</div>
+                <h3>HTI Escenario A · Profundización (60-90 min, entrega digital)</h3>
+                <p><strong>Producto:</strong> agregar prioridades a la cola usando <code>heapq</code> para casos críticos.</p>
+                <ul>
+                    <li>Definir una prioridad numérica donde valores más bajos signifiquen atención más urgente.</li>
+                    <li>Registrar al menos 6 pacientes y mostrar cómo cambia el orden de atención.</li>
+                    <li>Explicar en 8 a 10 líneas por qué esta solución ya no es una cola FIFO pura.</li>
+                    <li>Entregar código, salida y breve comentario sobre criterios éticos de prioridad.</li>
+                </ul>
+                <p><strong>Énfasis Bloom:</strong> aplicar con extensión y comenzar a distinguir variantes de la estructura base.</p>
+
+                <!-- HTI A Code Editor -->
+                <div class="hti-code-editor">
+                    <div class="hti-code-header">
+                        <span style="color:#6c7086;font-family:monospace;font-size:.78rem;">📝 hti_prioridad_pacientes.py</span>
+                        <div>
+                            <button class="hti-btn" onclick="runHtiA()" id="hti-a-run-btn" style="background:var(--primary);">▶ Run</button>
+                        </div>
+                    </div>
+                    <textarea id="hti-a-code" rows="14" spellcheck="false"># ── Cola con prioridad para pacientes urgentes ──
+import heapq
+
+# Define prioridad: menor número = más urgente
+pacientes = [
+    (2, "Samuel", "Lenguaje"),
+    (1, "Valentina", "Sensorial"),   # Urgente
+    (3, "Martín", "TEA"),
+    (1, "Lucía", "TDAH"),           # Urgente
+    (2, "Felipe", "Lenguaje"),
+    (3, "Diana", "Sensorial"),
+]
+
+heapq.heapify(pacientes)
+print("=== Atención por prioridad ===")
+while pacientes:
+    prio, nombre, terapia = heapq.heappop(pacientes)
+    print(f"  Prioridad {prio}: {nombre} - {terapia}")
+
+print("\n💡 Esto ya NO es FIFO: la urgencia altera el orden de llegada.")
+print("   Se debe justificar éticamente el criterio de prioridad.")</textarea>
+                    <div class="hti-code-output" id="hti-a-output"><pre></pre></div>
+                </div>
+                <div style="display:flex; gap:10px; margin-top:.8rem; flex-wrap:wrap;">
+                    <button class="hti-btn" onclick="marcarHtiA()" id="hti-a-done-btn">✅ Marcar como Entregado</button>
+                    <span id="hti-a-done-msg" style="display:none; color:var(--green); font-weight:700;">🎉 ¡HTI A registrada! +5 XP</span>
+                </div>
+            </div>
+
+            <!-- HTI B: Fillable table -->
+            <div class="scenario-b">
+                <h3>HTI Escenario B · Bajo umbral (20-30 min, cuaderno/papel)</h3>
+                <p><strong>Producto:</strong> elaborar un diagrama de una cola después de 5 operaciones <em>enqueue</em> y 3 <em>dequeue</em> con datos de pacientes NeuroBiz.</p>
+                <ul>
+                    <li>Marcar frente y final después de cada paso.</li>
+                    <li>Indicar quién sería el siguiente en ser atendido.</li>
+                    <li>Escribir una frase final que explique por qué la estructura protege el orden de llegada.</li>
+                </ul>
+                <p><strong>Importante:</strong> este escenario <strong>NO BLOQUEA la siguiente clase</strong> si no se realiza; se usa como refuerzo visual y de baja carga.</p>
+
+                <!-- HTI B Fillable Table -->
+                <p style="font-weight:700; margin-top:1rem;">📋 Completa la tabla de trazabilidad de la cola:</p>
+                <p style="font-size:.82rem; color:var(--muted);">Pacientes: Samuel, Valentina, Martín, Lucía, Felipe (en orden de llegada).</p>
+                <table style="font-size:.85rem;">
+                    <thead><tr><th>Paso</th><th>Operación</th><th>Frente</th><th>Final</th><th>Longitud</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td>Enqueue Samuel</td><td><input class="hti-table-input" id="hti-b-val-1" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-1b" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-1c" placeholder="núm?" maxlength="3" style="width:60px;"></td></tr>
+                        <tr><td>2</td><td>Enqueue Valentina</td><td><input class="hti-table-input" id="hti-b-val-2" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-2b" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-2c" placeholder="núm?" maxlength="3" style="width:60px;"></td></tr>
+                        <tr><td>3</td><td>Enqueue Martín</td><td><input class="hti-table-input" id="hti-b-val-3" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-3b" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-3c" placeholder="núm?" maxlength="3" style="width:60px;"></td></tr>
+                        <tr><td>4</td><td>Dequeue (atender)</td><td><input class="hti-table-input" id="hti-b-val-4" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-4b" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-4c" placeholder="núm?" maxlength="3" style="width:60px;"></td></tr>
+                        <tr><td>5</td><td>Dequeue (atender)</td><td><input class="hti-table-input" id="hti-b-val-5" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-5b" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-5c" placeholder="núm?" maxlength="3" style="width:60px;"></td></tr>
+                    </tbody>
+                </table>
+                <div style="display:flex; gap:10px; margin-top:.8rem; flex-wrap:wrap; align-items:center;">
+                    <button class="fib-submit-btn" onclick="verificarHtiB()" style="background:var(--primary);">🔍 Verificar</button>
+                    <button class="hti-btn" onclick="marcarHtiB()" id="hti-b-done-btn">✅ Marcar como Hecho</button>
+                    <span id="hti-b-msg" style="display:none; font-weight:700; font-size:.85rem;"></span>
+                </div>
+            </div>
         </section>
 
         <section id="quiz" class="card">
             <h2>Quiz formativo tipo Quizizz</h2>
-            <p class="section-intro">Responde primero sin mirar la solución. Luego pasa el cursor sobre cada tarjeta para contrastar tu elección.</p>
+            <p class="section-intro">Selecciona la respuesta correcta para cada pregunta y presiona <strong>Verificar</strong>. ¡Ganas XP según tu puntaje!</p>
             <div class="quiz-shell">
-            <article class="quiz-card">
+            <article class="quiz-q">
                 <h3>Pregunta 1</h3>
                 <p><strong>¿Qué significa FIFO en una cola?</strong></p>
-                <ul><li>a) El último en entrar es el primero en salir</li><li>b) El primero en entrar es el primero en salir</li><li>c) Todos salen al mismo tiempo</li><li>d) No existe un orden de salida</li></ul>
+                <ol><li>a) El último en entrar es el primero en salir</li><li>b) El primero en entrar es el primero en salir</li><li>c) Todos salen al mismo tiempo</li><li>d) No existe un orden de salida</li></ol>
                 <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) El primero en entrar es el primero en salir</div>
             </article>
-            
 
-            <article class="quiz-card">
+            <article class="quiz-q">
                 <h3>Pregunta 2</h3>
                 <p><strong>¿Qué operación agrega un paciente al final de la cola?</strong></p>
-                <ul><li>a) pop</li><li>b) push</li><li>c) enqueue</li><li>d) peek</li></ul>
+                <ol><li>a) pop</li><li>b) push</li><li>c) enqueue</li><li>d) peek</li></ol>
                 <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> c) enqueue</div>
             </article>
-            
 
-            <article class="quiz-card">
+            <article class="quiz-q">
                 <h3>Pregunta 3</h3>
                 <p><strong>En una cola, ¿qué elemento se atiende primero?</strong></p>
-                <ul><li>a) El que llegó más recientemente</li><li>b) El que está al frente</li><li>c) El que tenga nombre más corto</li><li>d) El que tenga mayor KPI</li></ul>
+                <ol><li>a) El que llegó más recientemente</li><li>b) El que está al frente</li><li>c) El que tenga nombre más corto</li><li>d) El que tenga mayor KPI</li></ol>
                 <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) El que está al frente</div>
             </article>
-            
 
-            <article class="quiz-card">
+            <article class="quiz-q">
                 <h3>Pregunta 4</h3>
                 <p><strong>¿Qué estructura de Python es especialmente útil para colas eficientes?</strong></p>
-                <ul><li>a) set</li><li>b) tuple</li><li>c) collections.deque</li><li>d) dict</li></ul>
+                <ol><li>a) set</li><li>b) tuple</li><li>c) collections.deque</li><li>d) dict</li></ol>
                 <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> c) collections.deque</div>
             </article>
-            
 
-            <article class="quiz-card">
+            <article class="quiz-q">
                 <h3>Pregunta 5</h3>
                 <p><strong>¿Por qué la cola se asocia con equidad en el caso base de NeuroBiz?</strong></p>
-                <ul><li>a) Porque prioriza siempre al último paciente</li><li>b) Porque respeta el orden de registro</li><li>c) Porque elimina la necesidad de datos</li><li>d) Porque siempre reduce la cola a cero</li></ul>
+                <ol><li>a) Porque prioriza siempre al último paciente</li><li>b) Porque respeta el orden de registro</li><li>c) Porque elimina la necesidad de datos</li><li>d) Porque siempre reduce la cola a cero</li></ol>
                 <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) Porque respeta el orden de registro</div>
             </article>
+            </div>
+            <div class="quiz-controls">
+                <button class="quiz-verify-btn" onclick="verificarQuiz()">✅ Verificar Respuestas</button>
+                <button class="quiz-reset-btn" onclick="reiniciarQuiz()">🔄 Reiniciar Quiz</button>
+            </div>
+            <div class="quiz-score-display" id="quiz-score-display">
+                📊 Puntaje: <strong id="quiz-score-text">0</strong> / 5 correctas
             </div>
         </section>
 
@@ -956,8 +1482,6 @@ const PT = (function() {
   const LS_KEY       = `tga05_s4`;
   const LS_GLOBAL    = "tga05_global";
 
-  // URL del Apps Script — reemplaza con tu URL al configurar
-  // Ver: EstructuraDatos/setup/CONFIGURAR_PROGRESO.html
   const SHEETS_URL = localStorage.getItem("tga05_sheets_url") || "";
 
   let state = {
@@ -972,32 +1496,25 @@ const PT = (function() {
     dispositivo     : navigator.userAgent.substring(0, 80)
   };
 
-  // ── Cargar desde localStorage ──────────────────────
   function load() {
     try {
       const raw = localStorage.getItem(LS_KEY);
       if (raw) Object.assign(state, JSON.parse(raw));
-
-      // Cargar nombre/id del perfil global si no está en esta semana
       const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
       if (!state.nombre       && global.nombre)        state.nombre        = global.nombre;
       if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante;
     } catch(e) { console.warn("PT load error:", e); }
   }
 
-  // ── Guardar en localStorage ────────────────────────
   function save() {
-    // Capturar nombre del input
     const inp = document.getElementById("pt-nombre");
     if (inp && inp.value.trim()) {
       state.nombre = inp.value.trim();
-      // Generar ID si no existe
       if (!state.id_estudiante) {
         state.id_estudiante = state.nombre.toLowerCase()
           .replace(/\s+/g,"_").replace(/[^a-z0-9_]/g,"")
           .substring(0,20) + "_" + Math.random().toString(36).substr(2,4);
       }
-      // Guardar perfil global
       const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
       global.nombre = state.nombre;
       global.id_estudiante = state.id_estudiante;
@@ -1007,7 +1524,6 @@ const PT = (function() {
     render();
   }
 
-  // ── Renderizar widget ──────────────────────────────
   function render() {
     const xpBar   = document.getElementById("pt-xp-bar");
     const xpCount = document.getElementById("pt-xp-count");
@@ -1019,7 +1535,6 @@ const PT = (function() {
     if (semLbl)  semLbl.textContent  = "Semana " + SEMANA;
     if (inp && !inp.value && state.nombre) inp.value = state.nombre;
 
-    // Sync original XP bars in the page
     document.querySelectorAll(".xp-fill,[data-target]").forEach(el => {
       el.style.width = Math.min(state.xp, XP_MAX) + "%";
     });
@@ -1027,14 +1542,12 @@ const PT = (function() {
     xpCounters.forEach(el => { el.textContent = state.xp + " XP"; });
   }
 
-  // ── Sumar XP ──────────────────────────────────────
   function addXP(pts, motivo) {
     state.xp = Math.min(state.xp + pts, XP_MAX);
     msg("✨ +" + pts + " XP — " + motivo, "lime");
     save();
   }
 
-  // ── Sincronizar con Supabase + Google Sheets ──────
   async function syncCloud() {
     save();
     const sheetsUrl = localStorage.getItem("tga05_sheets_url") || "";
@@ -1049,7 +1562,6 @@ const PT = (function() {
     msg("⏳ Sincronizando…", "#fff9c4");
     let synced = false;
 
-    // ── Supabase (recomendado) ─────────────────────
     if (sbUrl && sbKey) {
       try {
         const res = await fetch(sbUrl + "/rest/v1/student_progress", {
@@ -1083,7 +1595,6 @@ const PT = (function() {
       }
     }
 
-    // ── Google Sheets (opcional adicional) ─────────
     if (sheetsUrl) {
       try {
         const resp = await fetch(sheetsUrl, {
@@ -1104,7 +1615,6 @@ const PT = (function() {
     }
   }
 
-  // ── Exportar código de progreso ────────────────────
   function exportCode() {
     save();
     const code = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
@@ -1113,14 +1623,12 @@ const PT = (function() {
     document.body.appendChild(ta); ta.select(); document.execCommand("copy");
     document.body.removeChild(ta);
     msg("📋 ¡Código copiado! Guárdalo en Google Drive o OneDrive.", "#fff9c4");
-    // También abrir como descarga
     const a = document.createElement("a");
     a.href     = "data:text/plain;charset=utf-8," + encodeURIComponent(code);
     a.download = "progreso_tga05_s4_" + (state.id_estudiante || "estudiante") + ".txt";
     a.click();
   }
 
-  // ── Importar desde código ──────────────────────────
   function importCode() {
     const code = prompt("Pega tu código de progreso:");
     if (!code) return;
@@ -1134,7 +1642,6 @@ const PT = (function() {
     }
   }
 
-  // ── Toggle widget ──────────────────────────────────
   function toggle() {
     const w = document.getElementById("pt-widget");
     const t = document.getElementById("pt-toggle");
@@ -1142,7 +1649,6 @@ const PT = (function() {
     if (t) t.textContent = w && w.classList.contains("collapsed") ? "▼" : "▲";
   }
 
-  // ── Mensaje en widget ──────────────────────────────
   function msg(text, color) {
     const el = document.getElementById("pt-msg");
     if (!el) return;
@@ -1151,27 +1657,24 @@ const PT = (function() {
     setTimeout(() => { if (el.textContent === text) el.textContent = ""; }, 4000);
   }
 
-  // ── Init ───────────────────────────────────────────
   function init() {
     load();
     render();
 
-    // XP por visitar la semana (solo una vez por semana)
     const visitKey = `tga05_visited_s4`;
     if (!localStorage.getItem(visitKey)) {
       localStorage.setItem(visitKey, "1");
       addXP(15, "Material de Semana 4 abierto");
     }
 
-    // Hacer quiz interactivo si hay preguntas con clase .quiz-q
+    // Init quiz click handlers
     document.querySelectorAll(".quiz-q").forEach((qEl, qi) => {
       const answers = qEl.querySelectorAll("li");
-      // Buscar la respuesta oculta (.quiz-answer)
       const answerEl = qEl.querySelector(".quiz-answer");
       const correctText = answerEl ? answerEl.textContent : "";
-      const correctLetter = correctText.match(/^✅\s*([a-d])/i);
-      const correctIdx = correctLetter
-        ? ["a","b","c","d"].indexOf(correctLetter[1].toLowerCase())
+      const correctMatch = correctText.match(/✅\s*([a-d])/i);
+      const correctIdx = correctMatch
+        ? ["a","b","c","d"].indexOf(correctMatch[1].toLowerCase())
         : -1;
 
       answers.forEach((li, ai) => {
@@ -1187,13 +1690,11 @@ const PT = (function() {
         });
         li.addEventListener("click", () => {
           const key = "q" + qi;
-          if (state.quiz_respuestas[key] !== undefined) return; // ya respondida
+          if (state.quiz_respuestas[key] !== undefined) return;
           answers.forEach(a => { a.dataset.answered = "1"; });
           if (ai === correctIdx) {
             li.style.background = "#2e7d32";
             li.style.color = "#fff";
-            addXP(10, "Respuesta correcta en quiz");
-            state.quiz_puntaje = (state.quiz_puntaje || 0) + 1;
           } else {
             li.style.background = "#c62828";
             li.style.color = "#fff";
@@ -1208,7 +1709,6 @@ const PT = (function() {
         });
       });
 
-      // Restaurar estado previo
       const prevKey = "q" + qi;
       if (state.quiz_respuestas[prevKey] !== undefined) {
         const prev = state.quiz_respuestas[prevKey];
@@ -1230,7 +1730,6 @@ const PT = (function() {
       }
     });
 
-    // XP por configurar nombre
     const nombreInp = document.getElementById("pt-nombre");
     if (nombreInp) {
       nombreInp.addEventListener("blur", () => {
@@ -1254,14 +1753,12 @@ const PT = (function() {
   };
 })();
 
-// ── Exponer funciones para botones HTML ────────────────────
 function ptSaveLocal()  { PT.save(); }
 function ptSyncCloud()  { PT.sync(); }
 function ptExportCode() { PT.export(); }
 function ptImportCode() { PT.import(); }
 function ptToggle()     { PT.toggle(); }
 
-// ── Inicializar cuando cargue el DOM ───────────────────────
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", PT.init);
 } else {
@@ -1342,7 +1839,6 @@ if (document.readyState === "loading") {
     if (overlay) {
       overlay.style.display = "flex";
       var inp = document.getElementById("pt-modal-nombre");
-      // Pre-fill if there's a partial name saved
       try {
         var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
         if (g.nombre && inp) inp.value = g.nombre;
@@ -1366,10 +1862,8 @@ if (document.readyState === "loading") {
       return;
     }
 
-    // Build / update global profile
     var profile = {};
     try { profile = JSON.parse(localStorage.getItem("tga05_global") || "{}"); } catch(e) {}
-
     profile.nombre = nombre;
     if (grupo) profile.grupo = grupo;
     if (!profile.id_estudiante) {
@@ -1379,16 +1873,13 @@ if (document.readyState === "loading") {
     }
     localStorage.setItem("tga05_global", JSON.stringify(profile));
 
-    // Sync into the PT widget name input
     var ptInp = document.getElementById("pt-nombre");
     if (ptInp) { ptInp.value = nombre; ptInp.dispatchEvent(new Event("input")); }
 
-    // XP reward
     if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
       PT.addXP(5, "Perfil configurado ✨");
     }
 
-    // Close modal
     var overlay = document.getElementById("pt-overlay");
     if (overlay) {
       overlay.style.opacity = "0";
@@ -1396,13 +1887,11 @@ if (document.readyState === "loading") {
       setTimeout(function(){ overlay.style.display = "none"; overlay.style.opacity = ""; }, 200);
     }
 
-    // Auto-sync to Supabase after a short delay
     setTimeout(function(){
       if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
     }, 800);
   };
 
-  // Show on load if no name
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", function(){
       if (shouldShowModal()) showModal();
@@ -1411,6 +1900,876 @@ if (document.readyState === "loading") {
     if (shouldShowModal()) showModal();
   }
 })();
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     INTERACTIVE EXERCISES JAVASCRIPT
+     Pyodide · Fill-in-the-Blank · Drag-and-Drop · QueueViz · Quiz · HTI
+═══════════════════════════════════════════ -->
+<script>
+// ── Safe XP helper ─────────────────────────────────
+function safeAddXP(pts, motivo) {
+  try {
+    if (typeof PT !== 'undefined' && typeof PT.addXP === 'function') {
+      PT.addXP(pts, motivo);
+      return true;
+    }
+  } catch(e) { console.warn('PT.addXP not available:', e); }
+  return false;
+}
+
+// ═══════════════════════════════════════════
+//  GOOGLE COLAB — Pyodide Engine
+// ═══════════════════════════════════════════
+(function() {
+  var pyodide = null;
+  var pyodideReady = false;
+  var pyodideLoading = false;
+
+  var statusEl = document.getElementById('colab-status');
+  var fallbackEl = document.getElementById('colab-fallback');
+
+  function setStatus(msg, cls) {
+    if (!statusEl) return;
+    statusEl.innerHTML = '<span>' + msg + '</span>';
+    statusEl.className = 'colab-status';
+    if (cls) statusEl.classList.add(cls);
+  }
+
+  function disableRunBtns(disabled) {
+    for (var i = 1; i <= 4; i++) {
+      var btn = document.getElementById('run-btn-' + i);
+      if (btn) btn.disabled = disabled;
+      var mb = document.getElementById('mini-run-' + i);
+      if (mb) mb.disabled = disabled;
+    }
+  }
+
+  async function initPyodide() {
+    if (pyodideReady || pyodideLoading) return;
+    pyodideLoading = true;
+    disableRunBtns(true);
+    setStatus('⏳ Cargando motor Python (Pyodide v0.25)...');
+
+    try {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js';
+
+      await new Promise(function(resolve, reject) {
+        script.onload = resolve;
+        script.onerror = function() { reject(new Error('No se pudo cargar el script de Pyodide')); };
+        document.head.appendChild(script);
+      });
+
+      if (typeof window.loadPyodide !== 'function') {
+        throw new Error('loadPyodide no está definido después de cargar el script');
+      }
+
+      pyodide = await window.loadPyodide({
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/'
+      });
+
+      pyodideReady = true;
+      pyodideLoading = false;
+      disableRunBtns(false);
+      setStatus('✅ Python listo. Escribe código y presiona ▶ Run.', 'ready');
+    } catch(err) {
+      console.error('Pyodide load error:', err);
+      pyodideLoading = false;
+      pyodideReady = false;
+      setStatus('⚠️ No se pudo cargar Pyodide: ' + err.message);
+      disableRunBtns(false);
+      if (fallbackEl) fallbackEl.style.display = 'block';
+    }
+  }
+
+  window.runColabCell = async function(cellNum) {
+    if (!pyodideReady) {
+      if (!pyodideLoading) {
+        setStatus('⏳ Cargando Python... espera unos segundos.');
+        initPyodide();
+      } else {
+        setStatus('⏳ Python aún se está cargando. Espera un momento...');
+      }
+      return;
+    }
+
+    var codeArea = document.getElementById('colab-code-' + cellNum);
+    var outDiv   = document.getElementById('colab-out-' + cellNum);
+    var bodyDiv  = document.getElementById('colab-body-' + cellNum);
+    var runBtn   = document.getElementById('run-btn-' + cellNum);
+
+    if (!codeArea || !outDiv) return;
+
+    var code = codeArea.value;
+    if (!code.trim()) return;
+
+    if (runBtn) {
+      runBtn.textContent = '⏳ ...';
+      runBtn.disabled = true;
+    }
+    if (outDiv) {
+      outDiv.classList.add('visible');
+      outDiv.querySelector('pre').textContent = '';
+    }
+    if (bodyDiv) bodyDiv.classList.add('ran');
+
+    try {
+      if (!pyodide || typeof pyodide.setStdout !== 'function') {
+        pyodideReady = false;
+        throw new Error('Pyodide no está inicializado. Recarga la página.');
+      }
+      var output = '';
+      pyodide.setStdout({ batched: function(text) { output += text; } });
+      pyodide.setStderr({ batched: function(text) { output += text; } });
+
+      await pyodide.runPythonAsync(code);
+
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = output || '(sin salida)';
+      pre.classList.remove('colab-error');
+      safeAddXP(2, 'Código ejecutado en Colab');
+    } catch(err) {
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = 'Error: ' + err.message;
+      pre.classList.add('colab-error');
+    }
+
+    if (runBtn) {
+      runBtn.textContent = '▶ Run';
+      runBtn.disabled = false;
+    }
+  };
+
+  // ── Mini cells in Python section ──────────────────
+  window.runMiniCell = async function(cellNum) {
+    if (!pyodideReady) {
+      if (!pyodideLoading) {
+        setStatus('⏳ Cargando Python... espera unos segundos.');
+        initPyodide();
+      } else {
+        setStatus('⏳ Python aún se está cargando. Espera un momento...');
+      }
+      return;
+    }
+
+    var codeArea = document.getElementById('mini-code-' + cellNum);
+    var outDiv   = document.getElementById('mini-out-' + cellNum);
+    var runBtn   = document.getElementById('mini-run-' + cellNum);
+
+    if (!codeArea || !outDiv) return;
+
+    var code = codeArea.value;
+    if (!code.trim()) return;
+
+    if (runBtn) {
+      runBtn.textContent = '⏳ ...';
+      runBtn.disabled = true;
+    }
+    if (outDiv) {
+      outDiv.classList.add('visible');
+      outDiv.querySelector('pre').textContent = '';
+    }
+
+    try {
+      if (!pyodide || typeof pyodide.setStdout !== 'function') {
+        pyodideReady = false;
+        throw new Error('Pyodide no está inicializado. Recarga la página.');
+      }
+      var output = '';
+      pyodide.setStdout({ batched: function(text) { output += text; } });
+      pyodide.setStderr({ batched: function(text) { output += text; } });
+
+      await pyodide.runPythonAsync(code);
+
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = output || '(sin salida)';
+      pre.classList.remove('colab-error');
+      safeAddXP(2, 'Código ejecutado (mini-cell)');
+    } catch(err) {
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = 'Error: ' + err.message;
+      pre.classList.add('colab-error');
+    }
+
+    if (runBtn) {
+      runBtn.textContent = '▶ Run';
+      runBtn.disabled = false;
+    }
+  };
+
+  // ── Expose Pyodide runner for external cells (HTI A) ──
+  window._pyodideRunner = async function(code) {
+    if (!pyodideReady || !pyodide) {
+      return { output: '', error: 'Pyodide no está listo. Ejecuta primero la sección 🧪 Interactivo.' };
+    }
+    try {
+      var output = '';
+      pyodide.setStdout({ batched: function(text) { output += text; } });
+      pyodide.setStderr({ batched: function(text) { output += text; } });
+      await pyodide.runPythonAsync(code);
+      return { output: output, error: null };
+    } catch(e) {
+      return { output: '', error: e.message };
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(initPyodide, 500);
+    });
+  } else {
+    setTimeout(initPyodide, 500);
+  }
+})();
+</script>
+
+<script>
+// ═══════════════════════════════════════════
+//  QUEUE VISUALIZER — FIFO Waiting List
+// ═══════════════════════════════════════════
+(function() {
+  var patientsQueue = [];
+  var servedCount = 0;
+  var enqueueCount = 0;
+  var dequeueCount = 0;
+  var verified = false;
+
+  var nombres = ['Samuel', 'Valentina', 'Martín', 'Lucía', 'Felipe', 'Diana', 'Mateo', 'Isabella', 'Santiago', 'Emma'];
+  var terapias = ['Lenguaje', 'Sensorial', 'TEA', 'TDAH', 'Ocupacional', 'Cognitiva'];
+  var urgencias = ['baja', 'media', 'alta'];
+  var nameIdx = 0;
+
+  function getRandomPatient() {
+    var name = nombres[nameIdx % nombres.length];
+    nameIdx++;
+    return {
+      nombre: name,
+      tipo_terapia: terapias[Math.floor(Math.random() * terapias.length)],
+      urgencia: urgencias[Math.floor(Math.random() * urgencias.length)]
+    };
+  }
+
+  function renderQueue() {
+    var display = document.getElementById('queue-display');
+    if (!display) return;
+    display.innerHTML = '';
+
+    if (patientsQueue.length === 0) {
+      display.innerHTML = '<div style="color:#b0bec5;font-size:.82rem;padding:5px;">(cola vacía)</div>';
+    } else {
+      patientsQueue.forEach(function(p, idx) {
+        var div = document.createElement('div');
+        div.className = 'queue-item';
+        if (idx === 0) div.classList.add('front');
+        div.title = p.tipo_terapia + ' (urgencia: ' + p.urgencia + ')';
+        div.textContent = p.nombre;
+        display.appendChild(div);
+
+        if (idx < patientsQueue.length - 1) {
+          var arrow = document.createElement('span');
+          arrow.className = 'queue-arrow';
+          arrow.textContent = '→';
+          display.appendChild(arrow);
+        }
+      });
+    }
+
+    document.getElementById('q-served').textContent = servedCount;
+    document.getElementById('q-waiting').textContent = patientsQueue.length;
+    document.getElementById('q-ops').textContent = enqueueCount + dequeueCount;
+  }
+
+  window.queueEnqueue = function() {
+    var p = getRandomPatient();
+    patientsQueue.push(p);
+    enqueueCount++;
+    renderQueue();
+    var msg = document.getElementById('queue-msg');
+    msg.textContent = '➕ ' + p.nombre + ' (' + p.tipo_terapia + ') agregado al final de la cola.';
+    msg.style.color = '#89b4fa';
+  };
+
+  window.queueDequeue = function() {
+    if (patientsQueue.length === 0) {
+      var msg = document.getElementById('queue-msg');
+      msg.textContent = '⚠️ Underflow: la cola está vacía. No hay pacientes que atender.';
+      msg.style.color = '#f38ba8';
+      return;
+    }
+    var p = patientsQueue.shift();
+    dequeueCount++;
+    servedCount++;
+    renderQueue();
+    var msg = document.getElementById('queue-msg');
+    msg.textContent = '➖ ' + p.nombre + ' ha sido atendido(a) y sale de la cola.';
+    msg.style.color = '#a6e3a1';
+  };
+
+  window.queuePeek = function() {
+    if (patientsQueue.length === 0) {
+      var msg = document.getElementById('queue-msg');
+      msg.textContent = '👁️ La cola está vacía. No hay frente que consultar.';
+      msg.style.color = '#f9e2af';
+      return;
+    }
+    var p = patientsQueue[0];
+    var msg = document.getElementById('queue-msg');
+    msg.textContent = '👁️ Frente: ' + p.nombre + ' (' + p.tipo_terapia + ', urgencia ' + p.urgencia + ')';
+    msg.style.color = '#FFDF2D';
+  };
+
+  window.queueVerificar = function() {
+    if (enqueueCount >= 3 && dequeueCount >= 2) {
+      if (!verified) {
+        verified = true;
+        safeAddXP(10, 'Cola verificada (≥3 enqueues + ≥2 dequeues)');
+        try {
+          if (typeof PT !== 'undefined' && PT.state) {
+            PT.state.actividad_completada = true;
+            PT.save();
+          }
+        } catch(e) {}
+      }
+      var msg = document.getElementById('queue-msg');
+      msg.textContent = '✅ ¡Actividad completada! +10 XP. Has realizado ' + enqueueCount + ' enqueues y ' + dequeueCount + ' dequeues.';
+      msg.style.color = '#a6e3a1';
+    } else {
+      var msg = document.getElementById('queue-msg');
+      msg.textContent = '⚠️ Debes hacer al menos 3 enqueues y 2 dequeues. Actual: ' + enqueueCount + ' enqueues, ' + dequeueCount + ' dequeues.';
+      msg.style.color = '#ef6c00';
+    }
+  };
+
+  window.queueReiniciar = function() {
+    patientsQueue = [];
+    servedCount = 0;
+    enqueueCount = 0;
+    dequeueCount = 0;
+    verified = false;
+    nameIdx = 0;
+    renderQueue();
+    var msg = document.getElementById('queue-msg');
+    msg.textContent = '🔄 Cola reiniciada. ¡Empieza de nuevo!';
+    msg.style.color = '#b0bec5';
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderQueue);
+  } else {
+    renderQueue();
+  }
+})();
+</script>
+
+<script>
+// ═══════════════════════════════════════════
+//  CODECADEMY FILL-IN-THE-BLANK EXERCISES
+// ═══════════════════════════════════════════
+
+var fibCompleted = { ex1: false, ex2: false, ex3: false };
+
+// Exercise 1: Complete enqueue — "append" and "popleft"
+window.checkFib1 = function() {
+  var b1 = document.getElementById('fib-b1');
+  var b1b = document.getElementById('fib-b1b');
+  var fb  = document.getElementById('fib-fb-1');
+  var ex  = document.getElementById('fib-ex-1');
+
+  var v1 = (b1.value || '').trim();
+  var v1b = (b1b.value || '').trim();
+
+  var correct1 = (v1 === 'append');
+  var correct1b = (v1b === 'popleft');
+  var correct = correct1 && correct1b;
+
+  b1.className = 'fib-input ' + (correct1 ? 'correct-input' : 'wrong-input');
+  b1b.className = 'fib-input ' + (correct1b ? 'correct-input' : 'wrong-input');
+
+  if (correct) {
+    showFibFeedback(fb, 'success', '✅ ¡Correcto! enqueue usa append() para agregar al final, y dequeue usa popleft() para extraer del frente.');
+    ex.classList.add('correct'); ex.classList.remove('wrong');
+    if (!fibCompleted.ex1) {
+      fibCompleted.ex1 = true;
+      safeAddXP(5, 'FIB Ejercicio 1 completado');
+      checkAllFibCompleted();
+    }
+  } else {
+    var hint = '';
+    if (!correct1 && !correct1b) hint = 'Ambos métodos son incorrectos.';
+    else if (!correct1) hint = 'El método para agregar al final es append().';
+    else if (!correct1b) hint = 'El método para extraer del frente es popleft().';
+    showFibFeedback(fb, 'error', '❌ ' + hint);
+    ex.classList.add('wrong'); ex.classList.remove('correct');
+  }
+};
+
+// Exercise 2: FIFO order — "0" and "Ana"
+window.checkFib2 = function() {
+  var b2 = document.getElementById('fib-b2');
+  var b2b = document.getElementById('fib-b2b');
+  var fb  = document.getElementById('fib-fb-2');
+  var ex  = document.getElementById('fib-ex-2');
+
+  var v2 = (b2.value || '').trim();
+  var v2b = (b2b.value || '').trim().toLowerCase();
+
+  var correct2 = (v2 === '0');
+  var correct2b = (v2b === 'ana');
+  var correct = correct2 && correct2b;
+
+  b2.className = 'fib-input ' + (correct2 ? 'correct-input' : 'wrong-input');
+  b2b.className = 'fib-input ' + (correct2b ? 'correct-input' : 'wrong-input');
+
+  if (correct) {
+    showFibFeedback(fb, 'success', '✅ ¡Correcto! El índice 0 apunta al frente. Ana fue la primera en llegar, por eso es el frente.');
+    ex.classList.add('correct'); ex.classList.remove('wrong');
+    if (!fibCompleted.ex2) {
+      fibCompleted.ex2 = true;
+      safeAddXP(5, 'FIB Ejercicio 2 completado');
+      checkAllFibCompleted();
+    }
+  } else {
+    var hint = '';
+    if (!correct2) hint = 'El frente siempre está en el índice 0.';
+    else if (!correct2b) hint = 'Ana fue la primera, así que está al frente.';
+    showFibFeedback(fb, 'error', '❌ ' + hint);
+    ex.classList.add('wrong'); ex.classList.remove('correct');
+  }
+};
+
+// Exercise 3: Underflow guard — "not cola" or "len(cola) == 0" etc.
+window.checkFib3 = function() {
+  var b3 = document.getElementById('fib-b3');
+  var fb  = document.getElementById('fib-fb-3');
+  var ex  = document.getElementById('fib-ex-3');
+
+  var v3 = (b3.value || '').trim();
+  var correct = (
+    v3 === 'not cola' || v3 === 'len(cola) == 0' ||
+    v3 === 'len(cola)==0' || v3 === 'cola.is_empty()' ||
+    v3 === 'not cola_espera' || v3 === 'len(cola_espera) == 0' ||
+    v3 === 'len(cola_espera)==0' || v3 === 'cola_espera.is_empty()' ||
+    v3 === 'not pacientes' || v3 === 'len(pacientes) == 0'
+  );
+
+  b3.className = 'fib-input ' + (correct ? 'correct-input' : 'wrong-input');
+
+  if (correct) {
+    showFibFeedback(fb, 'success', '✅ ¡Correcto! La guarda "if not cola:" protege contra underflow antes de hacer dequeue.');
+    ex.classList.add('correct'); ex.classList.remove('wrong');
+    if (!fibCompleted.ex3) {
+      fibCompleted.ex3 = true;
+      safeAddXP(5, 'FIB Ejercicio 3 completado');
+      checkAllFibCompleted();
+    }
+  } else {
+    showFibFeedback(fb, 'error', '❌ Debes verificar si la cola está vacía: "not cola" o "len(cola) == 0".');
+    ex.classList.add('wrong'); ex.classList.remove('correct');
+  }
+};
+
+function showFibFeedback(el, cls, msg) {
+  if (!el) return;
+  el.className = 'fib-feedback show ' + cls;
+  el.textContent = msg;
+}
+
+function checkAllFibCompleted() {
+  if (fibCompleted.ex1 && fibCompleted.ex2 && fibCompleted.ex3) {
+    safeAddXP(5, 'Todos los FIB completados');
+  }
+}
+</script>
+
+<script>
+// ═══════════════════════════════════════════
+//  DRAG-AND-DROP: Pila vs Cola
+// ═══════════════════════════════════════════
+(function() {
+  var dndScore = 0;
+  var dndTotal = 10;
+  var dndDone = false;
+  var draggedItem = null;
+
+  function initDragDrop() {
+    var items = document.querySelectorAll('#dnd-items .dnd-item');
+    var zones = document.querySelectorAll('.dnd-drop-zone');
+
+    items.forEach(function(item) {
+      item.addEventListener('dragstart', function(e) {
+        draggedItem = this;
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', this.getAttribute('data-value'));
+      });
+
+      item.addEventListener('dragend', function(e) {
+        this.classList.remove('dragging');
+        draggedItem = null;
+        zones.forEach(function(z) { z.classList.remove('drag-over'); });
+        document.querySelectorAll('.dnd-column').forEach(function(c) { c.classList.remove('drag-over'); });
+      });
+    });
+
+    zones.forEach(function(zone) {
+      zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        this.classList.add('drag-over');
+        this.closest('.dnd-column').classList.add('drag-over');
+      });
+
+      zone.addEventListener('dragleave', function(e) {
+        this.classList.remove('drag-over');
+        this.closest('.dnd-column').classList.remove('drag-over');
+      });
+
+      zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        this.closest('.dnd-column').classList.remove('drag-over');
+
+        if (!draggedItem) return;
+
+        var colTarget = this.getAttribute('data-col');
+        var colItem = draggedItem.getAttribute('data-col');
+        var valEl = this.querySelector('.dnd-drop-value');
+
+        if (valEl && valEl.textContent.trim()) {
+          var fbEl = document.getElementById('dnd-feedback');
+          fbEl.textContent = '⚠️ Este espacio ya está ocupado. Reinicia para intentar de nuevo.';
+          fbEl.style.color = '#ef6c00';
+          return;
+        }
+
+        if (colTarget === colItem) {
+          this.classList.add('correct-drop');
+          dndScore++;
+          document.getElementById('dnd-score').textContent = dndScore;
+
+          if (valEl) {
+            valEl.textContent = '✅ ' + draggedItem.textContent;
+          }
+
+          draggedItem.classList.add('placed');
+        } else {
+          this.classList.add('wrong-drop');
+          setTimeout(function() {
+            zone.classList.remove('wrong-drop');
+          }, 800);
+
+          var fbEl = document.getElementById('dnd-feedback');
+          fbEl.textContent = '❌ "' + draggedItem.textContent + '" no pertenece a ' + colTarget + '. Intenta de nuevo.';
+          fbEl.style.color = '#c62828';
+          setTimeout(function() {
+            if (fbEl && fbEl.textContent.indexOf('❌') === 0) fbEl.textContent = '';
+          }, 2500);
+        }
+
+        if (dndScore >= dndTotal && !dndDone) {
+          dndDone = true;
+          var fbEl = document.getElementById('dnd-feedback');
+          fbEl.textContent = '🎉 ¡Perfecto! Has clasificado todas las operaciones correctamente.';
+          fbEl.style.color = '#1b5e20';
+          safeAddXP(3, 'Drag & drop completado');
+        }
+      });
+    });
+  }
+
+  window.resetDragDrop = function() {
+    dndScore = 0;
+    dndDone = false;
+    document.getElementById('dnd-score').textContent = '0';
+    document.getElementById('dnd-feedback').textContent = '';
+
+    document.querySelectorAll('.dnd-drop-zone').forEach(function(zone) {
+      zone.classList.remove('correct-drop', 'wrong-drop');
+      var valEl = zone.querySelector('.dnd-drop-value');
+      if (valEl) valEl.textContent = '';
+    });
+
+    document.querySelectorAll('#dnd-items .dnd-item').forEach(function(item) {
+      item.classList.remove('placed', 'dragging');
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDragDrop);
+  } else {
+    initDragDrop();
+  }
+})();
+</script>
+
+<script>
+// ═══════════════════════════════════════════
+//  QUIZ VERIFICATION + HTI A/B INTERACTIVE JS
+// ═══════════════════════════════════════════
+
+// ── QUIZ VERIFICATION ──────────────────────────────
+window.verificarQuiz = function() {
+  var quizQs = document.querySelectorAll('.quiz-q');
+  var total = quizQs.length;
+  var correct = 0;
+  var answered = 0;
+
+  quizQs.forEach(function(qEl, qi) {
+    var answerEl = qEl.querySelector('.quiz-answer');
+    var correctText = answerEl ? answerEl.textContent : '';
+    var correctMatch = correctText.match(/✅\s*([a-d])/i);
+    var correctIdx = correctMatch
+      ? ['a','b','c','d'].indexOf(correctMatch[1].toLowerCase())
+      : -1;
+
+    var lis = qEl.querySelectorAll('li');
+    var selected = -1;
+    lis.forEach(function(li, ai) {
+      if (li.dataset.answered === '1') {
+        selected = ai;
+      }
+    });
+
+    if (selected >= 0) answered++;
+
+    lis.forEach(function(li, ai) {
+      li.classList.remove('correct-answer', 'wrong-answer');
+    });
+
+    if (correctIdx >= 0 && selected >= 0) {
+      if (selected === correctIdx) {
+        lis[selected].classList.add('correct-answer');
+        correct++;
+      } else {
+        lis[selected].classList.add('wrong-answer');
+        if (correctIdx >= 0) lis[correctIdx].classList.add('correct-answer');
+      }
+    }
+
+    if (answerEl) answerEl.style.display = 'block';
+  });
+
+  var scoreEl = document.getElementById('quiz-score-display');
+  var scoreText = document.getElementById('quiz-score-text');
+  if (scoreEl && scoreText) {
+    scoreText.textContent = correct;
+    scoreEl.classList.add('visible');
+    if (answered < total) {
+      scoreEl.style.color = 'var(--muted)';
+      scoreEl.innerHTML = '⚠️ Responde todas las preguntas primero (' + answered + '/' + total + ' respondidas)';
+    } else if (correct === total) {
+      scoreEl.style.color = 'var(--green)';
+    } else if (correct >= 3) {
+      scoreEl.style.color = '#f57f17';
+    } else {
+      scoreEl.style.color = '#c62828';
+    }
+  }
+
+  if (answered >= total) {
+    if (correct === total) {
+      safeAddXP(10, '¡Quiz perfecto! 5/5 correctas');
+    } else if (correct >= 3) {
+      safeAddXP(5, 'Quiz: ' + correct + '/5 correctas');
+    }
+  }
+
+  try {
+    if (typeof PT !== 'undefined' && PT.state) {
+      PT.state.quiz_puntaje = correct;
+      PT.save();
+    }
+  } catch(e) {}
+};
+
+// ── REINICIAR QUIZ ──────────────────────────────────
+window.reiniciarQuiz = function() {
+  document.querySelectorAll('.quiz-q li').forEach(function(li) {
+    li.dataset.answered = '';
+    li.classList.remove('correct-answer', 'wrong-answer');
+    li.style.background = '';
+    li.style.color = '';
+  });
+  document.querySelectorAll('.quiz-answer').forEach(function(el) {
+    el.style.display = 'none';
+  });
+  var scoreEl = document.getElementById('quiz-score-display');
+  if (scoreEl) scoreEl.classList.remove('visible');
+  document.getElementById('quiz-score-text').textContent = '0';
+
+  try {
+    if (typeof PT !== 'undefined' && PT.state) {
+      PT.state.quiz_respuestas = {};
+      PT.state.quiz_puntaje = 0;
+      PT.save();
+    }
+  } catch(e) {}
+};
+
+// ── HTI A: RUN CODE ─────────────────────────────────
+window.runHtiA = async function() {
+  var codeArea = document.getElementById('hti-a-code');
+  var outDiv = document.getElementById('hti-a-output');
+  var runBtn = document.getElementById('hti-a-run-btn');
+
+  if (!codeArea || !outDiv) return;
+  var code = codeArea.value;
+  if (!code.trim()) return;
+
+  if (runBtn) {
+    runBtn.textContent = '⏳ ...';
+    runBtn.disabled = true;
+  }
+  outDiv.classList.add('visible');
+  outDiv.querySelector('pre').textContent = '';
+
+  try {
+    if (typeof window._pyodideRunner === 'function') {
+      var result = await window._pyodideRunner(code);
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = result.output || '(sin salida)';
+      if (result.error) {
+        pre.textContent = result.error;
+        pre.classList.add('colab-error');
+      } else {
+        pre.classList.remove('colab-error');
+      }
+      safeAddXP(2, 'Código HTI ejecutado');
+    } else {
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = '⏳ Python no disponible. Ejecuta primero la sección 🧪 Interactivo para cargar el motor, o usa Google Colab.';
+      pre.classList.remove('colab-error');
+    }
+  } catch(e) {
+    var pre = outDiv.querySelector('pre');
+    pre.textContent = 'Error: ' + e.message;
+    pre.classList.add('colab-error');
+  }
+
+  if (runBtn) {
+    runBtn.textContent = '▶ Run';
+    runBtn.disabled = false;
+  }
+};
+
+// ── HTI A: MARK AS DONE ─────────────────────────────
+window.marcarHtiA = function() {
+  var doneBtn = document.getElementById('hti-a-done-btn');
+  var doneMsg = document.getElementById('hti-a-done-msg');
+
+  if (doneBtn) {
+    doneBtn.disabled = true;
+    doneBtn.textContent = '✅ Entregado';
+    doneBtn.style.background = 'var(--muted)';
+    doneBtn.style.color = '#fff';
+  }
+  if (doneMsg) doneMsg.style.display = 'inline';
+
+  safeAddXP(5, 'HTI A entregada');
+
+  try {
+    if (typeof PT !== 'undefined' && PT.state) {
+      PT.state.hti_entregado = true;
+      PT.save();
+    }
+    var key = 'tga05_s4';
+    var st = JSON.parse(localStorage.getItem(key) || '{}');
+    st.hti_entregado = true;
+    localStorage.setItem(key, JSON.stringify(st));
+  } catch(e) {}
+};
+
+// ── HTI B: VERIFY TABLE ─────────────────────────────
+window.verificarHtiB = function() {
+  // Expected answers for the fillable table
+  // Paso1 Enqueue Samuel: frente=Samuel final=Samuel long=1
+  // Paso2 Enqueue Valentina: frente=Samuel final=Valentina long=2
+  // Paso3 Enqueue Martín: frente=Samuel final=Martín long=3
+  // Paso4 Dequeue: frente=Valentina final=Martín long=2
+  // Paso5 Dequeue: frente=Martín final=Martín long=1
+  var correct = 0;
+  var total = 5;
+
+  var expected = [
+    {f: 'Samuel', r: 'Samuel', l: '1'},
+    {f: 'Samuel', r: 'Valentina', l: '2'},
+    {f: 'Samuel', r: 'Martín', l: '3'},
+    {f: 'Valentina', r: 'Martín', l: '2'},
+    {f: 'Martín', r: 'Martín', l: '1'}
+  ];
+
+  for (var i = 1; i <= total; i++) {
+    var vF = document.getElementById('hti-b-val-' + i);
+    var vR = document.getElementById('hti-b-val-' + i + 'b');
+    var vL = document.getElementById('hti-b-val-' + i + 'c');
+
+    var vFVal = (vF ? vF.value.trim() : '');
+    var vRVal = (vR ? vR.value.trim() : '');
+    var vLVal = (vL ? vL.value.trim() : '');
+
+    var fOk = (vFVal === expected[i-1].f);
+    var rOk = (vRVal === expected[i-1].r);
+    var lOk = (vLVal === expected[i-1].l);
+    var rowOk = fOk && rOk && lOk;
+
+    if (vF) { vF.style.borderColor = fOk ? '#43a047' : '#c62828'; vF.style.background = fOk ? '#e8f5e9' : '#ffebee'; }
+    if (vR) { vR.style.borderColor = rOk ? '#43a047' : '#c62828'; vR.style.background = rOk ? '#e8f5e9' : '#ffebee'; }
+    if (vL) { vL.style.borderColor = lOk ? '#43a047' : '#c62828'; vL.style.background = lOk ? '#e8f5e9' : '#ffebee'; }
+
+    if (rowOk) correct++;
+  }
+
+  var msgEl = document.getElementById('hti-b-msg');
+  if (msgEl) {
+    msgEl.style.display = 'inline';
+    if (correct === total) {
+      msgEl.textContent = '🎉 ¡Excelente! Las 5 filas son correctas.';
+      msgEl.style.color = '#1b5e20';
+    } else if (correct >= 3) {
+      msgEl.textContent = '⚠️ ' + correct + '/5 correctas. Revisa las marcadas en rojo.';
+      msgEl.style.color = '#f57f17';
+    } else {
+      msgEl.textContent = '❌ Solo ' + correct + '/5 correctas. Repasa cómo funciona FIFO.';
+      msgEl.style.color = '#c62828';
+    }
+  }
+
+  if (correct === total) {
+    safeAddXP(2, 'Ficha HTI B verificada');
+  }
+};
+
+// ── HTI B: MARK AS DONE ─────────────────────────────
+window.marcarHtiB = function() {
+  var doneBtn = document.getElementById('hti-b-done-btn');
+  var msgEl = document.getElementById('hti-b-msg');
+
+  if (doneBtn) {
+    doneBtn.disabled = true;
+    doneBtn.textContent = '✅ Hecho';
+    doneBtn.style.background = 'var(--muted)';
+    doneBtn.style.color = '#fff';
+  }
+  if (msgEl) {
+    msgEl.style.display = 'inline';
+    msgEl.textContent = '🎉 ¡HTI B registrada! +2 XP';
+    msgEl.style.color = '#1b5e20';
+  }
+
+  safeAddXP(2, 'HTI B marcada como hecha');
+
+  try {
+    if (typeof PT !== 'undefined' && PT.state) {
+      PT.state.actividad_completada = true;
+      PT.save();
+    }
+    var key = 'tga05_s4';
+    var st = JSON.parse(localStorage.getItem(key) || '{}');
+    st.actividad_completada = true;
+    localStorage.setItem(key, JSON.stringify(st));
+  } catch(e) {}
+};
 </script>
 
 </body>
