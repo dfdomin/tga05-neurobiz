@@ -426,7 +426,137 @@ blockquote {
     .sticky-nav .inner { padding-inline: 16px; }
     h1 { font-size: 1.85rem; }
     .badge-row { gap: 8px; }
-}</style>
+}
+
+/* ═══════════════════════════════════════════════
+   INTERACTIVE EXERCISES — Colab / FIB / DnD / Quiz / StackViz / HTI
+═══════════════════════════════════════════════ */
+
+/* ── Colab Cells ───────────────────────── */
+.colab-section { margin: 1.5rem 0; }
+.colab-section h3 { color: var(--primary); font-size: 1.05rem; margin-bottom: 1rem; display: flex; align-items: center; gap: .5rem; }
+.colab-status { background: #fff8e1; border: 1px solid #FFDF2D; border-radius: 8px; padding: .6rem 1rem; margin-bottom: 1rem; font-size: .88rem; display: flex; align-items: center; gap: .5rem; color: #5d4037; }
+.colab-status.ready { background: #e8f5e9; border-color: #43a047; color: var(--green); }
+.colab-cell { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 10px; margin-bottom: 1rem; overflow: hidden; transition: box-shadow 0.3s; }
+.colab-cell:hover { box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+.colab-cell-header { display: flex; align-items: center; padding: .5rem .8rem; background: #16162a; border-bottom: 1px solid #2a2a4a; }
+.colab-cell-index { color: #6c7086; font-family: 'Courier New', monospace; font-size: .78rem; font-weight: 700; min-width: 60px; }
+.colab-run-btn { background: #2e7d32; color: #fff; border: none; border-radius: 4px; padding: .25rem .65rem; font-size: .72rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: .25rem; transition: background .2s; }
+.colab-run-btn:hover { background: #388e3c; }
+.colab-run-btn:disabled { background: #555; cursor: not-allowed; }
+.colab-cell-body { padding: .8rem 1rem .8rem 3.2rem; position: relative; }
+.colab-cell-body::before { content: 'In [ ]:'; position: absolute; left: .8rem; top: .85rem; color: #6c7086; font-family: 'Courier New', monospace; font-size: .78rem; }
+.colab-cell-body.ran::before { content: 'In [*]:'; color: #89b4fa; }
+.colab-cell textarea { width: 100%; min-height: 80px; background: transparent; border: none; color: #cdd6f4; font-family: 'Courier New', monospace; font-size: .85rem; line-height: 1.6; resize: vertical; outline: none; padding: 0; }
+.colab-output { display: none; background: #0d1117; border-top: 1px solid #2a2a4a; padding: .8rem 1rem .8rem 3.2rem; position: relative; }
+.colab-output::before { content: 'Out[*]:'; position: absolute; left: .8rem; top: .85rem; color: #f9cc6c; font-family: 'Courier New', monospace; font-size: .78rem; }
+.colab-output.visible { display: block; }
+.colab-output pre { color: #c9d1d9; font-family: 'Courier New', monospace; font-size: .82rem; line-height: 1.5; padding: 0; margin: 0; background: transparent; white-space: pre-wrap; word-break: break-all; }
+.colab-output .colab-error { color: #f85149; }
+
+/* ── FIB (Fill-in-the-Blank) ──────────── */
+.fib-exercise { background: #f8f9fa; border: 2px solid #dde5f3; border-radius: 18px; padding: 1.4rem 1.6rem; margin: 1.2rem 0; transition: border-color .3s; }
+.fib-exercise.correct { border-color: var(--green); background: #e8f5e9; }
+.fib-exercise.wrong   { border-color: #c62828; background: #ffebee; }
+.fib-exercise h4 { color: var(--primary); margin-bottom: .8rem; font-size: 1rem; }
+.fib-code-block { background: #1E2843; border-radius: 8px; padding: 1rem 1.3rem; font-family: 'Courier New', monospace; font-size: .85rem; line-height: 2; color: #cdd6f4; margin: .8rem 0; overflow-x: auto; white-space: pre-wrap; }
+.fib-input { background: rgba(255,223,45,.12); border: 1.5px solid rgba(255,223,45,.5); border-radius: 4px; color: var(--accent); font-family: 'Courier New', monospace; font-size: .85rem; padding: .15rem .4rem; width: 130px; outline: none; transition: border-color .2s; }
+.fib-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,223,45,.15); }
+.fib-input.correct-input { border-color: var(--green); background: rgba(46,125,50,.12); color: var(--green); }
+.fib-input.wrong-input   { border-color: #c62828; background: rgba(198,40,40,.12); color: #c62828; }
+.fib-feedback { margin-top: .6rem; padding: .5rem .9rem; border-radius: 6px; font-size: .85rem; font-weight: 600; display: none; }
+.fib-feedback.show { display: block; }
+.fib-feedback.success { background: #e8f5e9; color: var(--green); }
+.fib-feedback.error   { background: #ffebee; color: #c62828; }
+.fib-submit-btn { margin-top: .6rem; background: var(--primary); color: #fff; border: none; padding: .45rem 1.2rem; border-radius: 6px; font-weight: 700; font-size: .82rem; cursor: pointer; transition: background .2s; }
+.fib-submit-btn:hover { background: var(--primary-2); }
+.fib-submit-btn:disabled { opacity: .5; cursor: default; }
+
+/* ── Drag-and-Drop ─────────────────────── */
+.dnd-container { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
+.dnd-items { flex: 1 1 200px; display: flex; flex-wrap: wrap; gap: .5rem; align-content: flex-start; }
+.dnd-targets { flex: 2 1 400px; display: flex; flex-direction: column; gap: .6rem; }
+.dnd-item { background: var(--primary); color: #fff; padding: .5rem 1rem; border-radius: 8px; font-weight: 700; font-size: .88rem; cursor: grab; user-select: none; transition: transform .15s, box-shadow .15s; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+.dnd-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+.dnd-item:active { cursor: grabbing; }
+.dnd-item.dragging { opacity: .5; transform: scale(.95); }
+.dnd-item.placed { display: none; }
+.dnd-drop-zone { background: var(--bg); border: 2px dashed #dde5f3; border-radius: 10px; padding: .8rem 1rem; display: flex; align-items: center; gap: .8rem; min-height: 52px; transition: border-color .2s, background .2s; }
+.dnd-drop-zone.drag-over { border-color: var(--primary-2); background: rgba(30,40,67,.06); }
+.dnd-drop-zone.correct-drop { border-color: var(--green); border-style: solid; background: #e8f5e9; }
+.dnd-drop-zone.wrong-drop   { border-color: #c62828; border-style: solid; background: #ffebee; }
+.dnd-drop-label { font-weight: 800; font-size: .82rem; color: var(--primary); min-width: 60px; }
+.dnd-drop-value { font-family: 'Courier New', monospace; font-size: .85rem; color: var(--primary-2); flex: 1; }
+.dnd-drop-value .placed-badge { display: inline-block; background: var(--primary); color: #fff; padding: .15rem .6rem; border-radius: 12px; font-size: .8rem; font-weight: 700; }
+.dnd-score { margin-top: .8rem; font-weight: 800; font-size: 1rem; color: var(--primary); display: flex; align-items: center; gap: .5rem; }
+.dnd-reset-btn { background: #dde5f3; border: none; color: var(--primary); padding: .3rem .8rem; border-radius: 6px; font-size: .78rem; font-weight: 700; cursor: pointer; }
+.dnd-reset-btn:hover { background: var(--muted); color: #fff; }
+
+/* ── Stack Visualizer ──────────────────── */
+.stack-viz { background: #f8fbff; border: 2px solid #d9e5ff; border-radius: 16px; padding: 1.2rem; margin: 1rem 0; text-align: center; }
+.stack-column { display: flex; flex-direction: column-reverse; align-items: center; gap: 3px; min-height: 200px; padding: 10px; border: 2px dashed #b0bec5; border-radius: 12px; background: #fff; max-width: 220px; margin: 0 auto; }
+.stack-item { background: var(--primary); color: #fff; padding: 8px 16px; border-radius: 8px; font-size: .82rem; font-weight: 700; width: 100%; text-align: center; transition: all 0.3s ease; border: 2px solid transparent; }
+.stack-item:last-child { border-color: var(--accent); background: var(--primary-2); }
+.stack-item .item-label { font-size: .7rem; opacity: .8; display: block; }
+.stack-controls { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.stack-btn { background: var(--primary); color: #fff; border: none; padding: .4rem 1rem; border-radius: 8px; font-weight: 700; font-size: .8rem; cursor: pointer; transition: background .2s; }
+.stack-btn:hover { background: var(--primary-2); }
+.stack-btn.danger { background: #c62828; }
+.stack-btn.danger:hover { background: #b71c1c; }
+.stack-btn.success { background: var(--green); }
+.stack-btn.success:hover { background: #1b5e20; }
+.stack-info { font-size: .82rem; color: var(--muted); margin-top: 8px; }
+.stack-op-counter { font-weight: 800; color: var(--primary); }
+
+/* ── Quiz Verification ─────────────────── */
+.quiz-verify-btn { width: 100%; margin-top: 1rem; background: var(--primary); color: #fff; border: none; padding: .7rem 1.5rem; border-radius: 8px; font-weight: 700; font-size: .95rem; cursor: pointer; transition: background .2s; }
+.quiz-verify-btn:hover { background: var(--primary-2); }
+.quiz-verify-btn:disabled { opacity: .5; cursor: default; }
+.quiz-score-display { text-align: center; margin-top: .8rem; font-weight: 700; font-size: 1rem; display: none; }
+.quiz-score-display.visible { display: block; }
+.quiz-q ol { padding-left: 24px; }
+.quiz-q li { cursor: pointer; border-radius: 6px; padding: 4px 10px; margin-bottom: 3px; transition: background .2s, color .2s; }
+.quiz-q li:hover { background: rgba(25,118,210,.12); }
+.quiz-q li[data-answered="1"] { font-weight: 700; }
+.quiz-q li.correct-answer { background: #e8f5e9 !important; color: #2e7d32 !important; font-weight: 700 !important; border: 1px solid #a5d6a7 !important; }
+.quiz-q li.wrong-answer { background: #ffebee !important; color: #c62828 !important; font-weight: 700 !important; border: 1px solid #ef9a9a !important; }
+.quiz-answer { display: none; margin-top: 10px; padding: 10px; background: rgba(255,255,255,.92); border-radius: 14px; border: 1px dashed #64b5f6; }
+
+/* ── HTI Code Editor ───────────────────── */
+.hti-code-editor { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 10px; margin: 1rem 0; overflow: hidden; }
+.hti-code-header { display: flex; align-items: center; padding: .5rem .8rem; background: #16162a; border-bottom: 1px solid #2a2a4a; justify-content: space-between; }
+.mini-run-btn { background: #2e7d32; color: #fff; border: none; border-radius: 4px; padding: .25rem .65rem; font-size: .72rem; font-weight: 700; cursor: pointer; }
+.mini-run-btn:hover { background: #388e3c; }
+.mini-run-btn:disabled { background: #555; cursor: not-allowed; }
+.hti-code-editor textarea { width: 100%; background: transparent; border: none; color: #cdd6f4; font-family: 'Courier New', monospace; font-size: .85rem; line-height: 1.6; resize: vertical; outline: none; padding: .8rem 1rem; }
+.hti-code-output { display: none; background: #0d1117; border-top: 1px solid #2a2a4a; padding: .8rem 1rem; }
+.hti-code-output.visible { display: block; }
+.hti-code-output pre { color: #c9d1d9; font-family: 'Courier New', monospace; font-size: .82rem; line-height: 1.5; margin: 0; white-space: pre-wrap; word-break: break-all; }
+.hti-btn { background: var(--green); color: #fff; border: none; padding: .5rem 1.2rem; border-radius: 8px; font-weight: 700; font-size: .85rem; cursor: pointer; transition: background .2s; }
+.hti-btn:hover { background: #1b5e20; }
+.hti-btn:disabled { background: var(--muted); cursor: default; }
+
+/* ── Mini Code Cells (Python section) ──── */
+.mini-code-cell { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 10px; margin: 1rem 0; overflow: hidden; }
+.mini-code-cell .mini-code-header { display: flex; align-items: center; padding: .5rem .8rem; background: #16162a; border-bottom: 1px solid #2a2a4a; justify-content: space-between; }
+.mini-code-cell .mini-code-title { color: #cdd6f4; font-family: monospace; font-size: .78rem; }
+.mini-code-cell textarea { width: 100%; background: transparent; border: none; color: #cdd6f4; font-family: 'Courier New', monospace; font-size: .85rem; line-height: 1.6; resize: vertical; outline: none; padding: .8rem 1rem; }
+.mini-code-output { display: none; background: #0d1117; border-top: 1px solid #2a2a4a; padding: .8rem 1rem; }
+.mini-code-output.visible { display: block; }
+.mini-code-output pre { color: #c9d1d9; font-family: 'Courier New', monospace; font-size: .82rem; line-height: 1.5; margin: 0; white-space: pre-wrap; word-break: break-all; }
+.mini-code-output .colab-error { color: #f85149; }
+
+/* ── Mobile responsive ──────────────────── */
+@media (max-width: 640px) {
+  .colab-cell-body { padding: .8rem .8rem .8rem 2.6rem; }
+  .colab-cell-body::before { left: .4rem; font-size: .7rem; }
+  .colab-output { padding: .8rem .8rem .8rem 2.6rem; }
+  .colab-output::before { left: .4rem; font-size: .7rem; }
+  .dnd-container { flex-direction: column; }
+  .fib-code-block { font-size: .78rem; }
+  .stack-column { max-width: 180px; }
+}
+</style>
 
 <style id="progress-tracker-css">
 /* ── Progress Tracker Widget ── */
@@ -498,6 +628,7 @@ blockquote {
             <a href="#teoria">Teoría</a>
             <a href="#python">Python BI</a>
             <a href="#actividad">Actividad presencial</a>
+            <a href="#interactivo">🧪 Interactivo</a>
             <a href="#hti">HTI</a>
             <a href="#quiz">Quizizz</a>
             <a href="#bibliografia">Bibliografía</a>
@@ -698,175 +829,172 @@ blockquote {
             <p class="section-intro">Ejecuta cada bloque en Colab o Replit, documenta el comportamiento observado y conecta la salida con una decisión de negocio.</p>
             <blockquote>Empieza por predecir el estado de la pila antes de ejecutar cada bloque. El objetivo no es solo obtener una salida, sino justificar por qué cambia la cima después de cada operación.</blockquote>
             
-            <div class="code-window">
-                <div class="code-topbar">
-                    <span><strong>Bloque 1:</strong> Pila básica con list de Python</span>
-                    <span>colab_stack_list.py</span>
-                    <span class="code-dots"><span></span><span></span><span></span></span>
+            <div class="mini-code-cell">
+                <div class="mini-code-header">
+                    <span class="mini-code-title"><strong>Bloque 1:</strong> Pila básica con list de Python — colab_stack_list.py</span>
+                    <button class="mini-run-btn" onclick="runMiniCell(1)" id="mini-run-1">▶ Run</button>
                 </div>
-                <pre><code># Historial de sesiones de un paciente NeuroBiz usando list como stack
-                    sesiones_iniciales = [
-                        {&quot;fecha&quot;: &quot;2026-02-03&quot;, &quot;tipo&quot;: &quot;Lenguaje&quot;, &quot;indice_progreso&quot;: 6.8},
-                        {&quot;fecha&quot;: &quot;2026-02-10&quot;, &quot;tipo&quot;: &quot;Integración sensorial&quot;, &quot;indice_progreso&quot;: 7.1},
-                        {&quot;fecha&quot;: &quot;2026-02-17&quot;, &quot;tipo&quot;: &quot;Seguimiento TDAH&quot;, &quot;indice_progreso&quot;: 7.4},
-                    ]
+                <textarea id="mini-code-1" rows="14" spellcheck="false"># Historial de sesiones de un paciente NeuroBiz usando list como stack
+sesiones_iniciales = [
+    {"fecha": "2026-02-03", "tipo": "Lenguaje", "indice_progreso": 6.8},
+    {"fecha": "2026-02-10", "tipo": "Integración sensorial", "indice_progreso": 7.1},
+    {"fecha": "2026-02-17", "tipo": "Seguimiento TDAH", "indice_progreso": 7.4},
+]
 
-                    historial = []
+historial = []
 
-                    def push_sesion(stack, sesion):
-                        stack.append(sesion)
-                        print(f&quot;Registrada: {sesion[&#x27;tipo&#x27;]} -&gt; tamaño actual {len(stack)}&quot;)
+def push_sesion(stack, sesion):
+    stack.append(sesion)
+    print(f"Registrada: {sesion['tipo']} -> tamaño actual {len(stack)}")
 
-                    def pop_sesion(stack):
-                        if not stack:
-                            print(&quot;Underflow: no hay sesiones para retirar&quot;)
-                            return None
-                        sesion = stack.pop()
-                        print(f&quot;Retirada: {sesion[&#x27;tipo&#x27;]} -&gt; tamaño actual {len(stack)}&quot;)
-                        return sesion
+def pop_sesion(stack):
+    if not stack:
+        print("Underflow: no hay sesiones para retirar")
+        return None
+    sesion = stack.pop()
+    print(f"Retirada: {sesion['tipo']} -> tamaño actual {len(stack)}")
+    return sesion
 
-                    def peek_sesion(stack):
-                        if not stack:
-                            print(&quot;La pila está vacía&quot;)
-                            return None
-                        return stack[-1]
+def peek_sesion(stack):
+    if not stack:
+        print("La pila está vacía")
+        return None
+    return stack[-1]
 
-                    for sesion in sesiones_iniciales:
-                        push_sesion(historial, sesion)
+for sesion in sesiones_iniciales:
+    push_sesion(historial, sesion)
 
-                    print(&quot;
-Última sesión visible para el terapeuta:&quot;)
-                    print(peek_sesion(historial))
+print("\nÚltima sesión visible para el terapeuta:")
+print(peek_sesion(historial))
 
-                    print(&quot;
-Se detecta una carga duplicada y se deshace:&quot;)
-                    pop_sesion(historial)
+print("\nSe detecta una carga duplicada y se deshace:")
+pop_sesion(historial)
 
-                    print(&quot;
-Nueva cima después del ajuste:&quot;)
-                    print(peek_sesion(historial))</code></pre>
+print("\nNueva cima después del ajuste:")
+print(peek_sesion(historial))</textarea>
+                <div class="mini-code-output" id="mini-out-1"><pre></pre></div>
             </div>
             <div class="info-box">
                 <strong>Uso pedagógico:</strong> Sirve para que el estudiante relacione rápidamente la teoría con operaciones reales usando una lista como pila LIFO en Colab.
             </div>
             
 
-            <div class="code-window">
-                <div class="code-topbar">
-                    <span><strong>Bloque 2:</strong> Clase Stack con capacidad máxima y validaciones</span>
-                    <span>colab_stack_class.py</span>
-                    <span class="code-dots"><span></span><span></span><span></span></span>
+            <div class="mini-code-cell">
+                <div class="mini-code-header">
+                    <span class="mini-code-title"><strong>Bloque 2:</strong> Clase Stack con capacidad máxima — colab_stack_class.py</span>
+                    <button class="mini-run-btn" onclick="runMiniCell(2)" id="mini-run-2">▶ Run</button>
                 </div>
-                <pre><code><span class="kw">class</span> <span class="num">Stack</span><span class="op">:</span>
-    <span class="kw">def</span> <span class="num">__init__</span><span class="op">(</span><span class="var">self</span><span class="op">,</span> <span class="var">max_size</span><span class="op">=</span><span class="num">5</span><span class="op">)</span><span class="op">:</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">_items</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">max_size</span> <span class="op">=</span> <span class="var">max_size</span>
+                <textarea id="mini-code-2" rows="16" spellcheck="false">class Stack:
+    def __init__(self, max_size=5):
+        self._items = []
+        self.max_size = max_size
 
-    <span class="kw">def</span> <span class="num">is_empty</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">return</span> <span class="var">len</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">)</span> <span class="op">==</span> <span class="num">0</span>
+    def is_empty(self):
+        return len(self._items) == 0
 
-    <span class="kw">def</span> <span class="num">is_full</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">return</span> <span class="var">len</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="var">self</span><span class="op">.</span><span class="var">max_size</span>
+    def is_full(self):
+        return len(self._items) >= self.max_size
 
-    <span class="kw">def</span> <span class="num">push</span><span class="op">(</span><span class="var">self</span><span class="op">,</span> <span class="var">item</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">if</span> <span class="var">self</span><span class="op">.</span><span class="var">is_full</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>
-            <span class="kw">raise</span> <span class="var">OverflowError</span><span class="op">(</span><span class="str">&quot;Overflow: se alcanzó la capacidad visible del historial&quot;</span><span class="op">)</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">.</span><span class="var">append</span><span class="op">(</span><span class="var">item</span><span class="op">)</span>
+    def push(self, item):
+        if self.is_full():
+            raise OverflowError("Overflow: se alcanzó la capacidad visible del historial")
+        self._items.append(item)
 
-    <span class="kw">def</span> <span class="num">pop</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">if</span> <span class="var">self</span><span class="op">.</span><span class="var">is_empty</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>
-            <span class="kw">raise</span> <span class="var">IndexError</span><span class="op">(</span><span class="str">&quot;Underflow: no existen sesiones para retirar&quot;</span><span class="op">)</span>
-        <span class="kw">return</span> <span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">.</span><span class="var">pop</span><span class="op">(</span><span class="op">)</span>
+    def pop(self):
+        if self.is_empty():
+            raise IndexError("Underflow: no existen sesiones para retirar")
+        return self._items.pop()
 
-    <span class="kw">def</span> <span class="num">peek</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">if</span> <span class="var">self</span><span class="op">.</span><span class="var">is_empty</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>
-            <span class="kw">return</span> <span class="kw">None</span>
-        <span class="kw">return</span> <span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">[</span><span class="op">-</span><span class="num">1</span><span class="op">]</span>
+    def peek(self):
+        if self.is_empty():
+            return None
+        return self._items[-1]
 
-    <span class="kw">def</span> <span class="num">snapshot</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">return</span> <span class="var">list</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">)</span>
+    def snapshot(self):
+        return list(self._items)
 
-    <span class="kw">def</span> <span class="num">__len__</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">return</span> <span class="var">len</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">_items</span><span class="op">)</span>
+    def __len__(self):
+        return len(self._items)
 
-<span class="var">historial</span> <span class="op">=</span> <span class="var">Stack</span><span class="op">(</span><span class="var">max_size</span><span class="op">=</span><span class="num">3</span><span class="op">)</span>
+historial = Stack(max_size=3)
 
-<span class="kw">for</span> <span class="var">sesion</span> <span class="kw">in</span> <span class="op">[</span>
-    <span class="op">{</span><span class="str">&quot;fecha&quot;</span><span class="op">:</span> <span class="str">&quot;2026-02-03&quot;</span><span class="op">,</span> <span class="str">&quot;tipo&quot;</span><span class="op">:</span> <span class="str">&quot;Lenguaje&quot;</span><span class="op">}</span><span class="op">,</span>
-    <span class="op">{</span><span class="str">&quot;fecha&quot;</span><span class="op">:</span> <span class="str">&quot;2026-02-10&quot;</span><span class="op">,</span> <span class="str">&quot;tipo&quot;</span><span class="op">:</span> <span class="str">&quot;TEA - patrones&quot;</span><span class="op">}</span><span class="op">,</span>
-    <span class="op">{</span><span class="str">&quot;fecha&quot;</span><span class="op">:</span> <span class="str">&quot;2026-02-17&quot;</span><span class="op">,</span> <span class="str">&quot;tipo&quot;</span><span class="op">:</span> <span class="str">&quot;TDAH - hiperfoco&quot;</span><span class="op">}</span><span class="op">,</span>
-<span class="op">]</span><span class="op">:</span>
-    <span class="var">historial</span><span class="op">.</span><span class="var">push</span><span class="op">(</span><span class="var">sesion</span><span class="op">)</span>
+for sesion in [
+    {"fecha": "2026-02-03", "tipo": "Lenguaje"},
+    {"fecha": "2026-02-10", "tipo": "TEA - patrones"},
+    {"fecha": "2026-02-17", "tipo": "TDAH - hiperfoco"},
+]:
+    historial.push(sesion)
 
-<span class="var">print</span><span class="op">(</span><span class="str">&quot;Estado inicial:&quot;</span><span class="op">,</span> <span class="var">historial</span><span class="op">.</span><span class="var">snapshot</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="var">print</span><span class="op">(</span><span class="str">&quot;Cima actual:&quot;</span><span class="op">,</span> <span class="var">historial</span><span class="op">.</span><span class="var">peek</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+print("Estado inicial:", historial.snapshot())
+print("Cima actual:", historial.peek())
 
-<span class="kw">try</span><span class="op">:</span>
-    <span class="var">historial</span><span class="op">.</span><span class="var">push</span><span class="op">(</span><span class="op">{</span><span class="str">&quot;fecha&quot;</span><span class="op">:</span> <span class="str">&quot;2026-02-24&quot;</span><span class="op">,</span> <span class="str">&quot;tipo&quot;</span><span class="op">:</span> <span class="str">&quot;Acompañamiento familiar&quot;</span><span class="op">}</span><span class="op">)</span>
-<span class="kw">except</span> <span class="var">OverflowError</span> <span class="kw">as</span> <span class="var">error</span><span class="op">:</span>
-    <span class="var">print</span><span class="op">(</span><span class="var">error</span><span class="op">)</span>
+try:
+    historial.push({"fecha": "2026-02-24", "tipo": "Acompañamiento familiar"})
+except OverflowError as error:
+    print(error)
 
-<span class="var">print</span><span class="op">(</span><span class="str">&quot;Sesión retirada:&quot;</span><span class="op">,</span> <span class="var">historial</span><span class="op">.</span><span class="var">pop</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="var">print</span><span class="op">(</span><span class="str">&quot;Nueva cima:&quot;</span><span class="op">,</span> <span class="var">historial</span><span class="op">.</span><span class="var">peek</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre>
+print("Sesión retirada:", historial.pop())
+print("Nueva cima:", historial.peek())</textarea>
+                <div class="mini-code-output" id="mini-out-2"><pre></pre></div>
             </div>
             <div class="info-box">
                 <strong>Uso pedagógico:</strong> Hace visible la noción de overflow y underflow, mostrando que una restricción de negocio también se programa.
             </div>
             
 
-            <div class="code-window">
-                <div class="code-topbar">
-                    <span><strong>Bloque 3:</strong> Pila de acciones para función deshacer (undo)</span>
-                    <span>colab_stack_undo.py</span>
-                    <span class="code-dots"><span></span><span></span><span></span></span>
+            <div class="mini-code-cell">
+                <div class="mini-code-header">
+                    <span class="mini-code-title"><strong>Bloque 3:</strong> Pila de acciones para función deshacer (undo) — colab_stack_undo.py</span>
+                    <button class="mini-run-btn" onclick="runMiniCell(3)" id="mini-run-3">▶ Run</button>
                 </div>
-                <pre><code><span class="kw">class</span> <span class="num">AgendaUndo</span><span class="op">:</span>
-    <span class="kw">def</span> <span class="num">__init__</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">historial_acciones</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">agenda</span> <span class="op">=</span> <span class="op">{</span>
-            <span class="str">&quot;paciente&quot;</span><span class="op">:</span> <span class="str">&quot;Camila&quot;</span><span class="op">,</span>
-            <span class="str">&quot;sesion_activa&quot;</span><span class="op">:</span> <span class="str">&quot;Lenguaje&quot;</span><span class="op">,</span>
-            <span class="str">&quot;terapeuta&quot;</span><span class="op">:</span> <span class="str">&quot;Laura Pérez&quot;</span><span class="op">,</span>
-        <span class="op">}</span>
+                <textarea id="mini-code-3" rows="16" spellcheck="false">class AgendaUndo:
+    def __init__(self):
+        self.historial_acciones = []
+        self.agenda = {
+            "paciente": "Camila",
+            "sesion_activa": "Lenguaje",
+            "terapeuta": "Laura Pérez",
+        }
 
-    <span class="kw">def</span> <span class="num">registrar_accion</span><span class="op">(</span><span class="var">self</span><span class="op">,</span> <span class="var">descripcion</span><span class="op">,</span> <span class="var">cambios</span><span class="op">)</span><span class="op">:</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">historial_acciones</span><span class="op">.</span><span class="var">append</span><span class="op">(</span><span class="op">{</span>
-            <span class="str">&quot;descripcion&quot;</span><span class="op">:</span> <span class="var">descripcion</span><span class="op">,</span>
-            <span class="str">&quot;cambios&quot;</span><span class="op">:</span> <span class="var">cambios</span><span class="op">,</span>
-        <span class="op">}</span><span class="op">)</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">agenda</span><span class="op">.</span><span class="var">update</span><span class="op">(</span><span class="var">cambios</span><span class="op">)</span>
+    def registrar_accion(self, descripcion, cambios):
+        self.historial_acciones.append({
+            "descripcion": descripcion,
+            "cambios": cambios,
+        })
+        self.agenda.update(cambios)
 
-    <span class="kw">def</span> <span class="num">deshacer</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">if</span> <span class="kw">not</span> <span class="var">self</span><span class="op">.</span><span class="var">historial_acciones</span><span class="op">:</span>
-            <span class="var">print</span><span class="op">(</span><span class="str">&quot;No hay acciones para deshacer&quot;</span><span class="op">)</span>
-            <span class="kw">return</span>
-        <span class="var">ultima</span> <span class="op">=</span> <span class="var">self</span><span class="op">.</span><span class="var">historial_acciones</span><span class="op">.</span><span class="var">pop</span><span class="op">(</span><span class="op">)</span>
-        <span class="var">print</span><span class="op">(</span>f&quot;Se deshace: <span class="op">{</span><span class="var">ultima</span><span class="op">[</span><span class="str">&#x27;descripcion&#x27;</span><span class="op">]</span><span class="op">}</span>&quot;<span class="op">)</span>
-        <span class="cm"># reconstrucción mínima del estado usando una copia base</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">agenda</span> <span class="op">=</span> <span class="op">{</span>
-            <span class="str">&quot;paciente&quot;</span><span class="op">:</span> <span class="str">&quot;Camila&quot;</span><span class="op">,</span>
-            <span class="str">&quot;sesion_activa&quot;</span><span class="op">:</span> <span class="str">&quot;Lenguaje&quot;</span><span class="op">,</span>
-            <span class="str">&quot;terapeuta&quot;</span><span class="op">:</span> <span class="str">&quot;Laura Pérez&quot;</span><span class="op">,</span>
-        <span class="op">}</span>
-        <span class="kw">for</span> <span class="var">accion</span> <span class="kw">in</span> <span class="var">self</span><span class="op">.</span><span class="var">historial_acciones</span><span class="op">:</span>
-            <span class="var">self</span><span class="op">.</span><span class="var">agenda</span><span class="op">.</span><span class="var">update</span><span class="op">(</span><span class="var">accion</span><span class="op">[</span><span class="str">&quot;cambios&quot;</span><span class="op">]</span><span class="op">)</span>
+    def deshacer(self):
+        if not self.historial_acciones:
+            print("No hay acciones para deshacer")
+            return
+        ultima = self.historial_acciones.pop()
+        print(f"Se deshace: {ultima['descripcion']}")
+        # reconstrucción mínima del estado usando una copia base
+        self.agenda = {
+            "paciente": "Camila",
+            "sesion_activa": "Lenguaje",
+            "terapeuta": "Laura Pérez",
+        }
+        for accion in self.historial_acciones:
+            self.agenda.update(accion["cambios"])
 
-    <span class="kw">def</span> <span class="num">estado</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">return</span> <span class="op">{</span>
-            <span class="str">&quot;agenda&quot;</span><span class="op">:</span> <span class="var">dict</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">agenda</span><span class="op">)</span><span class="op">,</span>
-            <span class="str">&quot;acciones_pendientes&quot;</span><span class="op">:</span> <span class="var">len</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">historial_acciones</span><span class="op">)</span><span class="op">,</span>
-        <span class="op">}</span>
+    def estado(self):
+        return {
+            "agenda": dict(self.agenda),
+            "acciones_pendientes": len(self.historial_acciones),
+        }
 
-<span class="var">sistema</span> <span class="op">=</span> <span class="var">AgendaUndo</span><span class="op">(</span><span class="op">)</span>
-<span class="var">sistema</span><span class="op">.</span><span class="var">registrar_accion</span><span class="op">(</span><span class="str">&quot;Cambio de terapeuta&quot;</span><span class="op">,</span> <span class="op">{</span><span class="str">&quot;terapeuta&quot;</span><span class="op">:</span> <span class="str">&quot;Carlos Rojas&quot;</span><span class="op">}</span><span class="op">)</span>
-<span class="var">sistema</span><span class="op">.</span><span class="var">registrar_accion</span><span class="op">(</span><span class="str">&quot;Cambio de sesión&quot;</span><span class="op">,</span> <span class="op">{</span><span class="str">&quot;sesion_activa&quot;</span><span class="op">:</span> <span class="str">&quot;Seguimiento TDAH&quot;</span><span class="op">}</span><span class="op">)</span>
+sistema = AgendaUndo()
+sistema.registrar_accion("Cambio de terapeuta", {"terapeuta": "Carlos Rojas"})
+sistema.registrar_accion("Cambio de sesión", {"sesion_activa": "Seguimiento TDAH"})
 
-<span class="var">print</span><span class="op">(</span><span class="str">&quot;Antes de deshacer:&quot;</span><span class="op">)</span>
-<span class="var">print</span><span class="op">(</span><span class="var">sistema</span><span class="op">.</span><span class="var">estado</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+print("Antes de deshacer:")
+print(sistema.estado())
 
-<span class="var">sistema</span><span class="op">.</span><span class="var">deshacer</span><span class="op">(</span><span class="op">)</span>
-<span class="var">print</span><span class="op">(</span><span class="str">&quot;Después de deshacer una acción:&quot;</span><span class="op">)</span>
-<span class="var">print</span><span class="op">(</span><span class="var">sistema</span><span class="op">.</span><span class="var">estado</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre>
+sistema.deshacer()
+print("Después de deshacer una acción:")
+print(sistema.estado())</textarea>
+                <div class="mini-code-output" id="mini-out-3"><pre></pre></div>
             </div>
             <div class="info-box">
                 <strong>Uso pedagógico:</strong> Conecta la pila con una aplicación cercana al negocio: revertir la última modificación en la agenda o en el historial clínico.
@@ -901,6 +1029,26 @@ Nueva cima después del ajuste:&quot;)
                     <li>Registro final en ClassDojo y captura del código / traza como evidencia digital.</li>
                 </ul>
             </div>
+        </div>
+        <h3>📊 Visualizador Interactivo de Pila</h3>
+        <p>Usa los botones para simular operaciones sobre la pila del historial terapéutico. Observa cómo crece y se reduce la estructura.</p>
+        <div class="stack-viz" id="stack-viz-container">
+            <div class="stack-column" id="stack-column">
+                <!-- Stack items will be rendered here by JS -->
+            </div>
+            <div class="stack-controls">
+                <button class="stack-btn" onclick="stackPush()">📥 Push</button>
+                <button class="stack-btn danger" onclick="stackPop()">📤 Pop</button>
+                <button class="stack-btn" onclick="stackPeek()">👁️ Peek</button>
+                <button class="stack-btn success" onclick="verificarActividad()">✅ Verificar</button>
+                <button class="stack-btn" onclick="stackReset()">🔄 Reiniciar</button>
+            </div>
+            <div class="stack-info">
+                Operaciones: <span class="stack-op-counter" id="stack-op-count">0</span> |
+                Cima: <span id="stack-peek-display">(vacía)</span> |
+                Tamaño: <span id="stack-size-display">0</span>
+            </div>
+            <div id="stack-feedback" style="margin-top: 8px; font-size: .82rem; font-weight: 600;"></div>
         </div>
         <h3>Entregables mínimos</h3>
         <ul>
@@ -937,6 +1085,271 @@ Nueva cima después del ajuste:&quot;)
 </div>
         </section>
 
+        <section id="interactivo" class="card">
+            <h2>🧪 Ejercicios Interactivos</h2>
+            <p class="section-intro">Afianza tus habilidades con estos ejercicios interactivos. Ejecuta Python en vivo con el motor <strong>Pyodide</strong> (WebAssembly), completa los espacios en blanco, y arrastra las operaciones de pila en el orden correcto. ¡Cada actividad te da XP!</p>
+
+            <!-- ══════════════════════════════════════
+                 GOOGLE COLAB INTERFACE (in-page)
+            ══════════════════════════════════════════ -->
+            <div class="colab-section">
+                <h3>🐍 Google Colab — En Vivo en la Página</h3>
+                <div id="colab-status" class="colab-status">
+                    <span>⏳</span> Iniciando motor Python (Pyodide)...
+                </div>
+
+                <!-- Cell 1: Stack class pre-filled -->
+                <div class="colab-cell" id="colab-cell-1">
+                    <div class="colab-cell-header">
+                        <span class="colab-cell-index">[1]</span>
+                        <button class="colab-run-btn" onclick="runColabCell(1)" id="run-btn-1">▶ Run</button>
+                    </div>
+                    <div class="colab-cell-body" id="colab-body-1">
+                        <textarea id="colab-code-1" rows="14" spellcheck="false"># ── Clase Stack para historial NeuroBiz ──
+class Stack:
+    def __init__(self, max_size=5):
+        self._items = []
+        self.max_size = max_size
+
+    def is_empty(self):
+        return len(self._items) == 0
+
+    def is_full(self):
+        return len(self._items) >= self.max_size
+
+    def push(self, item):
+        if self.is_full():
+            raise OverflowError("Overflow: capacidad máxima alcanzada")
+        self._items.append(item)
+
+    def pop(self):
+        if self.is_empty():
+            raise IndexError("Underflow: pila vacía")
+        return self._items.pop()
+
+    def peek(self):
+        if self.is_empty():
+            return None
+        return self._items[-1]
+
+    def __len__(self):
+        return len(self._items)
+
+    def __repr__(self):
+        return f"Stack({self._items})"
+
+# Crea tu pila aquí
+historial = Stack(max_size=4)
+print("Pila creada. Usa historial.push(), historial.pop() y historial.peek()")
+print("Tamaño actual:", len(historial))</textarea>
+                    </div>
+                    <div class="colab-output" id="colab-out-1"><pre></pre></div>
+                </div>
+
+                <!-- Cell 2: Empty for student push/pop/peek -->
+                <div class="colab-cell" id="colab-cell-2">
+                    <div class="colab-cell-header">
+                        <span class="colab-cell-index">[2]</span>
+                        <button class="colab-run-btn" onclick="runColabCell(2)" id="run-btn-2">▶ Run</button>
+                    </div>
+                    <div class="colab-cell-body" id="colab-body-2">
+                        <textarea id="colab-code-2" rows="8" spellcheck="false"># ── Prueba operaciones push / pop / peek ──
+# Agrega 3 sesiones con historial.push({"tipo": "..."})
+
+# Consulta la cima con historial.peek()
+
+# Retira una sesión con historial.pop()
+
+# Imprime el estado actual
+print("Pila actual:", historial)
+print("Cima:", historial.peek())
+print("Tamaño:", len(historial))</textarea>
+                    </div>
+                    <div class="colab-output" id="colab-out-2"><pre></pre></div>
+                </div>
+
+                <!-- Cell 3: Session history management -->
+                <div class="colab-cell" id="colab-cell-3">
+                    <div class="colab-cell-header">
+                        <span class="colab-cell-index">[3]</span>
+                        <button class="colab-run-btn" onclick="runColabCell(3)" id="run-btn-3">▶ Run</button>
+                    </div>
+                    <div class="colab-cell-body" id="colab-body-3">
+                        <textarea id="colab-code-3" rows="12" spellcheck="false"># ── Gestión de historial de sesiones ──
+historial_sesiones = Stack(max_size=5)
+
+sesiones = [
+    {"fecha": "2026-03-01", "tipo": "Lenguaje", "notas": "Avance en fonética"},
+    {"fecha": "2026-03-08", "tipo": "Sensorial", "notas": "Integración táctil"},
+    {"fecha": "2026-03-15", "tipo": "Seguimiento TDAH", "notas": "Hiperfoco 8.1"},
+]
+
+for s in sesiones:
+    historial_sesiones.push(s)
+    print(f"Push: {s['tipo']}")
+
+print("\nCima actual:", historial_sesiones.peek()["tipo"])
+print("Tamaño:", len(historial_sesiones))
+
+# Deshacer última carga
+eliminada = historial_sesiones.pop()
+print(f"\nDeshacer: {eliminada['tipo']}")
+print("Nueva cima:", historial_sesiones.peek()["tipo"])</textarea>
+                    </div>
+                    <div class="colab-output" id="colab-out-3"><pre></pre></div>
+                </div>
+
+                <!-- Cell 4: Undo system exercise -->
+                <div class="colab-cell" id="colab-cell-4">
+                    <div class="colab-cell-header">
+                        <span class="colab-cell-index">[4]</span>
+                        <button class="colab-run-btn" onclick="runColabCell(4)" id="run-btn-4">▶ Run</button>
+                    </div>
+                    <div class="colab-cell-body" id="colab-body-4">
+                        <textarea id="colab-code-4" rows="14" spellcheck="false"># ── Sistema de Deshacer (Undo) para agenda NeuroBiz ──
+# Completa el código para que deshacer() revierta la última acción
+
+acciones = []  # pila para deshacer
+
+def registrar_accion(descripcion):
+    acciones.append(descripcion)
+    print(f"✔ Registrada: {descripcion}")
+
+def deshacer():
+    if not acciones:
+        print("⚠️ No hay acciones para deshacer")
+        return
+    ultima = acciones.pop()
+    print(f"↩ Se revierte: {ultima}")
+    print(f"  Acciones restantes: {len(acciones)}")
+
+# Prueba el sistema
+registrar_accion("Cambio de terapeuta: Laura -> Carlos")
+registrar_accion("Sesión: Lenguaje -> Seguimiento TDAH")
+registrar_accion("Nota clínica agregada")
+
+print("\n--- Estado inicial ---")
+print(f"Pila de acciones: {acciones}")
+print(f"Cima (última acción): {acciones[-1] if acciones else 'vacía'}")
+
+print("\n--- Deshaciendo... ---")
+deshacer()
+deshacer()
+
+print(f"\nPila final: {acciones}")</textarea>
+                    </div>
+                    <div class="colab-output" id="colab-out-4"><pre></pre></div>
+                </div>
+
+                <div id="colab-fallback" style="display:none; padding:1rem; background:#fff8e1; border-radius:8px; margin-top:1rem; font-size:.88rem; color:#5d4037;">
+                    ⚠️ No se pudo cargar Pyodide. Puedes usar <a href="https://colab.research.google.com" target="_blank" style="color:var(--primary); font-weight:700;">Google Colab</a> directamente.
+                </div>
+            </div>
+
+            <hr style="margin:2rem 0 1.5rem; border:none; border-top:1px solid #dde5f3;">
+
+            <!-- ══════════════════════════════════════
+                 CODECADEMY-STYLE FILL-IN-THE-BLANK
+            ══════════════════════════════════════════ -->
+            <h3 style="color:var(--primary); margin-bottom:1rem;">✍️ Codecademy — Completa el Código</h3>
+
+            <!-- Exercise 1: Complete push -->
+            <div class="fib-exercise" id="fib-ex-1">
+                <h4>Ejercicio 1: Completa el push</h4>
+                <p style="font-size:.85rem; color:var(--muted); margin-bottom:.6rem;">
+                    El terapeuta necesita registrar una nueva sesión de "Integración sensorial" para el paciente. Completa el push.
+                </p>
+                <div class="fib-code-block">
+                    <span style="color:#6c7086; font-style:italic;"># ── Registra una nueva sesión ──</span>
+historial.push(<span id="fib-b1-inp-wrap"><input type="text" class="fib-input" id="fib-b1" placeholder="?" maxlength="40" autocomplete="off"></span>)
+                </div>
+                <button class="fib-submit-btn" onclick="checkFib1()">✅ Verificar</button>
+                <div class="fib-feedback" id="fib-fb-1"></div>
+            </div>
+
+            <!-- Exercise 2: Identify result after operations -->
+            <div class="fib-exercise" id="fib-ex-2">
+                <h4>Ejercicio 2: Identifica el resultado</h4>
+                <p style="font-size:.85rem; color:var(--muted); margin-bottom:.6rem;">
+                    Después de: push("Lenguaje"), push("Sensorial"), push("TDAH"), pop(), ¿qué retorna peek()?
+                </p>
+                <div class="fib-code-block">
+                    <span style="color:#6c7086; font-style:italic;"># ── ¿Qué sesión queda en la cima? ──</span>
+pila.push("Lenguaje")
+pila.push("Sensorial")
+pila.push("TDAH")
+pila.pop()
+resultado = pila.peek()  <span style="color:#6c7086; font-style:italic;"># ¿resultado es...?</span>
+print(<span id="fib-b2-inp-wrap"><input type="text" class="fib-input" id="fib-b2" placeholder="?" maxlength="30" autocomplete="off"></span>)
+                </div>
+                <button class="fib-submit-btn" onclick="checkFib2()">✅ Verificar</button>
+                <div class="fib-feedback" id="fib-fb-2"></div>
+            </div>
+
+            <!-- Exercise 3: Underflow protection -->
+            <div class="fib-exercise" id="fib-ex-3">
+                <h4>Ejercicio 3: Protección contra underflow</h4>
+                <p style="font-size:.85rem; color:var(--muted); margin-bottom:.6rem;">
+                    Completa la condición para evitar que el sistema falle si el terapeuta consulta una pila vacía.
+                </p>
+                <div class="fib-code-block">
+                    <span style="color:#6c7086; font-style:italic;"># ── Protege la consulta de una pila vacía ──</span>
+if <span id="fib-b3-inp-wrap"><input type="text" class="fib-input" id="fib-b3" placeholder="?" maxlength="40" autocomplete="off"></span>:
+    print("Error: pila vacía. No hay sesiones registradas.")
+else:
+    print("Última sesión:", pila.peek())
+                </div>
+                <button class="fib-submit-btn" onclick="checkFib3()">✅ Verificar</button>
+                <div class="fib-feedback" id="fib-fb-3"></div>
+            </div>
+
+            <hr style="margin:2rem 0 1.5rem; border:none; border-top:1px solid #dde5f3;">
+
+            <!-- ══════════════════════════════════════
+                 DRAG-AND-DROP: Stack Operations Order
+            ══════════════════════════════════════════ -->
+            <h3 style="color:var(--primary); margin-bottom:1rem;">🖱️ Ordena las operaciones de una pila</h3>
+            <p style="font-size:.85rem; color:var(--muted); margin-bottom:.8rem;">
+                Arrastra cada operación al slot numerado correspondiente para obtener el estado esperado de la pila.
+            </p>
+            <div class="dnd-container" id="dnd-game">
+                <div class="dnd-items" id="dnd-items">
+                    <div class="dnd-item" draggable="true" data-value="push(A)" data-correct="1">push(A)</div>
+                    <div class="dnd-item" draggable="true" data-value="push(B)" data-correct="2">push(B)</div>
+                    <div class="dnd-item" draggable="true" data-value="pop()" data-correct="3">pop()</div>
+                    <div class="dnd-item" draggable="true" data-value="push(C)" data-correct="4">push(C)</div>
+                    <div class="dnd-item" draggable="true" data-value="peek()" data-correct="5">peek()</div>
+                    <div class="dnd-item" draggable="true" data-value="pop()" data-correct="6">pop()</div>
+                </div>
+                <div class="dnd-targets">
+                    <div class="dnd-drop-zone" data-accepts="1" id="dnd-zone-1">
+                        <span class="dnd-drop-label">Paso 1</span><span class="dnd-drop-value"></span>
+                    </div>
+                    <div class="dnd-drop-zone" data-accepts="2" id="dnd-zone-2">
+                        <span class="dnd-drop-label">Paso 2</span><span class="dnd-drop-value"></span>
+                    </div>
+                    <div class="dnd-drop-zone" data-accepts="3" id="dnd-zone-3">
+                        <span class="dnd-drop-label">Paso 3</span><span class="dnd-drop-value"></span>
+                    </div>
+                    <div class="dnd-drop-zone" data-accepts="4" id="dnd-zone-4">
+                        <span class="dnd-drop-label">Paso 4</span><span class="dnd-drop-value"></span>
+                    </div>
+                    <div class="dnd-drop-zone" data-accepts="5" id="dnd-zone-5">
+                        <span class="dnd-drop-label">Paso 5</span><span class="dnd-drop-value"></span>
+                    </div>
+                    <div class="dnd-drop-zone" data-accepts="6" id="dnd-zone-6">
+                        <span class="dnd-drop-label">Paso 6</span><span class="dnd-drop-value"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="dnd-score">
+                🏆 Puntaje: <span id="dnd-score">0</span> / 6
+                <button class="dnd-reset-btn" onclick="resetDragDrop()">🔄 Reiniciar</button>
+            </div>
+            <div id="dnd-feedback" style="margin-top:.6rem; font-size:.85rem; font-weight:600;"></div>
+
+        </section>
+
         <section id="hti" class="card">
             <h2>HTI - Trabajo independiente</h2>
             <p class="section-intro">Selecciona la ruta de trabajo indicada por tu docente. Ambas se conectan con el mismo resultado de aprendizaje, pero con distinta profundidad y carga.</p>
@@ -947,9 +1360,65 @@ Nueva cima después del ajuste:&quot;)
         <li>Crear una clase <code>Stack</code> o reutilizar la diseñada en clase.</li>
         <li>Registrar al menos 5 acciones de agenda: cambio de terapeuta, reasignación de sesión, cancelación, corrección de KPI y nota clínica.</li>
         <li>Programar una operación <code>deshacer()</code> que revierta la última acción realizada.</li>
-        <li>Entregar captura del código, salida de ejecución y una explicación de 8 a 10 líneas donde se indique por qué una pila es adecuada para “deshacer”.</li>
+        <li>Entregar captura del código, salida de ejecución y una explicación de 8 a 10 líneas donde se indique por qué una pila es adecuada para "deshacer".</li>
     </ul>
     <p><strong>Énfasis Bloom:</strong> aplicar y comenzar a transferir el concepto a un subproblema nuevo.</p>
+
+    <hr style="margin:1.5rem 0; border:none; border-top:1px solid #a5d6a7;">
+
+    <h4 style="color:var(--primary);">💻 Editor de Código — Escribe tu solución aquí</h4>
+    <p style="font-size:.82rem; color:var(--muted); margin-bottom:.6rem;">
+        Usa el editor para probar tu código de la pila con función deshacer. El código se ejecuta con el motor Python incluido.
+    </p>
+    <div class="hti-code-editor" id="hti-a-editor">
+        <div class="hti-code-header">
+            <span style="color:#cdd6f4;font-family:monospace;font-size:.78rem;">📄 stack_undo_neurobiz.py</span>
+            <button class="mini-run-btn" onclick="runHtiA()" id="hti-a-run-btn">▶ Run</button>
+        </div>
+        <textarea id="hti-a-code" rows="12" spellcheck="false"># ── Sistema de Deshacer para Agenda NeuroBiz ──
+class Stack:
+    def __init__(self):
+        self._items = []
+
+    def push(self, item):
+        self._items.append(item)
+
+    def pop(self):
+        if not self._items:
+            return None
+        return self._items.pop()
+
+    def peek(self):
+        if not self._items:
+            return None
+        return self._items[-1]
+
+    def __len__(self):
+        return len(self._items)
+
+# Prueba tu implementación
+acciones = Stack()
+acciones.push("Cambio de terapeuta: Laura -> Carlos")
+acciones.push("Reasignación de sesión: Lenguaje -> TDAH")
+acciones.push("Cancelación de cita del 15-mar")
+acciones.push("Corrección KPI: índice_progreso = 7.2")
+acciones.push("Nota clínica: paciente responde bien")
+
+print("Acciones registradas:", len(acciones))
+print("Última acción (cima):", acciones.peek())
+
+# Deshacer la última acción
+deshecha = acciones.pop()
+print(f"\nDeshacer: {deshecha}")
+print("Nueva cima:", acciones.peek())
+print("Acciones restantes:", len(acciones))</textarea>
+        <div class="hti-code-output" id="hti-a-output"><pre></pre></div>
+    </div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:.5rem; align-items:center;">
+        <button class="hti-btn" id="hti-a-done-btn" onclick="marcarHtiA()">✅ Marcar como Entregado</button>
+        <span id="hti-a-done-msg" style="font-size:.82rem; color:var(--green); font-weight:600; display:none;">🎉 ¡HTI A registrada! +5 XP</span>
+    </div>
 </div>
 <div class="scenario-b">
     <h3>HTI Escenario B · Bajo umbral (20-30 min, cuaderno/papel)</h3>
@@ -960,51 +1429,98 @@ Nueva cima después del ajuste:&quot;)
         <li>Escribir una frase final que indique cuál sesión quedaría disponible para consulta inmediata.</li>
     </ul>
     <p><strong>Importante:</strong> este escenario <strong>NO BLOQUEA la siguiente clase</strong> si no se realiza; funciona como refuerzo de bajo umbral para consolidar la representación mental de la pila.</p>
+
+    <hr style="margin:1.5rem 0; border:none; border-top:1px solid #ffcc80;">
+
+    <h4 style="color:var(--primary);">📝 Registra tu ejercicio aquí</h4>
+    <p style="font-size:.82rem; color:var(--muted); margin-bottom:.6rem;">
+        Completa la tabla con los datos de NeuroBiz que usarías en tu pila. Luego presiona "Verificar" y "Marcar como Hecho".
+    </p>
+    <table>
+        <thead><tr><th>Paso</th><th>Operación</th><th>Sesión / Evento</th><th>Tipo</th></tr></thead>
+        <tbody>
+            <tr><td>1</td><td>push</td><td><input type="text" id="hti-b-val-1" placeholder="Ej: Lenguaje" style="width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;"></td><td><input type="text" id="hti-b-type-1" placeholder="Ej: Terapia" data-expected="texto" style="width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;"></td></tr>
+            <tr><td>2</td><td>push</td><td><input type="text" id="hti-b-val-2" placeholder="Ej: Sensorial" style="width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;"></td><td><input type="text" id="hti-b-type-2" placeholder="Ej: Evaluación" data-expected="texto" style="width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;"></td></tr>
+            <tr><td>3</td><td>push</td><td><input type="text" id="hti-b-val-3" placeholder="Ej: Seguimiento TDAH" style="width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;"></td><td><input type="text" id="hti-b-type-3" placeholder="Ej: Seguimiento" data-expected="texto" style="width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;"></td></tr>
+            <tr><td>4</td><td>push</td><td><input type="text" id="hti-b-val-4" placeholder="Ej: Retroalimentación" style="width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;"></td><td><input type="text" id="hti-b-type-4" placeholder="Ej: Intervención" data-expected="texto" style="width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;"></td></tr>
+            <tr><td>5</td><td>push</td><td><input type="text" id="hti-b-val-5" placeholder="Ej: Nota clínica" style="width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;"></td><td><input type="text" id="hti-b-type-5" placeholder="Ej: Registro" data-expected="texto" style="width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;"></td></tr>
+        </tbody>
+    </table>
+    <div style="display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; margin-top:.5rem;">
+        <button class="hib-btn" onclick="verificarHtiB()" style="background:var(--orange); color:#fff; border:none; padding:.5rem 1.2rem; border-radius:8px; font-weight:700; font-size:.85rem; cursor:pointer;">🔍 Verificar</button>
+        <button class="hti-btn" id="hti-b-done-btn" onclick="marcarHtiB()">✅ Marcar como Hecho</button>
+        <span id="hti-b-msg" style="font-size:.82rem; font-weight:600; display:none;"></span>
+    </div>
 </div>
         </section>
 
         <section id="quiz" class="card">
             <h2>Quiz formativo tipo Quizizz</h2>
-            <p class="section-intro">Responde primero sin mirar la solución. Luego pasa el cursor sobre cada tarjeta para contrastar tu elección.</p>
+            <p class="section-intro">Haz clic en la opción que consideres correcta para cada pregunta. Luego presiona "Verificar Respuestas" para ver tu puntuación.</p>
             <div class="quiz-shell">
-            <article class="quiz-card">
+            <div class="quiz-q">
                 <h3>Pregunta 1</h3>
                 <p><strong>¿Qué describe mejor el comportamiento de una pila?</strong></p>
-                <ul><li>a) El primer elemento en entrar es el primero en salir.</li><li>b) El último elemento en entrar es el primero en salir.</li><li>c) Los elementos se extraen al azar.</li><li>d) Siempre se eliminan dos elementos a la vez.</li></ul>
+                <ol type="a">
+                    <li>El primer elemento en entrar es el primero en salir.</li>
+                    <li>El último elemento en entrar es el primero en salir.</li>
+                    <li>Los elementos se extraen al azar.</li>
+                    <li>Siempre se eliminan dos elementos a la vez.</li>
+                </ol>
                 <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) El último elemento en entrar es el primero en salir.</div>
-            </article>
-            
+            </div>
 
-            <article class="quiz-card">
+            <div class="quiz-q">
                 <h3>Pregunta 2</h3>
                 <p><strong>En Python, ¿qué operación de lista se usa habitualmente como push?</strong></p>
-                <ul><li>a) append()</li><li>b) clear()</li><li>c) sort()</li><li>d) remove()</li></ul>
+                <ol type="a">
+                    <li>append()</li>
+                    <li>clear()</li>
+                    <li>sort()</li>
+                    <li>remove()</li>
+                </ol>
                 <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> a) append()</div>
-            </article>
-            
+            </div>
 
-            <article class="quiz-card">
+            <div class="quiz-q">
                 <h3>Pregunta 3</h3>
                 <p><strong>¿Qué situación corresponde a underflow en NeuroBiz?</strong></p>
-                <ul><li>a) El historial supera la capacidad máxima definida.</li><li>b) Se consulta o extrae una sesión cuando no hay registros cargados.</li><li>c) Se agrega una sesión al final del día.</li><li>d) El KPI de retención aumenta.</li></ul>
+                <ol type="a">
+                    <li>El historial supera la capacidad máxima definida.</li>
+                    <li>Se consulta o extrae una sesión cuando no hay registros cargados.</li>
+                    <li>Se agrega una sesión al final del día.</li>
+                    <li>El KPI de retención aumenta.</li>
+                </ol>
                 <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) Se consulta o extrae una sesión cuando no hay registros cargados.</div>
-            </article>
-            
+            </div>
 
-            <article class="quiz-card">
+            <div class="quiz-q">
                 <h3>Pregunta 4</h3>
                 <p><strong>¿Cuál operación permite ver la sesión más reciente sin eliminarla?</strong></p>
-                <ul><li>a) pop</li><li>b) peek</li><li>c) push</li><li>d) enqueue</li></ul>
+                <ol type="a">
+                    <li>pop</li>
+                    <li>peek</li>
+                    <li>push</li>
+                    <li>enqueue</li>
+                </ol>
                 <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) peek</div>
-            </article>
-            
+            </div>
 
-            <article class="quiz-card">
+            <div class="quiz-q">
                 <h3>Pregunta 5</h3>
                 <p><strong>¿Por qué una pila es adecuada para el historial terapéutico reciente?</strong></p>
-                <ul><li>a) Porque respeta FIFO y garantiza equidad.</li><li>b) Porque siempre ordena de menor a mayor.</li><li>c) Porque prioriza el acceso al registro más reciente.</li><li>d) Porque almacena solo números enteros.</li></ul>
+                <ol type="a">
+                    <li>Porque respeta FIFO y garantiza equidad.</li>
+                    <li>Porque siempre ordena de menor a mayor.</li>
+                    <li>Porque prioriza el acceso al registro más reciente.</li>
+                    <li>Porque almacena solo números enteros.</li>
+                </ol>
                 <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> c) Porque prioriza el acceso al registro más reciente.</div>
-            </article>
+            </div>
+            </div>
+            <button class="quiz-verify-btn" onclick="verificarQuiz()" id="quiz-verify-btn">🔍 Verificar Respuestas</button>
+            <div class="quiz-score-display" id="quiz-score-display">
+                Puntaje: <span id="quiz-score-text">0</span> / 5 correctas
             </div>
         </section>
 
@@ -1500,6 +2016,790 @@ if (document.readyState === "loading") {
     if (shouldShowModal()) showModal();
   }
 })();
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     INTERACTIVE EXERCISES JAVASCRIPT
+     Pyodide · Fill-in-the-Blank · Drag-and-Drop · StackViz · Quiz · HTI
+═══════════════════════════════════════════════ -->
+<script>
+// ── Safe XP helper ─────────────────────────────────
+function safeAddXP(pts, motivo) {
+  try {
+    if (typeof PT !== 'undefined' && typeof PT.addXP === 'function') {
+      PT.addXP(pts, motivo);
+      return true;
+    }
+  } catch(e) { console.warn('PT.addXP not available:', e); }
+  return false;
+}
+
+// ═══════════════════════════════════════════
+//  GOOGLE COLAB — Pyodide Engine
+// ═══════════════════════════════════════════
+(function() {
+  var pyodide = null;
+  var pyodideReady = false;
+  var pyodideLoading = false;
+
+  var statusEl = document.getElementById('colab-status');
+  var fallbackEl = document.getElementById('colab-fallback');
+
+  function setStatus(msg, cls) {
+    if (!statusEl) return;
+    statusEl.innerHTML = '<span>' + msg + '</span>';
+    statusEl.className = 'colab-status';
+    if (cls) statusEl.classList.add(cls);
+  }
+
+  function disableRunBtns(disabled) {
+    for (var i = 1; i <= 4; i++) {
+      var btn = document.getElementById('run-btn-' + i);
+      if (btn) btn.disabled = disabled;
+    }
+  }
+
+  async function initPyodide() {
+    if (pyodideReady || pyodideLoading) return;
+    pyodideLoading = true;
+    disableRunBtns(true);
+    setStatus('⏳ Cargando motor Python (Pyodide v0.25)...');
+
+    try {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js';
+
+      await new Promise(function(resolve, reject) {
+        script.onload = resolve;
+        script.onerror = function() { reject(new Error('No se pudo cargar el script de Pyodide')); };
+        document.head.appendChild(script);
+      });
+
+      if (typeof window.loadPyodide !== 'function') {
+        throw new Error('loadPyodide no está definido después de cargar el script');
+      }
+
+      pyodide = await window.loadPyodide({
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/'
+      });
+
+      pyodideReady = true;
+      pyodideLoading = false;
+      disableRunBtns(false);
+      setStatus('✅ Python listo. Escribe código y presiona ▶ Run.', 'ready');
+    } catch(err) {
+      console.error('Pyodide load error:', err);
+      pyodideLoading = false;
+      pyodideReady = false;
+      setStatus('⚠️ No se pudo cargar Pyodide: ' + err.message);
+      disableRunBtns(false);
+      if (fallbackEl) fallbackEl.style.display = 'block';
+    }
+  }
+
+  window.runColabCell = async function(cellNum) {
+    if (!pyodideReady) {
+      if (!pyodideLoading) {
+        setStatus('⏳ Cargando Python... espera unos segundos.');
+        initPyodide();
+      } else {
+        setStatus('⏳ Python aún se está cargando. Espera un momento...');
+      }
+      return;
+    }
+
+    var codeArea = document.getElementById('colab-code-' + cellNum);
+    var outDiv   = document.getElementById('colab-out-' + cellNum);
+    var bodyDiv  = document.getElementById('colab-body-' + cellNum);
+    var runBtn   = document.getElementById('run-btn-' + cellNum);
+
+    if (!codeArea || !outDiv) return;
+
+    var code = codeArea.value;
+    if (!code.trim()) return;
+
+    if (runBtn) {
+      runBtn.textContent = '⏳ ...';
+      runBtn.disabled = true;
+    }
+    if (outDiv) {
+      outDiv.classList.add('visible');
+      outDiv.querySelector('pre').textContent = '';
+    }
+    if (bodyDiv) bodyDiv.classList.add('ran');
+
+    try {
+      if (!pyodide || typeof pyodide.setStdout !== 'function') {
+        pyodideReady = false;
+        throw new Error('Pyodide no está inicializado. Recarga la página.');
+      }
+      var output = '';
+      pyodide.setStdout({ batched: function(text) { output += text; } });
+      pyodide.setStderr({ batched: function(text) { output += text; } });
+
+      await pyodide.runPythonAsync(code);
+
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = output || '(sin salida)';
+      pre.classList.remove('colab-error');
+      safeAddXP(2, 'Código ejecutado en Colab');
+    } catch(err) {
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = 'Error: ' + err.message;
+      pre.classList.add('colab-error');
+    }
+
+    if (runBtn) {
+      runBtn.textContent = '▶ Run';
+      runBtn.disabled = false;
+    }
+  };
+
+  // ── Mini cells in Python section ──────────────────
+  window.runMiniCell = async function(cellNum) {
+    if (!pyodideReady) {
+      if (!pyodideLoading) {
+        setStatus('⏳ Cargando Python... espera unos segundos.');
+        initPyodide();
+      } else {
+        setStatus('⏳ Python aún se está cargando. Espera un momento...');
+      }
+      return;
+    }
+
+    var codeArea = document.getElementById('mini-code-' + cellNum);
+    var outDiv   = document.getElementById('mini-out-' + cellNum);
+    var runBtn   = document.getElementById('mini-run-' + cellNum);
+
+    if (!codeArea || !outDiv) return;
+
+    var code = codeArea.value;
+    if (!code.trim()) return;
+
+    if (runBtn) {
+      runBtn.textContent = '⏳ ...';
+      runBtn.disabled = true;
+    }
+    if (outDiv) {
+      outDiv.classList.add('visible');
+      outDiv.querySelector('pre').textContent = '';
+    }
+
+    try {
+      if (!pyodide || typeof pyodide.setStdout !== 'function') {
+        pyodideReady = false;
+        throw new Error('Pyodide no está inicializado. Recarga la página.');
+      }
+      var output = '';
+      pyodide.setStdout({ batched: function(text) { output += text; } });
+      pyodide.setStderr({ batched: function(text) { output += text; } });
+
+      await pyodide.runPythonAsync(code);
+
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = output || '(sin salida)';
+      pre.classList.remove('colab-error');
+      safeAddXP(2, 'Código ejecutado (mini-cell)');
+    } catch(err) {
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = 'Error: ' + err.message;
+      pre.classList.add('colab-error');
+    }
+
+    if (runBtn) {
+      runBtn.textContent = '▶ Run';
+      runBtn.disabled = false;
+    }
+  };
+
+  // ── Expose Pyodide runner for external cells (HTI A) ──
+  window._pyodideRunner = async function(code) {
+    if (!pyodideReady || !pyodide) {
+      return { output: '', error: 'Pyodide no está listo. Ejecuta primero la sección 🧪 Interactivo.' };
+    }
+    try {
+      var output = '';
+      pyodide.setStdout({ batched: function(text) { output += text; } });
+      pyodide.setStderr({ batched: function(text) { output += text; } });
+      await pyodide.runPythonAsync(code);
+      return { output: output, error: null };
+    } catch(e) {
+      return { output: '', error: e.message };
+    }
+  };
+
+  // Init Pyodide on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(initPyodide, 500);
+    });
+  } else {
+    setTimeout(initPyodide, 500);
+  }
+})();
+</script>
+
+<script>
+// ═══════════════════════════════════════════
+//  CODECADEMY FILL-IN-THE-BLANK EXERCISES
+// ═══════════════════════════════════════════
+
+var fibCompleted = { ex1: false, ex2: false, ex3: false };
+
+// Exercise 1: Complete push with session dict
+window.checkFib1 = function() {
+  var b1 = document.getElementById('fib-b1');
+  var fb  = document.getElementById('fib-fb-1');
+  var ex  = document.getElementById('fib-ex-1');
+
+  var v1 = b1.value.trim();
+
+  // Accept dict patterns for a session
+  var correct = (
+    v1.indexOf('{') !== -1 && v1.indexOf('}') !== -1 &&
+    (v1.indexOf('tipo') !== -1 || v1.indexOf('fecha') !== -1 || v1.indexOf('Integración') !== -1)
+  ) || v1.indexOf('Integración') !== -1;
+
+  b1.className = 'fib-input ' + (correct ? 'correct-input' : 'wrong-input');
+
+  if (correct) {
+    showFibFeedback(fb, 'success', '✅ ¡Correcto! Debes pasar un diccionario con los datos de la sesión, por ejemplo: {"tipo": "Integración sensorial", "fecha": "2026-03-08"}.');
+    ex.classList.add('correct'); ex.classList.remove('wrong');
+    if (!fibCompleted.ex1) {
+      fibCompleted.ex1 = true;
+      safeAddXP(5, 'Ejercicio 1 completado');
+      checkAllFibCompleted();
+    }
+  } else {
+    showFibFeedback(fb, 'error', '❌ Debes escribir un diccionario con los datos de la sesión, como {"tipo": "Integración sensorial"}.');
+    ex.classList.add('wrong'); ex.classList.remove('correct');
+  }
+};
+
+// Exercise 2: Identify peek result
+window.checkFib2 = function() {
+  var b2 = document.getElementById('fib-b2');
+  var fb  = document.getElementById('fib-fb-2');
+  var ex  = document.getElementById('fib-ex-2');
+
+  var v2 = b2.value.trim().toLowerCase();
+
+  // After push(Lenguaje), push(Sensorial), push(TDAH), pop() -> peek() returns "Sensorial"
+  var correct = (v2 === '"sensorial"' || v2 === "'sensorial'" || v2 === 'sensorial' || v2 === 'resultado');
+
+  b2.className = 'fib-input ' + (correct ? 'correct-input' : 'wrong-input');
+
+  if (correct) {
+    showFibFeedback(fb, 'success', '✅ ¡Correcto! Después de pop(), la cima es "Sensorial". Al eliminar "TDAH", la siguiente en la cima es "Sensorial", que fue la segunda en insertarse.');
+    ex.classList.add('correct'); ex.classList.remove('wrong');
+    if (!fibCompleted.ex2) {
+      fibCompleted.ex2 = true;
+      safeAddXP(5, 'Ejercicio 2 completado');
+      checkAllFibCompleted();
+    }
+  } else {
+    showFibFeedback(fb, 'error', '❌ Piensa: push("Lenguaje"), push("Sensorial"), push("TDAH") → [Lenguaje, Sensorial, TDAH]. pop() quita TDAH. peek() mira la nueva cima: "Sensorial".');
+    ex.classList.add('wrong'); ex.classList.remove('correct');
+  }
+};
+
+// Exercise 3: Underflow protection
+window.checkFib3 = function() {
+  var b3 = document.getElementById('fib-b3');
+  var fb  = document.getElementById('fib-fb-3');
+  var ex  = document.getElementById('fib-ex-3');
+
+  var v3 = b3.value.trim();
+
+  // Accept various forms of empty stack check
+  var correct = (
+    v3 === 'not pila' || v3 === 'len(pila) == 0' || v3 === 'pila == []' ||
+    v3 === 'len(pila)==0' || v3 === 'not pila' || v3 === 'pila.is_empty()' ||
+    v3 === 'not pila:' || v3 === 'not historial' || v3 === 'len(historial) == 0' ||
+    v3 === 'not historial:' || v3 === 'historial.is_empty()'
+  );
+
+  b3.className = 'fib-input ' + (correct ? 'correct-input' : 'wrong-input');
+
+  if (correct) {
+    showFibFeedback(fb, 'success', '✅ ¡Correcto! La condición if not pila: (o equivalentes como len(pila) == 0) protege contra underflow verificando que la pila no esté vacía antes de operar.');
+    ex.classList.add('correct'); ex.classList.remove('wrong');
+    if (!fibCompleted.ex3) {
+      fibCompleted.ex3 = true;
+      safeAddXP(5, 'Ejercicio 3 completado');
+      checkAllFibCompleted();
+    }
+  } else {
+    showFibFeedback(fb, 'error', '❌ La condición debe verificar que la pila está vacía. Opciones válidas: "not pila:", "len(pila) == 0:", "pila.is_empty()".');
+    ex.classList.add('wrong'); ex.classList.remove('correct');
+  }
+};
+
+function showFibFeedback(el, cls, msg) {
+  if (!el) return;
+  el.className = 'fib-feedback show ' + cls;
+  el.textContent = msg;
+}
+
+function checkAllFibCompleted() {
+  if (fibCompleted.ex1 && fibCompleted.ex2 && fibCompleted.ex3) {
+    safeAddXP(5, 'Todos los ejercicios interactivos completados');
+  }
+}
+</script>
+
+<script>
+// ═══════════════════════════════════════════
+//  DRAG-AND-DROP EXERCISE
+// ═══════════════════════════════════════════
+(function() {
+  var dndScore = 0;
+  var dndTotal = 6;
+  var dndDone = false;
+  var draggedItem = null;
+
+  function initDragDrop() {
+    var items = document.querySelectorAll('#dnd-items .dnd-item');
+    var zones = document.querySelectorAll('.dnd-drop-zone');
+
+    items.forEach(function(item) {
+      item.addEventListener('dragstart', function(e) {
+        draggedItem = this;
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', this.getAttribute('data-value'));
+      });
+
+      item.addEventListener('dragend', function(e) {
+        this.classList.remove('dragging');
+        draggedItem = null;
+        zones.forEach(function(z) { z.classList.remove('drag-over'); });
+      });
+    });
+
+    zones.forEach(function(zone) {
+      zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        this.classList.add('drag-over');
+      });
+
+      zone.addEventListener('dragleave', function(e) {
+        this.classList.remove('drag-over');
+      });
+
+      zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+
+        if (!draggedItem) return;
+
+        var accepts = this.getAttribute('data-accepts');
+        var correct = draggedItem.getAttribute('data-correct');
+        var valEl = this.querySelector('.dnd-drop-value');
+
+        if (accepts === correct) {
+          this.classList.add('correct-drop');
+          dndScore++;
+          document.getElementById('dnd-score').textContent = dndScore;
+
+          var badge = document.createElement('span');
+          badge.className = 'placed-badge';
+          badge.textContent = '✅ ' + draggedItem.textContent;
+          valEl.innerHTML = '';
+          valEl.appendChild(badge);
+
+          draggedItem.classList.add('placed');
+        } else {
+          this.classList.add('wrong-drop');
+          setTimeout(function() {
+            zone.classList.remove('wrong-drop');
+          }, 800);
+
+          var fbEl = document.getElementById('dnd-feedback');
+          fbEl.textContent = '❌ "' + draggedItem.textContent + '" no corresponde al paso ' + accepts + '. Intenta de nuevo.';
+          fbEl.style.color = '#c62828';
+          setTimeout(function() {
+            if (fbEl.textContent.indexOf('❌') === 0) fbEl.textContent = '';
+          }, 2000);
+        }
+
+        if (dndScore >= dndTotal && !dndDone) {
+          dndDone = true;
+          var fbEl = document.getElementById('dnd-feedback');
+          fbEl.textContent = '🎉 ¡Perfecto! Has ordenado todas las operaciones correctamente.';
+          fbEl.style.color = '#1b5e20';
+          safeAddXP(3, 'Drag & drop completado');
+        }
+      });
+    });
+  }
+
+  window.resetDragDrop = function() {
+    dndScore = 0;
+    dndDone = false;
+    document.getElementById('dnd-score').textContent = '0';
+    document.getElementById('dnd-feedback').textContent = '';
+
+    document.querySelectorAll('.dnd-drop-zone').forEach(function(zone) {
+      zone.classList.remove('correct-drop', 'wrong-drop');
+      var valEl = zone.querySelector('.dnd-drop-value');
+      if (valEl) valEl.innerHTML = '';
+    });
+
+    document.querySelectorAll('#dnd-items .dnd-item').forEach(function(item) {
+      item.classList.remove('placed', 'dragging');
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDragDrop);
+  } else {
+    initDragDrop();
+  }
+})();
+</script>
+
+<script>
+// ═══════════════════════════════════════════
+//  STACK VISUALIZER (Activity Section)
+// ═══════════════════════════════════════════
+(function() {
+  var stackData = [];  // {fecha, tipo, notas}
+  var opCount = 0;
+  var actividadCompletada = false;
+
+  function renderStack() {
+    var column = document.getElementById('stack-column');
+    var peekDisplay = document.getElementById('stack-peek-display');
+    var sizeDisplay = document.getElementById('stack-size-display');
+    var opCountDisplay = document.getElementById('stack-op-count');
+
+    if (!column) return;
+
+    column.innerHTML = '';
+
+    if (stackData.length === 0) {
+      column.innerHTML = '<div style="color:#b0bec5;font-size:.82rem;padding:20px;">Pila vacía</div>';
+      if (peekDisplay) peekDisplay.textContent = '(vacía)';
+      if (sizeDisplay) sizeDisplay.textContent = '0';
+    } else {
+      stackData.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'stack-item';
+        if (idx === stackData.length - 1) {
+          div.style.borderColor = '#FFDF2D';
+          div.style.background = '#2d3a5e';
+        }
+        div.innerHTML = '<span class="item-label">' + (item.tipo || item) + '</span>' + (item.fecha || '');
+        column.appendChild(div);
+      });
+      var cima = stackData[stackData.length - 1];
+      if (peekDisplay) peekDisplay.textContent = typeof cima === 'object' ? cima.tipo : cima;
+      if (sizeDisplay) sizeDisplay.textContent = stackData.length;
+    }
+
+    if (opCountDisplay) opCountDisplay.textContent = opCount;
+  }
+
+  window.stackPush = function() {
+    var tipos = ['Lenguaje', 'Integración sensorial', 'Seguimiento TDAH', 'Acompañamiento familiar', 'Nota clínica', 'Corrección KPI'];
+    var tipo = tipos[stackData.length % tipos.length];
+    var fecha = '2026-03-' + String(stackData.length + 1).padStart(2, '0');
+    stackData.push({fecha: fecha, tipo: tipo, notas: 'Sesión #' + (stackData.length + 1)});
+    opCount++;
+    renderStack();
+    var fb = document.getElementById('stack-feedback');
+    if (fb) { fb.textContent = '📥 Push: ' + tipo + ' agregada a la cima.'; fb.style.color = 'var(--primary)'; }
+    safeAddXP(1, 'Operación push en visualizador');
+  };
+
+  window.stackPop = function() {
+    if (stackData.length === 0) {
+      var fb = document.getElementById('stack-feedback');
+      if (fb) { fb.textContent = '⚠️ Underflow: la pila está vacía, no se puede hacer pop.'; fb.style.color = '#c62828'; }
+      return;
+    }
+    var removed = stackData.pop();
+    opCount++;
+    renderStack();
+    var fb = document.getElementById('stack-feedback');
+    if (fb) { fb.textContent = '📤 Pop: ' + (typeof removed === 'object' ? removed.tipo : removed) + ' retirada de la cima.'; fb.style.color = '#c62828'; }
+  };
+
+  window.stackPeek = function() {
+    var peekDisplay = document.getElementById('stack-peek-display');
+    var fb = document.getElementById('stack-feedback');
+    if (stackData.length === 0) {
+      if (fb) { fb.textContent = '👁️ Peek: la pila está vacía (underflow).'; fb.style.color = '#ef6c00'; }
+    } else {
+      var cima = stackData[stackData.length - 1];
+      var tipo = typeof cima === 'object' ? cima.tipo : cima;
+      if (fb) { fb.textContent = '👁️ Peek: la cima actual es "' + tipo + '" (sin eliminar).'; fb.style.color = 'var(--primary)'; }
+    }
+    opCount++;
+    renderStack();
+  };
+
+  window.stackReset = function() {
+    stackData = [];
+    opCount = 0;
+    actividadCompletada = false;
+    renderStack();
+    var fb = document.getElementById('stack-feedback');
+    if (fb) { fb.textContent = '🔄 Pila reiniciada.'; fb.style.color = 'var(--muted)'; }
+  };
+
+  window.verificarActividad = function() {
+    var fb = document.getElementById('stack-feedback');
+    // Check if the student performed a reasonable sequence
+    if (stackData.length >= 2 && opCount >= 4) {
+      if (!actividadCompletada) {
+        actividadCompletada = true;
+        safeAddXP(10, 'Actividad de pila completada correctamente');
+        try {
+          if (typeof PT !== 'undefined' && PT.state) {
+            PT.state.actividad_completada = true;
+            PT.save();
+          }
+        } catch(e) {}
+      }
+      if (fb) { fb.textContent = '🎉 ¡Actividad completada! Has trabajado con la pila correctamente. +10 XP'; fb.style.color = '#1b5e20'; }
+    } else {
+      if (fb) { fb.textContent = '⚠️ Realiza al menos 2 push y 2 operaciones más (pop/peek) para completar la actividad.'; fb.style.color = '#ef6c00'; }
+    }
+  };
+
+  // Initial render
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderStack);
+  } else {
+    renderStack();
+  }
+})();
+</script>
+
+<script>
+// ═══════════════════════════════════════════
+//  QUIZ VERIFICATION + HTI A/B INTERACTIVE JS
+// ═══════════════════════════════════════════
+
+// ── QUIZ VERIFICATION ──────────────────────────────
+window.verificarQuiz = function() {
+  var quizQs = document.querySelectorAll('.quiz-q');
+  var total = quizQs.length;
+  var correct = 0;
+  var answered = 0;
+
+  quizQs.forEach(function(qEl, qi) {
+    var answerEl = qEl.querySelector('.quiz-answer');
+    var correctText = answerEl ? answerEl.textContent : '';
+    var correctMatch = correctText.match(/^✅\s*([a-d])/i);
+    var correctIdx = correctMatch
+      ? ['a','b','c','d'].indexOf(correctMatch[1].toLowerCase())
+      : -1;
+
+    var lis = qEl.querySelectorAll('li');
+    var selected = -1;
+    lis.forEach(function(li, ai) {
+      if (li.dataset.answered === '1') {
+        selected = ai;
+      }
+    });
+
+    if (selected >= 0) answered++;
+
+    lis.forEach(function(li, ai) {
+      li.classList.remove('correct-answer', 'wrong-answer');
+    });
+
+    if (correctIdx >= 0 && selected >= 0) {
+      if (selected === correctIdx) {
+        lis[selected].classList.add('correct-answer');
+        correct++;
+      } else {
+        lis[selected].classList.add('wrong-answer');
+        if (correctIdx >= 0) lis[correctIdx].classList.add('correct-answer');
+      }
+    }
+
+    if (answerEl) answerEl.style.display = 'block';
+  });
+
+  var scoreEl = document.getElementById('quiz-score-display');
+  var scoreText = document.getElementById('quiz-score-text');
+  if (scoreEl && scoreText) {
+    scoreText.textContent = correct;
+    scoreEl.classList.add('visible');
+    if (answered < total) {
+      scoreEl.style.color = 'var(--muted)';
+      scoreEl.innerHTML = 'Responde todas las preguntas primero (' + answered + '/' + total + ' respondidas)';
+    } else if (correct === total) {
+      scoreEl.style.color = 'var(--green)';
+    } else if (correct >= 3) {
+      scoreEl.style.color = '#f57f17';
+    } else {
+      scoreEl.style.color = '#c62828';
+    }
+  }
+
+  if (answered >= total) {
+    if (correct === total) {
+      safeAddXP(10, '¡Quiz perfecto! 5/5 correctas');
+    } else if (correct >= 3) {
+      safeAddXP(5, 'Quiz: ' + correct + '/5 correctas');
+    }
+  }
+
+  try {
+    if (typeof PT !== 'undefined' && PT.state) {
+      PT.state.quiz_puntaje = correct;
+      PT.save();
+    }
+  } catch(e) {}
+};
+
+// ── HTI A: RUN CODE ─────────────────────────────────
+window.runHtiA = async function() {
+  var codeArea = document.getElementById('hti-a-code');
+  var outDiv = document.getElementById('hti-a-output');
+  var runBtn = document.getElementById('hti-a-run-btn');
+
+  if (!codeArea || !outDiv) return;
+  var code = codeArea.value;
+  if (!code.trim()) return;
+
+  if (runBtn) {
+    runBtn.textContent = '⏳ ...';
+    runBtn.disabled = true;
+  }
+  outDiv.classList.add('visible');
+  outDiv.querySelector('pre').textContent = '';
+
+  try {
+    if (typeof window._pyodideRunner === 'function') {
+      var result = await window._pyodideRunner(code);
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = result.output || '(sin salida)';
+      if (result.error) pre.classList.add('colab-error');
+      else pre.classList.remove('colab-error');
+      safeAddXP(2, 'Código HTI ejecutado');
+    } else {
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = '⏳ Python no disponible. Ejecuta primero la sección 🧪 Interactivo para cargar el motor, o usa Google Colab.';
+      pre.classList.remove('colab-error');
+    }
+  } catch(e) {
+    var pre = outDiv.querySelector('pre');
+    pre.textContent = 'Error: ' + e.message;
+    pre.classList.add('colab-error');
+  }
+
+  if (runBtn) {
+    runBtn.textContent = '▶ Run';
+    runBtn.disabled = false;
+  }
+};
+
+// ── HTI A: MARK AS DONE ─────────────────────────────
+window.marcarHtiA = function() {
+  var doneBtn = document.getElementById('hti-a-done-btn');
+  var doneMsg = document.getElementById('hti-a-done-msg');
+
+  if (doneBtn) {
+    doneBtn.disabled = true;
+    doneBtn.textContent = '✅ Entregado';
+    doneBtn.style.background = 'var(--muted)';
+  }
+  if (doneMsg) doneMsg.style.display = 'inline';
+
+  safeAddXP(5, 'HTI A entregada');
+
+  try {
+    if (typeof PT !== 'undefined' && PT.state) {
+      PT.state.hti_entregado = true;
+      PT.save();
+    }
+    var key = 'tga05_s2';
+    var st = JSON.parse(localStorage.getItem(key) || '{}');
+    st.hti_entregado = true;
+    localStorage.setItem(key, JSON.stringify(st));
+  } catch(e) {}
+};
+
+// ── HTI B: VERIFY TABLE ─────────────────────────────
+window.verificarHtiB = function() {
+  var total = 5;
+  var correct = 0;
+
+  for (var i = 1; i <= total; i++) {
+    var valEl  = document.getElementById('hti-b-val-' + i);
+    var typeEl = document.getElementById('hti-b-type-' + i);
+
+    var valVal  = valEl  ? valEl.value.trim() : '';
+    var typeVal = typeEl ? typeEl.value.trim() : '';
+
+    var valOk = (valVal.length > 1);
+    var typeOk = (typeVal.length > 1);
+
+    var rowCorrect = valOk && typeOk;
+
+    if (valEl)  { valEl.style.borderColor = valOk ? '#43a047' : '#c62828'; valEl.style.background = valOk ? '#e8f5e9' : '#ffebee'; }
+    if (typeEl) { typeEl.style.borderColor = typeOk ? '#43a047' : '#c62828'; typeEl.style.background = typeOk ? '#e8f5e9' : '#ffebee'; }
+
+    if (rowCorrect) correct++;
+  }
+
+  var msgEl = document.getElementById('hti-b-msg');
+  if (msgEl) {
+    msgEl.style.display = 'inline';
+    if (correct === total) {
+      msgEl.textContent = '🎉 ¡Ficha completa! Las 5 filas están llenas.';
+      msgEl.style.color = '#1b5e20';
+    } else if (correct >= 3) {
+      msgEl.textContent = '⚠️ ' + correct + '/5 filas completadas. Revisa las marcadas en rojo.';
+      msgEl.style.color = '#f57f17';
+    } else {
+      msgEl.textContent = '❌ Solo ' + correct + '/5 completadas. Completa todas las celdas.';
+      msgEl.style.color = '#c62828';
+    }
+  }
+
+  if (correct === total) {
+    safeAddXP(2, 'Ficha HTI B verificada');
+  }
+};
+
+// ── HTI B: MARK AS DONE ─────────────────────────────
+window.marcarHtiB = function() {
+  var doneBtn = document.getElementById('hti-b-done-btn');
+  var msgEl = document.getElementById('hti-b-msg');
+
+  if (doneBtn) {
+    doneBtn.disabled = true;
+    doneBtn.textContent = '✅ Hecho';
+    doneBtn.style.background = 'var(--muted)';
+    doneBtn.style.color = '#fff';
+  }
+  if (msgEl) {
+    msgEl.style.display = 'inline';
+    msgEl.textContent = '🎉 ¡HTI B registrada! +2 XP';
+    msgEl.style.color = '#1b5e20';
+  }
+
+  safeAddXP(2, 'HTI B marcada como hecha');
+
+  try {
+    if (typeof PT !== 'undefined' && PT.state) {
+      PT.state.actividad_completada = true;
+      PT.save();
+    }
+    var key = 'tga05_s2';
+    var st = JSON.parse(localStorage.getItem(key) || '{}');
+    st.actividad_completada = true;
+    localStorage.setItem(key, JSON.stringify(st));
+  } catch(e) {}
+};
 </script>
 
 </body>
