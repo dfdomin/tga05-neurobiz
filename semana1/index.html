@@ -320,6 +320,313 @@
       .card { padding: 1.2rem; }
       main { padding: 0 .8rem 3rem; }
     }
+
+    /* ══════════════════════════════════════════
+       GOOGLE COLAB INTERACTIVE CELLS
+    ══════════════════════════════════════════ */
+    .colab-section { margin: 1.5rem 0; }
+    .colab-section h3 { 
+      color: var(--primary); 
+      font-size: 1.05rem; 
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .colab-status {
+      background: var(--bloom2);
+      border: 1px solid #FFDF2D;
+      border-radius: 8px;
+      padding: .6rem 1rem;
+      margin-bottom: 1rem;
+      font-size: .88rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: #5d4037;
+    }
+    .colab-status.ready { background: #e8f5e9; border-color: #43a047; color: var(--green); }
+    .colab-cell {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: box-shadow 0.3s;
+    }
+    .colab-cell:hover { box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    .colab-cell-header {
+      display: flex;
+      align-items: center;
+      padding: .5rem .8rem;
+      background: #16162a;
+      border-bottom: 1px solid #2a2a4a;
+    }
+    .colab-cell-index {
+      color: #6c7086;
+      font-family: 'Courier New', monospace;
+      font-size: .78rem;
+      font-weight: 700;
+      min-width: 60px;
+    }
+    .colab-run-btn {
+      background: #2e7d32;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: .25rem .65rem;
+      font-size: .72rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+      transition: background .2s;
+    }
+    .colab-run-btn:hover { background: #388e3c; }
+    .colab-run-btn:disabled { background: #555; cursor: not-allowed; }
+    .colab-cell-body {
+      padding: .8rem 1rem .8rem 3.2rem;
+      position: relative;
+    }
+    .colab-cell-body::before {
+      content: 'In [ ]:';
+      position: absolute;
+      left: .8rem;
+      top: .85rem;
+      color: #6c7086;
+      font-family: 'Courier New', monospace;
+      font-size: .78rem;
+    }
+    .colab-cell-body.ran::before {
+      content: 'In [*]:';
+      color: #89b4fa;
+    }
+    .colab-cell textarea {
+      width: 100%;
+      min-height: 80px;
+      background: transparent;
+      border: none;
+      color: #cdd6f4;
+      font-family: 'Courier New', monospace;
+      font-size: .85rem;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      padding: 0;
+    }
+    .colab-output {
+      display: none;
+      background: #0d1117;
+      border-top: 1px solid #2a2a4a;
+      padding: .8rem 1rem .8rem 3.2rem;
+      position: relative;
+    }
+    .colab-output::before {
+      content: 'Out[*]:';
+      position: absolute;
+      left: .8rem;
+      top: .85rem;
+      color: #f9cc6c;
+      font-family: 'Courier New', monospace;
+      font-size: .78rem;
+    }
+    .colab-output.visible { display: block; }
+    .colab-output pre {
+      color: #c9d1d9;
+      font-family: 'Courier New', monospace;
+      font-size: .82rem;
+      line-height: 1.5;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .colab-output .colab-error { color: #f85149; }
+
+    /* ══════════════════════════════════════════
+       CODECADEMY-STYLE FILL-IN-THE-BLANK
+    ══════════════════════════════════════════ */
+    .fib-exercise {
+      background: #f8f9fa;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.6rem;
+      margin: 1.2rem 0;
+      transition: border-color .3s;
+    }
+    .fib-exercise.correct { border-color: var(--green); background: #e8f5e9; }
+    .fib-exercise.wrong   { border-color: var(--red);  background: #ffebee; }
+    .fib-exercise h4 {
+      color: var(--primary);
+      margin-bottom: .8rem;
+      font-size: 1rem;
+    }
+    .fib-code-block {
+      background: #1E2843;
+      border-radius: 8px;
+      padding: 1rem 1.3rem;
+      font-family: 'Courier New', monospace;
+      font-size: .85rem;
+      line-height: 2;
+      color: #cdd6f4;
+      margin: .8rem 0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    .fib-code-block .fib-blank {
+      display: inline-block;
+      min-width: 80px;
+      border-bottom: 2px dashed var(--gold);
+      padding: 0 .3rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .fib-input {
+      background: rgba(255,223,45,.12);
+      border: 1.5px solid rgba(255,223,45,.5);
+      border-radius: 4px;
+      color: var(--gold);
+      font-family: 'Courier New', monospace;
+      font-size: .85rem;
+      padding: .15rem .4rem;
+      width: 100px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .fib-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(255,223,45,.15); }
+    .fib-input.correct-input { border-color: var(--green); background: rgba(46,125,50,.12); color: var(--green); }
+    .fib-input.wrong-input   { border-color: var(--red);  background: rgba(198,40,40,.12); color: var(--red); }
+    .fib-feedback {
+      margin-top: .6rem;
+      padding: .5rem .9rem;
+      border-radius: 6px;
+      font-size: .85rem;
+      font-weight: 600;
+      display: none;
+    }
+    .fib-feedback.show { display: block; }
+    .fib-feedback.success { background: #e8f5e9; color: var(--green); }
+    .fib-feedback.error   { background: #ffebee; color: var(--red); }
+    .fib-submit-btn {
+      margin-top: .6rem;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: .45rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: .82rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .fib-submit-btn:hover { background: var(--accent); }
+    .fib-submit-btn:disabled { opacity: .5; cursor: default; }
+
+    /* ══════════════════════════════════════════
+       DRAG-AND-DROP EXERCISE
+    ══════════════════════════════════════════ */
+    .dnd-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .dnd-items {
+      flex: 1 1 200px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      align-content: flex-start;
+    }
+    .dnd-targets {
+      flex: 2 1 400px;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+    .dnd-item {
+      background: var(--primary);
+      color: #fff;
+      padding: .5rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: .88rem;
+      cursor: grab;
+      user-select: none;
+      transition: transform .15s, box-shadow .15s;
+      box-shadow: 0 2px 6px rgba(0,0,0,.15);
+    }
+    .dnd-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+    .dnd-item:active { cursor: grabbing; }
+    .dnd-item.dragging { opacity: .5; transform: scale(.95); }
+    .dnd-item.placed { display: none; }
+    .dnd-drop-zone {
+      background: var(--light-bg);
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: .8rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      min-height: 52px;
+      transition: border-color .2s, background .2s;
+    }
+    .dnd-drop-zone.drag-over { border-color: var(--accent); background: rgba(30,40,67,.06); }
+    .dnd-drop-zone.correct-drop { border-color: var(--green); border-style: solid; background: #e8f5e9; }
+    .dnd-drop-zone.wrong-drop   { border-color: var(--red);  border-style: solid; background: #ffebee; }
+    .dnd-drop-label {
+      font-weight: 800;
+      font-size: .82rem;
+      color: var(--primary);
+      min-width: 50px;
+    }
+    .dnd-drop-value {
+      font-family: 'Courier New', monospace;
+      font-size: .85rem;
+      color: var(--accent);
+      flex: 1;
+    }
+    .dnd-drop-value .placed-badge {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      padding: .15rem .6rem;
+      border-radius: 12px;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+    .dnd-score {
+      margin-top: .8rem;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .dnd-reset-btn {
+      background: var(--border);
+      border: none;
+      color: var(--primary);
+      padding: .3rem .8rem;
+      border-radius: 6px;
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .dnd-reset-btn:hover { background: var(--muted); color: #fff; }
+
+    /* ── MOBILE RESPONSIVE ADDITIONS ────────── */
+    @media (max-width: 640px) {
+      .colab-cell-body { padding: .8rem .8rem .8rem 2.6rem; }
+      .colab-cell-body::before { left: .4rem; font-size: .7rem; }
+      .colab-output { padding: .8rem .8rem .8rem 2.6rem; }
+      .colab-output::before { left: .4rem; font-size: .7rem; }
+      .dnd-container { flex-direction: column; }
+      .fib-code-block { font-size: .78rem; }
+    }
   </style>
 
 <style id="progress-tracker-css">
@@ -389,6 +696,7 @@
   <a href="#teoria">📚 Teoría</a>
   <a href="#python">🐍 Python</a>
   <a href="#actividad">⚙️ Actividad</a>
+  <a href="#interactivo">🧪 Interactivo</a>
   <a href="#hti">🏠 HTI</a>
   <a href="#quiz">🎮 Quiz</a>
   <a href="#bib">📖 Bibliografía</a>
@@ -767,6 +1075,207 @@
         </p>
       </div>
     </div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       🧪 INTERACTIVE EXERCISES — Codecademy + Colab
+  ═══════════════════════════════════════════ -->
+  <section id="interactivo" class="card">
+    <h2>🧪 Ejercicios Interactivos</h2>
+    <p style="font-size:.9rem; margin-bottom:1.2rem; color:var(--muted);">
+      Afianza tus habilidades con estos ejercicios interactivos. 
+      Ejecuta Python en vivo con el motor <strong>Pyodide</strong> (WebAssembly), 
+      completa los espacios en blanco, y arrastra los tipos de datos correctos. 
+      ¡Cada actividad te da XP!
+    </p>
+
+    <!-- ══════════════════════════════════════
+         GOOGLE COLAB INTERFACE (in-page)
+    ══════════════════════════════════════════ -->
+    <div class="colab-section">
+      <h3>🐍 Google Colab — En Vivo en la Página</h3>
+      <div id="colab-status" class="colab-status">
+        <span>⏳</span> Iniciando motor Python (Pyodide)...
+      </div>
+
+      <!-- Cell 1: Fix the dirty data -->
+      <div class="colab-cell" id="colab-cell-1">
+        <div class="colab-cell-header">
+          <span class="colab-cell-index">[1]</span>
+          <button class="colab-run-btn" onclick="runColabCell(1)" id="run-btn-1">
+            ▶ Run
+          </button>
+        </div>
+        <div class="colab-cell-body" id="colab-body-1">
+          <textarea id="colab-code-1" rows="5" spellcheck="false"># ── datos_sucios_neurobiz.py — ARCHIVO A CORREGIR ──
+sesiones_asistidas = "847"     # ← ¿Problema?
+tasa_retencion     = "78%"     # ← ¿Problema?
+sede               = 1         # ← ¿Problema?
+contrato_activo    = "True"    # ← ¿Problema?
+nivel_hiperfoco    = "7.2"     # ← ¿Problema?
+
+print("Tipos actuales:")
+print(type(sesiones_asistidas), type(tasa_retencion), type(sede))
+</textarea>
+        </div>
+        <div class="colab-output" id="colab-out-1"><pre></pre></div>
+      </div>
+
+      <!-- Cell 2: Student's correction -->
+      <div class="colab-cell" id="colab-cell-2">
+        <div class="colab-cell-header">
+          <span class="colab-cell-index">[2]</span>
+          <button class="colab-run-btn" onclick="runColabCell(2)" id="run-btn-2">
+            ▶ Run
+          </button>
+        </div>
+        <div class="colab-cell-body" id="colab-body-2">
+          <textarea id="colab-code-2" rows="6" spellcheck="false"># ── CORRECCIÓN — Escribe aquí tu versión corregida ──
+sesiones_asistidas = 847        # int
+tasa_retencion     = 0.78       # float
+sede               = "Barranquilla"  # str
+contrato_activo    = True       # bool
+nivel_hiperfoco    = 7.2        # float
+
+print("✅ ¡Tipos corregidos!")
+print(f"Tipo sesiones: {type(sesiones_asistidas).__name__}")
+</textarea>
+        </div>
+        <div class="colab-output" id="colab-out-2"><pre></pre></div>
+      </div>
+
+      <!-- Cell 3: Calculate efficiency -->
+      <div class="colab-cell" id="colab-cell-3">
+        <div class="colab-cell-header">
+          <span class="colab-cell-index">[3]</span>
+          <button class="colab-run-btn" onclick="runColabCell(3)" id="run-btn-3">
+            ▶ Run
+          </button>
+        </div>
+        <div class="colab-cell-body" id="colab-body-3">
+          <textarea id="colab-code-3" rows="8" spellcheck="false"># ── REPORTE DE EFICIENCIA ──
+sesiones_asistidas = 847
+sesiones_fallidas  = 112
+total_sesiones = sesiones_asistidas + sesiones_fallidas
+eficiencia = sesiones_asistidas / total_sesiones * 100
+
+print(f"Total sesiones: {total_sesiones}")
+print(f"Eficiencia operativa: {eficiencia:.1f}%")
+print(f"Tasa de éxito: {sesiones_asistidas/total_sesiones*100:.1f}%")
+</textarea>
+        </div>
+        <div class="colab-output" id="colab-out-3"><pre></pre></div>
+      </div>
+
+      <div id="colab-fallback" style="display:none; padding:1rem; background:#fff8e1; border-radius:8px; margin-top:1rem; font-size:.88rem; color:#5d4037;">
+        ⚠️ No se pudo cargar Pyodide. Puedes usar <a href="https://colab.research.google.com" target="_blank" style="color:var(--primary); font-weight:700;">Google Colab</a> directamente.
+      </div>
+    </div>
+
+    <hr style="margin:2rem 0 1.5rem; border:none; border-top:1px solid var(--border);">
+
+    <!-- ══════════════════════════════════════
+         CODECADEMY-STYLE FILL-IN-THE-BLANK
+    ══════════════════════════════════════════ -->
+    <h3 style="color:var(--primary); margin-bottom:1rem;">✍️ Codecademy — Completa el Código</h3>
+
+    <!-- Exercise 1: Correct data types -->
+    <div class="fib-exercise" id="fib-ex-1">
+      <h4>Ejercicio 1: Corrige los Tipos de Datos</h4>
+      <p style="font-size:.85rem; color:var(--muted); margin-bottom:.6rem;">
+        NeuroBiz recibió datos mal tipados. Corrige los valores para que cada variable tenga el tipo correcto.
+      </p>
+      <div class="fib-code-block">
+        <span class="cm"># ── Corrige los tipos de datos ──</span>
+sesiones_asistidas = <span id="fib-b1-inp-wrap"><input type="text" class="fib-input" id="fib-b1" placeholder="?" maxlength="10" autocomplete="off"></span>  <span class="cm"># debe ser int, no str</span>
+tasa_retencion     = <span id="fib-b2-inp-wrap"><input type="text" class="fib-input" id="fib-b2" placeholder="?" maxlength="10" autocomplete="off"></span>  <span class="cm"># debe ser float, no str</span>
+sede_principal     = <span id="fib-b3-inp-wrap"><input type="text" class="fib-input" id="fib-b3" placeholder="?" maxlength="20" autocomplete="off"></span>  <span class="cm"># debe ser str (nombre de ciudad)</span>
+      </div>
+      <button class="fib-submit-btn" onclick="checkFib1()">✅ Verificar</button>
+      <div class="fib-feedback" id="fib-fb-1"></div>
+    </div>
+
+    <!-- Exercise 2: Complete the calculation -->
+    <div class="fib-exercise" id="fib-ex-2">
+      <h4>Ejercicio 2: Completa el Cálculo</h4>
+      <p style="font-size:.85rem; color:var(--muted); margin-bottom:.6rem;">
+        NeuroBiz necesita calcular la eficiencia operativa. Completa la fórmula correctamente.
+      </p>
+      <div class="fib-code-block">
+        <span class="cm"># ── Completa el cálculo de eficiencia ──</span>
+sesiones = 847
+fallidas = 112
+<span id="fib-b4-inp-wrap"><input type="text" class="fib-input" id="fib-b4" placeholder="?" maxlength="15" autocomplete="off"></span> = sesiones + fallidas
+eficiencia = sesiones / <span id="fib-b5-inp-wrap"><input type="text" class="fib-input" id="fib-b5" placeholder="?" maxlength="15" autocomplete="off"></span> * 100
+
+print(f"Eficiencia: {eficiencia:.1f}%")
+      </div>
+      <button class="fib-submit-btn" onclick="checkFib2()">✅ Verificar</button>
+      <div class="fib-feedback" id="fib-fb-2"></div>
+    </div>
+
+    <!-- Exercise 3: Declare the correct variable -->
+    <div class="fib-exercise" id="fib-ex-3">
+      <h4>Ejercicio 3: Declara la Variable Correcta</h4>
+      <p style="font-size:.85rem; color:var(--muted); margin-bottom:.6rem;">
+        <strong>Escenario:</strong> NeuroBiz necesita almacenar si un paciente tiene contrato activo (sí/no). 
+        Escribe la declaración completa usando el tipo de dato más apropiado.
+      </p>
+      <div class="fib-code-block">
+        <span class="cm"># ── Escribe la declaración completa ──</span>
+<span id="fib-b6-inp-wrap"><input type="text" class="fib-input" id="fib-b6" placeholder="contrato_activo = ..." maxlength="40" autocomplete="off" style="width:240px;"></span>
+      </div>
+      <button class="fib-submit-btn" onclick="checkFib3()">✅ Verificar</button>
+      <div class="fib-feedback" id="fib-fb-3"></div>
+    </div>
+
+    <hr style="margin:2rem 0 1.5rem; border:none; border-top:1px solid var(--border);">
+
+    <!-- ══════════════════════════════════════
+         DRAG-AND-DROP: Tipos de Datos
+    ══════════════════════════════════════════ -->
+    <h3 style="color:var(--primary); margin-bottom:1rem;">🖱️ Arrastra cada valor al tipo de dato correcto</h3>
+    <p style="font-size:.85rem; color:var(--muted); margin-bottom:.8rem;">
+      Arrastra cada valor desde la izquierda hacia la zona del tipo de dato que le corresponde.
+    </p>
+    <div class="dnd-container" id="dnd-game">
+      <div class="dnd-items" id="dnd-items">
+        <div class="dnd-item" draggable="true" data-value="847" data-correct="int">847</div>
+        <div class="dnd-item" draggable="true" data-value="78%" data-correct="str">78%</div>
+        <div class="dnd-item" draggable="true" data-value="True" data-correct="bool">True</div>
+        <div class="dnd-item" draggable="true" data-value="Ana Ramos" data-correct="str">Ana Ramos</div>
+        <div class="dnd-item" draggable="true" data-value="6.4" data-correct="float">6.4</div>
+        <div class="dnd-item" draggable="true" data-value="[68,72,80]" data-correct="list">[68,72,80]</div>
+      </div>
+      <div class="dnd-targets">
+        <div class="dnd-drop-zone" data-accepts="int" id="dnd-zone-int">
+          <span class="dnd-drop-label">int</span>
+          <span class="dnd-drop-value"></span>
+        </div>
+        <div class="dnd-drop-zone" data-accepts="float" id="dnd-zone-float">
+          <span class="dnd-drop-label">float</span>
+          <span class="dnd-drop-value"></span>
+        </div>
+        <div class="dnd-drop-zone" data-accepts="str" id="dnd-zone-str">
+          <span class="dnd-drop-label">str</span>
+          <span class="dnd-drop-value"></span>
+        </div>
+        <div class="dnd-drop-zone" data-accepts="bool" id="dnd-zone-bool">
+          <span class="dnd-drop-label">bool</span>
+          <span class="dnd-drop-value"></span>
+        </div>
+        <div class="dnd-drop-zone" data-accepts="list" id="dnd-zone-list">
+          <span class="dnd-drop-label">list</span>
+          <span class="dnd-drop-value"></span>
+        </div>
+      </div>
+    </div>
+    <div class="dnd-score">
+      🏆 Puntaje: <span id="dnd-score">0</span> / 6
+      <button class="dnd-reset-btn" onclick="resetDragDrop()">🔄 Reiniciar</button>
+    </div>
+    <div id="dnd-feedback" style="margin-top:.6rem; font-size:.85rem; font-weight:600;"></div>
 
   </section>
 
@@ -1371,6 +1880,413 @@ if (document.readyState === "loading") {
     });
   } else {
     if (shouldShowModal()) showModal();
+  }
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════
+     INTERACTIVE EXERCISES JAVASCRIPT
+     Pyodide · Fill-in-the-Blank · Drag-and-Drop
+═══════════════════════════════════════════ -->
+<script id="interactive-exercises-js">
+// ── Safe XP helper ─────────────────────────────────
+function safeAddXP(pts, motivo) {
+  try {
+    if (typeof PT !== 'undefined' && typeof PT.addXP === 'function') {
+      PT.addXP(pts, motivo);
+      return true;
+    }
+  } catch(e) { console.warn('PT.addXP not available:', e); }
+  return false;
+}
+
+// ═══════════════════════════════════════════
+//  GOOGLE COLAB — Pyodide Engine
+// ═══════════════════════════════════════════
+(function() {
+  var pyodide = null;
+  var pyodideReady = false;
+  var pyodideLoading = false;
+  var runBtns = [];
+
+  var statusEl = document.getElementById('colab-status');
+  var fallbackEl = document.getElementById('colab-fallback');
+
+  function setStatus(msg, cls) {
+    if (!statusEl) return;
+    statusEl.innerHTML = '<span>' + msg + '</span>';
+    statusEl.className = 'colab-status';
+    if (cls) statusEl.classList.add(cls);
+  }
+
+  function disableRunBtns(disabled) {
+    for (var i = 1; i <= 3; i++) {
+      var btn = document.getElementById('run-btn-' + i);
+      if (btn) btn.disabled = disabled;
+    }
+  }
+
+  async function loadPyodide() {
+    if (pyodideReady || pyodideLoading) return;
+    pyodideLoading = true;
+    disableRunBtns(true);
+    setStatus('⏳ Cargando motor Python (Pyodide v0.25)...');
+
+    try {
+      // Load Pyodide from CDN
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js';
+
+      await new Promise(function(resolve, reject) {
+        script.onload = resolve;
+        script.onerror = function() { reject(new Error('No se pudo cargar el script de Pyodide')); };
+        document.head.appendChild(script);
+      });
+
+      if (typeof loadPyodide !== 'function') {
+        throw new Error('loadPyodide no está definido después de cargar el script');
+      }
+
+      pyodide = await loadPyodide({
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/'
+      });
+
+      pyodideReady = true;
+      disableRunBtns(false);
+      setStatus('✅ Python listo. Escribe código y presiona ▶ Run.', 'ready');
+    } catch(err) {
+      console.error('Pyodide load error:', err);
+      setStatus('⚠️ No se pudo cargar Pyodide: ' + err.message);
+      if (fallbackEl) fallbackEl.style.display = 'block';
+    }
+  }
+
+  window.runColabCell = async function(cellNum) {
+    if (!pyodideReady) {
+      if (!pyodideLoading) {
+        setStatus('⏳ Cargando Python... espera unos segundos.');
+        loadPyodide();
+      } else {
+        setStatus('⏳ Python aún se está cargando. Espera un momento...');
+      }
+      return;
+    }
+
+    var codeArea = document.getElementById('colab-code-' + cellNum);
+    var outDiv   = document.getElementById('colab-out-' + cellNum);
+    var bodyDiv  = document.getElementById('colab-body-' + cellNum);
+    var runBtn   = document.getElementById('run-btn-' + cellNum);
+
+    if (!codeArea || !outDiv) return;
+
+    var code = codeArea.value;
+    if (!code.trim()) return;
+
+    // Show running state
+    if (runBtn) {
+      runBtn.textContent = '⏳ ...';
+      runBtn.disabled = true;
+    }
+    if (outDiv) {
+      outDiv.classList.add('visible');
+      outDiv.querySelector('pre').textContent = '';
+    }
+    if (bodyDiv) bodyDiv.classList.add('ran');
+
+    try {
+      // Capture stdout
+      var output = '';
+      pyodide.setStdout({
+        batched: function(text) {
+          output += text;
+        }
+      });
+      pyodide.setStderr({
+        batched: function(text) {
+          output += text;
+        }
+      });
+
+      await pyodide.runPythonAsync(code);
+
+      var pre = outDiv.querySelector('pre');
+      if (output) {
+        pre.textContent = output;
+      } else {
+        pre.textContent = '(sin salida)';
+      }
+      pre.classList.remove('colab-error');
+
+      // XP for running code
+      safeAddXP(2, 'Código ejecutado en Colab');
+    } catch(err) {
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = 'Error: ' + err.message;
+      pre.classList.add('colab-error');
+    }
+
+    if (runBtn) {
+      runBtn.textContent = '▶ Run';
+      runBtn.disabled = false;
+    }
+  };
+
+  // Init Pyodide on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(loadPyodide, 500);
+    });
+  } else {
+    setTimeout(loadPyodide, 500);
+  }
+})();
+
+// ═══════════════════════════════════════════
+//  CODECADEMY FILL-IN-THE-BLANK EXERCISES
+// ═══════════════════════════════════════════
+
+// Track which exercises have been completed
+var fibCompleted = { ex1: false, ex2: false, ex3: false };
+
+// Exercise 1: Correct data types
+window.checkFib1 = function() {
+  var b1 = document.getElementById('fib-b1');
+  var b2 = document.getElementById('fib-b2');
+  var b3 = document.getElementById('fib-b3');
+  var fb  = document.getElementById('fib-fb-1');
+  var ex  = document.getElementById('fib-ex-1');
+
+  var v1 = b1.value.trim();
+  var v2 = b2.value.trim();
+  var v3 = b3.value.trim();
+
+  // Correct answers: 847 (int), 0.78 (float), "Barranquilla" (str written as city name)
+  var c1 = (v1 === '847');
+  var c2 = (v2 === '0.78' || v2 === '.78');
+  // For str: accept any city-like string (non-numeric)
+  var c3 = (v3.length > 2 && isNaN(Number(v3)) && v3 !== 'True' && v3 !== 'False');
+
+  // Mark inputs
+  b1.className = 'fib-input ' + (c1 ? 'correct-input' : 'wrong-input');
+  b2.className = 'fib-input ' + (c2 ? 'correct-input' : 'wrong-input');
+  b3.className = 'fib-input ' + (c3 ? 'correct-input' : 'wrong-input');
+
+  var allCorrect = c1 && c2 && c3;
+
+  if (allCorrect) {
+    showFibFeedback(fb, 'success', '✅ ¡Correcto! sesiones_asistidas = 847 (int), tasa_retencion = 0.78 (float), sede_principal = "Barranquilla" (str).');
+    ex.classList.add('correct');
+    ex.classList.remove('wrong');
+    if (!fibCompleted.ex1) {
+      fibCompleted.ex1 = true;
+      safeAddXP(5, 'Ejercicio 1 completado');
+      checkAllFibCompleted();
+    }
+  } else {
+    var msg = '❌ Algunos valores no son correctos. ';
+    if (!c1) msg += 'sesiones_asistidas debe ser 847 (sin comillas). ';
+    if (!c2) msg += 'tasa_retencion debe ser 0.78 (decimal, no porcentaje). ';
+    if (!c3) msg += 'sede_principal debe ser un nombre de ciudad como "Barranquilla". ';
+    showFibFeedback(fb, 'error', msg);
+    ex.classList.add('wrong');
+    ex.classList.remove('correct');
+  }
+};
+
+// Exercise 2: Complete the calculation
+window.checkFib2 = function() {
+  var b4 = document.getElementById('fib-b4');
+  var b5 = document.getElementById('fib-b5');
+  var fb  = document.getElementById('fib-fb-2');
+  var ex  = document.getElementById('fib-ex-2');
+
+  var v4 = b4.value.trim().toLowerCase();
+  var v5 = b5.value.trim().toLowerCase();
+
+  // Accept various names for 'total' and the variable
+  var c4 = (v4 === 'total' || v4 === 'total_sesiones' || v4 === 'totalsesiones' || v4 === 'totalsesiones');
+  var c5 = (v5 === 'total' || v5 === 'total_sesiones' || v5 === 'totalsesiones' || v5 === 'totalsesiones');
+
+  b4.className = 'fib-input ' + (c4 ? 'correct-input' : 'wrong-input');
+  b5.className = 'fib-input ' + (c5 ? 'correct-input' : 'wrong-input');
+
+  if (c4 && c5) {
+    showFibFeedback(fb, 'success', '✅ ¡Correcto! La variable se llama total (o total_sesiones). Se usa tanto para declarar total = sesiones + fallidas como para calcular eficiencia = sesiones / total * 100.');
+    ex.classList.add('correct');
+    ex.classList.remove('wrong');
+    if (!fibCompleted.ex2) {
+      fibCompleted.ex2 = true;
+      safeAddXP(5, 'Ejercicio 2 completado');
+      checkAllFibCompleted();
+    }
+  } else {
+    var msg = '❌ ';
+    if (!c4) msg += 'El nombre de la variable debe ser "total" (o "total_sesiones"). ';
+    if (!c5) msg += 'La eficiencia se calcula dividiendo sesiones entre "total". ';
+    showFibFeedback(fb, 'error', msg);
+    ex.classList.add('wrong');
+    ex.classList.remove('correct');
+  }
+};
+
+// Exercise 3: Declare correct variable
+window.checkFib3 = function() {
+  var b6 = document.getElementById('fib-b6');
+  var fb  = document.getElementById('fib-fb-3');
+  var ex  = document.getElementById('fib-ex-3');
+
+  var v6 = b6.value.trim();
+
+  // Accept: contrato_activo = True (with or without spaces, case-insensitive for True)
+  var pattern = /contrato_activo\s*=\s*True/i;
+  var correct = pattern.test(v6);
+
+  b6.className = 'fib-input ' + (correct ? 'correct-input' : 'wrong-input');
+
+  if (correct) {
+    showFibFeedback(fb, 'success', '✅ ¡Correcto! contrato_activo = True (tipo bool). Un booleano es el tipo más apropiado para valores de sí/no porque es semánticamente claro y eficiente en memoria.');
+    ex.classList.add('correct');
+    ex.classList.remove('wrong');
+    if (!fibCompleted.ex3) {
+      fibCompleted.ex3 = true;
+      safeAddXP(5, 'Ejercicio 3 completado');
+      checkAllFibCompleted();
+    }
+  } else {
+    showFibFeedback(fb, 'error', '❌ Debes escribir exactamente: contrato_activo = True (con True en mayúscula inicial, sin comillas, porque es un booleano).');
+    ex.classList.add('wrong');
+    ex.classList.remove('correct');
+  }
+};
+
+function showFibFeedback(el, cls, msg) {
+  if (!el) return;
+  el.className = 'fib-feedback show ' + cls;
+  el.textContent = msg;
+}
+
+function checkAllFibCompleted() {
+  if (fibCompleted.ex1 && fibCompleted.ex2 && fibCompleted.ex3) {
+    safeAddXP(5, 'Todos los ejercicios interactivos completados');
+  }
+}
+
+// ═══════════════════════════════════════════
+//  DRAG-AND-DROP EXERCISE
+// ═══════════════════════════════════════════
+(function() {
+  var dndScore = 0;
+  var dndTotal = 6;
+  var dndDone = false;
+  var draggedItem = null;
+
+  function initDragDrop() {
+    var items = document.querySelectorAll('#dnd-items .dnd-item');
+    var zones = document.querySelectorAll('.dnd-drop-zone');
+
+    items.forEach(function(item) {
+      item.addEventListener('dragstart', function(e) {
+        draggedItem = this;
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', this.getAttribute('data-value'));
+      });
+
+      item.addEventListener('dragend', function(e) {
+        this.classList.remove('dragging');
+        draggedItem = null;
+        // Remove drag-over from all zones
+        zones.forEach(function(z) { z.classList.remove('drag-over'); });
+      });
+    });
+
+    zones.forEach(function(zone) {
+      zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        this.classList.add('drag-over');
+      });
+
+      zone.addEventListener('dragleave', function(e) {
+        this.classList.remove('drag-over');
+      });
+
+      zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+
+        if (!draggedItem) return;
+
+        var accepts = this.getAttribute('data-accepts');
+        var correct = draggedItem.getAttribute('data-correct');
+        var valEl = this.querySelector('.dnd-drop-value');
+
+        if (accepts === correct) {
+          // Correct!
+          this.classList.add('correct-drop');
+          dndScore++;
+          document.getElementById('dnd-score').textContent = dndScore;
+
+          // Place item in zone
+          var badge = document.createElement('span');
+          badge.className = 'placed-badge';
+          badge.textContent = '✅ ' + draggedItem.textContent;
+          valEl.innerHTML = '';
+          valEl.appendChild(badge);
+
+          // Hide the original item
+          draggedItem.classList.add('placed');
+        } else {
+          // Wrong
+          this.classList.add('wrong-drop');
+          setTimeout(function() {
+            zone.classList.remove('wrong-drop');
+          }, 800);
+
+          var fbEl = document.getElementById('dnd-feedback');
+          fbEl.textContent = '❌ "' + draggedItem.textContent + '" no es de tipo ' + accepts + '. Intenta de nuevo.';
+          fbEl.style.color = 'var(--red)';
+          setTimeout(function() {
+            if (fbEl.textContent.indexOf('❌') === 0) fbEl.textContent = '';
+          }, 2000);
+        }
+
+        // Check if all done
+        if (dndScore >= dndTotal && !dndDone) {
+          dndDone = true;
+          var fbEl = document.getElementById('dnd-feedback');
+          fbEl.textContent = '🎉 ¡Perfecto! Has clasificado todos los tipos de datos correctamente.';
+          fbEl.style.color = 'var(--green)';
+          safeAddXP(3, 'Drag & drop completado');
+        }
+      });
+    });
+  }
+
+  window.resetDragDrop = function() {
+    dndScore = 0;
+    dndDone = false;
+    document.getElementById('dnd-score').textContent = '0';
+    document.getElementById('dnd-feedback').textContent = '';
+
+    // Reset all zones
+    document.querySelectorAll('.dnd-drop-zone').forEach(function(zone) {
+      zone.classList.remove('correct-drop', 'wrong-drop');
+      var valEl = zone.querySelector('.dnd-drop-value');
+      if (valEl) valEl.innerHTML = '';
+    });
+
+    // Reset all items
+    document.querySelectorAll('#dnd-items .dnd-item').forEach(function(item) {
+      item.classList.remove('placed', 'dragging');
+    });
+  };
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDragDrop);
+  } else {
+    initDragDrop();
   }
 })();
 </script>
