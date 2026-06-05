@@ -200,7 +200,7 @@ td.center{text-align:center;}
   <div class="stat-row" id="stats-row"></div>
 
   <div class="card">
-    <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+    <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem">
       <span>Estudiantes — <span id="cnt-shown">29</span> mostrados</span>
       <div class="filter-row" style="margin:0">
         <button class="filter-btn active" onclick="setFilter('todos',this)">Todos</button>
@@ -210,12 +210,15 @@ td.center{text-align:center;}
         <button class="filter-btn" onclick="setFilter('riesgo',this)">⚠️ Sin puntos</button>
       </div>
     </div>
+    <!-- Filtro por grupo — se puebla dinámicamente según grupos importados -->
+    <div id="grupo-filter-row" class="filter-row" style="margin-top:.5rem;display:none;border-top:1px solid var(--border);padding-top:.5rem"></div>
     <div class="table-wrap">
       <table id="students-table">
         <thead>
           <tr>
             <th>#</th>
             <th>Estudiante</th>
+            <th class="center" style="min-width:90px">Grupo</th>
             <th class="center">Puntos</th>
             <th class="center">Nota (0–5)</th>
             <th class="center">Estado</th>
@@ -251,6 +254,11 @@ td.center{text-align:center;}
 <!-- ════════════════════ CLASE TAB ════════════════════ -->
 <div id="tab-clase" style="display:none">
 
+  <!-- Banner de horario: ayuda a identificar el grupo activo -->
+  <div id="horario-banner" style="display:none;background:#1565c0;color:#fff;border-radius:8px;padding:.5rem 1.2rem;margin-bottom:.8rem;font-size:.85rem;font-weight:700;text-align:center;letter-spacing:.02em">
+    📅 <span id="horario-banner-text">Grupo — Horario</span>
+  </div>
+
   <div class="motiv-box">
     💡 Recuerda decirles a tus estudiantes: <strong>"Lo importante no es esta puntuación ni tu nota, sino lo que has aprendido y cómo has crecido."</strong>
   </div>
@@ -261,7 +269,7 @@ td.center{text-align:center;}
     <div>
       <div class="card">
         <div class="card-title">1. Selecciona el estudiante</div>
-        <input type="text" class="student-search" id="student-search" placeholder="🔍 Busca por nombre…" oninput="filterStudents()">
+        <input type="text" class="student-search" id="student-search" placeholder="🔍 Busca por nombre o cédula…" oninput="filterStudents()">
         <div class="student-list" id="student-list-ui"></div>
       </div>
 
@@ -462,7 +470,8 @@ const GROUP_KEY    = 'tga05_group_info_v1';
 
 let data = { config: { max_pts:50, thresh_exon:40, thresh_ayuda:30, semana_actual:1, peso:10 }, events: [] };
 let selectedStudentId = null;
-let activeFilter = 'todos';
+let activeFilter      = 'todos';
+let activeGrupoFilter = 'todos';
 
 function loadData() {
   const raw = localStorage.getItem(STORE_KEY);
@@ -527,6 +536,8 @@ function initApp() {
   renderSessionLog();
   updateRewardTable();
   updateCurrentStudentsInfo();
+  renderGrupoFilter();
+  updateHorarioBanner();
 }
 
 function loadConfig() {
@@ -570,6 +581,39 @@ function setFilter(f, btn) {
   renderTable();
 }
 
+function setGrupoFilter(g) {
+  activeGrupoFilter = g;
+  // Actualizar botones activos en el row de grupo
+  document.querySelectorAll('#grupo-filter-row .filter-btn').forEach(b => b.classList.remove('active'));
+  const match = [...document.querySelectorAll('#grupo-filter-row .filter-btn')].find(b => b.dataset.grupo === g);
+  if (match) match.classList.add('active');
+  renderTable();
+  renderStudentListUI();
+  updateHorarioBanner();
+}
+
+function renderGrupoFilter() {
+  const row = document.getElementById('grupo-filter-row');
+  if (!row) return;
+  const grupos = [...new Set(STUDENTS.map(s => s.grupo).filter(Boolean))].sort();
+  if (grupos.length === 0) { row.style.display = 'none'; return; }
+  row.style.display = 'flex';
+  row.innerHTML = `<span style="font-size:.75rem;font-weight:700;color:#555;align-self:center;margin-right:.4rem">Grupo:</span>` +
+    `<button class="filter-btn${activeGrupoFilter==='todos'?' active':''}" data-grupo="todos" onclick="setGrupoFilter('todos')">Todos</button>` +
+    grupos.map(g => `<button class="filter-btn${activeGrupoFilter===g?' active':''}" data-grupo="${esc(g)}" onclick="setGrupoFilter('${esc(g)}')">${esc(g)}</button>`).join('');
+}
+
+function updateHorarioBanner() {
+  const banner = document.getElementById('horario-banner');
+  const txt    = document.getElementById('horario-banner-text');
+  if (!banner || !txt) return;
+  if (activeGrupoFilter === 'todos') { banner.style.display = 'none'; return; }
+  const sample = STUDENTS.find(s => s.grupo === activeGrupoFilter);
+  const horario = sample?.horario || '—';
+  txt.textContent = `${activeGrupoFilter}  ·  ${horario}`;
+  banner.style.display = 'block';
+}
+
 // ── STATS ────────────────────────────────────────────────────────────────────
 function renderStats() {
   const totals = STUDENTS.map(s => getTotal(s.id));
@@ -591,6 +635,10 @@ function renderStats() {
 function renderTable() {
   let students = [...STUDENTS];
 
+  // Filtro por grupo
+  if (activeGrupoFilter !== 'todos') students = students.filter(s => (s.grupo || '') === activeGrupoFilter);
+
+  // Filtro por estado de puntos
   if (activeFilter === 'exon') students = students.filter(s => getTotal(s.id) >= data.config.thresh_exon);
   else if (activeFilter === 'ayuda') students = students.filter(s => {
     const p = getTotal(s.id); return p >= data.config.thresh_ayuda && p < data.config.thresh_exon;
@@ -608,9 +656,11 @@ function renderTable() {
     const notaV = parseFloat(nota);
     const st    = getStatus(pts);
     const last  = getLastActivity(s.id);
+    const grupoTag = s.grupo ? `<span style="background:#e3f2fd;color:#0d47a1;border-radius:4px;padding:.1rem .45rem;font-size:.72rem;font-weight:700">${esc(s.grupo)}</span>` : '<span style="color:#ccc;font-size:.75rem">—</span>';
     return `<tr>
       <td>${i+1}</td>
-      <td><strong>${esc(s.name)}</strong></td>
+      <td><strong>${esc(s.name)}</strong>${s.cc ? `<br><span style="font-size:.72rem;color:#999">CC: ${esc(s.cc)}</span>` : ''}</td>
+      <td class="center">${grupoTag}</td>
       <td class="center"><span class="pts-big">${pts >= 0 ? '+'+pts : pts}</span></td>
       <td class="center"><span class="nota-chip ${pts>0 ? (notaV>=3?'nota-pass':'nota-fail') : 'nota-na'}">${nota}</span></td>
       <td class="center"><span class="badge ${st.cls}">${st.label}</span></td>
@@ -621,7 +671,7 @@ function renderTable() {
     </tr>`;
   }).join('');
 
-  document.getElementById('table-body').innerHTML = rows || '<tr><td colspan="7" style="text-align:center;color:#aaa;padding:1.5rem">No hay estudiantes en este filtro</td></tr>';
+  document.getElementById('table-body').innerHTML = rows || '<tr><td colspan="8" style="text-align:center;color:#aaa;padding:1.5rem">No hay estudiantes en este filtro</td></tr>';
 }
 
 function selectStudentFromTable(id) {
@@ -639,13 +689,20 @@ function selectStudentFromTable(id) {
 function renderStudentListUI(filter = '') {
   const list = document.getElementById('student-list-ui');
   const q = filter.toLowerCase();
-  const students = STUDENTS.filter(s => !q || s.name.toLowerCase().includes(q));
+  const students = STUDENTS.filter(s => {
+    // Filtro de grupo activo (desde banner de Clase en Vivo)
+    if (activeGrupoFilter !== 'todos' && (s.grupo || '') !== activeGrupoFilter) return false;
+    if (!q) return true;
+    // Buscar por nombre O por cédula
+    return s.name.toLowerCase().includes(q) || (s.cc && s.cc.toLowerCase().includes(q));
+  });
   list.innerHTML = students.map(s => {
     const pts = getTotal(s.id);
     const st  = getStatus(pts);
     const sel = s.id === selectedStudentId ? ' selected' : '';
+    const grupoTag = s.grupo ? ` <span style="font-size:.7rem;background:#e8f5e9;color:#2e7d32;border-radius:3px;padding:.05rem .35rem;margin-left:.3rem">${esc(s.grupo)}</span>` : '';
     return `<div class="student-item${sel}" onclick="selectStudent(${s.id})">
-      ${esc(s.name)}
+      ${esc(s.name)}${grupoTag}
       <span class="si-badge badge ${st.cls}" style="float:right">${pts >= 0 ? '+'+pts : pts}</span>
     </div>`;
   }).join('') || '<div style="padding:.8rem;color:#aaa;text-align:center;font-size:.83rem">Sin resultados</div>';
@@ -826,18 +883,60 @@ function updateCurrentStudentsInfo() {
   const el = document.getElementById('current-students-info');
   if (!el) return;
   const fromStorage = localStorage.getItem(STUDENTS_KEY);
+  const grupos = [...new Set(STUDENTS.map(s => s.grupo).filter(Boolean))];
   if (fromStorage) {
     try {
       const saved = JSON.parse(fromStorage);
-      el.innerHTML = `Lista activa: <strong>${saved.length} estudiantes importados</strong> (guardados en este dispositivo) &nbsp;·&nbsp;
+      const grupoInfo = grupos.length ? ` · Grupos: <strong>${grupos.join(', ')}</strong>` : '';
+      el.innerHTML = `Lista activa: <strong>${saved.length} estudiantes importados</strong>${grupoInfo}
+        &nbsp;·&nbsp;
         <button onclick="clearStudentList()"
           style="font-size:.76rem;background:none;border:none;color:var(--red);cursor:pointer;text-decoration:underline;padding:0">
           Volver a lista por defecto
+        </button>
+        <br><button onclick="pushStudentsToSupabase()"
+          style="margin-top:.5rem;font-size:.78rem;background:#e3f2fd;color:#0d47a1;border:1px solid #90caf9;border-radius:5px;padding:.3rem .8rem;cursor:pointer">
+          ☁️ Sincronizar lista a Supabase (lookup por cédula)
         </button>`;
       return;
     } catch(e) {}
   }
   el.innerHTML = `Lista activa: <strong>${STUDENTS.length} estudiantes</strong> (lista por defecto integrada en el código)`;
+}
+
+async function pushStudentsToSupabase() {
+  const url = localStorage.getItem('tga05_supabase_url');
+  const key = localStorage.getItem('tga05_supabase_key');
+  if (!url || !key) {
+    toast('⚠️ Configura Supabase primero (abre supabase-config.js)', 3000);
+    return;
+  }
+  try {
+    const payload = STUDENTS.map(s => ({
+      cc:      s.cc    || `SIN_${s.id}`,
+      name:    s.name  || '',
+      grupo:   s.grupo || '',
+      horario: s.horario || ''
+    }));
+    const res = await fetch(`${url}/rest/v1/students`, {
+      method: 'POST',
+      headers: {
+        'apikey': key,
+        'Authorization': `Bearer ${key}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      toast(`✅ ${payload.length} estudiantes sincronizados a Supabase`, 3000);
+    } else {
+      const err = await res.text();
+      toast(`❌ Error Supabase: ${err.slice(0,120)}`, 4000);
+    }
+  } catch(e) {
+    toast(`❌ Error de red: ${e.message}`, 3000);
+  }
 }
 
 function clearStudentList() {
@@ -958,18 +1057,36 @@ function parseGroupInfo(text) {
 
 function confirmImport() {
   if (!importPreview.length) return;
-  STUDENTS.length = 0;
-  importPreview.forEach(s => STUDENTS.push(s));
-  localStorage.setItem(STUDENTS_KEY, JSON.stringify(importPreview));
   const gi = parseGroupInfo(document.getElementById('pdf-text').value);
+  // Enriquecer cada estudiante importado con grupo y horario del reporte
+  const enriched = importPreview.map(s => ({
+    ...s,
+    grupo:   gi.grupo   || '',
+    horario: gi.horario || ''
+  }));
+  // Merge por grupo: eliminar estudiantes del mismo grupo ya cargados, luego añadir los nuevos
+  if (gi.grupo) {
+    // Quita entradas anteriores del mismo grupo
+    const others = STUDENTS.filter(s => (s.grupo || '') !== gi.grupo);
+    STUDENTS.length = 0;
+    [...others, ...enriched].forEach(s => STUDENTS.push(s));
+  } else {
+    // Sin grupo detectado: reemplaza todo (comportamiento anterior)
+    STUDENTS.length = 0;
+    enriched.forEach(s => STUDENTS.push(s));
+  }
+  // Reasignar IDs secuenciales para evitar duplicados al combinar grupos
+  STUDENTS.forEach((s, i) => { s.id = i + 1; });
+  localStorage.setItem(STUDENTS_KEY, JSON.stringify(STUDENTS));
   localStorage.setItem(GROUP_KEY, JSON.stringify(gi));
   loadGroupInfoFromStorage();
   cancelImport();
   renderStats();
   renderTable();
   renderStudentListUI();
+  renderGrupoFilter();
   updateCurrentStudentsInfo();
-  toast(`✅ ${importPreview.length} estudiantes cargados${gi.grupo ? ' — Grupo ' + gi.grupo : ''}`, 3000);
+  toast(`✅ ${enriched.length} estudiantes cargados${gi.grupo ? ' — Grupo ' + gi.grupo : ''} (${STUDENTS.length} total)`, 3500);
   importPreview = [];
 }
 

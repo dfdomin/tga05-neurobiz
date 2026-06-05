@@ -1,7 +1,29 @@
 -- ══════════════════════════════════════════════════════════
 --  TGA05 · NeuroBiz S.A.S. — Supabase Schema
 --  Ejecuta este script en el SQL Editor de Supabase
+--
+--  DOS MODOS DE USO:
+--
+--  A) ACTUALIZACIÓN NORMAL (por defecto)
+--     Solo crea tablas/columnas/políticas que no existan.
+--     Seguro para correr en cualquier momento.
+--     → Deja las secciones de RESET comentadas como están.
+--
+--  B) RESET TOTAL (cuando necesitas recrear las tablas desde cero)
+--     1. python3 setup/backup.py   ← PRIMERO guarda tus datos
+--     2. Descomenta el bloque "RESET TOTAL" de abajo
+--     3. Ejecuta este script completo
+--     4. python3 setup/restore.py  ← Restaura con migración automática
 -- ══════════════════════════════════════════════════════════
+
+-- ┌─────────────────────────────────────────────────────────┐
+-- │  ⚠️  RESET TOTAL — DESCOMENTA SOLO SI HICISTE BACKUP    │
+-- │  Elimina y recrea las tablas desde cero.                │
+-- └─────────────────────────────────────────────────────────┘
+-- DROP VIEW  IF EXISTS resumen_docente;
+-- DROP TABLE IF EXISTS students        CASCADE;
+-- DROP TABLE IF EXISTS student_progress CASCADE;
+-- ─────────────────────────────────────────────────────────
 
 -- 1. Tabla principal de progreso
 CREATE TABLE IF NOT EXISTS student_progress (
@@ -30,6 +52,10 @@ CREATE INDEX IF NOT EXISTS idx_sp_student_id ON student_progress(student_id);
 CREATE INDEX IF NOT EXISTS idx_sp_semana     ON student_progress(semana);
 CREATE INDEX IF NOT EXISTS idx_sp_updated    ON student_progress(updated_at DESC);
 
+-- 2b. Columnas de grupo y horario (necesarias ANTES de crear la vista)
+ALTER TABLE student_progress ADD COLUMN IF NOT EXISTS grupo   TEXT DEFAULT '';
+ALTER TABLE student_progress ADD COLUMN IF NOT EXISTS horario TEXT DEFAULT '';
+
 -- 3. Actualizar updated_at automáticamente
 CREATE OR REPLACE FUNCTION update_updated_at()
 RETURNS TRIGGER AS $$
@@ -53,18 +79,21 @@ CREATE TRIGGER trg_updated_at
 ALTER TABLE student_progress ENABLE ROW LEVEL SECURITY;
 
 -- Política: cualquier anónimo puede insertar (estudiantes sin login)
+DROP POLICY IF EXISTS "anon_insert" ON student_progress;
 CREATE POLICY "anon_insert"
   ON student_progress FOR INSERT
   TO anon
   WITH CHECK (true);
 
 -- Política: cualquier anónimo puede actualizar (UPSERT)
+DROP POLICY IF EXISTS "anon_update" ON student_progress;
 CREATE POLICY "anon_update"
   ON student_progress FOR UPDATE
   TO anon
   USING (true);
 
 -- Política: cualquier anónimo puede leer (para recuperar su progreso)
+DROP POLICY IF EXISTS "anon_select" ON student_progress;
 CREATE POLICY "anon_select"
   ON student_progress FOR SELECT
   TO anon
@@ -73,12 +102,17 @@ CREATE POLICY "anon_select"
 -- ══════════════════════════════════════════════════════════
 --  Vista de resumen para el docente
 -- ══════════════════════════════════════════════════════════
-CREATE OR REPLACE VIEW resumen_docente AS
+CREATE OR REPLACE VIEW resumen_docente
+  WITH (security_invoker = true)
+AS
 SELECT
   student_name                              AS estudiante,
   student_id,
+  MAX(grupo)                                AS grupo,
+  MAX(horario)                              AS horario,
   COUNT(DISTINCT semana)                    AS semanas_visitadas,
   SUM(xp)                                  AS xp_total,
+  SUM(quiz_score)                          AS quiz_total,
   ROUND(COUNT(DISTINCT semana)::NUMERIC / 14 * 100, 1) AS pct_avance,
   SUM(CASE WHEN hti_done       THEN 1 ELSE 0 END) AS htis_entregadas,
   SUM(CASE WHEN activity_done  THEN 1 ELSE 0 END) AS actividades_completadas,
@@ -87,8 +121,49 @@ FROM student_progress
 GROUP BY student_name, student_id
 ORDER BY xp_total DESC;
 
+-- Permiso para que el dashboard del docente pueda consultar la vista
+GRANT SELECT ON resumen_docente TO anon;
+
+-- ══════════════════════════════════════════════════════════
+--  Tabla de estudiantes (lookup por cédula — multi-grupo)
+--  El docente importa desde PDF → se sincroniza aquí.
+--  Los materiales del curso hacen lookup por CC para
+--  auto-rellenar nombre y grupo en el modal de bienvenida.
+-- ══════════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS students (
+  cc         TEXT        PRIMARY KEY,
+  name       TEXT        NOT NULL,
+  grupo      TEXT        NOT NULL DEFAULT '',
+  horario    TEXT        NOT NULL DEFAULT '',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+DROP TRIGGER IF EXISTS trg_students_updated_at ON students;
+CREATE TRIGGER trg_students_updated_at
+  BEFORE UPDATE ON students
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+ALTER TABLE students ENABLE ROW LEVEL SECURITY;
+
+-- Estudiantes pueden leer su propio registro (lookup por CC)
+DROP POLICY IF EXISTS "anon_select_students" ON students;
+CREATE POLICY "anon_select_students"
+  ON students FOR SELECT TO anon USING (true);
+
+-- El docente puede insertar/actualizar (via participacion.html sync)
+DROP POLICY IF EXISTS "anon_upsert_students" ON students;
+CREATE POLICY "anon_upsert_students"
+  ON students FOR INSERT TO anon WITH CHECK (true);
+
+DROP POLICY IF EXISTS "anon_update_students" ON students;
+CREATE POLICY "anon_update_students"
+  ON students FOR UPDATE TO anon USING (true);
+
 -- ══════════════════════════════════════════════════════════
 --  Verificar instalación
 -- ══════════════════════════════════════════════════════════
 SELECT 'Tabla student_progress creada correctamente ✅' AS mensaje;
+SELECT 'Tabla students (lookup CC) creada correctamente ✅' AS mensaje;
 SELECT 'Vista resumen_docente lista ✅' AS mensaje;

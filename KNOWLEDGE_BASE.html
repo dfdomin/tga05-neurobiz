@@ -123,13 +123,13 @@
       <div class="hdr-badges">
         <span class="badge badge-yellow">IUB · DG-TSI-09-V4</span>
         <span class="badge badge-outline">Framework GAME</span>
-        <span class="badge badge-outline">14 semanas · 31 archivos</span>
+        <span class="badge badge-outline">20 secciones · 38+ archivos</span>
         <span class="badge badge-outline">Supabase + GitHub Pages</span>
         <span class="badge badge-outline">Mayo 2026</span>
       </div>
     </div>
     <div style="text-align:right;color:rgba(255,255,255,.6);font-size:.8rem">
-      Última actualización<br><strong style="color:#fff">30 mayo 2026 — v18</strong>
+      Última actualización<br><strong style="color:#fff">30 mayo 2026 — v20</strong>
     </div>
   </div>
 </header>
@@ -157,6 +157,8 @@
   <a href="#s14" onclick="setActive(this)">14 · Replicar módulo</a>
   <a href="#s17" onclick="setActive(this)">17 · Rutina docente</a>
   <a href="#s18" onclick="setActive(this)">18 · Importar desde PDF</a>
+  <a href="#s19" onclick="setActive(this)">19 · Backup & Restore</a>
+  <a href="#s20" onclick="setActive(this)">20 · Asistencia</a>
   <h3>IA</h3>
   <a href="#s15" onclick="setActive(this)">15 · Prompt nueva sesión</a>
 </aside>
@@ -195,7 +197,7 @@
         <li>Supabase (PostgreSQL REST)</li>
         <li>GitHub Pages (hosting estático)</li>
         <li>Google Colab (Python/BI)</li>
-        <li>SheetJS (export XLSX)</li>
+        <li>Export CSV via Blob + URL.createObjectURL</li>
       </ul>
     </div>
   </div>
@@ -455,7 +457,7 @@
   <div class="filetree">
 <span class="ft-dir">EstructuraDatos/</span>
 ├── <span class="ft-file">index.html</span>               <span class="ft-note">← Landing GitHub Pages</span>
-├── <span class="ft-warn">PROPUESTA_VICERRECTOR.html</span>  <span class="ft-note">← Para otra sesión</span>
+├── <span class="ft-warn">RESUMEN_PROYECTO.html</span>  <span class="ft-note">← Para otra sesión</span>
 ├── <span class="ft-dir">js/</span>
 │   └── <span class="ft-file">supabase-config.js</span>    <span class="ft-note">← ⚠️ Llenar URL+KEY antes de push</span>
 ├── <span class="ft-dir">semana1/</span> ... <span class="ft-dir">semana14/</span>
@@ -464,13 +466,13 @@
 ├── <span class="ft-dir">dashboard/</span>
 │   ├── <span class="ft-file">index.html</span>            <span class="ft-note">← Dashboard estudiante</span>
 │   ├── <span class="ft-file">profesor.html</span>         <span class="ft-note">← Dashboard docente (PIN: tga05)</span>
-│   └── <span class="ft-file">notas.html</span>            <span class="ft-note">← Consolidador de notas + export XLSX</span>
+│   └── <span class="ft-file">notas.html</span>            <span class="ft-note">← Consolidador de notas + export CSV</span>
 └── <span class="ft-dir">setup/</span>
     ├── <span class="ft-file">supabase_schema.sql</span>   <span class="ft-note">← Ejecutar en Supabase SQL Editor</span>
     ├── <span class="ft-file">CONFIGURAR_SUPABASE.html</span> <span class="ft-note">← Guía visual setup</span>
     ├── <span class="ft-file">GUIA_GIT_MOODLE.html</span>  <span class="ft-note">← Instrucciones Git + Moodle</span>
     ├── <span class="ft-file">apply_iub_colors.py</span>   <span class="ft-note">← Aplicar paleta IUB (ya ejecutado)</span>
-    ├── <span class="ft-file">exportar_notas.py</span>     <span class="ft-note">← Generar XLSX desde terminal</span>
+    ├── <span class="ft-file">exportar_notas.py</span>     <span class="ft-note">← Generar CSV/Excel desde terminal</span>
     ├── <span class="ft-file">update_widget_modal.py</span> <span class="ft-note">← Inyectar widget+modal (ya ejecutado)</span>
     └── <span class="ft-file">update_supabase_sync.py</span> <span class="ft-note">← Inyectar syncCloud() (ya ejecutado)</span>
   </div>
@@ -527,7 +529,7 @@
     <tr><td><span class="inline-code">update_widget_modal.py</span></td><td><span class="tag tag-green">✅ Ejecutado</span></td><td>Inyecta widget simplificado + modal bienvenida en 14 semanas.</td></tr>
     <tr><td><span class="inline-code">update_supabase_sync.py</span></td><td><span class="tag tag-green">✅ Ejecutado</span></td><td>Inyecta syncCloud() con soporte Supabase en 14 semanas.</td></tr>
     <tr><td><span class="inline-code">supabase_schema.sql</span></td><td><span class="tag tag-yellow">⏳ Pendiente</span></td><td>Ejecutar en Supabase SQL Editor. Solo 1 vez.</td></tr>
-    <tr><td><span class="inline-code">exportar_notas.py</span></td><td><span class="tag tag-navy">🔧 Listo</span></td><td>Genera XLSX desde terminal. <span class="inline-code">python3 exportar_notas.py --corte 1</span></td></tr>
+    <tr><td><span class="inline-code">exportar_notas.py</span></td><td><span class="tag tag-navy">🔧 Listo</span></td><td>Genera Excel (.xlsx) desde terminal. <span class="inline-code">python3 exportar_notas.py --corte 1</span></td></tr>
   </table>
   <div class="alert alert-info">
     <span>💡</span>
@@ -556,7 +558,7 @@ nota_corte = nota_formativa × 0.70 + nota_parcial × 0.30
         <li>Selecciona corte 1/2/3</li>
         <li>Ve formativa calculada por estudiante</li>
         <li>Escribe nota parcial (campo ⭐ amarillo)</li>
-        <li>Click → XLSX descargado con fórmulas Excel</li>
+        <li>Click → Excel descargado con fórmulas</li>
         <li>Parciales guardados en localStorage (no se pierden)</li>
       </ul>
     </div>
@@ -680,7 +682,7 @@ Institución Universitaria de Barranquilla (IUB). Paleta oficial DG-TSI-09-V4: p
 ### ARQUITECTURA (ya construida para TGA05, replicar para nuevo módulo)
 - Stack: HTML estático + Supabase REST + GitHub Pages (JAMstack, sin servidor)
 - 14 semanas × 2 archivos: index.html (estudiante) + notas_profesor.html (docente)
-- Dashboards: dashboard/index.html (estudiante), dashboard/profesor.html (PIN: tga05), dashboard/notas.html (consolidar notas + exportar XLSX)
+- Dashboards: dashboard/index.html (estudiante), dashboard/profesor.html (PIN: tga05), dashboard/notas.html (consolidar notas + exportar Excel)
 - Central config: js/supabase-config.js (llenar URL+KEY antes de push)
 - localStorage keys: tga05_global (nombre/id/grupo), tga05_sN (por semana), tga05_visited_sN
 - Widget: botón ☁️ Guardar (prominente) + ⚙️ oculta Código/Cargar. Modal bienvenida en primera visita (+5 XP).
@@ -735,7 +737,7 @@ NeuroBiz S.A.S.: empresa de terapias IA para neurodivergentes (TDAH, Autismo, Al
 - apply_iub_colors.py: aplica paleta IUB a todos los HTML (idempotente, reutilizable)
 - update_widget_modal.py: inyecta widget Supabase + modal bienvenida
 - supabase_schema.sql: schema DB (reutilizable, ejecutar en nuevo proyecto Supabase)
-- exportar_notas.py: genera XLSX desde Supabase vía terminal
+- exportar_notas.py: genera Excel desde Supabase vía terminal
 
 ### PUBLICACIÓN EN MOODLE
 Usar recurso tipo URL (NO File) apuntando a GitHub Pages. Abrir en nueva ventana. NO usar SCORM por ahora.
@@ -1066,6 +1068,7 @@ ASIGNATURA: ESTRUCTURA DE DATOS PARA LOS NEGOCIOS</code></pre>
       <li>Revisar la vista previa — verificar nombres y cédulas</li>
       <li>Clic <strong>✅ Cargar N estudiantes</strong></li>
       <li>El encabezado se actualiza automáticamente con el nombre del grupo</li>
+      <li>Clic <strong>☁️ Sincronizar lista a Supabase</strong> → esto habilita el lookup por cédula en los materiales de clase</li>
       <li>Listo — la lista persiste en este dispositivo para todas las clases del cuatrimestre</li>
     </ol>
     <div class="alert alert-info">
@@ -1074,19 +1077,176 @@ ASIGNATURA: ESTRUCTURA DE DATOS PARA LOS NEGOCIOS</code></pre>
     </div>
   </div>
 
+  <div class="card card-navy">
+    <h3>🪪 Identificación por cédula (CC) en materiales de clase</h3>
+    <p style="font-size:.87rem;margin-bottom:.8rem">A partir de esta versión, los estudiantes se identifican con su <strong>número de cédula</strong> en lugar de texto libre. Esto elimina duplicados y permite un repositorio único para múltiples grupos.</p>
+    <table class="info">
+      <tr><th>Dato guardado en tga05_global</th><th>Cómo se obtiene</th></tr>
+      <tr><td><code>cc</code></td><td>Ingresado por el estudiante en el modal de bienvenida</td></tr>
+      <tr><td><code>nombre</code></td><td>Auto-rellenado desde la lista del docente (Supabase o localStorage)</td></tr>
+      <tr><td><code>grupo</code></td><td>Auto-rellenado desde el reporte importado</td></tr>
+      <tr><td><code>horario</code></td><td>Auto-rellenado desde el reporte importado</td></tr>
+      <tr><td><code>id_estudiante</code></td><td>Igual a <code>cc</code> — elimina IDs aleatorios con duplicados</td></tr>
+    </table>
+    <h4 style="margin-top:1rem;margin-bottom:.4rem">Flujo del modal (2 pasos):</h4>
+    <ol style="font-size:.85rem;line-height:1.8">
+      <li><strong>Paso 1:</strong> Estudiante ingresa su cédula → clic "Buscar →"</li>
+      <li><strong>Paso 2a (CC encontrada):</strong> Sistema muestra nombre y grupo → estudiante confirma → perfil guardado</li>
+      <li><strong>Paso 2b (CC no encontrada):</strong> Formulario manual con nombre+grupo → perfil guardado con CC = número ingresado</li>
+    </ol>
+    <p style="font-size:.83rem;margin-top:.6rem;opacity:.85">La búsqueda primero revisa <code>tga05_students_v1</code> (localStorage del docente), luego llama a Supabase <code>/rest/v1/students?cc=eq.{CC}</code>. Si no hay conexión o la lista no existe, cae a entrada manual.</p>
+  </div>
+
+  <div class="card">
+    <h3>🗂️ Multi-grupo — Un repositorio para N grupos</h3>
+    <p style="font-size:.87rem;margin-bottom:.6rem">El sistema ahora soporta cargar estudiantes de varios grupos en el mismo dispositivo sin conflictos:</p>
+    <ul style="font-size:.87rem;line-height:1.9">
+      <li>Cada estudiante tiene <code>grupo</code> y <code>horario</code> asignados en la importación</li>
+      <li>Al importar un nuevo grupo, el sistema <strong>reemplaza solo los estudiantes de ese grupo</strong> y conserva los demás</li>
+      <li>En la tabla de participación → filtro por grupo con botones dinámicos</li>
+      <li>En Clase en Vivo → banner azul con el grupo y horario activo visible en la parte superior</li>
+      <li>Búsqueda por cédula disponible en la lista de Clase en Vivo</li>
+    </ul>
+  </div>
+
   <div class="card">
     <h3>🛠️ Para replicar en otro módulo</h3>
     <p style="font-size:.87rem">El importador es completamente portable. Para usarlo en otro módulo:</p>
     <ol style="font-size:.87rem;line-height:2">
       <li>Copiar <span class="inline-code">dashboard/participacion.html</span> al nuevo módulo</li>
       <li>Cambiar el prefijo del storage key (<span class="inline-code">tga05_</span>) por el código del nuevo módulo (ej: <span class="inline-code">tga03_</span>) para evitar conflictos entre módulos en el mismo navegador</li>
-      <li>La lista por defecto (hardcoded) puede quedar vacía o con estudiantes de ejemplo — siempre se puede sobrescribir por importación</li>
-      <li>Asegurarse de que el nuevo módulo tenga el mismo <span class="inline-code">STORE_KEY</span> en <span class="inline-code">dashboard/notas.html</span></li>
+      <li>Cambiar el nombre del módulo en el modal de bienvenida (semana*/index.html) — buscar "TGA05"</li>
+      <li>Ejecutar <span class="inline-code">setup/update_cc_modal.py</span> para aplicar el modal CC a todos los archivos de semana</li>
+      <li>Ejecutar el SQL de <span class="inline-code">setup/supabase_schema.sql</span> en Supabase (tablas <code>students</code> y columnas grupo/horario)</li>
     </ol>
     <div class="alert alert-success">
       <span>✅</span>
-      <div>El sistema fue diseñado exactamente para este uso recurrente: <strong>un módulo diferente cada cuatrimestre, grupos distintos, sin tocar código</strong>. El importador es la pieza clave que lo hace posible.</div>
+      <div>El sistema fue diseñado exactamente para este uso recurrente: <strong>un módulo diferente cada cuatrimestre, grupos distintos, sin tocar código</strong>. El importador + lookup por cédula es la pieza clave.</div>
     </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ S19 BACKUP & RESTORE ══ -->
+<section id="s19">
+  <div class="sec-title"><div class="sec-num">19</div><h2>Backup &amp; Restore de Supabase</h2></div>
+
+  <div class="card card-navy">
+    <h3>🔒 ¿Por qué un sistema de backup?</h3>
+    <p style="font-size:.87rem">Cada vez que se modifica el esquema de la BD (nuevas columnas, tablas, políticas), el script SQL puede necesitar recrear objetos con DROP TABLE. Sin backup, se pierden todos los datos. Este sistema garantiza <strong>cero pérdida de datos</strong> durante cualquier cambio de esquema.</p>
+  </div>
+
+  <div class="card">
+    <h3>📁 Archivos del sistema</h3>
+    <table class="info">
+      <tr><th>Archivo</th><th>Qué hace</th><th>Cuándo usar</th></tr>
+      <tr><td><code>setup/backup.py</code></td><td>Descarga todas las tablas Supabase a JSON con timestamp. Pagina automáticamente si hay más de 1000 filas.</td><td>ANTES de cualquier cambio de esquema</td></tr>
+      <tr><td><code>setup/restore.py</code></td><td>Restaura desde un backup JSON. Aplica migración automática: agrega defaults para columnas nuevas, descarta columnas obsoletas.</td><td>DESPUÉS de recrear las tablas con DROP TABLE</td></tr>
+      <tr><td><code>setup/supabase_schema.sql</code></td><td>Dos modos: Actualización normal (IF NOT EXISTS) o Reset Total (descomentar DROP TABLE al inicio).</td><td>Actualización: siempre. Reset: solo si backup hecho.</td></tr>
+      <tr><td><code>setup/backups/</code></td><td>Subcarpetas por timestamp. <strong>Ignorada por Git</strong> — los datos de estudiantes son privados.</td><td>—</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>🔁 Flujo de Reset Total</h3>
+    <ol style="font-size:.87rem;line-height:2.1">
+      <li><code>python3 setup/backup.py</code> → guarda en <code>setup/backups/YYYY-MM-DD_HHMMSS/</code></li>
+      <li>Editar <code>supabase_schema.sql</code> → descomenta las 3 líneas DROP del bloque "RESET TOTAL"</li>
+      <li>Pegar y ejecutar el SQL en Supabase SQL Editor</li>
+      <li>Volver a comentar las líneas DROP</li>
+      <li><code>python3 setup/restore.py</code> → restaura con migración automática</li>
+    </ol>
+    <div class="alert alert-warn"><span>⚠️</span><div>Nunca descomentes las líneas DROP sin haber corrido <code>backup.py</code> primero. El backup tarda &lt;10 segundos.</div></div>
+  </div>
+
+  <div class="card">
+    <h3>⚙️ Cómo actualizar cuando cambies el esquema</h3>
+    <pre><code><span class="cmt"># En restore.py → agregar la nueva columna:</span>
+SCHEMA["student_progress"]["keep"].append("nivel_riesgo")
+SCHEMA["student_progress"]["defaults"]["nivel_riesgo"] = "normal"
+<span class="cmt"># → Backups viejos (sin esa columna) la recibirán con valor "normal" automáticamente</span></code></pre>
+    <table class="info" style="margin-top:.8rem">
+      <tr><th>Situación en el backup</th><th>Resultado en restore</th></tr>
+      <tr><td>Campo en backup y en SCHEMA</td><td>✅ Se restaura con valor original</td></tr>
+      <tr><td>Campo en SCHEMA pero no en backup (columna nueva)</td><td>⚙️ Se agrega con el default</td></tr>
+      <tr><td>Campo en backup pero no en SCHEMA (columna eliminada)</td><td>🗑️ Se descarta silenciosamente</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>🔢 Versión de esquema actual — v2</h3>
+    <table class="info">
+      <tr><th>Tabla</th><th>Columnas v1</th><th>Columnas v2 (nuevas)</th></tr>
+      <tr><td><code>student_progress</code></td><td>id, student_name, student_id, semana, xp, quiz_answers, quiz_score, hti_done, activity_done</td><td><strong>grupo, horario</strong></td></tr>
+      <tr><td><code>students</code></td><td>—</td><td><strong>cc, name, grupo, horario</strong> (tabla nueva)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ S20 ASISTENCIA ══ -->
+<section id="s20">
+  <div class="sec-title"><div class="sec-num">20</div><h2>Asistencia — Evidencia y Registro</h2></div>
+
+  <div class="card card-navy">
+    <h3>❓ ¿El sistema actual permite evidenciar asistencia?</h3>
+    <p style="font-size:.87rem;margin-bottom:.8rem"><strong>Parcialmente.</strong> Hay evidencia indirecta disponible ahora mismo. Para un registro oficial (Academusoft-ready) se propone agregar la función "Pasar Lista" descrita más abajo.</p>
+    <table class="info">
+      <tr><th>Fuente actual</th><th>Qué prueba</th><th>Limitación</th></tr>
+      <tr>
+        <td>📊 Eventos de participación con timestamp<br><small>(participacion.html → exportar TSV)</small></td>
+        <td>El estudiante estuvo presente y participó en esa fecha y hora exacta</td>
+        <td>Solo cubre estudiantes con ≥1 punto. Asistentes silenciosos no quedan registrados.</td>
+      </tr>
+      <tr>
+        <td>☁️ <code>student_progress.created_at</code></td>
+        <td>El estudiante abrió el material en esa fecha</td>
+        <td>Es acceso online, no necesariamente presencia física en clase.</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>✅ Usar datos existentes como evidencia hoy</h3>
+    <ol style="font-size:.87rem;line-height:2">
+      <li>Abre <code>dashboard/participacion.html</code></li>
+      <li>Tab ⚙️ Configuración → <strong>Exportar Historial (.tsv)</strong></li>
+      <li>El archivo contiene: estudiante, puntos, tipo de evento, <strong>fecha y hora exacta</strong></li>
+      <li>Filtra por fecha de clase → todos los estudiantes con ≥1 evento ese día estuvieron presentes</li>
+    </ol>
+    <div class="alert alert-info">
+      <span>💡</span>
+      <div><strong>Estrategia de "asistencia por participación":</strong> al iniciar cada clase, da <strong>+1 pt "Asistencia"</strong> a cada estudiante presente. Esto registra su nombre, timestamp y fecha automáticamente en el historial TSV.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🚀 Feature propuesto: Tab "📋 Asistencia" en participacion.html</h3>
+    <table class="info">
+      <tr><th>Feature</th><th>Descripción</th></tr>
+      <tr><td>🟢 Presente / 🕐 Tardanza / 🔴 Ausente</td><td>Un botón por estudiante. Tardanza resta puntos automáticamente (configurable).</td></tr>
+      <tr><td>📅 Registro por fecha</td><td>Cada sesión guardada con la fecha del día. Historial completo del cuatrimestre.</td></tr>
+      <tr><td>📊 Resumen de asistencia</td><td>% por estudiante. Alerta visual si supera el 25% de fallas reglamentario IUB.</td></tr>
+      <tr><td>📥 Exportar CSV</td><td>Formato Academusoft: columna por fecha, fila por estudiante, valor P/T/F.</td></tr>
+      <tr><td>☁️ Sync Supabase</td><td>Tabla <code>attendance</code>: (cc, fecha, estado, grupo). Backup automático.</td></tr>
+    </table>
+    <div class="alert alert-success">
+      <span>✅</span>
+      <div>Para implementar, dile a la IA: <em>"Agrega un tab de Asistencia a participacion.html con registro por fecha, botones Presente/Tarde/Ausente y exportación CSV para Academusoft. Referencia KNOWLEDGE_BASE Sección 20."</em></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📐 Esquema SQL propuesto para tabla attendance</h3>
+    <pre><code>CREATE TABLE IF NOT EXISTS attendance (
+  id         UUID    DEFAULT gen_random_uuid() PRIMARY KEY,
+  cc         TEXT    NOT NULL,            <span class="cmt">-- FK → students.cc</span>
+  fecha      DATE    NOT NULL,            <span class="cmt">-- Fecha de la clase</span>
+  estado     TEXT    NOT NULL             <span class="cmt">-- 'P' (presente) | 'T' (tarde) | 'F' (falla)</span>
+             CHECK (estado IN ('P','T','F')),
+  grupo      TEXT    NOT NULL DEFAULT '',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE (cc, fecha)                      <span class="cmt">-- Una fila por estudiante por día</span>
+);</code></pre>
+    <p style="font-size:.83rem;margin-top:.6rem;opacity:.8">Al implementar: agregar esta tabla al <code>supabase_schema.sql</code> y actualizar <code>backup.py</code> / <code>restore.py</code> para incluirla.</p>
   </div>
 </section>
 

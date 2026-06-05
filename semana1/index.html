@@ -1811,6 +1811,8 @@ const PT = (function() {
   let state = {
     nombre          : "",
     id_estudiante   : "",
+    grupo           : "",
+    horario         : "",
     semana          : SEMANA,
     xp              : XP_BASE,
     quiz_respuestas : {},
@@ -1828,8 +1830,10 @@ const PT = (function() {
 
       // Cargar nombre/id del perfil global si no está en esta semana
       const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
-      if (!state.nombre       && global.nombre)        state.nombre        = global.nombre;
-      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante;
+      if (!state.nombre        && global.nombre)         state.nombre        = global.nombre;
+      if (!state.id_estudiante  && global.id_estudiante)  state.id_estudiante = global.id_estudiante;
+      if (!state.grupo          && global.grupo)          state.grupo         = global.grupo;
+      if (!state.horario        && global.horario)        state.horario       = global.horario;
     } catch(e) { console.warn("PT load error:", e); }
   }
 
@@ -1917,6 +1921,8 @@ const PT = (function() {
             quiz_score      : state.quiz_puntaje    || 0,
             hti_done        : !!state.hti_entregado,
             activity_done   : !!state.actividad_completada,
+            grupo           : state.grupo           || "",
+            horario         : state.horario         || "",
             updated_at      : new Date().toISOString()
           })
         });
@@ -2092,15 +2098,31 @@ const PT = (function() {
     }
   }
 
+    // ── Restaurar state desde un registro de Supabase ──────
+  function restoreFromCloud(record) {
+    if (!record) return;
+    if (record.xp          !== undefined) state.xp              = record.xp;
+    if (record.quiz_score  !== undefined) state.quiz_puntaje     = record.quiz_score;
+    if (record.quiz_answers !== undefined) state.quiz_respuestas = record.quiz_answers || {};
+    if (record.hti_done    !== undefined) state.hti_entregado    = record.hti_done;
+    if (record.activity_done !== undefined) state.actividad_completada = record.activity_done;
+    if (record.grupo       !== undefined) state.grupo            = record.grupo || "";
+    if (record.horario     !== undefined) state.horario          = record.horario || "";
+    if (record.student_id) state.id_estudiante = record.student_id;
+    save();
+  }
+
   return {
     init,
     addXP,
-    save  : save,
-    sync  : syncCloud,
-    export: exportCode,
-    import: importCode,
+    save            : save,
+    sync            : syncCloud,
+    export          : exportCode,
+    import          : importCode,
     toggle,
-    state : () => state
+    msg             : msg,
+    restoreFromCloud: restoreFromCloud,
+    state           : () => state
   };
 })();
 
@@ -2233,11 +2255,6 @@ if (document.readyState === "loading") {
     var ptInp = document.getElementById("pt-nombre");
     if (ptInp) { ptInp.value = nombre; ptInp.dispatchEvent(new Event("input")); }
 
-    // XP reward
-    if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
-      PT.addXP(5, "Perfil configurado ✨");
-    }
-
     // Close modal
     var overlay = document.getElementById("pt-overlay");
     if (overlay) {
@@ -2246,10 +2263,54 @@ if (document.readyState === "loading") {
       setTimeout(function(){ overlay.style.display = "none"; overlay.style.opacity = ""; }, 200);
     }
 
-    // Auto-sync to Supabase after a short delay
-    setTimeout(function(){
-      if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
-    }, 800);
+    // Intentar recuperar progreso previo de Supabase (nuevo dispositivo/borró cache)
+    var sbUrl = localStorage.getItem("tga05_supabase_url") || "";
+    var sbKey = localStorage.getItem("tga05_supabase_key") || "";
+    if (sbUrl && sbKey) {
+      fetch(sbUrl + "/rest/v1/student_progress?student_name=eq." + encodeURIComponent(nombre)
+          + "&semana=eq.1&order=updated_at.desc&limit=1", {
+        headers: { "apikey": sbKey, "Authorization": "Bearer " + sbKey }
+      }).then(function(r){ return r.json(); }).then(function(rows) {
+        if (rows && rows.length > 0) {
+          var prev = rows[0];
+          // Restaurar el mismo student_id para evitar duplicados
+          profile.id_estudiante = prev.student_id;
+          localStorage.setItem("tga05_global", JSON.stringify(profile));
+          // Actualizar PT state con datos previos
+          if (typeof PT !== "undefined" && typeof PT.restoreFromCloud === "function") {
+            PT.restoreFromCloud(prev);
+          }
+          if (typeof PT !== "undefined" && typeof PT.msg === "function") {
+            PT.msg("✅ Progreso anterior recuperado (" + prev.xp + " XP)", "lightgreen");
+          }
+        } else {
+          // Primera vez — dar XP de bienvenida
+          if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
+            PT.addXP(5, "Perfil configurado ✨");
+          }
+        }
+        // Sync final
+        setTimeout(function(){
+          if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
+        }, 500);
+      }).catch(function() {
+        // Sin conexion — dar XP local y sync local
+        if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
+          PT.addXP(5, "Perfil configurado ✨");
+        }
+        setTimeout(function(){
+          if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
+        }, 500);
+      });
+    } else {
+      // Sin credenciales configuradas — flujo local
+      if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
+        PT.addXP(5, "Perfil configurado ✨");
+      }
+      setTimeout(function(){
+        if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
+      }, 800);
+    }
   };
 
   // Show on load if no name
