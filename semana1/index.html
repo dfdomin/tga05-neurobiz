@@ -1923,6 +1923,7 @@ const PT = (function() {
             activity_done   : !!state.actividad_completada,
             grupo           : state.grupo           || "",
             horario         : state.horario         || "",
+            reading_done    : (function(){ try{ return Object.keys(JSON.parse(localStorage.getItem('tga05_s1_reading')||'{}')).length; }catch(e){return 0;} })(),
             updated_at      : new Date().toISOString()
           })
         });
@@ -2321,6 +2322,184 @@ if (document.readyState === "loading") {
   } else {
     if (shouldShowModal()) showModal();
   }
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════
+     READING TRACKER — XP por tiempo de lectura
+     IntersectionObserver + timer por sección
+═══════════════════════════════════════════ -->
+<script id="reading-tracker-js">
+(function () {
+  // ── Configuración de secciones ──────────────────────────────
+  // id: id del <section>, label: nombre visible, segundos: tiempo mínimo
+  // de permanencia continua en pantalla para ganar XP, xp: puntos
+  var SECTIONS = [
+    { id: 'mision',     label: '📋 Memorando',     segundos: 20, xp: 5  },
+    { id: 'teoria',     label: '📚 Marco Teórico',  segundos: 60, xp: 15 },
+    { id: 'python',     label: '🐍 Python / Colab', segundos: 40, xp: 10 },
+    { id: 'actividad',  label: '⚙️ Actividades',    segundos: 30, xp: 8  },
+    { id: 'interactivo',label: '🧪 Interactivo',    segundos: 30, xp: 8  },
+    { id: 'quiz',       label: '🎮 Quiz',            segundos: 20, xp: 5  },
+  ];
+  // Total posible: 51 XP de lectura
+
+  var LS_KEY = 'tga05_s1_reading'; // clave separada para no mezclar con el PT
+
+  // ── Cargar estado de lectura desde localStorage ─────────────
+  function loadState() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); }
+    catch(e) { return {}; }
+  }
+  function saveState(st) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(st)); } catch(e) {}
+  }
+
+  // ── Marcar sección como leída en el h2 ──────────────────────
+  function markRead(sectionEl, label) {
+    var h2 = sectionEl.querySelector('h2');
+    if (h2 && !h2.querySelector('.read-badge')) {
+      var badge = document.createElement('span');
+      badge.className = 'read-badge';
+      badge.title = 'Leído ✅';
+      badge.textContent = ' ✅';
+      badge.style.cssText = 'font-size:.75em;opacity:.7;';
+      h2.appendChild(badge);
+    }
+  }
+
+  // ── Restaurar badges al cargar (si ya fueron leídos) ────────
+  function restoreBadges(state) {
+    SECTIONS.forEach(function(sec) {
+      if (state[sec.id]) {
+        var el = document.getElementById(sec.id);
+        if (el) markRead(el, sec.label);
+      }
+    });
+  }
+
+  // ── Indicador de progreso de lectura en el PT widget ────────
+  function updateReadingUI(state) {
+    var done  = SECTIONS.filter(function(s) { return state[s.id]; }).length;
+    var total = SECTIONS.length;
+    var el    = document.getElementById('pt-reading-progress');
+    if (el) {
+      el.textContent = '📖 Lectura: ' + done + '/' + total + ' secciones';
+      el.style.color = done === total ? 'var(--green)' : 'var(--muted)';
+    }
+  }
+
+  // ── Núcleo: IntersectionObserver + timer por sección ────────
+  function initObserver() {
+    var state   = loadState();
+    var timers  = {}; // sectionId -> { start: timestamp, accumulated: ms }
+    var visible = {}; // sectionId -> bool
+
+    restoreBadges(state);
+    updateReadingUI(state);
+
+    // Visibilidad >= 30% de la sección para que cuente
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        var id = entry.target.id;
+        var sec = SECTIONS.find(function(s) { return s.id === id; });
+        if (!sec) return;
+        if (state[id]) return; // ya leída, ignorar
+
+        if (entry.isIntersecting) {
+          // Entró al viewport — iniciar/reanudar timer
+          visible[id] = true;
+          timers[id]  = timers[id] || { accumulated: 0 };
+          timers[id].start = Date.now();
+
+        } else {
+          // Salió del viewport — pausar timer
+          if (visible[id] && timers[id] && timers[id].start) {
+            timers[id].accumulated += Date.now() - timers[id].start;
+            timers[id].start = null;
+          }
+          visible[id] = false;
+
+          // Verificar si ya se acumuló el tiempo mínimo
+          var acum = (timers[id] && timers[id].accumulated) || 0;
+          if (acum >= sec.segundos * 1000) {
+            state[id] = true;
+            saveState(state);
+            markRead(entry.target, sec.label);
+            updateReadingUI(state);
+            safeAddXP(sec.xp, '📖 Leyó ' + sec.label);
+            // Auto-guardar en Supabase si tiene nombre
+            setTimeout(function() {
+              if (typeof PT !== 'undefined' && typeof PT.sync === 'function') {
+                PT.sync();
+              }
+            }, 1500);
+          }
+        }
+      });
+    }, { threshold: 0.30 });
+
+    // Verificar acumulado periódicamente mientras la sección sigue visible
+    // (para el caso de que el usuario SE QUEDE en la sección sin hacer scroll)
+    setInterval(function() {
+      SECTIONS.forEach(function(sec) {
+        if (state[sec.id]) return;
+        if (!visible[sec.id]) return;
+        var t = timers[sec.id];
+        if (!t || !t.start) return;
+        var acum = t.accumulated + (Date.now() - t.start);
+        if (acum >= sec.segundos * 1000) {
+          // Detener timer y otorgar XP
+          t.accumulated = acum;
+          t.start = null;
+          visible[sec.id] = false;
+          state[sec.id] = true;
+          saveState(state);
+          var el = document.getElementById(sec.id);
+          if (el) markRead(el, sec.label);
+          updateReadingUI(state);
+          safeAddXP(sec.xp, '📖 Leyó ' + sec.label);
+          observer.unobserve(el); // dejar de observar
+          setTimeout(function() {
+            if (typeof PT !== 'undefined' && typeof PT.sync === 'function') PT.sync();
+          }, 1500);
+        }
+      });
+    }, 2000); // revisar cada 2 segundos
+
+    // Observar todas las secciones
+    SECTIONS.forEach(function(sec) {
+      var el = document.getElementById(sec.id);
+      if (el && !state[sec.id]) observer.observe(el);
+    });
+  }
+
+  // ── Agregar indicador de lectura al widget del PT ───────────
+  function injectReadingUI() {
+    var ptBody = document.getElementById('pt-body');
+    if (!ptBody) return;
+    var div = document.createElement('div');
+    div.id = 'pt-reading-progress';
+    div.style.cssText = 'font-size:.75rem;margin-top:4px;text-align:center;';
+    div.textContent = '📖 Lectura: 0/' + SECTIONS.length + ' secciones';
+    // Insertar antes de #pt-msg
+    var msg = document.getElementById('pt-msg');
+    if (msg) ptBody.insertBefore(div, msg);
+    else ptBody.appendChild(div);
+  }
+
+  // ── Inicializar cuando el DOM esté listo ────────────────────
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      injectReadingUI();
+      // Esperar un tick para que PT esté inicializado
+      setTimeout(initObserver, 500);
+    });
+  } else {
+    injectReadingUI();
+    setTimeout(initObserver, 500);
+  }
+
 })();
 </script>
 
