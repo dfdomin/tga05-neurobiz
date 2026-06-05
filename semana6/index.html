@@ -464,6 +464,61 @@ footer {
   .xp-label { flex-direction: column; gap: .2rem; }
   table { font-size: .86rem; }
 }
+/* ── Pyodide Interactive Cell ── */
+.colab-cell {
+  margin: 1rem 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(30,30,46,.22);
+}
+.code-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: .65rem 1rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: var(--code-top);
+  color: #cdd6f4;
+  font-size: .82rem;
+}
+.code-title a {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 700;
+}
+.colab-cell .code-title { gap: .6rem; flex-wrap: wrap; }
+.run-btn {
+  flex-shrink: 0;
+  padding: .3rem .75rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--gold);
+  background: transparent;
+  color: var(--gold);
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.run-btn:hover { background: var(--gold); color: #1E2843; }
+.run-btn:disabled { opacity: .45; cursor: not-allowed; }
+.run-btn.running { background: var(--gold); color: #1E2843; opacity: .7; }
+pre.py-hide { display: none; } /* hidden until run */
+.py-console {
+  display: none;
+  background: #0f172a;
+  border-top: 2px solid #334155;
+  padding: .8rem 1rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .82rem;
+  color: #94e2d5;
+  max-height: 180px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+.py-console.show { display: block; }
+.py-console.err { color: #f38ba8; }
+.py-out-line { margin: 0; }
 </style>
 <style id="progress-tracker-css">
 /* ── Progress Tracker Widget ── */
@@ -510,6 +565,8 @@ footer {
 </style>
 
   <script src="../js/supabase-config.js"></script>
+  <!-- Pyodide runtime -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
 </head><body><header><div class="hero"><div class="badge-row"><span class="badge-module">🎓 TGA05 · Estructura de Datos para los Negocios</span><span class="badge-week">🗓 Semana 6 de 14</span><span class="badge-week">🏅 Módulo en progreso</span></div><div class="hero-grid"><div><h1>Recursividad I</h1><p class="subtitle">Concepto de recursividad, caso base, caso recursivo y árbol de llamadas aplicados al progreso terapéutico acumulado de NeuroBiz S.A.S.</p><div class="xp-panel"><div class="xp-label"><span>Barra XP del módulo</span><span>460 / 980 XP del módulo</span></div><div class="xp-track"><div class="xp-bar" data-progress="42.9"></div></div></div></div><aside class="hero-note"><p><strong>Rol inmersivo:</strong> Analista de Datos Estratégico de NeuroBiz S.A.S.</p><p>Esta semana no “programas por programar”: modelas procesos que se repiten sobre sí mismos para explicar cómo NeuroBiz acumula progreso clínico sesión tras sesión.</p></aside></div></div></header><nav><div class="nav-wrap"><a href="#mision">📋 Memorando</a><a href="#teoria">📚 Teoría</a><a href="#python">🐍 Python BI</a><a href="#actividad">⚙️ Actividad</a><a href="#quiz">🎮 Quizizz</a><a href="#bib">📖 Bibliografía</a></div></nav><main>
 
 <!-- ── PROGRESS TRACKER WIDGET ── -->
@@ -1037,6 +1094,137 @@ if (document.readyState === "loading") {
     if (shouldShowModal()) showModal();
   }
 })();
+</script>
+
+<!-- ── Pyodide Init + Cell Injection ── -->
+<script>
+// ── Pyodide Runtime (lazy init on first Run click) ──
+window.__pyodideReady  = false;
+window.__pyodideInst   = null;
+
+async function ensurePyodide() {
+  if (window.__pyodideReady) return window.__pyodideInst;
+  window.__pyodideInst = await window.loadPyodide({
+    indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/'
+  });
+  window.__pyodideReady = true;
+  return window.__pyodideInst;
+}
+
+// Strip HTML syntax-highlighting spans → clean Python source
+function extractCode(preEl) {
+  return preEl.textContent
+    .replace(/▮/g, '')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ');
+}
+
+// Append a line to the per-cell console output
+function pyAppend(cellId, text, isErr) {
+  let box = document.getElementById('py-console-' + cellId);
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'py-console-' + cellId;
+    box.className = isErr ? 'py-console err' : 'py-console';
+    const wrapper = document.getElementById(cellId);
+    if (wrapper) wrapper.parentElement.insertBefore(box, wrapper.nextSibling);
+  }
+  box.classList.add('show');
+  const line = document.createElement('p');
+  line.className = 'py-out-line';
+  line.textContent = text;
+  if (isErr) line.style.color = '#f38ba8';
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+
+// Wire Run button → execute Python in Pyodide
+function wireCell(cellId, preEl) {
+  const btn = document.querySelector('#' + cellId + ' .run-btn');
+  if (!btn) return;
+
+  btn.addEventListener('click', async () => {
+    if (btn.disabled) return;
+    btn.disabled = true;
+    btn.classList.add('running');
+    btn.textContent = '⏳ Loading…';
+
+    // Show code
+    preEl.classList.remove('py-hide');
+    preEl.classList.add('py-visible');
+
+    // Clear previous output
+    const old = document.getElementById('py-console-' + cellId);
+    if (old) old.remove();
+
+    const code = extractCode(preEl);
+
+    try {
+      const py = await ensurePyodide();
+      btn.textContent = '🚀 Running…';
+
+      py.setStdout({ batched: msg => pyAppend(cellId, msg, false) });
+      py.setStderr({ batched: msg => pyAppend(cellId, msg, true)  });
+
+      await py.runPythonAsync(code);
+      btn.textContent = '✅ Done';
+    } catch(e) {
+      pyAppend(cellId, 'Error: ' + e.message, true);
+      btn.textContent = '❌ Error';
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove('running');
+    }
+  });
+}
+
+// Inject wrapper + Run button into each Colab code block
+function patchCodeBlocks() {
+  const pySection = document.getElementById('python');
+  if (!pySection) return;
+
+  const cards = pySection.querySelectorAll('.activity-card');
+  let idx = 0;
+
+  cards.forEach(card => {
+    const pre      = card.querySelector('pre');
+    const codeTitle = card.querySelector('.code-title');
+    if (!pre || !codeTitle) return;
+    // Only Colab-titled blocks (skip quiz / other sections)
+    if (!codeTitle.textContent.includes('Colab')) return;
+
+    const cellId = 'py-cell-' + idx;
+
+    // wrapper
+    const wrap = document.createElement('div');
+    wrap.className = 'colab-cell';
+    wrap.id = cellId;
+    card.insertBefore(wrap, pre);
+
+    // move title + pre into wrapper
+    wrap.appendChild(codeTitle);
+
+    // run button
+    const btn = document.createElement('button');
+    btn.className = 'run-btn';
+    btn.textContent = '▶ Run';
+    codeTitle.appendChild(btn);
+
+    wrap.appendChild(pre);
+
+    // Hide code until Run is clicked
+    pre.classList.add('py-hide');
+
+    wireCell(cellId, pre);
+    idx++;
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', patchCodeBlocks);
+} else {
+  patchCodeBlocks();
+}
 </script>
 
 </body></html>

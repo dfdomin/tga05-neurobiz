@@ -426,7 +426,134 @@ blockquote {
     .sticky-nav .inner { padding-inline: 16px; }
     h1 { font-size: 1.85rem; }
     .badge-row { gap: 8px; }
-}</style>
+}
+    /* ══════════════════════════════════════════
+       GOOGLE COLAB INTERACTIVE CELLS (S5)
+    ══════════════════════════════════════════ */
+    .colab-section { margin: 1.5rem 0; }
+    .colab-section h3 {
+      color: var(--primary);
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .colab-status {
+      background: var(--bloom2);
+      border: 1px solid #FFDF2D;
+      border-radius: 8px;
+      padding: .6rem 1rem;
+      margin-bottom: 1rem;
+      font-size: .88rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: #5d4037;
+    }
+    .colab-status.ready { background: #e8f5e9; border-color: #43a047; color: var(--green); }
+    .colab-cell {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: box-shadow 0.3s;
+    }
+    .colab-cell:hover { box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    .colab-cell-header {
+      display: flex;
+      align-items: center;
+      padding: .5rem .8rem;
+      background: #16162a;
+      border-bottom: 1px solid #2a2a4a;
+    }
+    .colab-cell-label {
+      color: #6c7086;
+      font-family: 'Courier New', monospace;
+      font-size: .78rem;
+      font-weight: 700;
+      min-width: 60px;
+    }
+    .colab-cell-title {
+      color: #a6adc8;
+      font-size: .8rem;
+      flex: 1;
+      margin-left: .5rem;
+    }
+    .colab-run-btn {
+      background: #2e7d32;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: .25rem .65rem;
+      font-size: .72rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+      transition: background .2s;
+    }
+    .colab-run-btn:hover { background: #388e3c; }
+    .colab-run-btn:disabled { background: #555; cursor: not-allowed; }
+    .colab-cell-body {
+      padding: .8rem 1rem .8rem 3.2rem;
+      position: relative;
+    }
+    .colab-cell-body::before {
+      content: 'In [ ]:';
+      position: absolute;
+      left: .8rem;
+      top: .85rem;
+      color: #6c7086;
+      font-family: 'Courier New', monospace;
+      font-size: .78rem;
+    }
+    .colab-cell-body.ran::before {
+      content: 'In [*]:';
+      color: #89b4fa;
+    }
+    .colab-cell textarea {
+      width: 100%;
+      min-height: 80px;
+      background: transparent;
+      border: none;
+      color: #cdd6f4;
+      font-family: 'Courier New', monospace;
+      font-size: .85rem;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      padding: 0;
+    }
+    .colab-output {
+      display: none;
+      background: #0d1117;
+      border-top: 1px solid #2a2a4a;
+      padding: .8rem 1rem .8rem 3.2rem;
+      position: relative;
+    }
+    .colab-output.visible { display: block; }
+    .colab-output pre {
+      margin: 0;
+      color: #cdd6f4;
+      font-family: 'Courier New', monospace;
+      font-size: .85rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .colab-output pre.colab-error { color: #f38ba8; }
+    .colab-fallback {
+      display: none;
+      padding: 1rem;
+      background: #fff8e1;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: .88rem;
+      color: #5d4037;
+    }
+</style>
 
 <style id="progress-tracker-css">
 /* ── Progress Tracker Widget ── */
@@ -665,138 +792,165 @@ blockquote {
 <blockquote>Elegir estructura es tomar una decisión de diseño. En contextos de negocio, esa decisión se defiende por trazabilidad, equidad, eficiencia y claridad operativa.</blockquote>
         </section>
 
+
+        <!-- ══════════════════════════════════════
+             GOOGLE COLAB INTERACTIVE CELLS (S5)
+        ══════════════════════════════════════════ -->
         <section id="python" class="card">
             <h2>Python como herramienta analítica (Google Colab)</h2>
-            <p class="section-intro">Ejecuta cada bloque en Colab o Replit, documenta el comportamiento observado y conecta la salida con una decisión de negocio.</p>
+            <p class="section-intro">Ejecuta cada bloque directamente aquí. Pyodide ejecuta Python en el navegador — sin servidor externo.</p>
             <blockquote>En esta semana el código debe ir acompañado de una defensa explícita de la decisión estructural: no basta con que funcione; debe ser la opción más razonable para el caso planteado.</blockquote>
-            
-            <div class="code-window">
-                <div class="code-topbar">
-                    <span><strong>Bloque 1:</strong> Cola circular con arreglo para rotación de terapeutas</span>
-                    <span>colab_circular_queue.py</span>
-                    <span class="code-dots"><span></span><span></span><span></span></span>
+
+            <div class="colab-section">
+                <h3>🐍 Google Colab — En Vivo en la Página</h3>
+                <div id="colab-status" class="colab-status">
+                    <span>⏳</span> Iniciando motor Python (Pyodide v0.24.1)...
                 </div>
-                <pre><code><span class="kw">class</span> <span class="num">CircularQueue</span><span class="op">:</span>
-    <span class="kw">def</span> <span class="num">__init__</span><span class="op">(</span><span class="var">self</span><span class="op">,</span> <span class="var">capacity</span><span class="op">)</span><span class="op">:</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">capacity</span> <span class="op">=</span> <span class="var">capacity</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">data</span> <span class="op">=</span> <span class="op">[</span><span class="kw">None</span><span class="op">]</span> <span class="op">*</span> <span class="var">capacity</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">front</span> <span class="op">=</span> <span class="num">0</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">rear</span> <span class="op">=</span> <span class="num">0</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">size</span> <span class="op">=</span> <span class="num">0</span>
 
-    <span class="kw">def</span> <span class="num">is_empty</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">return</span> <span class="var">self</span><span class="op">.</span><span class="var">size</span> <span class="op">==</span> <span class="num">0</span>
+                <!-- Cell 1: Cola circular -->
+                <div class="colab-cell" id="colab-cell-1">
+                    <div class="colab-cell-header">
+                        <span class="colab-cell-label">[1]</span>
+                        <span class="colab-cell-title">colab_circular_queue.py — Cola circular con arreglo para rotación de terapeutas</span>
+                        <button class="colab-run-btn" onclick="runColabCell(1)" id="run-btn-1">▶ Run</button>
+                    </div>
+                    <div class="colab-cell-body" id="colab-body-1">
+                        <textarea id="colab-code-1" rows="12" spellcheck="false">class CircularQueue:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.data = [None] * capacity
+        self.front = 0
+        self.rear = 0
+        self.size = 0
 
-    <span class="kw">def</span> <span class="num">is_full</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">return</span> <span class="var">self</span><span class="op">.</span><span class="var">size</span> <span class="op">==</span> <span class="var">self</span><span class="op">.</span><span class="var">capacity</span>
+    def is_empty(self):
+        return self.size == 0
 
-    <span class="kw">def</span> <span class="num">enqueue</span><span class="op">(</span><span class="var">self</span><span class="op">,</span> <span class="var">item</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">if</span> <span class="var">self</span><span class="op">.</span><span class="var">is_full</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>
-            <span class="kw">raise</span> <span class="var">OverflowError</span><span class="op">(</span><span class="str">&quot;No hay espacio en la cola circular&quot;</span><span class="op">)</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">data</span><span class="op">[</span><span class="var">self</span><span class="op">.</span><span class="var">rear</span><span class="op">]</span> <span class="op">=</span> <span class="var">item</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">rear</span> <span class="op">=</span> <span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">rear</span> <span class="op">+</span> <span class="num">1</span><span class="op">)</span> <span class="op">%</span> <span class="var">self</span><span class="op">.</span><span class="var">capacity</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">size</span> <span class="op">+=</span> <span class="num">1</span>
+    def is_full(self):
+        return self.size == self.capacity
 
-    <span class="kw">def</span> <span class="num">dequeue</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">if</span> <span class="var">self</span><span class="op">.</span><span class="var">is_empty</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>
-            <span class="kw">raise</span> <span class="var">IndexError</span><span class="op">(</span><span class="str">&quot;La cola circular está vacía&quot;</span><span class="op">)</span>
-        <span class="var">item</span> <span class="op">=</span> <span class="var">self</span><span class="op">.</span><span class="var">data</span><span class="op">[</span><span class="var">self</span><span class="op">.</span><span class="var">front</span><span class="op">]</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">data</span><span class="op">[</span><span class="var">self</span><span class="op">.</span><span class="var">front</span><span class="op">]</span> <span class="op">=</span> <span class="kw">None</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">front</span> <span class="op">=</span> <span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">front</span> <span class="op">+</span> <span class="num">1</span><span class="op">)</span> <span class="op">%</span> <span class="var">self</span><span class="op">.</span><span class="var">capacity</span>
-        <span class="var">self</span><span class="op">.</span><span class="var">size</span> <span class="op">-=</span> <span class="num">1</span>
-        <span class="kw">return</span> <span class="var">item</span>
+    def enqueue(self, item):
+        if self.is_full():
+            raise OverflowError("No hay espacio en la cola circular")
+        self.data[self.rear] = item
+        self.rear = (self.rear + 1) % self.capacity
+        self.size += 1
 
-    <span class="kw">def</span> <span class="num">snapshot</span><span class="op">(</span><span class="var">self</span><span class="op">)</span><span class="op">:</span>
-        <span class="kw">return</span> <span class="op">{</span>
-            <span class="str">&quot;data&quot;</span><span class="op">:</span> <span class="var">list</span><span class="op">(</span><span class="var">self</span><span class="op">.</span><span class="var">data</span><span class="op">)</span><span class="op">,</span>
-            <span class="str">&quot;front&quot;</span><span class="op">:</span> <span class="var">self</span><span class="op">.</span><span class="var">front</span><span class="op">,</span>
-            <span class="str">&quot;rear&quot;</span><span class="op">:</span> <span class="var">self</span><span class="op">.</span><span class="var">rear</span><span class="op">,</span>
-            <span class="str">&quot;size&quot;</span><span class="op">:</span> <span class="var">self</span><span class="op">.</span><span class="var">size</span><span class="op">,</span>
-        <span class="op">}</span>
+    def dequeue(self):
+        if self.is_empty():
+            raise IndexError("La cola circular está vacía")
+        item = self.data[self.front]
+        self.data[self.front] = None
+        self.front = (self.front + 1) % self.capacity
+        self.size -= 1
+        return item
 
-<span class="var">terapeutas</span> <span class="op">=</span> <span class="var">CircularQueue</span><span class="op">(</span><span class="num">4</span><span class="op">)</span>
-<span class="kw">for</span> <span class="var">nombre</span> <span class="kw">in</span> <span class="op">[</span><span class="str">&quot;Laura&quot;</span><span class="op">,</span> <span class="str">&quot;Carlos&quot;</span><span class="op">,</span> <span class="str">&quot;María&quot;</span><span class="op">,</span> <span class="str">&quot;Jorge&quot;</span><span class="op">]</span><span class="op">:</span>
-    <span class="var">terapeutas</span><span class="op">.</span><span class="var">enqueue</span><span class="op">(</span><span class="var">nombre</span><span class="op">)</span>
+    def snapshot(self):
+        return {
+            "data": list(self.data),
+            "front": self.front,
+            "rear": self.rear,
+            "size": self.size,
+        }
 
-<span class="var">print</span><span class="op">(</span><span class="str">&quot;Estado inicial:&quot;</span><span class="op">,</span> <span class="var">terapeutas</span><span class="op">.</span><span class="var">snapshot</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="var">print</span><span class="op">(</span><span class="str">&quot;Atiende primero:&quot;</span><span class="op">,</span> <span class="var">terapeutas</span><span class="op">.</span><span class="var">dequeue</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="var">terapeutas</span><span class="op">.</span><span class="var">enqueue</span><span class="op">(</span><span class="str">&quot;Laura&quot;</span><span class="op">)</span>  <span class="cm"># vuelve al final después de cerrar su turno</span>
-<span class="var">print</span><span class="op">(</span><span class="str">&quot;Estado circular:&quot;</span><span class="op">,</span> <span class="var">terapeutas</span><span class="op">.</span><span class="var">snapshot</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre>
-            </div>
-            <div class="info-box">
-                <strong>Uso pedagógico:</strong> Hace visible el recorrido circular y la reutilización de posiciones en un arreglo fijo.
-            </div>
-            
+terapeutas = CircularQueue(4)
+for nombre in ["Laura", "Carlos", "María", "Jorge"]:
+    terapeutas.enqueue(nombre)
 
-            <div class="code-window">
-                <div class="code-topbar">
-                    <span><strong>Bloque 2:</strong> Deque para cancelaciones urgentes</span>
-                    <span>colab_deque_urgencias.py</span>
-                    <span class="code-dots"><span></span><span></span><span></span></span>
+print("Estado inicial:", terapeutas.snapshot())
+print("Atiende primero:", terapeutas.dequeue())
+terapeutas.enqueue("Laura")  # vuelve al final después de cerrar su turno
+print("Estado circular:", terapeutas.snapshot())</textarea>
+                    </div>
+                    <div class="colab-output" id="colab-out-1"><pre></pre></div>
                 </div>
-                <pre><code><span class="kw">from</span> <span class="var">collections</span> <span class="kw">import</span> <span class="var">deque</span>
 
-<span class="var">agenda_del_dia</span> <span class="op">=</span> <span class="var">deque</span><span class="op">(</span><span class="op">[</span>
-    <span class="str">&quot;Samuel - Lenguaje&quot;</span><span class="op">,</span>
-    <span class="str">&quot;Valentina - Sensorial&quot;</span><span class="op">,</span>
-    <span class="str">&quot;Martín - TEA&quot;</span><span class="op">,</span>
-<span class="op">]</span><span class="op">)</span>
-
-<span class="var">print</span><span class="op">(</span><span class="str">&quot;Agenda inicial:&quot;</span><span class="op">,</span> <span class="var">list</span><span class="op">(</span><span class="var">agenda_del_dia</span><span class="op">)</span><span class="op">)</span>
-
-<span class="var">agenda_del_dia</span><span class="op">.</span><span class="var">appendleft</span><span class="op">(</span><span class="str">&quot;Lucía - Cancelación urgente por reacomodo&quot;</span><span class="op">)</span>
-<span class="var">agenda_del_dia</span><span class="op">.</span><span class="var">append</span><span class="op">(</span><span class="str">&quot;Camila - Seguimiento regular&quot;</span><span class="op">)</span>
-
-<span class="var">print</span><span class="op">(</span><span class="str">&quot;Agenda ajustada:&quot;</span><span class="op">,</span> <span class="var">list</span><span class="op">(</span><span class="var">agenda_del_dia</span><span class="op">)</span><span class="op">)</span>
-<span class="var">print</span><span class="op">(</span><span class="str">&quot;Siguiente caso a gestionar:&quot;</span><span class="op">,</span> <span class="var">agenda_del_dia</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">)</span></code></pre>
-            </div>
-            <div class="info-box">
-                <strong>Uso pedagógico:</strong> Permite mostrar por qué un doble extremo es útil cuando una urgencia debe entrar por el frente.
-            </div>
-            
-
-            <div class="code-window">
-                <div class="code-topbar">
-                    <span><strong>Bloque 3:</strong> Decisión integrada: pila o cola según el problema</span>
-                    <span>colab_decision_matrix.py</span>
-                    <span class="code-dots"><span></span><span></span><span></span></span>
+                <div class="info-box">
+                    <strong>Uso pedagógico:</strong> Hace visible el recorrido circular y la reutilización de posiciones en un arreglo fijo.
                 </div>
-                <pre><code>from collections import deque
 
-                    def recomendar_estructura(problema):
-                        mapa = {
-                            &quot;historial_reciente&quot;: &quot;Pila&quot;,
-                            &quot;lista_espera&quot;: &quot;Cola&quot;,
-                            &quot;rotacion_terapeutas&quot;: &quot;Cola circular&quot;,
-                            &quot;cancelaciones_urgentes&quot;: &quot;Deque&quot;,
-                        }
-                        return mapa.get(problema, &quot;Analizar caso&quot;)
+                <!-- Cell 2: Deque cancelaciones urgentes -->
+                <div class="colab-cell" id="colab-cell-2">
+                    <div class="colab-cell-header">
+                        <span class="colab-cell-label">[2]</span>
+                        <span class="colab-cell-title">colab_deque_urgencias.py — Deque para cancelaciones urgentes</span>
+                        <button class="colab-run-btn" onclick="runColabCell(2)" id="run-btn-2">▶ Run</button>
+                    </div>
+                    <div class="colab-cell-body" id="colab-body-2">
+                        <textarea id="colab-code-2" rows="10" spellcheck="false">from collections import deque
 
-                    casos = [
-                        &quot;historial_reciente&quot;,
-                        &quot;lista_espera&quot;,
-                        &quot;rotacion_terapeutas&quot;,
-                        &quot;cancelaciones_urgentes&quot;,
-                    ]
+agenda_del_dia = deque([
+    "Samuel - Lenguaje",
+    "Valentina - Sensorial",
+    "Martín - TEA",
+])
 
-                    for caso in casos:
-                        print(caso, &quot;-&gt;&quot;, recomendar_estructura(caso))
+print("Agenda inicial:", list(agenda_del_dia))
 
-                    historial = []
-                    historial.append(&quot;Sesión Lenguaje&quot;)
-                    historial.append(&quot;Sesión TEA&quot;)
+agenda_del_dia.appendleft("Lucía - Cancelación urgente por reacomodo")
+agenda_del_dia.append("Camila - Seguimiento regular")
 
-                    espera = deque([&quot;Samuel&quot;, &quot;Valentina&quot;, &quot;Martín&quot;])
+print("Agenda ajustada:", list(agenda_del_dia))
+print("Siguiente caso a gestionar:", agenda_del_dia[0])</textarea>
+                    </div>
+                    <div class="colab-output" id="colab-out-2"><pre></pre></div>
+                </div>
 
-                    print(&quot;
-Cima del historial:&quot;, historial[-1])
-                    print(&quot;Frente de la espera:&quot;, espera[0])</code></pre>
+                <div class="info-box">
+                    <strong>Uso pedagógico:</strong> Permite mostrar por qué un doble extremo es útil cuando una urgencia debe entrar por el frente.
+                </div>
+
+                <!-- Cell 3: Decisión integrada -->
+                <div class="colab-cell" id="colab-cell-3">
+                    <div class="colab-cell-header">
+                        <span class="colab-cell-label">[3]</span>
+                        <span class="colab-cell-title">colab_decision_matrix.py — Decisión integrada: pila o cola según el problema</span>
+                        <button class="colab-run-btn" onclick="runColabCell(3)" id="run-btn-3">▶ Run</button>
+                    </div>
+                    <div class="colab-cell-body" id="colab-body-3">
+                        <textarea id="colab-code-3" rows="14" spellcheck="false">from collections import deque
+
+def recomendar_estructura(problema):
+    mapa = {
+        "historial_reciente": "Pila",
+        "lista_espera": "Cola",
+        "rotacion_terapeutas": "Cola circular",
+        "cancelaciones_urgentes": "Deque",
+    }
+    return mapa.get(problema, "Analizar caso")
+
+casos = [
+    "historial_reciente",
+    "lista_espera",
+    "rotacion_terapeutas",
+    "cancelaciones_urgentes",
+]
+
+for caso in casos:
+    print(caso, "-&gt;", recomendar_estructura(caso))
+
+historial = []
+historial.append("Sesión Lenguaje")
+historial.append("Sesión TEA")
+
+espera = deque(["Samuel", "Valentina", "Martín"])
+
+print("\nCima del historial:", historial[-1])
+print("Frente de la espera:", espera[0])</textarea>
+                    </div>
+                    <div class="colab-output" id="colab-out-3"><pre></pre></div>
+                </div>
+
+                <div class="info-box">
+                    <strong>Uso pedagógico:</strong> Refuerza la comparación crítica entre estructuras y ayuda a preparar el reto decisional de la semana.
+                </div>
+
+                <div id="colab-fallback" class="colab-fallback">
+                    ⚠️ No se pudo cargar Pyodide. Puedes usar <a href="https://colab.research.google.com" target="_blank" style="color:var(--primary); font-weight:700;">Google Colab</a> directamente.
+                </div>
             </div>
-            <div class="info-box">
-                <strong>Uso pedagógico:</strong> Refuerza la comparación crítica entre estructuras y ayuda a preparar el reto decisional de la semana.
-            </div>
-            
         </section>
+
 
         <section id="actividad" class="card">
             <h2>Actividad presencial HAD + HP (4 horas)</h2>
@@ -1423,5 +1577,155 @@ if (document.readyState === "loading") {
 })();
 </script>
 
+
+<script>
+(function() {
+  var pyodide = null;
+  var pyodideReady = false;
+  var pyodideLoading = false;
+
+  var statusEl   = document.getElementById('colab-status');
+  var fallbackEl = document.getElementById('colab-fallback');
+
+  function setStatus(msg, cls) {
+    if (!statusEl) return;
+    statusEl.innerHTML = '<span>' + msg + '</span>';
+    statusEl.className = 'colab-status';
+    if (cls) statusEl.classList.add(cls);
+  }
+
+  function disableRunBtns(disabled) {
+    for (var i = 1; i <= 3; i++) {
+      var btn = document.getElementById('run-btn-' + i);
+      if (btn) btn.disabled = disabled;
+    }
+  }
+
+  async function initPyodide() {
+    if (pyodideReady || pyodideLoading) return;
+    pyodideLoading = true;
+    disableRunBtns(true);
+    setStatus('⏳ Cargando motor Python (Pyodide v0.24.1)...');
+
+    try {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js';
+
+      await new Promise(function(resolve, reject) {
+        script.onload = resolve;
+        script.onerror = function() { reject(new Error('No se pudo cargar el script de Pyodide')); };
+        document.head.appendChild(script);
+      });
+
+      if (typeof window.loadPyodide !== 'function') {
+        throw new Error('loadPyodide no está definido después de cargar el script');
+      }
+
+      pyodide = await window.loadPyodide({
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/'
+      });
+
+      pyodideReady = true;
+      pyodideLoading = false;
+      disableRunBtns(false);
+      setStatus('🐍 Motor Python · Listo para ejecutar', 'ready');
+    } catch(err) {
+      console.error('Pyodide load error:', err);
+      pyodideLoading = false;
+      pyodideReady = false;
+      setStatus('⚠️ No se pudo cargar Pyodide: ' + err.message);
+      disableRunBtns(false);
+      if (fallbackEl) fallbackEl.style.display = 'block';
+    }
+  }
+
+  window.runColabCell = async function(cellNum) {
+    if (!pyodideReady) {
+      if (!pyodideLoading) {
+        setStatus('⏳ Cargando Python... espera unos segundos.');
+        initPyodide();
+      } else {
+        setStatus('⏳ Python aún se está cargando. Espera un momento...');
+      }
+      return;
+    }
+
+    var codeArea = document.getElementById('colab-code-' + cellNum);
+    var outDiv   = document.getElementById('colab-out-' + cellNum);
+    var bodyDiv  = document.getElementById('colab-body-' + cellNum);
+    var runBtn   = document.getElementById('run-btn-' + cellNum);
+
+    if (!codeArea || !outDiv) return;
+
+    var code = codeArea.value;
+    if (!code.trim()) return;
+
+    if (runBtn) {
+      runBtn.textContent = '⏳ ...';
+      runBtn.disabled = true;
+    }
+    if (outDiv) {
+      outDiv.classList.add('visible');
+      outDiv.querySelector('pre').textContent = '';
+    }
+    if (bodyDiv) bodyDiv.classList.add('ran');
+
+    try {
+      if (!pyodide || typeof pyodide.setStdout !== 'function') {
+        pyodideReady = false;
+        throw new Error('Pyodide no está inicializado. Recarga la página.');
+      }
+      var output = '';
+      pyodide.setStdout({ batched: function(text) { output += text; } });
+      pyodide.setStderr({ batched: function(text) { output += text; } });
+
+      await pyodide.runPythonAsync(code);
+
+      var pre = outDiv.querySelector('pre');
+      if (output) {
+        pre.textContent = output;
+      } else {
+        pre.textContent = '(sin salida)';
+      }
+      pre.classList.remove('colab-error');
+
+      safeAddXP(2, 'Código ejecutado en Colab');
+    } catch(err) {
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = 'Error: ' + err.message;
+      pre.classList.add('colab-error');
+    }
+
+    if (runBtn) {
+      runBtn.textContent = '▶ Run';
+      runBtn.disabled = false;
+    }
+  };
+
+  // Init Pyodide on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(initPyodide, 500);
+    });
+  } else {
+    setTimeout(initPyodide, 500);
+  }
+
+  window._pyodideRunner = async function(code) {
+    if (!pyodideReady || !pyodide) {
+      return { output: '', error: 'Pyodide no está listo. Recarga la página.' };
+    }
+    try {
+      var output = '';
+      pyodide.setStdout({ batched: function(text) { output += text; } });
+      pyodide.setStderr({ batched: function(text) { output += text; } });
+      await pyodide.runPythonAsync(code);
+      return { output: output, error: null };
+    } catch(e) {
+      return { output: '', error: e.message };
+    }
+  };
+})();
+</script>
 </body>
 </html>

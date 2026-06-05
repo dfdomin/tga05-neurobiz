@@ -464,6 +464,104 @@ footer {
   .xp-label { flex-direction: column; gap: .2rem; }
   table { font-size: .86rem; }
 }
+/* ── Pyodide Interactive Cells ── */
+.py-cell-wrap {
+  margin: 1.2rem 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 6px 20px rgba(30,40,67,.12);
+}
+.py-cell-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .55rem 1rem;
+  background: linear-gradient(135deg, #1E2843, #2d3a5e);
+  color: #cdd6f4;
+  font-size: .8rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.py-cell-header .py-cell-title {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-weight: 700;
+}
+.py-cell-header .py-badge {
+  background: rgba(255,223,45,.18);
+  color: #FFDF2D;
+  border: 1px solid rgba(255,223,45,.3);
+  border-radius: 6px;
+  padding: .1rem .5rem;
+  font-size: .72rem;
+}
+.py-cell-btn {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff;
+  border-radius: 8px;
+  padding: .3rem .75rem;
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s;
+}
+.py-cell-btn:hover { background: rgba(255,255,255,.22); }
+.py-cell-btn:disabled { opacity: .5; cursor: not-allowed; }
+.py-cell-code {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  background: var(--code-bg);
+  color: #cdd6f4;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .85rem;
+  line-height: 1.6;
+  white-space: pre;
+  overflow-x: auto;
+}
+.py-cell-output {
+  min-height: 42px;
+  padding: .75rem 1rem;
+  background: #f0f4ff;
+  border-top: 1px solid var(--border);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .82rem;
+  color: #1f2937;
+  white-space: pre-wrap;
+}
+.py-cell-output .py-err { color: #c62828; }
+.py-cell-output .py-ok  { color: #2e7d32; }
+.py-cell-loading {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: var(--muted);
+  font-size: .82rem;
+  padding: .5rem 1rem;
+}
+.py-cell-loading::before {
+  content: '';
+  width: 16px; height: 16px;
+  border: 2px solid rgba(30,40,67,.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.py-section-intro {
+  background: linear-gradient(135deg, #1E2843, #2d3a5e);
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+  color: #fff;
+  margin-bottom: 1.4rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.py-section-intro .py-icon { font-size: 2rem; flex-shrink: 0; }
+.py-section-intro h3 { margin: 0 0 .3rem; color: #FFDF2D; font-size: 1.15rem; }
+.py-section-intro p { margin: 0; opacity: .85; font-size: .9rem; }
 </style>
 <style id="progress-tracker-css">
 /* ── Progress Tracker Widget ── */
@@ -510,6 +608,8 @@ footer {
 </style>
 
   <script src="../js/supabase-config.js"></script>
+  <!-- Pyodide v0.24.1 -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
 </head><body><header><div class="hero"><div class="badge-row"><span class="badge-module">🎓 TGA05 · Estructura de Datos para los Negocios</span><span class="badge-week">🗓 Semana 9 de 14</span><span class="badge-week">🏅 Módulo en progreso</span></div><div class="hero-grid"><div><h1>Listas Enlazadas Simples II: Operaciones</h1><p class="subtitle">Operaciones completas en listas enlazadas simples: insertar en posición, eliminar, buscar e invertir el historial terapéutico de NeuroBiz.</p><div class="xp-panel"><div class="xp-label"><span>Barra XP del módulo</span><span>700 / 980 XP del módulo</span></div><div class="xp-track"><div class="xp-bar" data-progress="64.3"></div></div></div></div><aside class="hero-note"><p><strong>Rol inmersivo:</strong> Analista de Datos Estratégico de NeuroBiz S.A.S.</p><p>Ahora la estructura ya existe; el reto es operarla con precisión para mantener historiales confiables, actualizables y auditables en tiempo real.</p></aside></div></div></header><nav><div class="nav-wrap"><a href="#mision">📋 Memorando</a><a href="#teoria">📚 Teoría</a><a href="#python">🐍 Python BI</a><a href="#actividad">⚙️ Actividad</a><a href="#quiz">🎮 Quizizz</a><a href="#bib">📖 Bibliografía</a></div></nav><main>
 
 <!-- ── PROGRESS TRACKER WIDGET ── -->
@@ -667,7 +767,476 @@ footer {
 <span class="var">historial</span>.<span class="fn">recorrer</span>()
 <span class="var">historial</span>.<span class="fn">invertir</span>()
 <span class="fn">print</span>(<span class="str">"Después de invertir:"</span>)
-<span class="var">historial</span>.<span class="fn">recorrer</span>()</pre></div><p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p></div></section><section id="actividad" class="card"><h2>⚙️ Actividad presencial (HAD + HP = 4 horas)</h2><div class="activity-card"><h3>🧪 Gestión Avanzada del Historial</h3><p><strong>Propósito:</strong> Implementar las operaciones completas CRUD en la lista enlazada del historial terapéutico de NeuroBiz.</p><p><strong>Verbo Bloom explícito:</strong> Aplicar · probar · analizar · justificar</p><p><strong>Duración total:</strong> 240 minutos presenciales con acompañamiento, demostración, laboratorio y cierre formativo.</p><h3>Instrucciones claras para el estudiante</h3><ol class="step-list"><li>Parte de la clase base de la semana 8 y agrega métodos buscar, eliminar, insertar_en_posicion e invertir.</li><li>Prueba cada operación con un historial de 5 nodos y documenta qué ocurre con la cabeza en cada caso especial.</li><li>Elimina al menos una sesión cancelada y justifica por qué el resto del historial sigue siendo coherente.</li><li>Invierte la lista y explica qué valor ejecutivo tiene ver primero las sesiones más recientes.</li><li>Presenta al cierre una mini auditoría: qué errores detectaste y cómo los corregiste.</li></ol><div class="info-box tip"><div class="icon">✅</div><p><strong>Producto esperado:</strong> Colab con operaciones CRUD completas y pruebas sobre un historial de al menos 5 sesiones.</p></div><div class="info-box warn"><div class="icon">🎯</div><p><strong>Criterio de evidencia:</strong> La evaluación prioriza manejo correcto de referencias, prueba de casos límite y lectura crítica del valor de cada operación para el negocio.</p></div><h3>🕹️ Framework GAME en acción</h3><div class="game-grid"><article class="game-card"><h4>Guiar</h4><p>El docente modela un caso límite por operación para anticipar errores comunes.</p></article><article class="game-card"><h4>Articular</h4><p>Se enlazan estructura, mantenimiento del historial y lectura gerencial del dato.</p></article><article class="game-card"><h4>Motivar</h4><p>La actividad se plantea como una misión de saneamiento y visualización ejecutiva del historial clínico.</p></article><article class="game-card"><h4>Evaluar</h4><p>Se valoran funcionalidad, pruebas, explicación de casos límite y quiz formativo.</p></article></div></div><div class="dojo-panel"><h3>🏆 Panel ClassDojo — puntos de la misión</h3><p>Los puntos se asignan por evidencia observable y concreta, no por impresiones generales. Usa esta tabla como guía de comportamiento y desempeño.</p><div class="table-wrap"><table><thead><tr><th>Momento</th><th>Criterio concreto</th><th>Puntos</th></tr></thead><tbody><tr><td>Inicio</td><td>Recupera correctamente la estructura base de la semana 8</td><td class="points">+1</td></tr><tr><td>CRUD</td><td>Implementa al menos tres operaciones sin romper la lista</td><td class="points">+2</td></tr><tr><td>Casos límite</td><td>Maneja cabeza, lista vacía o id inexistente</td><td class="points">+2</td></tr><tr><td>Análisis</td><td>Explica utilidad gerencial de invertir o depurar la lista</td><td class="points">+1</td></tr><tr><td>Cierre</td><td>Documenta pruebas y participa en síntesis final</td><td class="points">+1</td></tr></tbody></table></div></div><h3>🏠 HTI — Trabajo independiente con dos rutas</h3><p class="lead">Ambos escenarios profundizan la semana. El Escenario A desarrolla más dominio técnico; el Escenario B sostiene continuidad conceptual y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>.</p><article class="scenario a"><div class="scenario-header"><span>HTI Escenario A — Fusionar dos listas enlazadas de sedes distintas de NeuroBiz</span><span>60–90 min · entrega digital</span></div><div class="scenario-body"><p>Implementa una función que reciba dos listas enlazadas de pacientes de dos sedes distintas y construya una sola lista consolidada.</p><p>Debes explicar si la fusión conserva el orden original o si requiere un criterio adicional. Incluye pruebas con al menos 3 nodos por lista.</p><p>Entrega: notebook funcional, esquema breve de la estrategia usada y comentario sobre el valor administrativo de consolidar sedes.</p><div class="scenario-note">Escenario A consolida dominio estructural y prepara para pensar en integración de fuentes de datos.</div></div></article><article class="scenario b"><div class="scenario-header"><span>HTI Escenario B — Trazado paso a paso de eliminar(nodo)</span><span>20–30 min · cuaderno/papel</span></div><div class="scenario-body"><p>Dibuja una lista de 5 nodos y muestra paso a paso la operación <code>eliminar</code> para un nodo intermedio.</p><p>Marca dónde están <em>anterior</em>, <em>actual</em> y qué referencia cambia cuando el nodo desaparece.</p><p>Este escenario es de bajo umbral y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>; su propósito es reforzar precisión visual sobre las referencias.</p><div class="scenario-note">Úsalo cuando el estudiante necesita fijar la lógica del reencadenamiento antes de fusionar o invertir estructuras.</div></div></article></section><section id="quiz" class="card"><h2>🎮 Quiz de verificación — Quizizz</h2><div class="quiz-box"><p><strong>Modalidad sugerida:</strong> 5 preguntas · 8 a 10 minutos · retroalimentación inmediata. Las respuestas correctas están ocultas y aparecen al pasar el cursor sobre cada tarjeta.</p><div class="quiz-grid"><article class="quiz-item" tabindex="0"><h4>Pregunta 1</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Qué debe cuidarse al eliminar un nodo de una lista enlazada?</strong></p><ol class="quiz-options"><li>Cambiar el color del nodo</li><li>Actualizar la referencia del nodo anterior o la cabeza</li><li>Ordenar toda la lista</li><li>Crear una tupla</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La operación crítica es reencadenar correctamente la lista.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 2</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Para qué sirve insertar en posición?</strong></p><ol class="quiz-options"><li>Para borrar todos los nodos</li><li>Para añadir una sesión en un punto específico del historial</li><li>Para evitar recorrer la lista</li><li>Para reemplazar la cabeza siempre</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> Permite ubicar seguimientos o correcciones en el punto adecuado.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 3</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>Invertir una lista enlazada simple implica…</strong></p><ol class="quiz-options"><li>copiar los datos a una lista de Python obligatoriamente</li><li>cambiar la dirección de los enlaces entre nodos</li><li>eliminar la cabeza</li><li>usar búsqueda binaria</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La inversión real ocurre al reorientar referencias.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 4</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Qué caso límite merece atención especial en eliminar?</strong></p><ol class="quiz-options"><li>Cuando el nodo está al inicio o la lista está vacía</li><li>Cuando la lista tiene texto</li><li>Cuando el computador es lento</li><li>Cuando se usa Quizizz</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La cabeza y la lista vacía son casos límite centrales.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 5</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Por qué estas operaciones se asocian a una lógica CRUD?</strong></p><ol class="quiz-options"><li>Porque usan colores distintos</li><li>Porque crean, leen, actualizan e incluso eliminan elementos de una estructura</li><li>Porque son exclusivamente de bases de datos SQL</li><li>Porque solo sirven para pacientes</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La analogía CRUD ayuda a vincular estructuras con flujos reales de información.</div></article></div></div></section><section id="bib" class="card"><h2>📖 Bibliografía en formato APA</h2><div class="mini-card"><p>Las siguientes fuentes sostienen la teoría de la semana y legitiman el enfoque de Python como herramienta analítica para resolver problemas organizacionales del caso NeuroBiz.</p><ul><li>Cairó Battistutti, O., & Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li><li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill.</li><li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li><li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial.</li><li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li><li>Google Colaboratory. (2024). <em>Google Colaboratory</em>. https://colab.research.google.com</li></ul></div></section></main><footer>TGA05 · Semana 9 · Material del estudiante · Framework GAME · Caso transversal NeuroBiz S.A.S. · ODS 7 y 13</footer><script>document.addEventListener('DOMContentLoaded', function () {var bar = document.querySelector('.xp-bar'); if (bar) {requestAnimationFrame(function () {bar.style.width = bar.dataset.progress + '%';});}});</script>
+<span class="var">historial</span>.<span class="fn">recorrer</span>()</pre></div><p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p></div></section>
+
+<!-- ════════════════════════════════════════════
+     🐍 PYTHON DE REFERENCIA — SEMANA 9
+     Interactive Pyodide cells · v0.24.1
+     ════════════════════════════════════════════ -->
+<section id="python" class="card" style="margin-top:1.4rem">
+  <h2>🐍 Python de Referencia — Semana 9</h2>
+
+  <div class="py-section-intro">
+    <div class="py-icon">🐍</div>
+    <div>
+      <h3>Ejecuta el código directamente en tu navegador</h3>
+      <p>Esta sección usa Pyodide (Python en WebAssembly) para que puedas ejecutar, modificar y experimentar con el código de listas enlazadas sin instalar nada. Haz clic en "▶ Ejecutar" en cada celda.</p>
+    </div>
+  </div>
+
+  <!-- Cell 1: Nodo + ListaEnlazada base -->
+  <div class="py-cell-wrap" id="pycell-1">
+    <div class="py-cell-header">
+      <span class="py-cell-title">📦 Celda 1 — Definición de Nodo y ListaEnlazada</span>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <span class="py-badge">Python 3.11</span>
+        <button class="py-cell-btn" onclick="runColabCell('pycell-1', this)">▶ Ejecutar</button>
+      </div>
+    </div>
+    <pre class="py-cell-code">class Nodo:
+    def __init__(self, dato):
+        self.dato = dato
+        self.siguiente = None
+
+    def __repr__(self):
+        return f"Nodo({self.dato})"
+
+class ListaEnlazada:
+    def __init__(self):
+        self.cabeza = None
+
+    def insertar_al_final(self, dato):
+        nuevo = Nodo(dato)
+        if self.cabeza is None:
+            self.cabeza = nuevo
+            return
+        actual = self.cabeza
+        while actual.siguiente:
+            actual = actual.siguiente
+        actual.siguiente = nuevo
+
+    def recorrer(self):
+        resultado = []
+        actual = self.cabeza
+        while actual:
+            resultado.append(actual.dato)
+            actual = actual.siguiente
+        return resultado
+
+    def __repr__(self):
+        return " -> ".join(str(d) for d in self.recorrer()) or " Lista vacía"
+
+# Construir historial de NeuroBiz
+historial = ListaEnlazada()
+for sesion in [
+    {"id": 1, "estado": "asistida", "fecha": "2024-01-10"},
+    {"id": 2, "estado": "asistida", "fecha": "2024-01-17"},
+    {"id": 3, "estado": "cancelada", "fecha": "2024-01-24"},
+    {"id": 4, "estado": "asistida", "fecha": "2024-01-31"},
+    {"id": 5, "estado": "seguimiento", "fecha": "2024-02-07"}
+]:
+    historial.insertar_al_final(sesion)
+
+print("Historial de NeuroBiz:")
+print(historial)
+print(f"Nodos en lista: {len(historial.recorrer())}")</pre>
+    <div class="py-cell-output" id="pycell-1-out"></div>
+  </div>
+
+  <!-- Cell 2: Buscar por ID -->
+  <div class="py-cell-wrap" id="pycell-2">
+    <div class="py-cell-header">
+      <span class="py-cell-title">🔍 Celda 2 — Buscar sesión por ID</span>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <span class="py-badge">Python 3.11</span>
+        <button class="py-cell-btn" onclick="runColabCell('pycell-2', this)">▶ Ejecutar</button>
+      </div>
+    </div>
+    <pre class="py-cell-code">class Nodo:
+    def __init__(self, dato):
+        self.dato = dato
+        self.siguiente = None
+
+class ListaEnlazada:
+    def __init__(self):
+        self.cabeza = None
+
+    def insertar_al_final(self, dato):
+        nuevo = Nodo(dato)
+        if self.cabeza is None:
+            self.cabeza = nuevo
+            return
+        actual = self.cabeza
+        while actual.siguiente:
+            actual = actual.siguiente
+        actual.siguiente = nuevo
+
+    def buscar(self, id_sesion):
+        actual = self.cabeza
+        while actual:
+            if actual.dato["id"] == id_sesion:
+                return actual.dato
+            actual = actual.siguiente
+        return None
+
+    def recorrer(self):
+        resultado = []
+        actual = self.cabeza
+        while actual:
+            resultado.append(actual.dato)
+            actual = actual.siguiente
+        return resultado
+
+# Recrear historial
+historial = ListaEnlazada()
+for sesion in [
+    {"id": 1, "estado": "asistida", "fecha": "2024-01-10"},
+    {"id": 2, "estado": "asistida", "fecha": "2024-01-17"},
+    {"id": 3, "estado": "cancelada", "fecha": "2024-01-24"},
+    {"id": 4, "estado": "asistida", "fecha": "2024-01-31"},
+    {"id": 5, "estado": "seguimiento", "fecha": "2024-02-07"}
+]:
+    historial.insertar_al_final(sesion)
+
+# Buscar sesiones
+for buscar_id in [2, 3, 99]:
+    resultado = historial.buscar(buscar_id)
+    if resultado:
+        print(f"✓ Sesión ID {buscar_id} encontrada: estado={resultado['estado']}, fecha={resultado['fecha']}")
+    else:
+        print(f"✗ Sesión ID {buscar_id} no encontrada en el historial")</pre>
+    <div class="py-cell-output" id="pycell-2-out"></div>
+  </div>
+
+  <!-- Cell 3: Eliminar sesión -->
+  <div class="py-cell-wrap" id="pycell-3">
+    <div class="py-cell-header">
+      <span class="py-cell-title">🗑 Celda 3 — Eliminar sesión cancelada</span>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <span class="py-badge">Python 3.11</span>
+        <button class="py-cell-btn" onclick="runColabCell('pycell-3', this)">▶ Ejecutar</button>
+      </div>
+    </div>
+    <pre class="py-cell-code">class Nodo:
+    def __init__(self, dato):
+        self.dato = dato
+        self.siguiente = None
+
+class ListaEnlazada:
+    def __init__(self):
+        self.cabeza = None
+
+    def insertar_al_final(self, dato):
+        nuevo = Nodo(dato)
+        if self.cabeza is None:
+            self.cabeza = nuevo
+            return
+        actual = self.cabeza
+        while actual.siguiente:
+            actual = actual.siguiente
+        actual.siguiente = nuevo
+
+    def eliminar(self, id_sesion):
+        actual = self.cabeza
+        anterior = None
+        while actual:
+            if actual.dato["id"] == id_sesion:
+                if anterior is None:
+                    self.cabeza = actual.siguiente
+                else:
+                    anterior.siguiente = actual.siguiente
+                return True
+            anterior = actual
+            actual = actual.siguiente
+        return False
+
+    def recorrer(self):
+        resultado = []
+        actual = self.cabeza
+        while actual:
+            resultado.append(actual.dato)
+            actual = actual.siguiente
+        return resultado
+
+# Recrear historial
+historial = ListaEnlazada()
+for sesion in [
+    {"id": 1, "estado": "asistida", "fecha": "2024-01-10"},
+    {"id": 2, "estado": "asistida", "fecha": "2024-01-17"},
+    {"id": 3, "estado": "cancelada", "fecha": "2024-01-24"},
+    {"id": 4, "estado": "asistida", "fecha": "2024-01-31"},
+    {"id": 5, "estado": "seguimiento", "fecha": "2024-02-07"}
+]:
+    historial.insertar_al_final(sesion)
+
+print("Antes de eliminar:", len(historial.recorrer()), "sesiones")
+print("Eliminar sesión 3 (cancelada):", historial.eliminar(3))
+print("Después de eliminar:", len(historial.recorrer()), "sesiones")
+print("Contenido remaining:", [s["id"] for s in historial.recorrer()])</pre>
+    <div class="py-cell-output" id="pycell-3-out"></div>
+  </div>
+
+  <!-- Cell 4: Insertar en posición -->
+  <div class="py-cell-wrap" id="pycell-4">
+    <div class="py-cell-header">
+      <span class="py-cell-title">📍 Celda 4 — Insertar en posición específica</span>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <span class="py-badge">Python 3.11</span>
+        <button class="py-cell-btn" onclick="runColabCell('pycell-4', this)">▶ Ejecutar</button>
+      </div>
+    </div>
+    <pre class="py-cell-code">class Nodo:
+    def __init__(self, dato):
+        self.dato = dato
+        self.siguiente = None
+
+class ListaEnlazada:
+    def __init__(self):
+        self.cabeza = None
+
+    def insertar_al_final(self, dato):
+        nuevo = Nodo(dato)
+        if self.cabeza is None:
+            self.cabeza = nuevo
+            return
+        actual = self.cabeza
+        while actual.siguiente:
+            actual = actual.siguiente
+        actual.siguiente = nuevo
+
+    def insertar_en_posicion(self, posicion, dato):
+        nuevo = Nodo(dato)
+        if posicion == 0:
+            nuevo.siguiente = self.cabeza
+            self.cabeza = nuevo
+            return
+        actual = self.cabeza
+        indice = 0
+        while actual and indice < posicion - 1:
+            actual = actual.siguiente
+            indice += 1
+        if actual is None:
+            raise IndexError("Posición fuera de rango")
+        nuevo.siguiente = actual.siguiente
+        actual.siguiente = nuevo
+
+    def recorrer(self):
+        resultado = []
+        actual = self.cabeza
+        while actual:
+            resultado.append(actual.dato)
+            actual = actual.siguiente
+        return resultado
+
+# Construir lista ordenada por ID
+historial = ListaEnlazada()
+for sesion in [{"id": 1}, {"id": 2}, {"id": 4}, {"id": 5}]:
+    historial.insertar_al_final(sesion)
+
+print("Antes:", [s["id"] for s in historial.recorrer()])
+# Insertar sesión 3 en posición 2 (entre 2 y 4)
+historial.insertar_en_posicion(2, {"id": 3})
+print("Después de insertar en posición 2:", [s["id"] for s in historial.recorrer()])
+# Insertar al inicio (posición 0)
+historial.insertar_en_posicion(0, {"id": 0})
+print("Después de insertar al inicio:", [s["id"] for s in historial.recorrer()])</pre>
+    <div class="py-cell-output" id="pycell-4-out"></div>
+  </div>
+
+  <!-- Cell 5: Invertir lista -->
+  <div class="py-cell-wrap" id="pycell-5">
+    <div class="py-cell-header">
+      <span class="py-cell-title">🔄 Celda 5 — Invertir la lista (ver sesiones más recientes primero)</span>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <span class="py-badge">Python 3.11</span>
+        <button class="py-cell-btn" onclick="runColabCell('pycell-5', this)">▶ Ejecutar</button>
+      </div>
+    </div>
+    <pre class="py-cell-code">class Nodo:
+    def __init__(self, dato):
+        self.dato = dato
+        self.siguiente = None
+
+class ListaEnlazada:
+    def __init__(self):
+        self.cabeza = None
+
+    def insertar_al_final(self, dato):
+        nuevo = Nodo(dato)
+        if self.cabeza is None:
+            self.cabeza = nuevo
+            return
+        actual = self.cabeza
+        while actual.siguiente:
+            actual = actual.siguiente
+        actual.siguiente = nuevo
+
+    def invertir(self):
+        anterior = None
+        actual = self.cabeza
+        while actual:
+            siguiente_temporal = actual.siguiente
+            actual.siguiente = anterior
+            anterior = actual
+            actual = siguiente_temporal
+        self.cabeza = anterior
+
+    def recorrer(self):
+        resultado = []
+        actual = self.cabeza
+        while actual:
+            resultado.append(actual.dato)
+            actual = actual.siguiente
+        return resultado
+
+# Construir historial cronológico
+historial = ListaEnlazada()
+for sesion in [
+    {"id": 1, "fecha": "2024-01-10", "nota": "Inicio tratamiento"},
+    {"id": 2, "fecha": "2024-01-17", "nota": "Seguimiento"},
+    {"id": 3, "fecha": "2024-01-24", "nota": "Evaluación mensual"},
+    {"id": 4, "fecha": "2024-01-31", "nota": "Ajuste de dosis"},
+    {"id": 5, "fecha": "2024-02-07", "nota": "Revisión final"}
+]:
+    historial.insertar_al_final(sesion)
+
+print("Orden cronológico (más antiguo primero):")
+for s in historial.recorrer():
+    print(f"  ID {s['id']} — {s['fecha']} — {s['nota']}")
+
+historial.invertir()
+print("\nOrden invertido (más reciente primero):")
+for s in historial.recorrer():
+    print(f"  ID {s['id']} — {s['fecha']} — {s['nota']}")</pre>
+    <div class="py-cell-output" id="pycell-5-out"></div>
+  </div>
+
+  <!-- Cell 6: Todas las operaciones combinadas -->
+  <div class="py-cell-wrap" id="pycell-6">
+    <div class="py-cell-header">
+      <span class="py-cell-title">🚀 Celda 6 — Pipeline completo: Buscar → Eliminar → Insertar → Invertir</span>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <span class="py-badge">Python 3.11</span>
+        <button class="py-cell-btn" onclick="runColabCell('pycell-6', this)">▶ Ejecutar</button>
+      </div>
+    </div>
+    <pre class="py-cell-code">class Nodo:
+    def __init__(self, dato):
+        self.dato = dato
+        self.siguiente = None
+
+class ListaEnlazada:
+    def __init__(self):
+        self.cabeza = None
+
+    def insertar_al_final(self, dato):
+        nuevo = Nodo(dato)
+        if self.cabeza is None:
+            self.cabeza = nuevo
+            return
+        actual = self.cabeza
+        while actual.siguiente:
+            actual = actual.siguiente
+        actual.siguiente = nuevo
+
+    def buscar(self, id_sesion):
+        actual = self.cabeza
+        while actual:
+            if actual.dato["id"] == id_sesion:
+                return actual.dato
+            actual = actual.siguiente
+        return None
+
+    def eliminar(self, id_sesion):
+        actual = self.cabeza
+        anterior = None
+        while actual:
+            if actual.dato["id"] == id_sesion:
+                if anterior is None:
+                    self.cabeza = actual.siguiente
+                else:
+                    anterior.siguiente = actual.siguiente
+                return True
+            anterior = actual
+            actual = actual.siguiente
+        return False
+
+    def insertar_en_posicion(self, posicion, dato):
+        nuevo = Nodo(dato)
+        if posicion == 0:
+            nuevo.siguiente = self.cabeza
+            self.cabeza = nuevo
+            return
+        actual = self.cabeza
+        indice = 0
+        while actual and indice < posicion - 1:
+            actual = actual.siguiente
+            indice += 1
+        if actual is None:
+            raise IndexError("Posición fuera de rango")
+        nuevo.siguiente = actual.siguiente
+        actual.siguiente = nuevo
+
+    def invertir(self):
+        anterior = None
+        actual = self.cabeza
+        while actual:
+            siguiente_temporal = actual.siguiente
+            actual.siguiente = anterior
+            anterior = actual
+            actual = siguiente_temporal
+        self.cabeza = anterior
+
+    def recorrer(self):
+        resultado = []
+        actual = self.cabeza
+        while actual:
+            resultado.append(actual.dato)
+            actual = actual.siguiente
+        return resultado
+
+# ── Pipeline completo de operaciones NeuroBiz ──
+historial = ListaEnlazada()
+datos_iniciales = [
+    {"id": 1, "estado": "asistida"},
+    {"id": 2, "estado": "asistida"},
+    {"id": 3, "estado": "cancelada"},
+    {"id": 4, "estado": "asistida"},
+    {"id": 5, "estado": "asistida"}
+]
+for sesion in datos_iniciales:
+    historial.insertar_al_final(sesion)
+
+print(f"Estado inicial: {[s['id'] for s in historial.recorrer()]} (longitud={len(historial.recorrer())})")
+
+# 1. Buscar sesión 4
+s4 = historial.buscar(4)
+print(f"\n1. Buscar sesión 4 → {s4}")
+
+# 2. Eliminar sesión cancelada (id=3)
+eliminado = historial.eliminar(3)
+print(f"2. Eliminar sesión 3 (cancelada) → {'✓ eliminado' if eliminado else '✗ no encontrado'}")
+print(f"   Estado después de eliminar: {[s['id'] for s in historial.recorrer()]}")
+
+# 3. Insertar seguimiento en posición 1
+historial.insertar_en_posicion(1, {"id": 6, "estado": "seguimiento"})
+print(f"3. Insertar sesión 6 (seguimiento) en posición 1 → {[s['id'] for s in historial.recorrer()]}")
+
+# 4. Invertir para ver más reciente primero
+historial.invertir()
+print(f"4. Invertir lista → {[s['id'] for s in historial.recorrer()]}")
+
+print("\n✓ Pipeline completado — historial listo para auditoría")</pre>
+    <div class="py-cell-output" id="pycell-6-out"></div>
+  </div>
+
+  <div class="info-box tip" style="margin-top:1rem">
+    <div class="icon">💡</div>
+    <p><strong>Experimenta:</strong> Haz clic en "▶ Ejecutar" y luego modifica algún valor en el código (por ejemplo, cambia el ID de búsqueda o añade más sesiones). Vuelve a ejecutar para ver cómo cambia el resultado. Cada modificación es evidencia de tu comprensión.</p>
+  </div>
+</section>
+
+<section id="actividad" class="card"><h2>⚙️ Actividad presencial (HAD + HP = 4 horas)</h2><div class="activity-card"><h3>🧪 Gestión Avanzada del Historial</h3><p><strong>Propósito:</strong> Implementar las operaciones completas CRUD en la lista enlazada del historial terapéutico de NeuroBiz.</p><p><strong>Verbo Bloom explícito:</strong> Aplicar · probar · analizar · justificar</p><p><strong>Duración total:</strong> 240 minutos presenciales con acompañamiento, demostración, laboratorio y cierre formativo.</p><h3>Instrucciones claras para el estudiante</h3><ol class="step-list"><li>Parte de la clase base de la semana 8 y agrega métodos buscar, eliminar, insertar_en_posicion e invertir.</li><li>Prueba cada operación con un historial de 5 nodos y documenta qué ocurre con la cabeza en cada caso especial.</li><li>Elimina al menos una sesión cancelada y justifica por qué el resto del historial sigue siendo coherente.</li><li>Invierte la lista y explica qué valor ejecutivo tiene ver primero las sesiones más recientes.</li><li>Presenta al cierre una mini auditoría: qué errores detectaste y cómo los corregiste.</li></ol><div class="info-box tip"><div class="icon">✅</div><p><strong>Producto esperado:</strong> Colab con operaciones CRUD completas y pruebas sobre un historial de al menos 5 sesiones.</p></div><div class="info-box warn"><div class="icon">🎯</div><p><strong>Criterio de evidencia:</strong> La evaluación prioriza manejo correcto de referencias, prueba de casos límite y lectura crítica del valor de cada operación para el negocio.</p></div><h3>🕹️ Framework GAME en acción</h3><div class="game-grid"><article class="game-card"><h4>Guiar</h4><p>El docente modela un caso límite por operación para anticipar errores comunes.</p></article><article class="game-card"><h4>Articular</h4><p>Se enlazan estructura, mantenimiento del historial y lectura gerencial del dato.</p></article><article class="game-card"><h4>Motivar</h4><p>La actividad se plantea como una misión de saneamiento y visualización ejecutiva del historial clínico.</p></article><article class="game-card"><h4>Evaluar</h4><p>Se valoran funcionalidad, pruebas, explicación de casos límite y quiz formativo.</p></article></div></div><div class="dojo-panel"><h3>🏆 Panel ClassDojo — puntos de la misión</h3><p>Los puntos se asignan por evidencia observable y concreta, no por impresiones generales. Usa esta tabla como guía de comportamiento y desempeño.</p><div class="table-wrap"><table><thead><tr><th>Momento</th><th>Criterio concreto</th><th>Puntos</th></tr></thead><tbody><tr><td>Inicio</td><td>Recupera correctamente la estructura base de la semana 8</td><td class="points">+1</td></tr><tr><td>CRUD</td><td>Implementa al menos tres operaciones sin romper la lista</td><td class="points">+2</td></tr><tr><td>Casos límite</td><td>Maneja cabeza, lista vacía o id inexistente</td><td class="points">+2</td></tr><tr><td>Análisis</td><td>Explica utilidad gerencial de invertir o depurar la lista</td><td class="points">+1</td></tr><tr><td>Cierre</td><td>Documenta pruebas y participa en síntesis final</td><td class="points">+1</td></tr></tbody></table></div></div><h3>🏠 HTI — Trabajo independiente con dos rutas</h3><p class="lead">Ambos escenarios profundizan la semana. El Escenario A desarrolla más dominio técnico; el Escenario B sostiene continuidad conceptual y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>.</p><article class="scenario a"><div class="scenario-header"><span>HTI Escenario A — Fusionar dos listas enlazadas de sedes distintas de NeuroBiz</span><span>60–90 min · entrega digital</span></div><div class="scenario-body"><p>Implementa una función que reciba dos listas enlazadas de pacientes de dos sedes distintas y construya una sola lista consolidada.</p><p>Debes explicar si la fusión conserva el orden original o si requiere un criterio adicional. Incluye pruebas con al menos 3 nodos por lista.</p><p>Entrega: notebook funcional, esquema breve de la estrategia usada y comentario sobre el valor administrativo de consolidar sedes.</p><div class="scenario-note">Escenario A consolida dominio estructural y prepara para pensar en integración de fuentes de datos.</div></div></article><article class="scenario b"><div class="scenario-header"><span>HTI Escenario B — Trazado paso a paso de eliminar(nodo)</span><span>20–30 min · cuaderno/papel</span></div><div class="scenario-body"><p>Dibuja una lista de 5 nodos y muestra paso a paso la operación <code>eliminar</code> para un nodo intermedio.</p><p>Marca dónde están <em>anterior</em>, <em>actual</em> y qué referencia cambia cuando el nodo desaparece.</p><p>Este escenario es de bajo umbral y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>; su propósito es reforzar precisión visual sobre las referencias.</p><div class="scenario-note">Úsalo cuando el estudiante necesita fijar la lógica del reencadenamiento antes de fusionar o invertir estructuras.</div></div></article></section><section id="quiz" class="card"><h2>🎮 Quiz de verificación — Quizizz</h2><div class="quiz-box"><p><strong>Modalidad sugerida:</strong> 5 preguntas · 8 a 10 minutos · retroalimentación inmediata. Las respuestas correctas están ocultas y aparecen al pasar el cursor sobre cada tarjeta.</p><div class="quiz-grid"><article class="quiz-item" tabindex="0"><h4>Pregunta 1</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Qué debe cuidarse al eliminar un nodo de una lista enlazada?</strong></p><ol class="quiz-options"><li>Cambiar el color del nodo</li><li>Actualizar la referencia del nodo anterior o la cabeza</li><li>Ordenar toda la lista</li><li>Crear una tupla</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La operación crítica es reencadenar correctamente la lista.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 2</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Para qué sirve insertar en posición?</strong></p><ol class="quiz-options"><li>Para borrar todos los nodos</li><li>Para añadir una sesión en un punto específico del historial</li><li>Para evitar recorrer la lista</li><li>Para reemplazar la cabeza siempre</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> Permite ubicar seguimientos o correcciones en el punto adecuado.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 3</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>Invertir una lista enlazada simple implica…</strong></p><ol class="quiz-options"><li>copiar los datos a una lista de Python obligatoriamente</li><li>cambiar la dirección de los enlaces entre nodos</li><li>eliminar la cabeza</li><li>usar búsqueda binaria</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La inversión real ocurre al reorientar referencias.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 4</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Qué caso límite merece atención especial en eliminar?</strong></p><ol class="quiz-options"><li>Cuando el nodo está al inicio o la lista está vacía</li><li>Cuando la lista tiene texto</li><li>Cuando el computador es lento</li><li>Cuando se usa Quizizz</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La cabeza y la lista vacía son casos límite centrales.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 5</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Por qué estas operaciones se asocian a una lógica CRUD?</strong></p><ol class="quiz-options"><li>Porque usan colores distintos</li><li>Porque crean, leen, actualizan e incluso eliminan elementos de una estructura</li><li>Porque son exclusivamente de bases de datos SQL</li><li>Porque solo sirven para pacientes</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La analogía CRUD ayuda a vincular estructuras con flujos reales de información.</div></article></div></div></section><section id="bib" class="card"><h2>📖 Bibliografía en formato APA</h2><div class="mini-card"><p>Las siguientes fuentes sostienen la teoría de la semana y legitiman el enfoque de Python como herramienta analítica para resolver problemas organizacionales del caso NeuroBiz.</p><ul><li>Cairó Battistutti, O., & Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li><li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill.</li><li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li><li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial.</li><li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li><li>Google Colaboratory. (2024). <em>Google Colaboratory</em>. https://colab.research.google.com</li></ul></div></section></main><footer>TGA05 · Semana 9 · Material del estudiante · Framework GAME · Caso transversal NeuroBiz S.A.S. · ODS 7 y 13</footer><script>document.addEventListener('DOMContentLoaded', function () {var bar = document.querySelector('.xp-bar'); if (bar) {requestAnimationFrame(function () {bar.style.width = bar.dataset.progress + '%';});}});</script>
 <script id="progress-tracker-js">
 // ════════════════════════════════════════════════════
 //  NeuroBiz Progress Tracker · Semana 9
@@ -991,6 +1560,106 @@ if (document.readyState === "loading") {
 } else {
   PT.init();
 }
+</script>
+
+<!-- ════════════════════════════════════════════
+     Pyodide Infrastructure · v0.24.1
+     ════════════════════════════════════════════ -->
+<script>
+// ── Pyodide state ──────────────────────────
+let pyodideInstance = null;
+let pyodideLoading = false;
+let pyodideReady = false;
+
+// ── Load Pyodide once ───────────────────────
+async function loadPyodide() {
+  if (pyodideInstance) return pyodideInstance;
+  if (pyodideLoading) {
+    // wait for existing load to finish
+    while (pyodideLoading) { await new Promise(r => setTimeout(r, 100)); }
+    return pyodideInstance;
+  }
+  pyodideLoading = true;
+  try {
+    pyodideInstance = await window.loadPyodide({
+      indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/"
+    });
+    pyodideReady = true;
+  } catch(e) {
+    console.error("Pyodide load error:", e);
+    pyodideLoading = false;
+  }
+  return pyodideInstance;
+}
+
+// ── Run a cell ───────────────────────────────
+async function runColabCell(cellId, btnEl) {
+  const outEl = document.getElementById(cellId + "-out");
+  if (!outEl) return;
+
+  // Show loading state
+  btnEl.disabled = true;
+  btnEl.textContent = "⏳ Ejecutando…";
+  outEl.innerHTML = '<div class="py-cell-loading">Cargando Pyodide (solo la primera vez)…</div>';
+
+  try {
+    const py = await loadPyodide();
+    if (!py) {
+      outEl.innerHTML = '<span class="py-err">❌ Error cargando Pyodide. Recarga la página e intenta de nuevo.</span>';
+      btnEl.disabled = false;
+      btnEl.textContent = "▶ Ejecutar";
+      return;
+    }
+
+    // Get code from <pre> inside this cell
+    const preEl = document.querySelector("#" + cellId + " .py-cell-code");
+    const code = preEl ? preEl.textContent : "";
+
+    // Show output area
+    outEl.innerHTML = "";
+
+    // Capture stdout/stderr
+    py.runPython(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+sys.stderr = StringIO()
+`);
+    await py.runPythonAsync(code);
+
+    const stdout = py.runPython("sys.stdout.getvalue()");
+    const stderr = py.runPython("sys.stderr.getvalue()");
+
+    py.runPython(`sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__`);
+
+    if (stderr && stderr.trim()) {
+      outEl.innerHTML = '<span class="py-err">' + escHtml(stderr) + '</span>';
+    } else if (stdout && stdout.trim()) {
+      outEl.textContent = stdout;
+    } else {
+      outEl.innerHTML = '<span class="py-ok">✓ Ejecutado sin salida de texto</span>';
+    }
+  } catch(e) {
+    outEl.innerHTML = '<span class="py-err">❌ Error: ' + escHtml(String(e.message || e)) + '</span>';
+  }
+
+  btnEl.disabled = false;
+  btnEl.textContent = "▶ Ejecutar";
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+// ── Preload Pyodide on page load (optional) ─
+window.addEventListener("load", function() {
+  // Uncomment next line to preload Pyodide eagerly:
+  // loadPyodide();
+});
 </script>
 
 <!-- ── WELCOME MODAL ── -->

@@ -464,6 +464,79 @@ footer {
   .xp-label { flex-direction: column; gap: .2rem; }
   table { font-size: .86rem; }
 }
+/* ── Pyodide Interactive Cell ── */
+.colab-cell {
+  margin: 1rem 0;
+  border-radius: 14px;
+  border: 1.5px solid #c7d2fe;
+  background: #f8faff;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(30,40,67,.08);
+}
+.colab-cell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .5rem .9rem;
+  background: var(--code-top);
+  gap: .6rem;
+}
+.colab-cell-title {
+  font-size: .78rem;
+  color: #cdd6f4;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.colab-run-btn {
+  padding: .3rem .85rem;
+  background: linear-gradient(135deg, #FFDF2D, #f9d46a);
+  color: #1E2843;
+  border: none;
+  border-radius: 8px;
+  font-size: .76rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: opacity .2s, transform .1s;
+}
+.colab-run-btn:hover { opacity: .88; }
+.colab-run-btn:active { transform: scale(.96); }
+.colab-run-btn.running { opacity: .6; cursor: wait; }
+.pyodide-badge {
+  font-size: .68rem;
+  color: rgba(255,255,255,.45);
+  font-family: ui-monospace, monospace;
+}
+.colab-code-area {
+  background: var(--code-bg);
+  padding: .9rem 1.1rem;
+  overflow-x: auto;
+}
+.colab-code-area pre {
+  margin: 0;
+  font-size: .85rem;
+  line-height: 1.6;
+  color: #cdd6f4;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.colab-code-area .kw  { color: var(--mauve); }
+.colab-code-area .fn  { color: #89b4fa; }
+.colab-code-area .str { color: var(--green-code); }
+.colab-code-area .cm  { color: #6c7086; font-style: italic; }
+.colab-code-area .num { color: var(--peach); }
+.colab-code-area .var { color: #cdd6f4; }
+.colab-code-area .op  { color: var(--teal); }
+.colab-output {
+  min-height: 38px;
+  padding: .7rem 1rem;
+  background: #fff;
+  font-family: ui-monospace, monospace;
+  font-size: .83rem;
+  color: #1e2843;
+  border-top: 1px solid #e0e7ff;
+  white-space: pre-wrap;
+}
+.colab-output:empty { color: #94a3b8; font-style: italic; }
+.colab-output .err  { color: #ef4444; }
+.colab-output .ok   { color: #16a34a; }
 </style>
 <style id="progress-tracker-css">
 /* ── Progress Tracker Widget ── */
@@ -510,6 +583,7 @@ footer {
 </style>
 
   <script src="../js/supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
 </head><body><header><div class="hero"><div class="badge-row"><span class="badge-module">🎓 TGA05 · Estructura de Datos para los Negocios</span><span class="badge-week">🗓 Semana 7 de 14</span><span class="badge-week">🏅 Módulo en progreso</span></div><div class="hero-grid"><div><h1>Recursividad II</h1><p class="subtitle">Recursividad directa e indirecta, comparación con iteración y búsqueda binaria recursiva para optimizar la consulta de sesiones ordenadas en NeuroBiz.</p><div class="xp-panel"><div class="xp-label"><span>Barra XP del módulo</span><span>540 / 980 XP del módulo</span></div><div class="xp-track"><div class="xp-bar" data-progress="50.0"></div></div></div></div><aside class="hero-note"><p><strong>Rol inmersivo:</strong> Analista de Datos Estratégico de NeuroBiz S.A.S.</p><p>Pasas de “entender qué es” a decidir cuándo conviene aplicar recursión y cuándo una estrategia iterativa resulta más clara o eficiente para el negocio.</p></aside></div></div></header><nav><div class="nav-wrap"><a href="#mision">📋 Memorando</a><a href="#teoria">📚 Teoría</a><a href="#python">🐍 Python BI</a><a href="#actividad">⚙️ Actividad</a><a href="#quiz">🎮 Quizizz</a><a href="#bib">📖 Bibliografía</a></div></nav><main>
 
 <!-- ── PROGRESS TRACKER WIDGET ── -->
@@ -536,48 +610,150 @@ footer {
     <div id="pt-msg"></div>
   </div>
 </div>
-<section id="mision" class="card"><div class="bloom-badge">🧠 Bloom de la semana: Aplicar → Analizar</div><h2>📋 Memorando — Tu misión en NeuroBiz</h2><div class="memo"><strong>Memorando interno · Dirección de Analítica Clínica</strong><p>La gerencia operativa de NeuroBiz quiere acelerar la consulta de historiales porque el equipo administrativo tarda demasiado buscando una sesión específica en listas extensas. Como <strong>Analista de Datos Estratégico</strong>, debes argumentar por qué una búsqueda binaria recursiva es mejor que revisar registro por registro cuando los datos ya están ordenados.</p><p>Además, el área de calidad desea validar perfiles terapéuticos enlazando reglas que se llaman entre sí. Esto introduce la <strong>recursividad indirecta</strong>: una función invoca otra y el ciclo conceptual se completa con una tercera validación base.</p></div><div class="summary-grid"><article class="mini-card"><h4>Resultado de aprendizaje <span class="citation">RA2</span></h4><p>Aplicar estructuras simples para resolver situaciones organizacionales con verificación y justificación.</p></article><article class="mini-card"><h4>Criterios activados <span class="citation">CE1 · CE2 · CE3 · CE4</span></h4><p>Seleccionar estrategia, implementarla, compararla y codificarla con evidencia.</p></article><article class="mini-card"><h4>Entregable central <span class="citation">Búsqueda optimizada</span></h4><p>Implementación de búsqueda binaria recursiva y comparación razonada con búsqueda lineal.</p></article><article class="mini-card"><h4>Framework GAME <span class="citation">Guiar · Articular · Motivar · Evaluar</span></h4><p>El análisis del algoritmo se conecta con decisiones operativas reales y retroalimentación rápida.</p></article></div><h3>📊 KPIs de contexto que debes usar siempre</h3><p class="lead">Estos indicadores atraviesan toda la unidad. Aunque la estructura de datos cambie, el contexto sigue siendo NeuroBiz y sus decisiones basadas en evidencia.</p><div class="kpi-grid"><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">📆</div><div><div class="kpi-name">sesiones_asistidas</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">26</div><p class="kpi-insight">Más volumen de sesiones hace visible la necesidad de búsquedas eficientes.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">🛑</div><div><div class="kpi-name">sesiones_fallidas</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">3</div><p class="kpi-insight">Permite discutir filtros y validaciones en el perfil terapéutico.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">📈</div><div><div class="kpi-name">tasa_retencion</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">0.91</div><p class="kpi-insight">Se usará luego como criterio de ordenamiento en el HTI A.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">🧠</div><div><div class="kpi-name">indice_progreso</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">5.4</div><p class="kpi-insight">El historial ordenado facilita localizar hitos de progreso.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">🎯</div><div><div class="kpi-name">nivel_hiperfoco</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">0.79</div><p class="kpi-insight">Permite segmentar búsquedas por perfiles TDAH.</p></article><article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">🧩</div><div><div class="kpi-name">reconocimiento_patrones</div><div class="kpi-var">KPI NeuroBiz</div></div></div><div class="kpi-value">0.84</div><p class="kpi-insight">Ayuda a explicar por qué un dato bien ordenado mejora el análisis de patrones.</p></article></div><div class="ods-strip">🌍 Comparar recursión e iteración favorece decisiones más eficientes sobre cómputo. Eso contribuye al <strong>ODS 7</strong> y al <strong>ODS 13</strong> porque reduce búsquedas redundantes, tiempos muertos y reprocesos digitales en la gestión terapéutica.</div></section><section id="teoria" class="card"><h2>📚 Teoría construida desde fuentes reales</h2><p class="lead">Lee esta sección como una caja de herramientas conceptuales. Las ideas se parafrasean desde bibliografía base del módulo y se aterrizan al caso NeuroBiz para mantener el enfoque de negocio.</p><div class="citation">Cairó & Guardati, 2006</div><div class="citation">Joyanes Aguilar, 2014</div><div class="citation">Weiss, 2014</div><div class="citation">Moreno Pérez, 2012</div><h3>1. Recursividad directa e indirecta</h3><p>La recursividad directa ocurre cuando una función se llama a sí misma de manera explícita. Joyanes Aguilar (2014) la usa para introducir el patrón básico de reducción del problema. Es útil porque la relación entre problema grande y problema pequeño se ve inmediatamente.</p><p>La recursividad indirecta aparece cuando la llamada pasa por una o más funciones intermedias. Cairó Battistutti y Guardati Bueno (2006) la presentan como una extensión del mismo principio: el proceso sigue siendo recursivo aunque la referencia no sea literal dentro del mismo cuerpo de función.</p><h3>2. Recursión vs iteración: no es una guerra, es una decisión</h3><p>Weiss (2014) recuerda que una buena estructura de datos siempre debe analizarse junto con el costo de las operaciones. En clase, esto significa que la pregunta no es “¿cuál técnica es más bonita?”, sino “¿cuál explica mejor el problema y cuál consume menos pasos para este caso?”.</p><p>La iteración suele ser más familiar y puede ser más eficiente en tareas lineales sencillas. La recursividad, por su parte, suele comunicar mejor problemas que se dividen naturalmente, como una búsqueda binaria o un ordenamiento tipo Merge Sort.</p><h3>3. Búsqueda binaria recursiva en historiales ordenados</h3><p>Si las sesiones de un paciente están ordenadas por fecha o por identificador, no es necesario revisar una a una. La búsqueda binaria reduce el espacio de búsqueda a la mitad en cada paso. Esa reducción es un ejemplo perfecto de aplicación recursiva con valor empresarial claro.</p><p>Moreno Pérez (2012) insiste en que el análisis paso a paso es clave para que el estudiante no confunda “dividir el rango” con “moverse secuencialmente”. Por eso conviene contar pasos y registrar el centro evaluado en cada llamada.</p><h3>4. Programas recursivos como soluciones verificables</h3><p>Un programa recursivo bien diseñado debe ser demostrable: el estudiante debe poder describir la entrada, el caso base, la reducción del problema y la salida. Ese marco será el mismo cuando más adelante se estudien algoritmos de ordenamiento o estructuras dinámicas.</p><p>En el contexto NeuroBiz, la comparación entre búsqueda lineal y binaria no solo mejora la sintaxis; mejora la lectura crítica de procesos organizacionales: si los datos están preparados, el análisis puede ser más rápido y sostenible.</p><div class="info-box tip"><div class="icon">🧭</div><p><strong>Pista didáctica:</strong> leer una estructura de datos como si fuera una historia de negocio evita que el código se vuelva mecánico. Primero nombra la lógica, luego escríbela.</p></div><div class="table-wrap"><table><thead><tr><th>Concepto</th><th>Descripción</th><th>Ejemplo NeuroBiz</th><th>Valor analítico</th></tr></thead><tbody><tr><td><strong>Recursión directa</strong></td><td>La función se invoca a sí misma</td><td>factorial(n), búsqueda_binaria()</td><td>Patrón visible y fácil de auditar</td></tr><tr><td><strong>Recursión indirecta</strong></td><td>Una función llama a otra y el ciclo vuelve</td><td>validar_perfil → validar_diagnostico → validar_perfil_base</td><td>Permite modelar flujos de validación por etapas</td></tr><tr><td><strong>Iteración</strong></td><td>Repite con bucles y variables de control</td><td>buscar sesión con for</td><td>Suele ser simple para recorridos lineales</td></tr><tr><td><strong>Búsqueda binaria</strong></td><td>Reduce el espacio de búsqueda a la mitad</td><td>listas de sesiones ordenadas</td><td>Disminuye pasos y tiempo de consulta</td></tr></tbody></table></div><div class="info-box brain"><div class="icon">🧠</div><p><strong>Neurodivergencia y lectura del dato:</strong> las variables <code>nivel_hiperfoco</code> y <code>reconocimiento_patrones</code> se usan como contexto de negocio para reforzar una visión respetuosa de la diversidad; no son etiquetas reductoras, sino información para decisiones de acompañamiento.</p></div><div class="info-box warn"><div class="icon">⚙️</div><p><strong>Recuerda:</strong> en este módulo Python se usa como herramienta de <em>Business Intelligence</em>. El foco es elegir y explicar una estructura adecuada para un problema organizacional, no coleccionar sintaxis sin contexto.</p></div></section><section id="python" class="card"><h2>🐍 Python como herramienta analítica — Google Colab</h2><p class="lead">Ejecuta los bloques en Google Colab o Replit. La meta no es memorizar cada símbolo, sino comprender cómo la estructura elegida permite responder preguntas de gestión sobre sesiones, retención y progreso.</p><div class="activity-card"><h3>Bloque 1 — Recursión directa e indirecta en validación de perfil</h3><p>Permite mostrar que la idea recursiva puede distribuirse entre varias funciones del proceso.</p><div class="code-wrap"><div class="code-title"><span>Google Colab · Bloque 1</span><a href="https://colab.research.google.com" target="_blank" rel="noopener">Abrir Colab</a></div><pre><span class="kw">def</span> <span class="fn">validar_perfil_base</span>(perfil):
-    <span class="kw">return</span> <span class="str">"diagnostico"</span> <span class="kw">in</span> <span class="var">perfil</span> <span class="kw">and</span> <span class="str">"sesiones"</span> <span class="kw">in</span> <span class="var">perfil</span>
+<script>
+// ════════════════════════════════════════════════════════
+//  Pyodide Runtime Manager for TGA05 Semana 7
+// ════════════════════════════════════════════════════════
+window.__pyodideReady = false;
+window.__pyodideLoading = false;
+window.__pyodidePromise = null;
 
-<span class="kw">def</span> <span class="fn">validar_diagnostico</span>(perfil):
-    <span class="kw">if</span> <span class="var">perfil</span>[<span class="str">"diagnostico"</span>] <span class="kw">in</span> {<span class="str">"TDAH"</span>, <span class="str">"TEA"</span>, <span class="str">"ACCC"</span>}:
-        <span class="kw">return</span> <span class="fn">validar_perfil_base</span>(<span class="var">perfil</span>)
-    <span class="kw">return</span> <span class="kw">False</span>
+window.__initPyodide = function() {
+  if (window.__pyodideReady) return Promise.resolve();
+  if (window.__pyodideLoading) return window.__pyodidePromise;
+  window.__pyodideLoading = true;
+  window.__pyodidePromise = new Promise(function(resolve, reject) {
+    var idleTimer = setTimeout(function() {
+      window.__pyodideReady = true;
+      resolve();
+    }, 18000);
+    try {
+      window.loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/" })
+        .then(function(py) {
+          window.__pyodide = py;
+          window.__pyodideReady = true;
+          clearTimeout(idleTimer);
+          resolve();
+        })
+        .catch(function(e) {
+          clearTimeout(idleTimer);
+          reject(e);
+        });
+    } catch(e) { clearTimeout(idleTimer); reject(e); }
+  });
+  return window.__pyodidePromise;
+};
 
-<span class="kw">def</span> <span class="fn">validar_perfil</span>(perfil):
-    <span class="kw">if</span> <span class="kw">not</span> <span class="var">perfil</span>:
-        <span class="kw">return</span> <span class="kw">False</span>
-    <span class="kw">return</span> <span class="fn">validar_diagnostico</span>(<span class="var">perfil</span>)
+function __runColabCell(cellId) {
+  var cell = document.getElementById(cellId);
+  if (!cell) return;
+  var btn  = cell.querySelector('.colab-run-btn');
+  var out  = cell.querySelector('.colab-output');
+  var pre  = cell.querySelector('.colab-code-area pre');
+  if (!pre || !out) return;
 
-<span class="var">perfil_neurobiz</span> <span class="op">=</span> {<span class="str">"diagnostico"</span>: <span class="str">"TEA"</span>, <span class="str">"sesiones"</span>: <span class="num">12</span>}
-<span class="fn">print</span>(<span class="fn">validar_perfil</span>(<span class="var">perfil_neurobiz</span>))</pre></div><p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p></div><div class="activity-card"><h3>Bloque 2 — Búsqueda binaria recursiva en sesiones ordenadas</h3><p>El bloque usa una lista ordenada por id o fecha y registra cada paso para volver visible la reducción del rango.</p><div class="code-wrap"><div class="code-title"><span>Google Colab · Bloque 2</span><a href="https://colab.research.google.com" target="_blank" rel="noopener">Abrir Colab</a></div><pre><span class="var">sesiones_ordenadas</span> <span class="op">=</span> [<span class="num">101</span>, <span class="num">105</span>, <span class="num">109</span>, <span class="num">120</span>, <span class="num">132</span>, <span class="num">140</span>, <span class="num">155</span>]
+  var code = pre.textContent || '';
+  out.innerHTML = '<span style="color:#94a3b8">⏳ Cargando núcleo Python…</span>';
+  if (btn) { btn.classList.add('running'); btn.textContent = '⏳'; }
 
-<span class="kw">def</span> <span class="fn">busqueda_binaria_recursiva</span>(lista, objetivo, inicio, fin, pasos=<span class="num">0</span>):
-    <span class="kw">if</span> <span class="var">inicio</span> <span class="op">></span> <span class="var">fin</span>:
-        <span class="kw">return</span> <span class="op">-</span><span class="num">1</span>, <span class="var">pasos</span>
-    <span class="var">pasos</span> <span class="op">+=</span> <span class="num">1</span>
-    <span class="var">medio</span> <span class="op">=</span> (<span class="var">inicio</span> <span class="op">+</span> <span class="var">fin</span>) <span class="op">//</span> <span class="num">2</span>
-    <span class="kw">if</span> <span class="var">lista</span>[<span class="var">medio</span>] <span class="op">==</span> <span class="var">objetivo</span>:
-        <span class="kw">return</span> <span class="var">medio</span>, <span class="var">pasos</span>
-    <span class="kw">if</span> <span class="var">objetivo</span> <span class="op"><</span> <span class="var">lista</span>[<span class="var">medio</span>]:
-        <span class="kw">return</span> <span class="fn">busqueda_binaria_recursiva</span>(<span class="var">lista</span>, <span class="var">objetivo</span>, <span class="var">inicio</span>, <span class="var">medio</span> <span class="op">-</span> <span class="num">1</span>, <span class="var">pasos</span>)
-    <span class="kw">return</span> <span class="fn">busqueda_binaria_recursiva</span>(<span class="var">lista</span>, <span class="var">objetivo</span>, <span class="var">medio</span> <span class="op">+</span> <span class="num">1</span>, <span class="var">fin</span>, <span class="var">pasos</span>)
+  window.__initPyodide().then(function() {
+    if (btn) { btn.classList.remove('running'); btn.textContent = '▶ Run'; }
+    out.innerHTML = '<span style="color:#94a3b8">⏳ Ejecutando…</span>';
+    try {
+      var result = window.__pyodide.runPython(code);
+      var text   = result === undefined || result === null ? '' : String(result);
+      if (text.trim() === '') {
+        out.innerHTML = '<span class="ok">✅ Sin salida (ejecución exitosa)</span>';
+      } else {
+        out.innerHTML = '<span class="ok">→ </span><span>' + text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</span>';
+      }
+    } catch(err) {
+      out.innerHTML = '<span class="err">❌ ' + err.message.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</span>';
+    }
+  }).catch(function(e) {
+    if (btn) { btn.classList.remove('running'); btn.textContent = '▶ Run'; }
+    out.innerHTML = '<span class="err">❌ No se pudo cargar Pyodide: ' + e.message + '</span>';
+  });
+}
 
-<span class="var">posicion</span>, <span class="var">pasos</span> <span class="op">=</span> <span class="fn">busqueda_binaria_recursiva</span>(<span class="var">sesiones_ordenadas</span>, <span class="num">132</span>, <span class="num">0</span>, <span class="fn">len</span>(<span class="var">sesiones_ordenadas</span>) <span class="op">-</span> <span class="num">1</span>)
-<span class="fn">print</span>(<span class="str">f"Encontrada en posición {posicion}, pasos {pasos}"</span>)</pre></div><p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p></div><div class="activity-card"><h3>Bloque 3 — Comparación lineal vs binaria midiendo pasos</h3><p>El objetivo es analizar, no memorizar: el estudiante debe explicar por qué la segunda estrategia usa menos verificaciones cuando la lista está ordenada.</p><div class="code-wrap"><div class="code-title"><span>Google Colab · Bloque 3</span><a href="https://colab.research.google.com" target="_blank" rel="noopener">Abrir Colab</a></div><pre><span class="kw">def</span> <span class="fn">busqueda_lineal</span>(lista, objetivo):
-    <span class="var">pasos</span> <span class="op">=</span> <span class="num">0</span>
-    <span class="kw">for</span> <span class="var">indice</span>, <span class="var">valor</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="var">lista</span>):
-        <span class="var">pasos</span> <span class="op">+=</span> <span class="num">1</span>
-        <span class="kw">if</span> <span class="var">valor</span> <span class="op">==</span> <span class="var">objetivo</span>:
-            <span class="kw">return</span> <span class="var">indice</span>, <span class="var">pasos</span>
-    <span class="kw">return</span> <span class="op">-</span><span class="num">1</span>, <span class="var">pasos</span>
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() { setTimeout(window.__initPyodide, 3000); });
+} else {
+  setTimeout(window.__initPyodide, 3000);
+<div class="activity-card"><h3>Bloque 1 — Recursión directa e indirecta en validación de perfil</h3>
+<p>Permite mostrar que la idea recursiva puede distribuirse entre varias funciones del proceso.</p>
+<div class="colab-cell" id="cell-1">
+  <div class="colab-cell-header">
+    <span class="colab-cell-title">Bloque 1 · Pyodide</span>
+    <button class="colab-run-btn" onclick="__runColabCell('cell-1')">▶ Run</button>
+  </div>
+  <div class="colab-code-area"><pre>def validar_perfil_base(perfil):
+    return "diagnostico" in perfil and "sesiones" in perfil
 
-<span class="var">objetivo</span> <span class="op">=</span> <span class="num">155</span>
-<span class="var">pos_l</span>, <span class="var">pasos_l</span> <span class="op">=</span> <span class="fn">busqueda_lineal</span>(<span class="var">sesiones_ordenadas</span>, <span class="var">objetivo</span>)
-<span class="var">pos_b</span>, <span class="var">pasos_b</span> <span class="op">=</span> <span class="fn">busqueda_binaria_recursiva</span>(<span class="var">sesiones_ordenadas</span>, <span class="var">objetivo</span>, <span class="num">0</span>, <span class="fn">len</span>(<span class="var">sesiones_ordenadas</span>) <span class="op">-</span> <span class="num">1</span>)
+def validar_diagnostico(perfil):
+    if perfil["diagnostico"] in {"TDAH", "TEA", "ACCC"}:
+        return validar_perfil_base(perfil)
+    return False
 
-<span class="fn">print</span>(<span class="str">f"Lineal: posición={pos_l}, pasos={pasos_l}"</span>)
-<span class="fn">print</span>(<span class="str">f"Binaria recursiva: posición={pos_b}, pasos={pasos_b}"</span>)</pre></div><p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p></div></section><section id="actividad" class="card"><h2>⚙️ Actividad presencial (HAD + HP = 4 horas)</h2><div class="activity-card"><h3>🧪 Optimizando la Búsqueda en NeuroBiz</h3><p><strong>Propósito:</strong> Implementar búsqueda binaria recursiva para encontrar una sesión en el historial de un paciente y compararla con una búsqueda lineal.</p><p><strong>Verbo Bloom explícito:</strong> Aplicar · comparar · analizar · justificar</p><p><strong>Duración total:</strong> 240 minutos presenciales con acompañamiento, demostración, laboratorio y cierre formativo.</p><h3>Instrucciones claras para el estudiante</h3><ol class="step-list"><li>Ordena la lista de sesiones entregada por el docente y verifica que todos los equipos usen el mismo criterio (id o fecha).</li><li>Escribe una versión lineal simple para establecer el punto de comparación.</li><li>Implementa la versión recursiva de búsqueda binaria y registra en una tabla los pasos utilizados en al menos tres consultas.</li><li>Analiza en qué situaciones la estrategia binaria deja de tener sentido (por ejemplo, si la lista no está ordenada).</li><li>Realiza una mini socialización donde tu equipo justifique la decisión técnica frente a la gerencia de NeuroBiz.</li></ol><div class="info-box tip"><div class="icon">✅</div><p><strong>Producto esperado:</strong> Colab con búsqueda lineal, búsqueda binaria recursiva y tabla comparativa de pasos.</p></div><div class="info-box warn"><div class="icon">🎯</div><p><strong>Criterio de evidencia:</strong> El criterio principal no es solo “encontrar la sesión”, sino argumentar por qué la estructura ordenada habilita una mejor estrategia.</p></div><h3>🕹️ Framework GAME en acción</h3><div class="game-grid"><article class="game-card"><h4>Guiar</h4><p>El docente modela una búsqueda manual en una lista ordenada para introducir el razonamiento de “ir a la mitad”.</p></article><article class="game-card"><h4>Articular</h4><p>Se enlazan recursión, orden de datos, validación de perfiles y comparación con iteración.</p></article><article class="game-card"><h4>Motivar</h4><p>La misión se presenta como una mejora operativa real que ahorra tiempo a la sede NeuroBiz.</p></article><article class="game-card"><h4>Evaluar</h4><p>Se observa el código, la tabla de pasos, la justificación oral y el quiz.</p></article></div></div><div class="dojo-panel"><h3>🏆 Panel ClassDojo — puntos de la misión</h3><p>Los puntos se asignan por evidencia observable y concreta, no por impresiones generales. Usa esta tabla como guía de comportamiento y desempeño.</p><div class="table-wrap"><table><thead><tr><th>Momento</th><th>Criterio concreto</th><th>Puntos</th></tr></thead><tbody><tr><td>Inicio</td><td>Reconoce por qué la lista debe estar ordenada</td><td class="points">+1</td></tr><tr><td>Implementación</td><td>Completa búsqueda lineal y binaria</td><td class="points">+2</td></tr><tr><td>Análisis</td><td>Explica diferencias de pasos entre estrategias</td><td class="points">+2</td></tr><tr><td>Validación</td><td>Identifica un caso donde la binaria no aplica</td><td class="points">+1</td></tr><tr><td>Cierre</td><td>Participa en síntesis comparativa final</td><td class="points">+1</td></tr></tbody></table></div></div><h3>🏠 HTI — Trabajo independiente con dos rutas</h3><p class="lead">Ambos escenarios profundizan la semana. El Escenario A desarrolla más dominio técnico; el Escenario B sostiene continuidad conceptual y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>.</p><article class="scenario a"><div class="scenario-header"><span>HTI Escenario A — Merge Sort recursivo para ordenar pacientes por tasa de retención</span><span>60–90 min · entrega digital</span></div><div class="scenario-body"><p>Implementa un algoritmo <code>merge_sort</code> que ordene una lista de pacientes de NeuroBiz según <code>tasa_retencion</code>.</p><p>Debes mostrar la lista antes y después, incluir comentarios cortos sobre el proceso de división y mezcla, y responder: ¿por qué este algoritmo también ejemplifica una estructura recursiva?</p><p>Entrega: notebook funcional, captura de resultados y breve análisis de cómo el ordenamiento puede apoyar priorización gerencial.</p><div class="scenario-note">Escenario A profundiza el análisis y anticipa temas futuros de eficiencia algorítmica.</div></div></article><article class="scenario b"><div class="scenario-header"><span>HTI Escenario B — Tabla comparativa de recursión directa vs indirecta</span><span>20–30 min · cuaderno/papel</span></div><div class="scenario-body"><p>Elabora una tabla con 3 ejemplos de recursión directa y 3 de recursión indirecta usando datos o procesos de NeuroBiz.</p><p>Para cada ejemplo escribe: qué función llama a cuál, cuál sería el caso base y qué beneficio organizacional aporta.</p><p>Este escenario es de bajo umbral y <strong>NO BLOQUEA la siguiente clase si no se realiza</strong>; su finalidad es mantener claridad conceptual sin convertir la tarea en barrera.</p><div class="scenario-note">Úsalo cuando el grupo necesite reforzar comparación conceptual antes de asumir un algoritmo recursivo más complejo.</div></div></article></section><section id="quiz" class="card"><h2>🎮 Quiz de verificación — Quizizz</h2><div class="quiz-box"><p><strong>Modalidad sugerida:</strong> 5 preguntas · 8 a 10 minutos · retroalimentación inmediata. Las respuestas correctas están ocultas y aparecen al pasar el cursor sobre cada tarjeta.</p><div class="quiz-grid"><article class="quiz-item" tabindex="0"><h4>Pregunta 1</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Qué diferencia principal hay entre recursión directa e indirecta?</strong></p><ol class="quiz-options"><li>La directa usa listas y la indirecta no</li><li>La directa se llama a sí misma; la indirecta pasa por otra función</li><li>La indirecta no necesita caso base</li><li>La directa siempre es más rápida</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La diferencia está en la ruta de la llamada, no en la necesidad de caso base.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 2</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Cuándo tiene sentido usar búsqueda binaria?</strong></p><ol class="quiz-options"><li>Cuando los datos están ordenados</li><li>Cuando la lista es aleatoria y pequeña</li><li>Solo con cadenas de texto</li><li>Solo en listas de dos elementos</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> Sin orden previo no puedes descartar la mitad del problema con fundamento.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 3</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>¿Qué busca comparar el conteo de pasos en clase?</strong></p><ol class="quiz-options"><li>El color del código</li><li>La longitud del nombre de la función</li><li>La eficiencia relativa entre dos estrategias</li><li>La velocidad del internet</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> Contar pasos hace visible la diferencia analítica entre estrategias.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 4</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>En la validación de perfil terapéutico de NeuroBiz, la recursión indirecta se observa cuando…</strong></p><ol class="quiz-options"><li>una función imprime un texto</li><li>validar_perfil llama a validar_diagnostico y esta a validar_perfil_base</li><li>se usa un bucle while</li><li>se ordena una lista</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La cadena de llamadas entre funciones modela el flujo recursivo indirecto.</div></article><article class="quiz-item" tabindex="0"><h4>Pregunta 5</h4><small>Pasa el cursor o enfoca la tarjeta para ver la respuesta.</small><p><strong>Si la lista no está ordenada, la búsqueda binaria recursiva…</strong></p><ol class="quiz-options"><li>sigue siendo igualmente válida</li><li>puede fallar conceptualmente porque descarta rangos sin criterio</li><li>ordena automáticamente la lista</li><li>reemplaza la validación</li></ol><div class="quiz-answer"><strong>Respuesta correcta:</strong> La reducción solo es válida si el criterio de orden se mantiene.</div></article></div></div></section><section id="bib" class="card"><h2>📖 Bibliografía en formato APA</h2><div class="mini-card"><p>Las siguientes fuentes sostienen la teoría de la semana y legitiman el enfoque de Python como herramienta analítica para resolver problemas organizacionales del caso NeuroBiz.</p><ul><li>Cairó Battistutti, O., & Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li><li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill.</li><li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li><li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial.</li><li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li><li>Google Colaboratory. (2024). <em>Google Colaboratory</em>. https://colab.research.google.com</li></ul></div></section></main><footer>TGA05 · Semana 7 · Material del estudiante · Framework GAME · Caso transversal NeuroBiz S.A.S. · ODS 7 y 13</footer><script>document.addEventListener('DOMContentLoaded', function () {var bar = document.querySelector('.xp-bar'); if (bar) {requestAnimationFrame(function () {bar.style.width = bar.dataset.progress + '%';});}});</script>
+def validar_perfil(perfil):
+    if not perfil:
+        return False
+    return validar_diagnostico(perfil)
+
+perfil_neurobiz = {"diagnostico": "TEA", "sesiones": 12}
+print(validar_perfil(perfil_neurobiz))</pre></div>
+  <div class="colab-output"></div>
+<p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p>
+<div class="colab-cell" id="cell-2">
+  <div class="colab-cell-header">
+    <span class="colab-cell-title">Bloque 2 · Pyodide</span>
+    <button class="colab-run-btn" onclick="__runColabCell('cell-2')">▶ Run</button>
+  </div>
+  <div class="colab-code-area"><pre>sesiones_ordenadas = [101, 105, 109, 120, 132, 140, 155]
+
+def busqueda_binaria_recursiva(lista, objetivo, inicio, fin, pasos=0):
+    if inicio > fin:
+        return -1, pasos
+    pasos += 1
+    medio = (inicio + fin) // 2
+    if lista[medio] == objetivo:
+        return medio, pasos
+    if objetivo < lista[medio]:
+        return busqueda_binaria_recursiva(lista, objetivo, inicio, medio - 1, pasos)
+    return busqueda_binaria_recursiva(lista, objetivo, medio + 1, fin, pasos)
+
+posicion, pasos = busqueda_binaria_recursiva(sesiones_ordenadas, 132, 0, len(sesiones_ordenadas) - 1)
+print(f"Encontrada en posición {posicion}, pasos {pasos}")</pre></div>
+  <div class="colab-output"></div>
+</div>
+<p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p>
+</div>
+<div class="activity-card"><h3>Bloque 3 — Comparación lineal vs binaria midiendo pasos</h3>
+<p>El objetivo es analizar, no memorizar: el estudiante debe explicar por qué la segunda estrategia usa menos verificaciones cuando la lista está ordenada.</p>
+<div class="colab-cell" id="cell-3">
+  <div class="colab-cell-header">
+    <span class="colab-cell-title">Bloque 3 · Pyodide</span>
+    <button class="colab-run-btn" onclick="__runColabCell('cell-3')">▶ Run</button>
+  </div>
+  <div class="colab-code-area"><pre>def busqueda_lineal(lista, objetivo):
+    pasos = 0
+    for indice, valor in enumerate(lista):
+        pasos += 1
+        if valor == objetivo:
+            return indice, pasos
+    return -1, pasos
+
+objetivo = 155
+pos_l, pasos_l = busqueda_lineal(sesiones_ordenadas, objetivo)
+pos_b, pasos_b = busqueda_binaria_recursiva(sesiones_ordenadas, objetivo, 0, len(sesiones_ordenadas) - 1)
+
+print(f"Lineal: posición={pos_l}, pasos={pasos_l}")
+print(f"Binaria recursiva: posición={pos_b}, pasos={pasos_b}")</pre></div>
+  <div class="colab-output"></div>
+</div>
+<p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p>
+</div>
+</section>
 <script id="progress-tracker-js">
 // ════════════════════════════════════════════════════
 //  NeuroBiz Progress Tracker · Semana 7

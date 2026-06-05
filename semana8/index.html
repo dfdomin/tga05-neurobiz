@@ -510,6 +510,48 @@ footer {
 </style>
 
   <script src="../js/supabase-config.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/pyodide/v0.24.1/pyodide.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/pyodide.js"></script>
+  <style>
+  /* ── Pyodide Interactive Cell ── */
+  .code-wrap { position: relative; }
+  .pyodide-run {
+    background: linear-gradient(135deg, #FFDF2D, #f9d46a);
+    color: #1E2843;
+    border: none;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: .78rem;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    transition: opacity .2s;
+    white-space: nowrap;
+  }
+  .pyodide-run:hover { opacity: .85; }
+  .pyodide-run.running { background: #e0e0e0; color: #555; cursor: wait; }
+  .colab-output {
+    display: none;
+    background: #0f172a;
+    color: #a6e3a1;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .82rem;
+    line-height: 1.6;
+    padding: .9rem 1.1rem;
+    border-top: 1px solid #334155;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  .colab-output.has-error { color: #f38ba8; }
+  .colab-output .py-err { color: #f38ba8; }
+  #py-status {
+    font-size: .72rem;
+    color: rgba(255,255,255,.5);
+    margin-left: 8px;
+  }
+  #py-status.loading { color: #f9d46a; }
+  </style>
 </head><body><header><div class="hero"><div class="badge-row"><span class="badge-module">🎓 TGA05 · Estructura de Datos para los Negocios</span><span class="badge-week">🗓 Semana 8 de 14</span><span class="badge-week">🏅 Módulo en progreso</span></div><div class="hero-grid"><div><h1>Listas Enlazadas Simples I</h1><p class="subtitle">Introducción a listas enlazadas, nodo, referencias y recorrido de historiales terapéuticos que evolucionan con el tiempo en NeuroBiz.</p><div class="xp-panel"><div class="xp-label"><span>Barra XP del módulo</span><span>620 / 980 XP del módulo</span></div><div class="xp-track"><div class="xp-bar" data-progress="57.1"></div></div></div></div><aside class="hero-note"><p><strong>Rol inmersivo:</strong> Analista de Datos Estratégico de NeuroBiz S.A.S.</p><p>Cambias de estructuras estáticas a estructuras dinámicas: ahora el dato no vive solo, sino conectado con el siguiente dentro de un historial que puede crecer sin reescribirlo todo.</p></aside></div></div></header><nav><div class="nav-wrap"><a href="#mision">📋 Memorando</a><a href="#teoria">📚 Teoría</a><a href="#python">🐍 Python BI</a><a href="#actividad">⚙️ Actividad</a><a href="#quiz">🎮 Quizizz</a><a href="#bib">📖 Bibliografía</a></div></nav><main>
 
 <!-- ── PROGRESS TRACKER WIDGET ── -->
@@ -1046,4 +1088,131 @@ if (document.readyState === "loading") {
 })();
 </script>
 
+<script>
+/* ═══════════════════════════════════════════════════════
+   Pyodide Interactive Cell Runtime — TGA05 Semana 8
+   ═══════════════════════════════════════════════════════ */
+(function () {
+  const PYODIDE_CDN = "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/";
+  let pyodideReady = false;
+  let pyodideLoading = false;
+  let pendingRuns = [];
+
+  function loadPyodide() {
+    if (pyodideReady || pyodideLoading) return;
+    pyodideLoading = true;
+    setStatus("Cargando Python…", true);
+    window.loadPyodide({ indexURL: PYODIDE_CDN }).then(function (pd) {
+      window.__pyodide = pd;
+      pyodideReady = true;
+      pyodideLoading = false;
+      setStatus("Python listo ✓", false);
+      // Run any queued blocks
+      pendingRuns.forEach(function (r) { runCode(r.code, r.out, r.btn); });
+      pendingRuns = [];
+    }).catch(function (err) {
+      setStatus("Error al cargar Python", false);
+      console.error("Pyodide error:", err);
+    });
+  }
+
+  function setStatus(text, loading) {
+    var el = document.getElementById("py-status");
+    if (el) { el.textContent = text; el.className = loading ? "loading" : ""; }
+  }
+
+  function runCode(code, outEl, btnEl) {
+    if (!pyodideReady) {
+      pendingRuns.push({ code: code, out: outEl, btn: btnEl });
+      loadPyodide();
+      return;
+    }
+    if (btnEl) {
+      btnEl.textContent = "⏳ Ejecutando…";
+      btnEl.className = "pyodide-run running";
+    }
+    outEl.style.display = "block";
+    outEl.textContent = "";
+    outEl.className = "colab-output";
+
+    try {
+      var pd = window.__pyodide;
+      pd.runPython("\nimport sys\nimport io\nsys.stdout = io.StringIO()\n");
+      pd.runPython(code);
+      var result = pd.runPython("sys.stdout.getvalue()");
+      outEl.textContent = result || "(sin salida)";
+    } catch (err) {
+      outEl.className = "colab-output has-error";
+      outEl.textContent = "Error: " + err.message;
+    }
+
+    if (btnEl) {
+      btnEl.textContent = "▶ Ejecutar";
+      btnEl.className = "pyodide-run";
+    }
+  }
+
+  function attachAll() {
+    document.querySelectorAll(".code-wrap").forEach(function (wrap) {
+      var titleEl = wrap.querySelector(".code-title");
+      if (!titleEl) return;
+      if (titleEl.querySelector(".pyodide-run")) return; // already attached
+
+      var pre = wrap.querySelector("pre");
+      if (!pre) return;
+
+      // Strip syntax highlight spans to get raw Python
+      var tmp = document.createElement("div");
+      tmp.innerHTML = pre.innerHTML;
+      tmp.querySelectorAll("span").forEach(function (s) {
+        var t = document.createTextNode(s.textContent);
+        s.parentNode.replaceChild(t, s);
+      });
+      var rawCode = tmp.textContent || "";
+
+      // Create run button
+      var btn = document.createElement("button");
+      btn.className = "pyodide-run";
+      btn.textContent = "▶ Ejecutar";
+      btn.style.marginLeft = "auto";
+
+      // Create output div
+      var out = document.createElement("div");
+      out.className = "colab-output";
+      out.id = "py-out-" + Math.random().toString(36).substr(2, 6);
+
+      // Status span
+      var status = document.createElement("span");
+      status.id = "py-status";
+      status.style.marginLeft = "8px";
+
+      btn.addEventListener("click", (function (code, outEl, btnEl) {
+        return function () { runCode(code, outEl, btnEl); };
+      })(rawCode, out, btn));
+
+      titleEl.appendChild(status);
+      titleEl.appendChild(btn);
+      wrap.appendChild(out);
+    });
+  }
+
+  // Auto-init when DOM ready
+  function init() {
+    attachAll();
+    // Pre-load Pyodide lazily on first user interaction
+    document.addEventListener("mouseover", function onFirstHover(e) {
+      if (e.target.classList && e.target.classList.contains("code-title")) {
+        loadPyodide();
+        document.removeEventListener("mouseover", onFirstHover);
+      }
+    }, true);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
 </body></html>
