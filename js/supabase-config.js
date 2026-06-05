@@ -5,9 +5,12 @@
 // ══════════════════════════════════════════════════════════════
 
 (function () {
-  // ── EDITA ESTOS DOS VALORES ────────────────────────────────
-  var SUPABASE_URL = "https://hmaognhkhyvbjxqznnhx.supabase.co"; // Ejemplo: https://abcxyz.supabase.co
-  var SUPABASE_KEY = "sb_publishable_KYwM0iAAmQU8rS7S3HPR0Q_QvoSCYZo"; // Tu clave anon/public de Supabase
+  // ── NO PUBLICAR CREDENCIALES AQUÍ ──────────────────────────
+  // Este archivo queda como plantilla para evitar filtrar datos del proyecto.
+  // Configura SUPABASE_URL y SUPABASE_KEY en localStorage desde setup/CONFIGURAR_SUPABASE.html
+  // o usa una copia local ignorada por Git: js/supabase-config.local.js.
+  var SUPABASE_URL = "https://hmaognhkhyvbjxqznnhx.supabase.co";
+  var SUPABASE_KEY = "sb_publishable_KYwM0iAAmQU8rS7S3HPR0Q_QvoSCYZo";
   // ──────────────────────────────────────────────────────────
 
   var COURSE_CODE  = "TGA05-2026-1"; // Identificador del curso (no cambiar)

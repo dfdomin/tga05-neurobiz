@@ -7,7 +7,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard Docente — TGA05 NeuroBiz</title>
-  <script src="../js/supabase-config.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -256,8 +255,8 @@ function logout() {
 }
 
 // ── DATA ─────────────────────────────────────────────────────
-let allRows = [];    // raw rows from Supabase
-let summary = [];    // per-student summary
+let allRows = [];    // raw rows for heatmap (student_id + semana)
+let summary = [];    // per-student summary from resumen_docente view
 
 async function loadData() {
   const sbUrl = localStorage.getItem("tga05_supabase_url");
@@ -272,15 +271,23 @@ async function loadData() {
   }
 
   try {
-    // Fetch all rows (paginated at 1000)
+    // Fetch 1: vista agregada resumen_docente (server-side aggregation)
     const res = await fetch(
-      `${sbUrl}/rest/v1/student_progress?order=student_name.asc,semana.asc&limit=1000`,
+      `${sbUrl}/rest/v1/resumen_docente?order=xp_total.desc&limit=1000`,
       { headers: { "apikey": sbKey, "Authorization": "Bearer " + sbKey } }
     );
     if (!res.ok) throw new Error("Supabase " + res.status);
-    allRows = await res.json();
+    const viewRows = await res.json();
 
-    summary = buildSummary(allRows);
+    // Fetch 2: datos crudos ligeros para heatmap y filtro por semana
+    const res2 = await fetch(
+      `${sbUrl}/rest/v1/student_progress?select=student_id,semana&limit=5000`,
+      { headers: { "apikey": sbKey, "Authorization": "Bearer " + sbKey } }
+    );
+    if (!res2.ok) throw new Error("Supabase " + res2.status);
+    allRows = await res2.json();
+
+    summary = buildSummary(viewRows);
     renderStats();
     renderTable();
     renderHeatmap();
@@ -297,25 +304,30 @@ async function loadData() {
   }
 }
 
-function buildSummary(rows) {
-  const map = {};
-  for (const r of rows) {
-    const id = r.student_id || r.student_name;
-    if (!map[id]) map[id] = {
-      id, nombre: r.student_name, grupo: "",
-      semanas: new Set(), xp: 0, quiz: 0, ultima: null
-    };
-    const s = map[id];
-    s.semanas.add(r.semana);
-    s.xp    += r.xp || 0;
-    s.quiz  += r.quiz_score || 0;
-    if (!s.ultima || (r.updated_at && r.updated_at > s.ultima)) s.ultima = r.updated_at;
+function buildSummary(viewRows) {
+  // Construir mapa student_id → Set de semanas desde datos crudos
+  const semanasMap = {};
+  for (const r of allRows) {
+    const id = r.student_id;
+    if (!semanasMap[id]) semanasMap[id] = new Set();
+    semanasMap[id].add(r.semana);
   }
-  return Object.values(map).map(s => ({
-    ...s,
-    semanas_n: s.semanas.size,
-    pct: Math.round(s.semanas.size / 14 * 100)
-  }));
+
+  // Mapear columnas de la vista al formato esperado por el dashboard
+  return viewRows.map(function(r) {
+    return {
+      id: r.student_id,
+      nombre: r.estudiante,
+      grupo: r.grupo || "",
+      horario: r.horario || "",
+      semanas: semanasMap[r.student_id] || new Set(),
+      semanas_n: r.semanas_visitadas,
+      xp: r.xp_total,
+      quiz: r.quiz_total || 0,
+      pct: r.pct_avance,
+      ultima: r.ultima_actividad
+    };
+  });
 }
 
 // ── RENDER STATS ─────────────────────────────────────────────

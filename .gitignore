@@ -1,3 +1,86 @@
+# ============================
+# CREDENTIALS & SECRETS
+# ============================
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.json
+*secret*
+*credential*
+supabase/.branches
+supabase/.temp
+
+# ============================
+# PERSONAL & INSTITUTIONAL DATA
+# ============================
+*.xlsx
+*.xls
+*.csv
+*.pdf
+personal_*
+students_*
+cedulas_*
+notas_*
+grades_*
+
+# ============================
+# CONFIGURATION FILES WITH SENSITIVE DATA
+# ============================
+config.json
+config.*.json
+settings.json
+*.config.js
+firebase.json
+supabase/config.toml
+
+# ============================
+# SCRIPTS NOT MEANT FOR REPOSITORY
+# ============================
+scripts/local_*
+scripts/test_*
+scripts/debug_*
+scripts/temp_*
+*.sh
+
+# ============================
+# SYSTEM & IDE FILES
+# ============================
 .DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.suo
+*.user
+
+# ============================
+# BUILD & DEPENDENCY ARTIFACTS
+# ============================
+node_modules/
 __pycache__/
 *.pyc
+*.pyo
+.pytest_cache/
+dist/
+build/
+*.egg-info/
+
+# ============================
+# BACKUPS (never commit to main)
+# ============================
+backups/
+
+# ============================
+# SKILLOPT (external dependency)
+# ============================
+SkillOpt/
+
+# ============================
+# MEMORY & INTERNAL FILES
+# ============================
+.opencode/memory/
+migration_report.json
+verification_report.json

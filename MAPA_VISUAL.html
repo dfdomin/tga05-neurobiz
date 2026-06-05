@@ -179,11 +179,11 @@ details .inner{padding:1rem;}
   <h1>Mapa Visual del <span>Ecosistema Digital</span><br>construido para tu curso</h1>
   <p>Todo lo que logramos juntos: desde cero hasta un sistema completo de enseñanza, gamificación y gestión docente.</p>
   <div class="kpi-row">
-    <div class="kpi"><div class="n">28</div><div class="l">Archivos HTML</div></div>
+    <div class="kpi"><div class="n">41</div><div class="l">Archivos HTML</div></div>
     <div class="kpi"><div class="n">14</div><div class="l">Semanas de material</div></div>
-    <div class="kpi"><div class="n">29</div><div class="l">Estudiantes cargados</div></div>
-    <div class="kpi"><div class="n">6</div><div class="l">Herramientas docente</div></div>
-    <div class="kpi"><div class="n">1</div><div class="l">BD cloud (Supabase)</div></div>
+    <div class="kpi"><div class="n">N</div><div class="l">Grupos (multi-grupo)</div></div>
+    <div class="kpi"><div class="n">8</div><div class="l">Herramientas docente</div></div>
+    <div class="kpi"><div class="n">2</div><div class="l">Tablas Supabase</div></div>
     <div class="kpi"><div class="n">100%</div><div class="l">Listo para clase</div></div>
   </div>
 </div>
@@ -234,10 +234,11 @@ details .inner{padding:1rem;}
       <!-- COLUMNA 2: Infraestructura -->
       <div class="arch-zone">
         <h4>☁️ Infraestructura</h4>
-        <a class="arch-node teal" href="#">Supabase DB<br><small>student_progress</small></a>
+        <a class="arch-node teal" href="#">Supabase DB<br><small>student_progress · students</small></a>
         <a class="arch-node teal" href="#">GitHub Pages<br><small>hosting estático</small></a>
         <a class="arch-node navy" href="js/supabase-config.js">⚙️ supabase-config.js</a>
-        <a class="arch-node teal" href="#">localStorage<br><small>participación/parciales</small></a>
+        <a class="arch-node teal" href="#">localStorage<br><small>participación · asistencia</small></a>
+        <a class="arch-node orange" href="setup/backup.py">🔒 backup.py / restore.py</a>
       </div>
 
       <!-- ARROW -->
@@ -461,7 +462,7 @@ details .inner{padding:1rem;}
         <span class="status">✅ Completo</span>
       </div>
       <div class="feature-body">
-        <div class="feature-tldr">17 secciones · prompt compacto para nueva IA · guía completa para replicar en Cálculo, Física, etc.</div>
+        <div class="feature-tldr">20 secciones · prompt compacto para nueva IA · guía completa para replicar en Cálculo, Física, etc.</div>
         <div class="scenario">
           <div class="scenario-title">Escenario: Crear material para otro módulo</div>
           <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el docente quiere replicar esto para "Cálculo Empresarial"</span></div>
@@ -485,6 +486,53 @@ details .inner{padding:1rem;}
           <div class="bdd-line"><span class="bdd-kw then">✅</span><span class="bdd-text">Widget lateral: clic → respuesta correcta/incorrecta → XP inmediato</span></div>
           <div class="bdd-line"><span class="bdd-then">⏳</span><span class="bdd-text">Quizzes principales (14 archivos): necesitan script de actualización a botones clicables</span></div>
           <div class="bdd-line"><span class="bdd-then">📋</span><span class="bdd-text">Actividades Colab: externas, requieren revisión manual del docente</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F11: CC Modal + Multi-grupo -->
+    <div class="feature-card dom-partic">
+      <div class="feature-header">
+        <span class="f-icon">🪪</span>
+        <h3>Identificación por Cédula (CC) + Multi-grupo</h3>
+        <span class="status">✅ Completo</span>
+      </div>
+      <div class="feature-body">
+        <div class="feature-tldr">Modal 2 pasos en 14 semanas · lookup automático CC → nombre+grupo · repositorio único para N grupos</div>
+        <div class="scenario">
+          <div class="scenario-title">Escenario: Estudiante abre material por primera vez</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el estudiante abre semana1/index.html</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">ingresa su número de cédula</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">el sistema busca en localStorage → Supabase → muestra nombre + grupo automáticamente</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">si no se encuentra, cae a formulario manual de respaldo</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">el perfil se guarda en tga05_global con cc, nombre, grupo, horario</span></div>
+        </div>
+        <div class="scenario" style="margin-top:.7rem">
+          <div class="scenario-title">Escenario: Docente tiene dos grupos este cuatrimestre</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el docente importa Grupo A (30 estudiantes)</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">importa Grupo B</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">aparecen botones "Grupo A" / "Grupo B" para filtrar en la tabla</span></div>
+          <div class="bdd-line"><span class="bdd-kw then">And</span><span class="bdd-text">el banner de horario cambia según el grupo activo</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F12: Backup & Restore -->
+    <div class="feature-card dom-infra">
+      <div class="feature-header">
+        <span class="f-icon">🔒</span>
+        <h3>Backup &amp; Restore de Supabase</h3>
+        <span class="status">✅ Completo</span>
+      </div>
+      <div class="feature-body">
+        <div class="feature-tldr">backup.py → JSON timestamped · restore.py → migración automática de esquema · cero pérdida de datos</div>
+        <div class="scenario">
+          <div class="scenario-title">Escenario: Cambio de esquema sin perder datos</div>
+          <div class="bdd-line"><span class="bdd-kw given">Given</span><span class="bdd-text">el docente necesita agregar columnas nuevas a la BD</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">corre <code>python3 setup/backup.py</code></span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">los datos se guardan en setup/backups/YYYY-MM-DD/ en &lt;10 segundos</span></div>
+          <div class="bdd-line"><span class="bdd-kw when">When</span><span class="bdd-text">corre el SQL y luego <code>python3 setup/restore.py</code></span></div>
+          <div class="bdd-line"><span class="bdd-kw then">Then</span><span class="bdd-text">los datos vuelven con columnas nuevas rellenadas con defaults automáticamente</span></div>
         </div>
       </div>
     </div>
@@ -520,7 +568,7 @@ details .inner{padding:1rem;}
       <details open>
         <summary>📂 semana1–14/ &nbsp;(×14 carpetas)</summary>
         <div class="inner">
-          <div class="ft-file"><span class="ft-name">index.html</span><span class="ft-tag ft-new">🆕 Sesión 1</span><span class="ft-desc">Material de estudio · caso NeuroBiz · quiz gamificado · XP · Supabase sync</span></div>
+          <div class="ft-file"><span class="ft-name">index.html</span><span class="ft-tag ft-mod">✏️ +CC modal</span><span class="ft-desc">Material de estudio · caso NeuroBiz · quiz gamificado · XP · Supabase sync · modal CC 2 pasos</span></div>
           <div class="ft-file"><span class="ft-name">notas_profesor.html</span><span class="ft-tag ft-new">🆕 Sesión 1</span><span class="ft-desc">Guía docente · objetivos · timing · alertas 🟢🟡🔴 de vigencia</span></div>
         </div>
       </details>
@@ -532,7 +580,7 @@ details .inner{padding:1rem;}
           <div class="ft-file"><span class="ft-name">profesor.html</span><span class="ft-tag ft-mod">✏️ +botón participación</span><span class="ft-desc">Dashboard docente · todos los estudiantes · CSV export · PIN</span></div>
           <div class="ft-file"><span class="ft-name">notas.html</span><span class="ft-tag ft-mod">✏️ +columna participación</span><span class="ft-desc">Consolidación de notas · fórmula configurable · XLSX export</span></div>
           <div class="ft-file"><span class="ft-name">revision.html</span><span class="ft-tag ft-new">🆕 Sesión 4</span><span class="ft-desc">Revisión TDAH-friendly · timer 15min · un estudiante a la vez · XP</span></div>
-          <div class="ft-file"><span class="ft-name">participacion.html</span><span class="ft-tag ft-new">🆕 Esta sesión</span><span class="ft-desc">Reemplazo ClassDojo · puntos en clase · botones rápidos · ↩ deshacer</span></div>
+          <div class="ft-file"><span class="ft-name">participacion.html</span><span class="ft-tag ft-mod">✏️ +CC +multi-grupo +Supabase sync</span><span class="ft-desc">Reemplazo ClassDojo · puntos · botones rápidos · importar PDF · filtro por grupo · horario banner</span></div>
           <div class="ft-file"><span class="ft-name">mis_puntos.html</span><span class="ft-tag ft-new">🆕 Esta sesión</span><span class="ft-desc">Vista estudiante · busca su nombre · ve puntos + recompensa + historial</span></div>
         </div>
       </details>
@@ -540,10 +588,14 @@ details .inner{padding:1rem;}
       <details>
         <summary>📂 setup/</summary>
         <div class="inner">
-          <div class="ft-file"><span class="ft-name">CONFIGURAR_SUPABASE.html</span><span class="ft-tag ft-new">🆕</span><span class="ft-desc">Formulario para guardar URL + key · botón de prueba de conexión</span></div>
-          <div class="ft-file"><span class="ft-name">GUIA_GIT_MOODLE.html</span><span class="ft-tag ft-new">🆕</span><span class="ft-desc">Checklist interactiva: SQL → Git → GitHub Pages → Moodle</span></div>
+          <div class="ft-file"><span class="ft-name">CONFIGURAR_SUPABASE.html</span><span class="ft-tag ft-new">🆕</span><span class="ft-desc">Formulario URL + key · botón de prueba de conexión</span></div>
+          <div class="ft-file"><span class="ft-name">GUIA_GIT_MOODLE.html</span><span class="ft-tag ft-new">🆕</span><span class="ft-desc">Checklist: SQL → Git → GitHub Pages → Moodle</span></div>
           <div class="ft-file"><span class="ft-name">CONFIGURAR_PROGRESO.html</span><span class="ft-tag ft-new">🆕</span><span class="ft-desc">Configurar progreso / estado del curso</span></div>
-          <div class="ft-file"><span class="ft-name">supabase_schema.sql</span><span class="ft-tag ft-new">🆕</span><span class="ft-desc">Tabla student_progress · RLS policies · trigger · vista resumen_docente</span></div>
+          <div class="ft-file"><span class="ft-name">supabase_schema.sql</span><span class="ft-tag ft-mod">✏️ v2 + RESET TOTAL</span><span class="ft-desc">Tabla student_progress + students · RLS idempotentes · sección DROP comentada</span></div>
+          <div class="ft-file"><span class="ft-name">backup.py</span><span class="ft-tag ft-new">🆕 Esta sesión</span><span class="ft-desc">Descarga student_progress + students → JSON timestamped con paginación automática</span></div>
+          <div class="ft-file"><span class="ft-name">restore.py</span><span class="ft-tag ft-new">🆕 Esta sesión</span><span class="ft-desc">Restaura desde backup con migración automática de esquema · --dry-run · --table · --backup</span></div>
+          <div class="ft-file"><span class="ft-name">update_cc_modal.py</span><span class="ft-tag ft-new">🆕 Esta sesión</span><span class="ft-desc">Script idempotente que aplica el modal CC de 2 pasos a las 14 semanas</span></div>
+          <div class="ft-file"><span class="ft-name">backups/</span><span class="ft-tag" style="background:#fce4ec;color:#b71c1c">🔒 .gitignored</span><span class="ft-desc">Carpeta de backups JSON con datos de estudiantes (no se sube a Git)</span></div>
         </div>
       </details>
 
@@ -624,8 +676,8 @@ details .inner{padding:1rem;}
         <div class="prog-bar"><div class="prog-fill" style="width:100%;background:var(--c-game)"></div></div>
       </div>
       <div class="prog-row">
-        <div class="prog-label"><span>☁️ Supabase + GitHub Pages</span><span>90%</span></div>
-        <div class="prog-bar"><div class="prog-fill" style="width:90%;background:var(--c-infra)"></div></div>
+        <div class="prog-label"><span>☁️ Supabase + GitHub Pages</span><span>100%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:100%;background:var(--c-infra)"></div></div>
       </div>
       <div class="prog-row">
         <div class="prog-label"><span>📊 Dashboard docente</span><span>100%</span></div>
@@ -652,7 +704,9 @@ details .inner{padding:1rem;}
         <li><strong>Sesión 2:</strong> Supabase schema · CONFIGURAR_SUPABASE · GUIA_GIT_MOODLE · GitHub Pages</li>
         <li><strong>Sesión 3:</strong> KNOWLEDGE_BASE (17 secciones) · IUB branding · consolidación notas XLSX</li>
         <li><strong>Sesión 4:</strong> revision.html (TDAH-friendly) · Sección 16 actividades autocalificables · Sección 17 rutina docente</li>
-        <li><strong>Esta sesión:</strong> participacion.html · mis_puntos.html · Ahorcado word bank · columna participación en notas</li>
+        <li><strong>Sesión 5:</strong> participacion.html · mis_puntos.html · Ahorcado word bank · columna participación en notas</li>
+        <li><strong>Sesión 6:</strong> Modal CC 2 pasos en 14 semanas · multi-grupo en participacion.html · tabla students Supabase</li>
+        <li><strong>Esta sesión:</strong> backup.py · restore.py · schema idempotente · KNOWLEDGE_BASE S19+S20 · Asistencia documentada</li>
       </ul>
     </div>
   </div>
@@ -675,16 +729,18 @@ details .inner{padding:1rem;}
       <h3 style="font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:.8rem">🔧 Técnico (puede hacer la IA)</h3>
       <ul class="pending-list">
         <li>Script Python para actualizar los 14 quizzes principales de hover-reveal a botones clicables con XP</li>
-        <li>Supabase tabla <code>participation_events</code> para backup cloud de los puntos (actualmente en localStorage)</li>
+        <li>Tab "📋 Asistencia" en participacion.html (ver KNOWLEDGE_BASE S20) con Presente/Tarde/Ausente + exportar CSV Academusoft</li>
+        <li>Supabase tabla <code>attendance</code> para backup cloud del registro de asistencia</li>
         <li>Conectar Ahorcado: cuando el grupo gana, sumar XP al estudiante que inició la ronda</li>
       </ul>
     </div>
     <div class="card">
       <h3 style="font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:.8rem">🏫 Docente (tú lo haces)</h3>
       <ul class="pending-list">
+        <li>Ejecutar <code>setup/supabase_schema.sql</code> en Supabase SQL Editor (tablas students + columnas grupo/horario)</li>
         <li>Abrir GUIA_GIT_MOODLE.html y completar pasos Git → GitHub Pages → Moodle URL resources</li>
-        <li>Compartir el link de <code>mis_puntos.html</code> con los estudiantes para que vean sus puntos</li>
-        <li>Al final de cada clase: exportar .tsv de participación como respaldo</li>
+        <li>Compartir el link de <code>mis_puntos.html</code> con los estudiantes</li>
+        <li>Al final de cada clase: exportar .tsv de participación como respaldo de asistencia</li>
         <li>Para replicar en otro módulo: copiar prompt compacto de KNOWLEDGE_BASE Sección 15</li>
       </ul>
     </div>
@@ -699,7 +755,7 @@ details .inner{padding:1rem;}
 </div><!-- /container -->
 
 <footer style="background:var(--navy);color:#fff;text-align:center;padding:1.2rem;font-size:.78rem;opacity:.8;margin-top:2rem">
-  TGA05 · Estructura de Datos para los Negocios · IUB · Grupo 7_GA_G1 · Generado con GitHub Copilot IA
+  TGA05 · Estructura de Datos para los Negocios · IUB · Multi-grupo · Generado con GitHub Copilot IA
 </footer>
 
 <script>

@@ -598,8 +598,6 @@ blockquote {
 #pt-quiz-panel .pq button.wrong  { background:#c62828; border-color:#e57373; }
 #pt-quiz-panel .pq button:disabled{ opacity:.7; cursor:default; }
 </style>
-
-  <script src="../js/supabase-config.js"></script>
 </head>
 <body>
     <header class="hero">
@@ -1096,9 +1094,23 @@ print("Frente de la espera:", espera[0])</textarea>
 </ol>
             <p class="foot-ref">Las referencias impresas se interpretan de forma aplicada; las referencias digitales se emplean para validar la implementación en Python y la ejecución en entornos de notebook.</p>
         </section>
+  <!-- ══ EJERCICIOS INTERACTIVOS ═══════════════════ -->
+  <section id="ejercicios-interactivos" class="card">
+    <h2>🎮 Ejercicios Interactivos</h2>
+    <p class="lead">Practica los conceptos de esta semana con ejercicios tipo Codecademy. Completa los espacios en blanco, ordena los bloques de código o selecciona la respuesta correcta.</p>
+    <div id="exercise-container"></div>
+  </section>
+
     </main>
 
     <footer class="footer">UIB · TGA05 · Semana 5 · Material autónomo para estudiante · Caso transversal NeuroBiz S.A.S.</footer>
+<link rel="stylesheet" href="../js/exercise-styles.css">
+<script src="../js/exercise-engine.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    ExerciseEngine.init("#exercise-container", 5, "../exercises/exercises_seed.json");
+  });
+</script>
     <script>document.addEventListener('DOMContentLoaded', () => {
   const bar = document.querySelector('.xp-fill');
   if (bar) {
@@ -1126,7 +1138,10 @@ const PT = (function() {
 
   let state = {
     nombre          : "",
+    cc              : "",
     id_estudiante   : "",
+    grupo           : "",
+    horario         : "",
     semana          : SEMANA,
     xp              : XP_BASE,
     quiz_respuestas : {},
@@ -1142,10 +1157,13 @@ const PT = (function() {
       const raw = localStorage.getItem(LS_KEY);
       if (raw) Object.assign(state, JSON.parse(raw));
 
-      // Cargar nombre/id del perfil global si no está en esta semana
+      // Cargar perfil global (nombre, cc, grupo, horario)
       const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
-      if (!state.nombre       && global.nombre)        state.nombre        = global.nombre;
-      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante;
+      if (!state.nombre        && global.nombre)        state.nombre        = global.nombre;
+      if (!state.cc            && global.cc)            state.cc            = global.cc;
+      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante || global.cc;
+      if (!state.grupo         && global.grupo)         state.grupo         = global.grupo;
+      if (!state.horario       && global.horario)       state.horario       = global.horario;
     } catch(e) { console.warn("PT load error:", e); }
   }
 
@@ -1226,13 +1244,15 @@ const PT = (function() {
           },
           body: JSON.stringify({
             student_name    : state.nombre         || "Anónimo",
-            student_id      : state.id_estudiante  || "desconocido",
+            student_id      : state.id_estudiante  || state.cc || "desconocido",
             semana          : state.semana,
             xp              : state.xp             || 0,
             quiz_answers    : state.quiz_respuestas || {},
             quiz_score      : state.quiz_puntaje    || 0,
             hti_done        : !!state.hti_entregado,
             activity_done   : !!state.actividad_completada,
+            grupo           : state.grupo          || "",
+            horario         : state.horario        || "",
             updated_at      : new Date().toISOString()
           })
         });
@@ -1268,14 +1288,18 @@ const PT = (function() {
     }
   }
 
+  // ── XSS sanitization helper ─────────────────────────
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, function(m) {
+      return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[m];
+    });
+  }
+
   // ── Exportar código de progreso ────────────────────
   function exportCode() {
     save();
-    const code = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
-    const ta = document.createElement("textarea");
-    ta.value = code;
-    document.body.appendChild(ta); ta.select(); document.execCommand("copy");
-    document.body.removeChild(ta);
+    const code = btoa(encodeURIComponent(JSON.stringify(state)));
+    navigator.clipboard.writeText(code);
     msg("📋 ¡Código copiado! Guárdalo en Google Drive o OneDrive.", "#fff9c4");
     // También abrir como descarga
     const a = document.createElement("a");
@@ -1289,7 +1313,7 @@ const PT = (function() {
     const code = prompt("Pega tu código de progreso:");
     if (!code) return;
     try {
-      const decoded = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+      const decoded = JSON.parse(decodeURIComponent(atob(code.trim())));
       Object.assign(state, decoded);
       save();
       msg("✅ Progreso restaurado correctamente.", "lightgreen");
@@ -1444,7 +1468,7 @@ if (document.readyState === "loading") {
 #pt-modal-box{
   background:linear-gradient(160deg,#1E2843,#1E2843 70%,#2d3a5e);
   color:#fff;border-radius:20px;padding:2rem 2rem 1.5rem;
-  width:min(94vw,400px);box-shadow:0 20px 60px rgba(0,0,0,.5);
+  width:min(94vw,420px);box-shadow:0 20px 60px rgba(0,0,0,.5);
   position:relative;animation:slideUp .35s cubic-bezier(.2,.8,.3,1);
 }
 @keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
@@ -1466,107 +1490,257 @@ if (document.readyState === "loading") {
   margin-top:.4rem;transition:opacity .15s;
 }
 #pt-modal-btn:hover{opacity:.9}
-#pt-modal-error{color:#ff8a80;font-size:.8rem;margin-top:.5rem;min-height:1em}
-#pt-modal-xp{
-  text-align:center;font-size:.78rem;opacity:.7;margin-top:.7rem;
+#pt-modal-btn-search{
+  padding:.65rem 1.2rem;border:none;border-radius:10px;
+  background:rgba(255,255,255,.18);color:#fff;font-weight:700;font-size:.92rem;
+  cursor:pointer;transition:background .15s;flex-shrink:0;
 }
+#pt-modal-btn-search:hover{background:rgba(255,255,255,.28)}
+#pt-modal-error{color:#ff8a80;font-size:.8rem;margin-top:.5rem;min-height:1em}
+#pt-modal-xp{text-align:center;font-size:.78rem;opacity:.7;margin-top:.7rem}
+.pt-found-card{
+  background:rgba(255,255,255,.1);border:1.5px solid rgba(249,168,37,.6);
+  border-radius:12px;padding:1rem 1.1rem;margin-bottom:.9rem;
+}
+.pt-found-card .pt-fc-name{font-size:1rem;font-weight:800;margin-bottom:.25rem}
+.pt-found-card .pt-fc-meta{font-size:.8rem;opacity:.8;line-height:1.6}
+.pt-step{transition:opacity .2s}
+.pt-link-btn{
+  background:none;border:none;color:rgba(255,255,255,.6);font-size:.8rem;
+  cursor:pointer;text-decoration:underline;padding:.3rem 0 0;display:block;
+  text-align:center;width:100%;
+}
+.pt-link-btn:hover{color:#fff}
 </style>
 
 <div id="pt-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="pt-modal-title">
   <div id="pt-modal-box">
     <h2 id="pt-modal-title">👋 ¡Bienvenido a TGA05!</h2>
     <p class="sub">NeuroBiz S.A.S. · Estructura de Datos para los Negocios</p>
-    <div class="field">
-      <label for="pt-modal-nombre">Tu nombre completo *</label>
-      <input id="pt-modal-nombre" type="text" placeholder="Ej: María García López"
-        autocomplete="name" autofocus
-        onkeydown="if(event.key==='Enter')ptModalSetup()" />
+
+    <!-- PASO 1 — Ingresar cédula -->
+    <div id="pt-step1" class="pt-step">
+      <div class="field">
+        <label for="pt-modal-cc">Número de cédula / documento *</label>
+        <div style="display:flex;gap:.5rem">
+          <input id="pt-modal-cc" type="tel" inputmode="numeric" pattern="[0-9]*"
+            placeholder="Ej: 1043158867" autocomplete="off"
+            onkeydown="if(event.key==='Enter')ptSearchCC()" />
+          <button id="pt-modal-btn-search" onclick="ptSearchCC()">Buscar →</button>
+        </div>
+      </div>
+      <div id="pt-modal-error"></div>
+      <p id="pt-modal-xp">🔒 Tu cédula identifica tu progreso de forma segura — no se comparte.</p>
     </div>
-    <div class="field">
-      <label for="pt-modal-grupo">Grupo / Paralelo</label>
-      <input id="pt-modal-grupo" type="text" placeholder="Ej: GA-01" />
+
+    <!-- PASO 2A — Perfil encontrado -->
+    <div id="pt-step2a" class="pt-step" style="display:none">
+      <div class="pt-found-card">
+        <div class="pt-fc-name" id="pt-fc-name">—</div>
+        <div class="pt-fc-meta" id="pt-fc-meta">—</div>
+      </div>
+      <button id="pt-modal-btn" onclick="ptConfirmFound()">¡Empezar! 🚀</button>
+      <button class="pt-link-btn" onclick="ptBackToCC()">← No soy yo — volver a buscar</button>
+      <div id="pt-modal-error2"></div>
     </div>
-    <button id="pt-modal-btn" onclick="ptModalSetup()">¡Empezar! 🚀</button>
-    <div id="pt-modal-error"></div>
-    <p id="pt-modal-xp">⭐ Recibirás +5 XP por configurar tu perfil</p>
+
+    <!-- PASO 2B — No encontrado: entrada manual -->
+    <div id="pt-step2b" class="pt-step" style="display:none">
+      <p style="font-size:.82rem;opacity:.75;margin-bottom:1rem;background:rgba(255,255,255,.08);border-radius:8px;padding:.6rem .8rem">
+        ⚠️ No encontramos tu cédula en la lista del grupo.<br>
+        Completa tus datos manualmente. El docente podrá importarte en la próxima clase.
+      </p>
+      <div class="field">
+        <label for="pt-modal-nombre">Tu nombre completo *</label>
+        <input id="pt-modal-nombre" type="text" placeholder="Ej: María García López"
+          autocomplete="name"
+          onkeydown="if(event.key==='Enter')ptModalSetupManual()" />
+      </div>
+      <div class="field">
+        <label for="pt-modal-grupo">Grupo / Paralelo</label>
+        <input id="pt-modal-grupo" type="text" placeholder="Ej: 7_GA_G1" />
+      </div>
+      <button id="pt-modal-btn" onclick="ptModalSetupManual()">Continuar →</button>
+      <button class="pt-link-btn" onclick="ptBackToCC()">← Volver a ingresar cédula</button>
+      <div id="pt-modal-error3"></div>
+    </div>
+
   </div>
 </div>
 
 <script id="welcome-modal-js">
 (function () {
+
   function shouldShowModal() {
     try {
       var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
-      return !g.nombre || g.nombre.trim().length < 2;
+      return !g.cc || String(g.cc).trim().length < 3;
     } catch(e) { return true; }
+  }
+
+  function showStep(name) {
+    ["pt-step1","pt-step2a","pt-step2b"].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.style.display = (id === name) ? "block" : "none";
+    });
   }
 
   function showModal() {
     var overlay = document.getElementById("pt-overlay");
-    if (overlay) {
-      overlay.style.display = "flex";
-      var inp = document.getElementById("pt-modal-nombre");
-      // Pre-fill if there's a partial name saved
-      try {
-        var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
-        if (g.nombre && inp) inp.value = g.nombre;
-        var gInp = document.getElementById("pt-modal-grupo");
-        if (g.grupo && gInp) gInp.value = g.grupo;
-      } catch(e) {}
-      if (inp) setTimeout(function(){ inp.focus(); }, 100);
-    }
+    if (overlay) overlay.style.display = "flex";
+    showStep("pt-step1");
+    try {
+      var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
+      if (g.cc) {
+        var ccInp = document.getElementById("pt-modal-cc");
+        if (ccInp) ccInp.value = g.cc;
+      }
+    } catch(e) {}
+    var inp = document.getElementById("pt-modal-cc");
+    if (inp) setTimeout(function(){ inp.focus(); }, 100);
   }
 
-  window.ptModalSetup = function() {
-    var nombreInp = document.getElementById("pt-modal-nombre");
-    var grupoInp  = document.getElementById("pt-modal-grupo");
-    var errEl     = document.getElementById("pt-modal-error");
-    var nombre    = nombreInp ? nombreInp.value.trim() : "";
-    var grupo     = grupoInp  ? grupoInp.value.trim()  : "";
-
-    if (!nombre || nombre.length < 3) {
-      if (errEl) errEl.textContent = "Por favor escribe tu nombre completo (mínimo 3 caracteres).";
-      if (nombreInp) nombreInp.focus();
-      return;
-    }
-
-    // Build / update global profile
-    var profile = {};
-    try { profile = JSON.parse(localStorage.getItem("tga05_global") || "{}"); } catch(e) {}
-
-    profile.nombre = nombre;
-    if (grupo) profile.grupo = grupo;
-    if (!profile.id_estudiante) {
-      profile.id_estudiante = nombre.toLowerCase()
-        .replace(/\s+/g, "_").replace(/[^a-z0-9_áéíóúñ]/g, "")
-        .substring(0, 22) + "_" + Math.random().toString(36).substr(2, 4);
-    }
-    localStorage.setItem("tga05_global", JSON.stringify(profile));
-
-    // Sync into the PT widget name input
-    var ptInp = document.getElementById("pt-nombre");
-    if (ptInp) { ptInp.value = nombre; ptInp.dispatchEvent(new Event("input")); }
-
-    // XP reward
-    if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
-      PT.addXP(5, "Perfil configurado ✨");
-    }
-
-    // Close modal
+  function closeModal() {
     var overlay = document.getElementById("pt-overlay");
     if (overlay) {
       overlay.style.opacity = "0";
       overlay.style.transition = "opacity .2s";
       setTimeout(function(){ overlay.style.display = "none"; overlay.style.opacity = ""; }, 200);
     }
+  }
 
-    // Auto-sync to Supabase after a short delay
+  function getStudentsList() {
+    try { return JSON.parse(localStorage.getItem("tga05_students_v1") || "[]"); } catch(e) { return []; }
+  }
+
+  function saveProfile(cc, nombre, grupo, horario) {
+    var profile = {};
+    try { profile = JSON.parse(localStorage.getItem("tga05_global") || "{}"); } catch(e) {}
+    profile.cc            = cc;
+    profile.nombre        = nombre;
+    profile.grupo         = grupo   || profile.grupo   || "";
+    profile.horario       = horario || profile.horario || "";
+    profile.id_estudiante = cc;
+    localStorage.setItem("tga05_global", JSON.stringify(profile));
+    var ptInp = document.getElementById("pt-nombre");
+    if (ptInp) { ptInp.value = nombre; ptInp.dispatchEvent(new Event("input")); }
+    if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
+      PT.addXP(5, "Perfil configurado \u2728");
+    }
     setTimeout(function(){
       if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
     }, 800);
+    closeModal();
+  }
+
+  window.ptSearchCC = function() {
+    var ccInp = document.getElementById("pt-modal-cc");
+    var errEl = document.getElementById("pt-modal-error");
+    var cc    = ccInp ? ccInp.value.trim().replace(/\D/g,'') : "";
+    if (!cc || cc.length < 5) {
+      if (errEl) errEl.textContent = "Ingresa tu n\u00famero de c\u00e9dula (m\u00ednimo 5 d\u00edgitos).";
+      if (ccInp) ccInp.focus();
+      return;
+    }
+    if (errEl) errEl.textContent = "";
+    var students = getStudentsList();
+    var found    = students.find(function(s){ return String(s.cc) === cc; });
+    if (found) {
+      var nameEl = document.getElementById("pt-fc-name");
+      var metaEl = document.getElementById("pt-fc-meta");
+      if (nameEl) nameEl.textContent = "\u2705 " + found.name;
+      if (metaEl) metaEl.innerHTML =
+        (found.grupo   ? "\ud83d\udcda Grupo: <strong>" + esc(found.grupo) + "</strong>" : "") +
+        (found.horario ? " \u00a0\u00b7\u00a0 \u23f0 " + esc(found.horario) : "");
+      nameEl.dataset.cc      = cc;
+      nameEl.dataset.nombre  = found.name;
+      nameEl.dataset.grupo   = found.grupo   || "";
+      nameEl.dataset.horario = found.horario || "";
+      showStep("pt-step2a");
+      var btn = document.getElementById("pt-modal-btn");
+      if (btn) setTimeout(function(){ btn.focus(); }, 100);
+      return;
+    }
+    var sUrl = localStorage.getItem("tga05_supabase_url");
+    var sKey = localStorage.getItem("tga05_supabase_key");
+    if (sUrl && sKey) {
+      if (errEl) errEl.textContent = "\u23f3 Buscando en la base de datos\u2026";
+      fetch(sUrl + "/rest/v1/students?cc=eq." + encodeURIComponent(cc) + "&limit=1", {
+        headers: { "apikey": sKey, "Authorization": "Bearer " + sKey }
+      }).then(function(r){ return r.json(); })
+        .then(function(rows){
+          if (errEl) errEl.textContent = "";
+          if (rows && rows.length) {
+            var r = rows[0];
+            var nameEl = document.getElementById("pt-fc-name");
+            var metaEl = document.getElementById("pt-fc-meta");
+            if (nameEl) nameEl.textContent = "\u2705 " + r.name;
+            if (metaEl) metaEl.innerHTML =
+              (r.grupo   ? "\ud83d\udcda Grupo: <strong>" + esc(r.grupo) + "</strong>" : "") +
+              (r.horario ? " \u00a0\u00b7\u00a0 \u23f0 " + esc(r.horario) : "");
+            nameEl.dataset.cc      = cc;
+            nameEl.dataset.nombre  = r.name;
+            nameEl.dataset.grupo   = r.grupo   || "";
+            nameEl.dataset.horario = r.horario || "";
+            showStep("pt-step2a");
+          } else {
+            var nombreInp = document.getElementById("pt-modal-nombre");
+            if (nombreInp) nombreInp.dataset.cc = cc;
+            showStep("pt-step2b");
+            if (nombreInp) setTimeout(function(){ nombreInp.focus(); }, 100);
+          }
+        }).catch(function(){
+          if (errEl) errEl.textContent = "";
+          var nombreInp = document.getElementById("pt-modal-nombre");
+          if (nombreInp) nombreInp.dataset.cc = cc;
+          showStep("pt-step2b");
+          if (nombreInp) setTimeout(function(){ nombreInp.focus(); }, 100);
+        });
+      return;
+    }
+    var nombreInp = document.getElementById("pt-modal-nombre");
+    if (nombreInp) nombreInp.dataset.cc = cc;
+    showStep("pt-step2b");
+    if (nombreInp) setTimeout(function(){ nombreInp.focus(); }, 100);
   };
 
-  // Show on load if no name
+  window.ptConfirmFound = function() {
+    var nameEl  = document.getElementById("pt-fc-name");
+    var cc      = nameEl ? nameEl.dataset.cc      : "";
+    var nombre  = nameEl ? nameEl.dataset.nombre  : "";
+    var grupo   = nameEl ? nameEl.dataset.grupo   : "";
+    var horario = nameEl ? nameEl.dataset.horario : "";
+    if (!cc || !nombre) {
+      var e2 = document.getElementById("pt-modal-error2");
+      if (e2) e2.textContent = "Error al leer los datos. Intenta de nuevo.";
+      return;
+    }
+    saveProfile(cc, nombre, grupo, horario);
+  };
+
+  window.ptModalSetupManual = function() {
+    var nombreInp = document.getElementById("pt-modal-nombre");
+    var grupoInp  = document.getElementById("pt-modal-grupo");
+    var ccInp     = document.getElementById("pt-modal-cc");
+    var errEl     = document.getElementById("pt-modal-error3");
+    var nombre    = nombreInp ? nombreInp.value.trim() : "";
+    var grupo     = grupoInp  ? grupoInp.value.trim()  : "";
+    var cc        = ccInp     ? ccInp.value.trim().replace(/\D/g,'') : "";
+    if (!nombre || nombre.length < 3) {
+      if (errEl) errEl.textContent = "Por favor escribe tu nombre completo (m\u00ednimo 3 caracteres).";
+      if (nombreInp) nombreInp.focus();
+      return;
+    }
+    if (!cc) { cc = "MANUAL_" + Date.now(); }
+    saveProfile(cc, nombre, grupo, "");
+  };
+
+  window.ptBackToCC = function() {
+    showStep("pt-step1");
+    var inp = document.getElementById("pt-modal-cc");
+    if (inp) setTimeout(function(){ inp.focus(); }, 100);
+  };
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", function(){
       if (shouldShowModal()) showModal();

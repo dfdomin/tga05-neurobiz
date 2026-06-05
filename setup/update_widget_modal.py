@@ -3,9 +3,8 @@
 update_widget_modal.py
 ──────────────────────
 Para cada semana*/index.html:
-  1. Inyecta <script src="../js/supabase-config.js"> en el <head>
-  2. Reemplaza los botones del widget (simplificar: ⚙️ oculta Código/Cargar)
-  3. Inyecta el modal de bienvenida (CSS + HTML + JS) antes de </body>
+  1. Reemplaza los botones del widget (simplificar: ⚙️ oculta Código/Cargar)
+  2. Inyecta el modal de bienvenida (CSS + HTML + JS) antes de </body>
 
 Idempotente: verifica marcadores antes de modificar.
 """
@@ -13,12 +12,6 @@ Idempotente: verifica marcadores antes de modificar.
 import os, re
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
-
-# ─────────────────────────────────────────────────────────────────
-#  1. CONFIG SCRIPT TAG (inject in <head>)
-# ─────────────────────────────────────────────────────────────────
-CONFIG_SCRIPT_TAG = '  <script src="../js/supabase-config.js"></script>\n'
-CONFIG_MARKER     = 'supabase-config.js'
 
 # ─────────────────────────────────────────────────────────────────
 #  2. WIDGET BUTTONS — OLD vs NEW
@@ -198,19 +191,14 @@ def process_file(path, semana_num):
 
     changes = []
 
-    # 1. Inject config.js in <head>
-    if CONFIG_MARKER not in content:
-        content = content.replace("</head>", CONFIG_SCRIPT_TAG + "</head>", 1)
-        changes.append("config.js injected")
-
-    # 2. Simplify widget buttons
+    # 1. Simplify widget buttons
     if OLD_BTNS in content:
         content = content.replace(OLD_BTNS, NEW_BTNS, 1)
         changes.append("widget simplified")
     elif NEW_BTNS in content:
         changes.append("widget already simplified")
 
-    # 3. Inject welcome modal before </body>
+    # 2. Inject welcome modal before </body>
     if MODAL_MARKER not in content:
         content = content.replace("</body>", MODAL_BLOCK + "\n</body>", 1)
         changes.append("welcome modal injected")

@@ -298,7 +298,7 @@
       color: var(--green);
       font-weight: 600;
     }
-    .quiz-q:hover .quiz-answer { display: block; }
+    /* .quiz-q:hover .quiz-answer — eliminado: respuestas solo se muestran al responder */
 
     /* ── BIBLIOGRAPHY ───────────────────────── */
     .bib { font-size: .88rem; line-height: 1.8; }
@@ -933,12 +933,12 @@
       De: Dirección Ejecutiva, NeuroBiz S.A.S.<br>
       Asunto: Modernización del sistema de información terapéutico</strong>
 
-      NeuroBiz S.A.S. atiende actualmente más de <strong>1.200 sesiones mensuales</strong> en sus sedes de Barranquilla, 
+      NeuroBiz S.A.S. atiende actualmente más de <b>1.200 sesiones mensuales</b> en sus sedes de Barranquilla, 
       Bogotá y Medellín, en convenio con la UIB. Sin embargo, los datos de los pacientes 
       se almacenan de forma dispersa: algunos en hojas de cálculo, otros en notas de papel. 
       La junta directiva exige que el equipo técnico establezca las <em>bases computacionales</em> 
       para organizar esta información de manera eficiente. <br><br>
-      Su primera misión como <strong>Analistas de Datos</strong> es dominar los fundamentos: 
+      Su primera misión como <b>Analistas de Datos</b> es dominar los fundamentos: 
       ¿cómo almacena Python los datos de un paciente en memoria? 
       ¿Qué estructura es más eficiente para manejar cientos de registros?
     </div>
@@ -1254,7 +1254,7 @@ print(f"   Media  : {sum(sesiones_semanales)/len(sesiones_semanales):.1f}")</tex
 
         <h3>📝 Paso 2 — Código Corregido</h3>
         <p style="margin-bottom:.5rem;font-size:.9rem;color:var(--muted);">
-          Cuando completes el paso 1, el código corregido aparecerá aquí automáticamente. 
+          Haz clic en <strong>Verificar Todo</strong> arriba para generar el código corregido. 
           También puedes ejecutarlo en la sección <a href="#interactivo" style="color:var(--accent);">🧪 Interactivo</a>.
         </p>
         <div class="code-wrap" style="margin-top:.8rem">
@@ -1657,7 +1657,7 @@ print(f"Eficiencia: {eficiencia:.1f}%")
     <div class="quiz-box">
       <h3>5 preguntas · 8 minutos · Modo Playground</h3>
       <p style="font-size:.85rem; margin-bottom:1rem; color:var(--muted);">
-        Pasa el cursor sobre cada pregunta para ver la respuesta correcta (modo estudio). 
+        Selecciona una opción en cada pregunta y haz clic en <strong>Verificar Respuestas</strong>. 
         En clase el docente lanzará el quiz en vivo.
       </p>
 
@@ -1811,6 +1811,8 @@ const PT = (function() {
   let state = {
     nombre          : "",
     id_estudiante   : "",
+    grupo           : "",
+    horario         : "",
     semana          : SEMANA,
     xp              : XP_BASE,
     quiz_respuestas : {},
@@ -1828,8 +1830,10 @@ const PT = (function() {
 
       // Cargar nombre/id del perfil global si no está en esta semana
       const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
-      if (!state.nombre       && global.nombre)        state.nombre        = global.nombre;
-      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante;
+      if (!state.nombre        && global.nombre)         state.nombre        = global.nombre;
+      if (!state.id_estudiante  && global.id_estudiante)  state.id_estudiante = global.id_estudiante;
+      if (!state.grupo          && global.grupo)          state.grupo         = global.grupo;
+      if (!state.horario        && global.horario)        state.horario       = global.horario;
     } catch(e) { console.warn("PT load error:", e); }
   }
 
@@ -1917,6 +1921,8 @@ const PT = (function() {
             quiz_score      : state.quiz_puntaje    || 0,
             hti_done        : !!state.hti_entregado,
             activity_done   : !!state.actividad_completada,
+            grupo           : state.grupo           || "",
+            horario         : state.horario         || "",
             updated_at      : new Date().toISOString()
           })
         });
@@ -2037,6 +2043,7 @@ const PT = (function() {
           const key = "q" + qi;
           if (state.quiz_respuestas[key] !== undefined) return; // ya respondida
           answers.forEach(a => { a.dataset.answered = "1"; });
+          li.dataset.selected = "1"; // marcar solo el li elegido
           if (ai === correctIdx) {
             li.style.background = "#2e7d32";
             li.style.color = "#fff";
@@ -2061,6 +2068,7 @@ const PT = (function() {
       if (state.quiz_respuestas[prevKey] !== undefined) {
         const prev = state.quiz_respuestas[prevKey];
         answers.forEach(a => { a.dataset.answered = "1"; });
+        if (prev >= 0 && prev < answers.length) answers[prev].dataset.selected = "1";
         if (prev === correctIdx && correctIdx >= 0) {
           answers[prev].style.background = "#2e7d32";
           answers[prev].style.color = "#fff";
@@ -2090,15 +2098,31 @@ const PT = (function() {
     }
   }
 
+    // ── Restaurar state desde un registro de Supabase ──────
+  function restoreFromCloud(record) {
+    if (!record) return;
+    if (record.xp          !== undefined) state.xp              = record.xp;
+    if (record.quiz_score  !== undefined) state.quiz_puntaje     = record.quiz_score;
+    if (record.quiz_answers !== undefined) state.quiz_respuestas = record.quiz_answers || {};
+    if (record.hti_done    !== undefined) state.hti_entregado    = record.hti_done;
+    if (record.activity_done !== undefined) state.actividad_completada = record.activity_done;
+    if (record.grupo       !== undefined) state.grupo            = record.grupo || "";
+    if (record.horario     !== undefined) state.horario          = record.horario || "";
+    if (record.student_id) state.id_estudiante = record.student_id;
+    save();
+  }
+
   return {
     init,
     addXP,
-    save  : save,
-    sync  : syncCloud,
-    export: exportCode,
-    import: importCode,
+    save            : save,
+    sync            : syncCloud,
+    export          : exportCode,
+    import          : importCode,
     toggle,
-    state : () => state
+    msg             : msg,
+    restoreFromCloud: restoreFromCloud,
+    state           : () => state
   };
 })();
 
@@ -2231,11 +2255,6 @@ if (document.readyState === "loading") {
     var ptInp = document.getElementById("pt-nombre");
     if (ptInp) { ptInp.value = nombre; ptInp.dispatchEvent(new Event("input")); }
 
-    // XP reward
-    if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
-      PT.addXP(5, "Perfil configurado ✨");
-    }
-
     // Close modal
     var overlay = document.getElementById("pt-overlay");
     if (overlay) {
@@ -2244,10 +2263,54 @@ if (document.readyState === "loading") {
       setTimeout(function(){ overlay.style.display = "none"; overlay.style.opacity = ""; }, 200);
     }
 
-    // Auto-sync to Supabase after a short delay
-    setTimeout(function(){
-      if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
-    }, 800);
+    // Intentar recuperar progreso previo de Supabase (nuevo dispositivo/borró cache)
+    var sbUrl = localStorage.getItem("tga05_supabase_url") || "";
+    var sbKey = localStorage.getItem("tga05_supabase_key") || "";
+    if (sbUrl && sbKey) {
+      fetch(sbUrl + "/rest/v1/student_progress?student_name=eq." + encodeURIComponent(nombre)
+          + "&semana=eq.1&order=updated_at.desc&limit=1", {
+        headers: { "apikey": sbKey, "Authorization": "Bearer " + sbKey }
+      }).then(function(r){ return r.json(); }).then(function(rows) {
+        if (rows && rows.length > 0) {
+          var prev = rows[0];
+          // Restaurar el mismo student_id para evitar duplicados
+          profile.id_estudiante = prev.student_id;
+          localStorage.setItem("tga05_global", JSON.stringify(profile));
+          // Actualizar PT state con datos previos
+          if (typeof PT !== "undefined" && typeof PT.restoreFromCloud === "function") {
+            PT.restoreFromCloud(prev);
+          }
+          if (typeof PT !== "undefined" && typeof PT.msg === "function") {
+            PT.msg("✅ Progreso anterior recuperado (" + prev.xp + " XP)", "lightgreen");
+          }
+        } else {
+          // Primera vez — dar XP de bienvenida
+          if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
+            PT.addXP(5, "Perfil configurado ✨");
+          }
+        }
+        // Sync final
+        setTimeout(function(){
+          if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
+        }, 500);
+      }).catch(function() {
+        // Sin conexion — dar XP local y sync local
+        if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
+          PT.addXP(5, "Perfil configurado ✨");
+        }
+        setTimeout(function(){
+          if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
+        }, 500);
+      });
+    } else {
+      // Sin credenciales configuradas — flujo local
+      if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
+        PT.addXP(5, "Perfil configurado ✨");
+      }
+      setTimeout(function(){
+        if (typeof PT !== "undefined" && typeof PT.sync === "function") PT.sync();
+      }, 800);
+    }
   };
 
   // Show on load if no name
@@ -2484,7 +2547,10 @@ function safeAddXP(pts, motivo) {
     }
   };
 
-  // ── Expose Pyodide runner for external cells (HTI A) ──
+  // ── Expose initPyodide globally so external buttons can trigger load ──
+  window.initPyodideForHti = function() { initPyodide(); };
+
+// ── Expose Pyodide runner for external cells (HTI A) ──
   window._pyodideRunner = async function(code) {
     if (!pyodideReady || !pyodide) {
       return { output: '', error: 'Pyodide no está listo. Ejecuta primero la sección 🧪 Interactivo.' };
@@ -2894,8 +2960,8 @@ window.verificarQuiz = function() {
     var lis = qEl.querySelectorAll('li');
     var selected = -1;
     lis.forEach(function(li, ai) {
-      if (li.dataset.answered === '1') {
-        selected = ai;
+      if (li.dataset.selected === '1') {
+        selected = ai; // usar .selected para identificar la opcion elegida
       }
     });
 
@@ -2957,8 +3023,8 @@ window.verificarQuiz = function() {
 };
 
 // ── RUN PYTHON CODE HELPER ──────────────────────────
-// This is set by the Colab IIFE to provide external access
-window._pyodideRunner = null;
+// window._pyodideRunner is set by the Colab IIFE when Pyodide loads
+// DO NOT initialize to null here - it would override the IIFE assignment
 
 // ── HTI A: RUN CODE ─────────────────────────────────
 window.runHtiA = async function() {
@@ -2979,17 +3045,25 @@ window.runHtiA = async function() {
 
   // Try using the Pyodide runner exposed by the Colab IIFE
   try {
+    // Si Pyodide aun no cargó, intentar iniciarlo
+    if (typeof window._pyodideRunner !== 'function') {
+      var pre = outDiv.querySelector('pre');
+      pre.textContent = '⏳ Cargando motor Python... espera unos segundos y vuelve a hacer clic en Run.';
+      pre.classList.remove('colab-error');
+      // Intentar cargar Pyodide si la función existe
+      if (typeof window.initPyodideForHti === 'function') {
+        window.initPyodideForHti();
+      }
+      if (runBtn) { runBtn.textContent = '▶ Run'; runBtn.disabled = false; }
+      return;
+    }
     if (typeof window._pyodideRunner === 'function') {
       var result = await window._pyodideRunner(code);
       var pre = outDiv.querySelector('pre');
-      pre.textContent = result.output || '(sin salida)';
+      pre.textContent = result.output || result.error || '(sin salida)';
       if (result.error) pre.classList.add('colab-error');
       else pre.classList.remove('colab-error');
       safeAddXP(2, 'Código HTI ejecutado');
-    } else {
-      var pre = outDiv.querySelector('pre');
-      pre.textContent = '⏳ Python no disponible. Ejecuta primero la sección 🧪 Interactivo para cargar el motor, o usa Google Colab.';
-      pre.classList.remove('colab-error');
     }
   } catch(e) {
     var pre = outDiv.querySelector('pre');

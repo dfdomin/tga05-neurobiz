@@ -583,8 +583,7 @@ footer {
 </style>
 
   <script src="../js/supabase-config.js"></script>
-  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
-</head><body><header><div class="hero"><div class="badge-row"><span class="badge-module">🎓 TGA05 · Estructura de Datos para los Negocios</span><span class="badge-week">🗓 Semana 7 de 14</span><span class="badge-week">🏅 Módulo en progreso</span></div><div class="hero-grid"><div><h1>Recursividad II</h1><p class="subtitle">Recursividad directa e indirecta, comparación con iteración y búsqueda binaria recursiva para optimizar la consulta de sesiones ordenadas en NeuroBiz.</p><div class="xp-panel"><div class="xp-label"><span>Barra XP del módulo</span><span>540 / 980 XP del módulo</span></div><div class="xp-track"><div class="xp-bar" data-progress="50.0"></div></div></div></div><aside class="hero-note"><p><strong>Rol inmersivo:</strong> Analista de Datos Estratégico de NeuroBiz S.A.S.</p><p>Pasas de “entender qué es” a decidir cuándo conviene aplicar recursión y cuándo una estrategia iterativa resulta más clara o eficiente para el negocio.</p></aside></div></div></header><nav><div class="nav-wrap"><a href="#mision">📋 Memorando</a><a href="#teoria">📚 Teoría</a><a href="#python">🐍 Python BI</a><a href="#actividad">⚙️ Actividad</a><a href="#quiz">🎮 Quizizz</a><a href="#bib">📖 Bibliografía</a></div></nav><main>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script></head><body><header><div class="hero"><div class="badge-row"><span class="badge-module">🎓 TGA05 · Estructura de Datos para los Negocios</span><span class="badge-week">🗓 Semana 7 de 14</span><span class="badge-week">🏅 Módulo en progreso</span></div><div class="hero-grid"><div><h1>Recursividad II</h1><p class="subtitle">Recursividad directa e indirecta, comparación con iteración y búsqueda binaria recursiva para optimizar la consulta de sesiones ordenadas en NeuroBiz.</p><div class="xp-panel"><div class="xp-label"><span>Barra XP del módulo</span><span>540 / 980 XP del módulo</span></div><div class="xp-track"><div class="xp-bar" data-progress="50.0"></div></div></div></div><aside class="hero-note"><p><strong>Rol inmersivo:</strong> Analista de Datos Estratégico de NeuroBiz S.A.S.</p><p>Pasas de “entender qué es” a decidir cuándo conviene aplicar recursión y cuándo una estrategia iterativa resulta más clara o eficiente para el negocio.</p></aside></div></div></header><nav><div class="nav-wrap"><a href="#mision">📋 Memorando</a><a href="#teoria">📚 Teoría</a><a href="#python">🐍 Python BI</a><a href="#actividad">⚙️ Actividad</a><a href="#quiz">🎮 Quizizz</a><a href="#bib">📖 Bibliografía</a></div></nav><main>
 
 <!-- ── PROGRESS TRACKER WIDGET ── -->
 <div id="pt-widget">
@@ -753,8 +752,7 @@ print(f"Binaria recursiva: posición={pos_b}, pasos={pasos_b}")</pre></div>
 </div>
 <p class="lead">Sugerencia: ejecuta el bloque, cambia un dato del caso NeuroBiz y registra qué ocurre. Esa modificación convierte el ejemplo en evidencia de comprensión.</p>
 </div>
-</section>
-<script id="progress-tracker-js">
+</section><script id="progress-tracker-js">
 // ════════════════════════════════════════════════════
 //  NeuroBiz Progress Tracker · Semana 7
 // ════════════════════════════════════════════════════
@@ -772,7 +770,10 @@ const PT = (function() {
 
   let state = {
     nombre          : "",
+    cc              : "",
     id_estudiante   : "",
+    grupo           : "",
+    horario         : "",
     semana          : SEMANA,
     xp              : XP_BASE,
     quiz_respuestas : {},
@@ -788,10 +789,13 @@ const PT = (function() {
       const raw = localStorage.getItem(LS_KEY);
       if (raw) Object.assign(state, JSON.parse(raw));
 
-      // Cargar nombre/id del perfil global si no está en esta semana
+      // Cargar perfil global (nombre, cc, grupo, horario)
       const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
-      if (!state.nombre       && global.nombre)        state.nombre        = global.nombre;
-      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante;
+      if (!state.nombre        && global.nombre)        state.nombre        = global.nombre;
+      if (!state.cc            && global.cc)            state.cc            = global.cc;
+      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante || global.cc;
+      if (!state.grupo         && global.grupo)         state.grupo         = global.grupo;
+      if (!state.horario       && global.horario)       state.horario       = global.horario;
     } catch(e) { console.warn("PT load error:", e); }
   }
 
@@ -872,13 +876,15 @@ const PT = (function() {
           },
           body: JSON.stringify({
             student_name    : state.nombre         || "Anónimo",
-            student_id      : state.id_estudiante  || "desconocido",
+            student_id      : state.id_estudiante  || state.cc || "desconocido",
             semana          : state.semana,
             xp              : state.xp             || 0,
             quiz_answers    : state.quiz_respuestas || {},
             quiz_score      : state.quiz_puntaje    || 0,
             hti_done        : !!state.hti_entregado,
             activity_done   : !!state.actividad_completada,
+            grupo           : state.grupo          || "",
+            horario         : state.horario        || "",
             updated_at      : new Date().toISOString()
           })
         });
@@ -917,11 +923,8 @@ const PT = (function() {
   // ── Exportar código de progreso ────────────────────
   function exportCode() {
     save();
-    const code = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
-    const ta = document.createElement("textarea");
-    ta.value = code;
-    document.body.appendChild(ta); ta.select(); document.execCommand("copy");
-    document.body.removeChild(ta);
+    const code = btoa(encodeURIComponent(JSON.stringify(state)));
+    navigator.clipboard.writeText(code);
     msg("📋 ¡Código copiado! Guárdalo en Google Drive o OneDrive.", "#fff9c4");
     // También abrir como descarga
     const a = document.createElement("a");
@@ -935,7 +938,7 @@ const PT = (function() {
     const code = prompt("Pega tu código de progreso:");
     if (!code) return;
     try {
-      const decoded = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+      const decoded = JSON.parse(decodeURIComponent(atob(code.trim())));
       Object.assign(state, decoded);
       save();
       msg("✅ Progreso restaurado correctamente.", "lightgreen");
