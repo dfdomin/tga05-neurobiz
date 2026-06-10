@@ -1,38 +1,34 @@
 // ══════════════════════════════════════════════════════════════
-//  TGA05 · NeuroBiz S.A.S. — Configuración Supabase centralizada
-//  Edita este archivo una sola vez con los datos de tu proyecto.
-//  Todos los materiales del módulo lo cargan automáticamente.
+//  TGA05 · NeuroBiz S.A.S. — Supabase compartido IUB (mismo que ADM18)
 // ══════════════════════════════════════════════════════════════
 
 (function () {
-  // ── NO PUBLICAR CREDENCIALES AQUÍ ──────────────────────────
-  // Este archivo queda como plantilla para evitar filtrar datos del proyecto.
-  // Configura SUPABASE_URL y SUPABASE_KEY en localStorage desde setup/CONFIGURAR_SUPABASE.html
-  // o usa una copia local ignorada por Git: js/supabase-config.local.js.
-  var SUPABASE_URL = "https://hmaognhkhyvbjxqznnhx.supabase.co";
-  var SUPABASE_KEY = "sb_publishable_KYwM0iAAmQU8rS7S3HPR0Q_QvoSCYZo";
-  // ──────────────────────────────────────────────────────────
+  var SUPABASE_URL = "https://nnrgxuzvjtweyzkdrech.supabase.co";
+  var SUPABASE_KEY = "sb_publishable_-101J7EEEhv-C5kjosWGTg_657OtsBg";
 
-  var COURSE_CODE  = "TGA05-2026-1"; // Identificador del curso (no cambiar)
+  var MODULE_CODE   = "TGA05";
+  var OFFERING_CODE = "TGA05-2026-2";
+  var NARRATIVE     = "NeuroBiz S.A.S.";
+  var COURSE_CODE   = OFFERING_CODE;
 
   if (!SUPABASE_URL || !SUPABASE_KEY) {
-    console.warn(
-      "[TGA05] supabase-config.js: SUPABASE_URL y SUPABASE_KEY no configurados.\n" +
-      "Abre setup/CONFIGURAR_SUPABASE.html para obtener los valores."
-    );
+    console.warn("[TGA05] supabase-config.js: credenciales no configuradas.");
     return;
   }
 
-  // Guardar en localStorage para que el tracker los use
-  if (!localStorage.getItem("tga05_supabase_url")) {
-    localStorage.setItem("tga05_supabase_url", SUPABASE_URL);
-  }
-  if (!localStorage.getItem("tga05_supabase_key")) {
-    localStorage.setItem("tga05_supabase_key", SUPABASE_KEY);
-  }
-  if (!localStorage.getItem("tga05_course_code")) {
-    localStorage.setItem("tga05_course_code", COURSE_CODE);
-  }
+  localStorage.setItem("tga05_supabase_url", SUPABASE_URL);
+  localStorage.setItem("tga05_supabase_key", SUPABASE_KEY);
+  localStorage.setItem("gamif_module_code", MODULE_CODE);
+  localStorage.setItem("gamif_offering_code", OFFERING_CODE);
+  localStorage.setItem("gamif_narrative", NARRATIVE);
+  localStorage.setItem("tga05_course_code", COURSE_CODE);
 
-  console.info("[TGA05] Supabase configurado ✅ →", SUPABASE_URL);
+  window.MODULE_CODE = MODULE_CODE;
+  window.OFFERING_CODE = OFFERING_CODE;
+  window.NARRATIVE = NARRATIVE;
+  window.SUPABASE_URL = SUPABASE_URL;
+  window.SUPABASE_KEY = SUPABASE_KEY;
+  window.GAMIF_PREFIX = "tga05";
+
+  console.info("[TGA05] Supabase gamificación ✅ →", SUPABASE_URL, "|", OFFERING_CODE);
 })();
