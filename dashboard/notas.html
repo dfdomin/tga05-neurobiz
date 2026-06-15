@@ -287,12 +287,17 @@
 
 <div id="toast"></div>
 
+<script src="../js/supabase-config.js"></script>
 <script>
 // ── Config Supabase (desde supabase-config.js o localStorage) ────────────────
 function getSupabaseConfig() {
-  const url = localStorage.getItem('tga05_supabase_url') || '';
-  const key = localStorage.getItem('tga05_supabase_key') || '';
+  const url = window.SUPABASE_URL || localStorage.getItem('tga05_supabase_url') || '';
+  const key = window.SUPABASE_KEY || localStorage.getItem('tga05_supabase_key') || '';
   return { url, key };
+}
+
+function offeringCode() {
+  return window.OFFERING_CODE || localStorage.getItem('gamif_offering_code') || 'TGA05-2026-2';
 }
 
 // ── PIN ───────────────────────────────────────────────────────────────────────
@@ -432,13 +437,25 @@ async function loadData() {
   document.getElementById('table-area').innerHTML = '';
 
   try {
-    // Fetch all rows for this corte's semana range
-    const resp = await fetch(
+    const offering = offeringCode();
+    const headers = { apikey: key, Authorization: `Bearer ${key}` };
+    const endpoints = [
       `${url}/rest/v1/student_progress?semana=gte.${semStart}&semana=lte.${semEnd}&select=student_id,student_name,grupo,semana,xp,quiz_score,activity_done&limit=5000`,
-      { headers: { 'apikey': key, 'Authorization': `Bearer ${key}` } }
-    );
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const rows = await resp.json();
+      `${url}/rest/v1/v_legacy_student_progress?offering_code=eq.${encodeURIComponent(offering)}&semana=gte.${semStart}&semana=lte.${semEnd}&select=student_id,student_name,grupo,semana,xp,quiz_score,activity_done&limit=5000`,
+    ];
+    let rows = [];
+    for (const endpoint of endpoints) {
+      const resp = await fetch(endpoint, { headers });
+      if (resp.ok) {
+        rows = await resp.json();
+        if (rows.length) break;
+      }
+    }
+    if (!rows.length) {
+      const last = await fetch(endpoints[1], { headers });
+      if (!last.ok) throw new Error(`HTTP ${last.status}`);
+      rows = await last.json();
+    }
 
     // Agrupar por estudiante
     const byStudent = {};
