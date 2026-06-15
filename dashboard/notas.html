@@ -27,8 +27,8 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Open Sans', Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
 
-    /* PIN GATE */
-    #pin-gate {
+    /* LOGIN DOCENTE */
+    #login {
       position: fixed; inset: 0; background: linear-gradient(135deg, var(--navy), var(--navy2));
       display: flex; align-items: center; justify-content: center; z-index: 9999;
     }
@@ -39,12 +39,18 @@
     }
     #pin-box h2 { font-size: 1.3rem; margin-bottom: .3rem; }
     #pin-box p  { opacity: .75; font-size: .85rem; margin-bottom: 1.5rem; }
-    #pin-input {
-      width: 100%; background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.3);
-      border-radius: 10px; padding: .65rem 1rem; color: #fff; font-size: 1.1rem;
-      text-align: center; letter-spacing: .3em; outline: none; font-family: inherit;
+    #pin-box label {
+      display: block; text-align: left; font-size: .78rem; font-weight: 700;
+      opacity: .85; margin-bottom: .35rem; margin-top: .6rem;
     }
-    #pin-input:focus { border-color: var(--yellow); }
+    #pin-box input[type="text"],
+    #pin-box input[type="password"] {
+      width: 100%; background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.3);
+      border-radius: 10px; padding: .65rem 1rem; color: #fff; font-size: 1rem;
+      outline: none; font-family: inherit;
+    }
+    #pin-box input:focus { border-color: var(--yellow); }
+    #teacherLoginMsg { font-size: .85rem; margin-top: .5rem; min-height: 1.2rem; color: #ff8a80; }
     #pin-btn {
       width: 100%; margin-top: .8rem; padding: .75rem;
       background: var(--yellow); color: var(--navy); border: none;
@@ -186,22 +192,24 @@
 </head>
 <body>
 
-<!-- PIN GATE -->
-<div id="pin-gate">
+<!-- LOGIN DOCENTE -->
+<div id="login">
   <div id="pin-box">
     <div style="font-size:2.5rem;margin-bottom:.5rem">📊</div>
     <h2>Consolidación de Notas</h2>
     <p>TGA05 — Estructura de Datos para los Negocios</p>
-    <input type="password" id="pin-input" placeholder="PIN docente" maxlength="10"
-           onkeydown="if(event.key==='Enter')checkPin()">
-    <button class="btn btn-primary" id="pin-btn" onclick="checkPin()" style="width:100%;margin-top:.8rem">
+    <label for="teacherUser">Usuario docente</label>
+    <input type="text" id="teacherUser" autocomplete="username" placeholder="docente">
+    <label for="teacherPass">Contraseña</label>
+    <input type="password" id="teacherPass" autocomplete="current-password">
+    <button type="button" class="btn btn-primary" id="teacherLoginBtn" style="width:100%;margin-top:.8rem">
       Ingresar
     </button>
-    <p id="pin-error"></p>
-    <p style="font-size:.75rem;opacity:.5;margin-top:1rem">PIN por defecto: tga05</p>
+    <p id="teacherLoginMsg"></p>
   </div>
 </div>
 
+<div id="app" hidden>
 <!-- HEADER -->
 <header>
   <div class="hdr-inner">
@@ -288,6 +296,7 @@
 <div id="toast"></div>
 
 <script src="../js/supabase-config.js"></script>
+<script src="../js/teacher-auth.js"></script>
 <script>
 // ── Config Supabase (desde supabase-config.js o localStorage) ────────────────
 function getSupabaseConfig() {
@@ -300,21 +309,13 @@ function offeringCode() {
   return window.OFFERING_CODE || localStorage.getItem('gamif_offering_code') || 'TGA05-2026-2';
 }
 
-// ── PIN ───────────────────────────────────────────────────────────────────────
-function checkPin() {
-  const pin = document.getElementById('pin-input').value;
-  const stored = localStorage.getItem('tga05_prof_pin') || 'tga05';
-  if (pin === stored) {
-    document.getElementById('pin-gate').style.display = 'none';
-    initPage();
-  } else {
-    const el = document.getElementById('pin-error');
-    el.textContent = '❌ PIN incorrecto';
-    document.getElementById('pin-input').value = '';
-  }
-}
-document.getElementById('pin-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') checkPin();
+// ── Acceso docente (Supabase verify_teacher_login) ───────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  TeacherAuth.bindLoginForm({
+    onSuccess: function () {
+      initPage();
+    },
+  });
 });
 
 // ── Estado global ─────────────────────────────────────────────────────────────
