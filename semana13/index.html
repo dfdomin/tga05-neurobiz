@@ -949,6 +949,12 @@ if (document.readyState === "loading") {
     try { return JSON.parse(localStorage.getItem("tga05_students_v1") || "[]"); } catch(e) { return []; }
   }
 
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, function(m) {
+      return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[m];
+    });
+  }
+
   function saveProfile(cc, nombre, grupo, horario) {
     var profile = {};
     try { profile = JSON.parse(localStorage.getItem("tga05_global") || "{}"); } catch(e) {}
