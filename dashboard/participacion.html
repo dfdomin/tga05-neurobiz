@@ -88,6 +88,7 @@
   <script src="../js/academic-rules.js"></script>
   <script src="../js/academic-status-bar.js"></script>
   <script src="../js/celebration.js"></script>
+  <script src="../js/student-identicon.js"></script>
 </head>
 <body>
   <header>
@@ -523,6 +524,20 @@
 
     function esc(s) { return String(s ?? "").replace(/[&<>"']/g, m => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[m])); }
 
+    // ── Identicon helpers (student-identicon.js) ────────────────
+    function identiconInline(id) {
+      if (typeof window.renderIdenticonSVG !== 'function') return '';
+      var svg = window.renderIdenticonSVG(id);
+      if (!svg) return '';
+      return svg.replace('width="44" height="44"', 'width="24" height="24"');
+    }
+    function firmaName(id) {
+      return typeof window.getIdenticonFirmaName === 'function' ? window.getIdenticonFirmaName(id) : '?';
+    }
+    function verifCode(id) {
+      return typeof window.getIdenticonCode === 'function' ? window.getIdenticonCode(id) : '';
+    }
+
     function init() {
       const meta = getClassMeta();
       if (typeof meta.weekday !== "number") {
@@ -612,7 +627,7 @@
         const pts = todayPts[s.cc] || 0;
         return `<tr>
           <td><input type="checkbox" value="${ccAttr(s.cc)}" class="live-chk"></td>
-          <td><strong>${esc(s.name)}</strong></td>
+          <td style="white-space:nowrap">${identiconInline(s.cc)}&nbsp;<strong>${esc(s.name)}</strong> <span class="identicon-verify" style="font-size:.65rem;color:#7c3aed;font-weight:700;background:rgba(124,58,237,.1);padding:0 4px;border-radius:4px">${verifCode(s.cc)}</span> <span class="firma-dot" title="Pixel-firma: ${firmaName(s.cc)}" style="font-size:.6rem;color:#546e7a;opacity:.3">◇</span></td>
           <td>${esc(s.cc)}</td>
           <td>${esc(s.grupo || "-")}</td>
           <td>${pts}</td>
@@ -777,7 +792,7 @@
         const pct = calcAttendancePct(s.cc);
         const ccSafe = ccAttr(s.cc);
         return `<tr>
-          <td><strong>${esc(s.name)}</strong></td>
+          <td style="white-space:nowrap">${identiconInline(s.cc)}&nbsp;<strong>${esc(s.name)}</strong> <span class="identicon-verify" style="font-size:.65rem;color:#7c3aed;font-weight:700;background:rgba(124,58,237,.1);padding:0 4px;border-radius:4px">${verifCode(s.cc)}</span> <span class="firma-dot" title="Pixel-firma: ${firmaName(s.cc)}" style="font-size:.6rem;color:#546e7a;opacity:.3">◇</span></td>
           <td>${esc(s.cc)}</td>
           <td>${esc(s.grupo || "-")}</td>
           <td>

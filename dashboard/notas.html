@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="../js/supabase-config.js"></script>
+  <script src="../js/student-identicon.js"></script>
   <!-- SheetJS para generar XLSX en el navegador -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <style>
@@ -520,6 +521,20 @@ async function loadData() {
   }
 }
 
+// ── Identicon helpers (delegado a student-identicon.js) ────────────────────────
+function renderIdenticonSVGInline(id) {
+  if (typeof window.renderIdenticonSVG !== 'function') return '';
+  var svg = window.renderIdenticonSVG(id);
+  // reducir tamaño para tabla
+  return svg.replace('width="44" height="44"', 'width="28" height="28"').replace('viewBox="0 0 44 44"', 'viewBox="0 0 44 44"');
+}
+function getFirmaName(id) {
+  return typeof window.getIdenticonFirmaName === 'function' ? window.getIdenticonFirmaName(id) : '?';
+}
+function getVerifCode(id) {
+  return typeof window.getIdenticonCode === 'function' ? window.getIdenticonCode(id) : '';
+}
+
 // ── Renderizar tabla ──────────────────────────────────────────────────────────
 function renderTable(cfg) {
   if (!students.length) {
@@ -543,7 +558,7 @@ function renderTable(cfg) {
 
     return `<tr>
       <td>${i+1}</td>
-      <td><strong>${escHtml(s.nombre)}</strong></td>
+      <td style="white-space:nowrap">${renderIdenticonSVGInline(s.student_id)}&nbsp;<strong>${escHtml(s.nombre)}</strong> <span class="identicon-verify" style="font-size:.65rem;color:#7c3aed;font-weight:700;background:rgba(124,58,237,.1);padding:0 4px;border-radius:4px">${getVerifCode(s.student_id)}</span> <span class="identicon-firma" title="Pixel-firma: ${getFirmaName(s.student_id)}" style="font-size:.6rem;color:#546e7a;opacity:.4">◇</span></td>
       <td class="center">${escHtml(s.grupo)}</td>
       <td class="center">${s.semanas_count}/${cfg.semEsperadas}</td>
       <td class="center">${s.actividades}</td>

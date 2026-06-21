@@ -556,6 +556,83 @@ blockquote {
   .fib-code-block { font-size: .78rem; }
   .stack-column { max-width: 180px; }
 }
+
+/* ── MEJORA 1 · Callout de trazado ── */
+.callout-trace {
+  background: #eef6ff;
+  border-left: 4px solid #1a73e8;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.callout-trace h3 { margin-top: 0; color: #1a55b5; font-size: 1.05rem; }
+.callout-trace table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 0.875rem; }
+.callout-trace th { background: #d0e6ff; padding: 6px 10px; text-align: left; }
+.callout-trace td { padding: 6px 10px; border-bottom: 1px solid #c5d9f5; vertical-align: top; }
+.callout-trace tr:last-child td { border-bottom: none; }
+.callout-hint { margin-top: 0.75rem; margin-bottom: 0; font-size: 0.875rem; color: #444; }
+
+/* ── MEJORA 2 · Callout checkpoint ── */
+.callout-checkpoint {
+  background: #f0faf0;
+  border-left: 4px solid #2e7d32;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+}
+.callout-checkpoint h3 { margin-top: 0; color: #1b5e20; font-size: 1.05rem; }
+.callout-checkpoint ol { margin: 0.5rem 0 0.75rem 1.25rem; }
+.callout-checkpoint li { margin-bottom: 0.5rem; font-size: 0.9rem; }
+.callout-checkpoint details { margin-top: 0.5rem; font-size: 0.875rem; }
+.callout-checkpoint summary {
+  cursor: pointer; color: #2e7d32; font-weight: 600;
+  user-select: none; padding: 4px 0;
+}
+.callout-checkpoint details ul { margin: 0.5rem 0 0.5rem 1.25rem; }
+.callout-checkpoint details p { margin: 0.5rem 0 0; }
+
+/* ── MEJORA 3 · Callout puente (bridge) ── */
+.callout-bridge {
+  background: #fff8e1;
+  border-left: 4px solid #f9a825;
+  border-radius: 8px;
+  padding: 1.1rem 1.5rem;
+  margin: 2rem 0 0.75rem;
+}
+.callout-bridge h3 { margin-top: 0; color: #e65100; font-size: 1rem; }
+.callout-bridge p { margin: 0; font-size: 0.9rem; }
+.code-note {
+  font-size: 0.875rem;
+  color: #555;
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin: 0 0 2rem;
+}
+
+/* ── MEJORA 4-A · Callout nivel ── */
+.callout-level {
+  background: #fff3e0;
+  border-left: 4px solid #e65100;
+  border-radius: 8px;
+  padding: 0.9rem 1.25rem;
+  margin: 1.5rem 0 0.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+.level-badge {
+  background: #e65100;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+.callout-level p { margin: 0; font-size: 0.9rem; color: #333; }
 </style>
 
 <style id="progress-tracker-css">
@@ -773,6 +850,41 @@ blockquote {
         <section id="teoria" class="card">
             <h2>Teoría aplicada a negocios</h2>
             <p class="section-intro">La teoría se construye con base en literatura clásica de estructuras de datos y se traduce al lenguaje operativo de NeuroBiz.</p>
+
+            <!-- ══════════════════════════════════════════════════════
+                 MEJORA 1 · Trazado manual al inicio de la teoría
+                 Mueve la comprensión concreta ANTES de la abstracción
+                 ══════════════════════════════════════════════════════ -->
+            <div class="callout callout-trace">
+              <h3>🔢 Antes de leer la teoría: traza esto a mano</h3>
+              <p>
+                Antes de ver las definiciones formales, imagina cinco acciones sobre el historial de
+                un paciente de NeuroBiz. Dibuja la pila en tu cuaderno después de cada paso.
+                La tabla muestra la solución — intenta hacerla tú primero.
+              </p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Paso</th>
+                    <th>Operación</th>
+                    <th>Estado de la pila (base → cima)</th>
+                    <th>¿Qué ve el terapeuta?</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>push <em>Lenguaje</em></td><td>[Lenguaje]</td><td>Primera sesión cargada.</td></tr>
+                  <tr><td>2</td><td>push <em>Integración sensorial</em></td><td>[Lenguaje, Integración]</td><td>La cima cambió.</td></tr>
+                  <tr><td>3</td><td>push <em>Seguimiento TDAH</em></td><td>[Lenguaje, Integración, Seguimiento TDAH]</td><td>La sesión más reciente queda arriba.</td></tr>
+                  <tr><td>4</td><td>pop</td><td>[Lenguaje, Integración]</td><td>Se deshizo la última carga.</td></tr>
+                  <tr><td>5</td><td>peek</td><td>[Lenguaje, Integración]</td><td>Consulta Integración sin borrar nada.</td></tr>
+                </tbody>
+              </table>
+              <p class="callout-hint">
+                💡 <strong>Pista clave:</strong> la cima siempre es el elemento más a la derecha de la lista.
+                <code>peek</code> lo lee; <code>pop</code> lo quita; <code>push</code> agrega uno nuevo a la derecha.
+              </p>
+            </div>
+
             <h3>1. ¿Qué es una pila y por qué importa en negocios?</h3>
 <p>Cairó Battistutti y Guardati Bueno (2006) describen la pila como una estructura lineal donde las inserciones y extracciones se realizan sobre un mismo extremo. Esa idea, traducida al contexto de NeuroBiz, significa que el dato más reciente queda en la <em>cima</em> y es el primero en consultarse. Joyanes Aguilar (2014) insiste en que la elección de la estructura condiciona la eficiencia del algoritmo; por eso, antes de programar, conviene identificar la lógica del proceso.</p>
 <p>En un historial terapéutico, el terapeuta normalmente no empieza por la primera sesión histórica, sino por la más reciente. El comportamiento esperado es <strong>LIFO</strong> (<em>Last In, First Out</em>): el último dato que entra es el primero en salir. Weiss (2014) explica que esta organización facilita resolver problemas donde la recencia es crítica, como deshacer acciones, retroceder estados o inspeccionar eventos recientes.</p>
@@ -830,6 +942,35 @@ blockquote {
 </table>
         </section>
 
+        <!-- ══════════════════════════════════════════════════════
+             MEJORA 2 · Checkpoint de autoevaluación
+             Permite que la estudiante se calibre antes de codificar
+             ══════════════════════════════════════════════════════ -->
+        <div class="callout callout-checkpoint">
+          <h3>🧭 Checkpoint: ¿estás lista para el código?</h3>
+          <p>Responde estas dos preguntas mentalmente antes de continuar. No tienen puntos — son para que tú misma sepas dónde estás.</p>
+          <ol>
+            <li>
+              <strong>Sin ver la tabla:</strong> ¿puedes decir de memoria qué hace <code>peek()</code>
+              sin que la pila pierda datos?
+            </li>
+            <li>
+              <strong>En papel:</strong> dibuja el estado de la pila después de
+              <code>push(A)</code>, <code>push(B)</code>, <code>pop()</code>.
+              ¿Qué queda en la cima?
+            </li>
+          </ol>
+          <details>
+            <summary>Ver respuestas</summary>
+            <ul>
+              <li><code>peek()</code> devuelve el elemento en la cima <strong>sin eliminarlo</strong>. La pila no cambia de tamaño.</li>
+              <li>Después de <code>push(A) → push(B) → pop()</code>, la pila queda <code>[A]</code>. La cima es <strong>A</strong>.</li>
+            </ul>
+            <p>✅ Si respondiste ambas correctamente: estás lista para los bloques de Python.<br>
+               ⬅️ Si alguna estuvo difícil: regresa a la Sección 2 (operaciones esenciales) y revisa la tabla de operaciones.</p>
+          </details>
+        </div>
+
         <section id="python" class="card">
             <h2>Python como herramienta analítica (Google Colab)</h2>
             <p class="section-intro">Ejecuta cada bloque en Colab o Replit, documenta el comportamiento observado y conecta la salida con una decisión de negocio.</p>
@@ -884,6 +1025,79 @@ print(peek_sesion(historial))</textarea>
                 <strong>Uso pedagógico:</strong> Sirve para que el estudiante relacione rápidamente la teoría con operaciones reales usando una lista como pila LIFO en Colab.
             </div>
             
+            <!-- ══════════════════════════════════════════════════════
+                 MEJORA 3 · Bloque 1.5 — Puente cognitivo
+                 Clase Stack mínima, sin excepciones ni max_size
+                 ══════════════════════════════════════════════════════ -->
+            <div class="callout callout-bridge">
+              <h3>🌉 Bloque 1.5 · Mi primera clase <code>Stack</code> (versión mínima)</h3>
+              <p>
+                El Bloque 1 usó una <code>list</code> directamente. El Bloque 2 introduce
+                una clase completa con capacidad máxima y excepciones. Este bloque intermedio
+                hace el <strong>mismo trabajo que el Bloque 1</strong>, pero envuelto en una clase.
+                Compara los resultados: son idénticos.
+              </p>
+            </div>
+
+            <div class="code-block" id="bloque15">
+              <div class="code-header">
+                <span class="code-filename">colab_stack_minima.py</span>
+                <button class="run-btn" onclick="copyBlock('bloque15')">📋 Copiar</button>
+              </div>
+              <pre><code class="language-python"># ── Bloque 1.5 · Clase Stack mínima (sin límite, sin excepciones) ──
+# Propósito: ver la MISMA lógica del Bloque 1, pero dentro de una clase.
+# Compara: push = append, pop = pop, peek = [-1]. Nada nuevo aún.
+
+class Stack:
+    def __init__(self):
+        self._items = []        # lista interna; el prefijo _ indica "no tocar desde afuera"
+
+    def push(self, item):
+        self._items.append(item)
+
+    def pop(self):
+        if self._items:         # solo retira si hay algo
+            return self._items.pop()
+
+    def peek(self):
+        if self._items:
+            return self._items[-1]
+
+    def is_empty(self):
+        return len(self._items) == 0
+
+# ── Prueba con sesiones de NeuroBiz ──
+historial = Stack()
+
+historial.push("Lenguaje")
+historial.push("Integración sensorial")
+print("Cima actual:", historial.peek())   # → Integración sensorial
+
+historial.pop()
+print("Después de pop:", historial.peek()) # → Lenguaje
+
+print("¿Está vacía?", historial.is_empty()) # → False</code></pre>
+            </div>
+
+            <p class="code-note">
+              <strong>Compara con el Bloque 1:</strong> el resultado es idéntico. La diferencia es que ahora
+              <code>push</code>, <code>pop</code> y <code>peek</code> son <em>métodos</em> de un objeto,
+              no funciones sueltas. Eso es todo. El Bloque 2 agrega una sola idea nueva encima de esto:
+              la capacidad máxima y qué pasa cuando se supera.
+            </p>
+
+            <!-- ══════════════════════════════════════════════════════
+                 MEJORA 4-A · Señal de dificultad creciente
+                 ══════════════════════════════════════════════════════ -->
+            <div class="callout callout-level">
+              <span class="level-badge">⚡ Nivel +1</span>
+              <p>
+                Este bloque introduce <strong>una sola idea nueva</strong> respecto al Bloque 1.5:
+                la pila ahora tiene una <em>capacidad máxima</em> definida por la empresa, y cuando se
+                supera, el sistema lanza una excepción (<code>OverflowError</code>). Si el Bloque 1.5
+                aún no te quedó claro, regresa antes de continuar.
+              </p>
+            </div>
 
             <div class="mini-code-cell">
                 <div class="mini-code-header">
@@ -975,7 +1189,12 @@ print("Nueva cima:", historial.peek())</textarea>
             return
         ultima = self.historial_acciones.pop()
         print(f"Se deshace: {ultima['descripcion']}")
-        # reconstrucción mínima del estado usando una copia base
+        # ── ¿Por qué reconstruimos desde cero? ──────────────────────────────
+        # Una pila solo guarda "qué hicimos", NO el estado anterior completo.
+        # Para "deshacer", volvemos al estado base (como borrar un borrador)
+        # y reaplicamos TODO excepto la última acción que acabamos de extraer.
+        # Es el mismo patrón que usaría un editor de texto con Ctrl+Z.
+        # ─────────────────────────────────────────────────────────────────────
         self.agenda = {
             "paciente": "Camila",
             "sesion_activa": "Lenguaje",

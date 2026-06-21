@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Revisión de Estudiantes — TGA05</title>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="../js/student-identicon.js"></script>
   <style>
     :root {
       --navy:#1E2843; --navy2:#2d3a5e; --yellow:#FFDF2D;
@@ -405,8 +406,12 @@ function buildCard(s) {
   const isRisk = pct < 30;
   const isReviewed = reviewedIds.has(s.id);
   const avgQuiz = s.quizScores.length ? (s.quizScores.reduce((a,b)=>a+b,0)/s.quizScores.length).toFixed(1) : '—';
-  const initials = s.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
   const lastSeen = s.lastActivity ? new Date(s.lastActivity).toLocaleDateString('es-CO',{month:'short',day:'numeric'}) : '—';
+
+  // Generar SVG identicon inline
+  var identiconSvg = window.renderIdenticonSVG ? window.renderIdenticonSVG(s.id) : '';
+  const firmaName = window.getIdenticonFirmaName ? window.getIdenticonFirmaName(s.id) : '?';
+  const verifCode = window.getIdenticonCode ? window.getIdenticonCode(s.id) : '';
 
   const weekPills = Array.from({length: Math.min(14,7)}, (_,i) => {
     const w = i+1;
@@ -419,10 +424,10 @@ function buildCard(s) {
   return `
   <div class="student-card ${isRisk ? 'at-risk' : ''} ${isReviewed ? 'reviewed' : ''}" id="card-${s.id}">
     <div class="card-header" onclick="toggleCard('${s.id}')">
-      <div class="student-avatar">${initials}</div>
+      <div class="student-avatar" style="overflow:hidden;border-radius:6px;width:40px;height:40px;background:transparent;display:flex;align-items:center;justify-content:center">${identiconSvg}</div>
       <div class="student-info">
-        <div class="student-name">${s.name} <span style="font-size:.75rem;color:var(--muted);font-weight:400">· Grupo ${s.grupo}</span></div>
-        <div class="student-meta">Última actividad: ${lastSeen} · ${s.weeks.length}/${EXPECTED_WEEKS} semanas</div>
+        <div class="student-name">${s.name} <span class="identicon-verify" style="font-size:.65rem;color:#7c3aed;font-weight:700;background:rgba(124,58,237,.1);padding:0 4px;border-radius:4px">${verifCode}</span> <span class="identicon-firma" title="Pixel-firma: ${firmaName}" style="font-size:.6rem;color:#546e7a;opacity:.5;margin-left:2px">◇</span></div>
+        <div class="student-meta">📌 ${s.grupo} · Última actividad: ${lastSeen} · ${s.weeks.length}/${EXPECTED_WEEKS} semanas</div>
       </div>
       <div class="student-badges">
         ${isRisk ? '<span class="sbadge sbadge-risk">⚠️ Riesgo</span>' : '<span class="sbadge sbadge-ok">✅ Activo</span>'}
@@ -431,7 +436,7 @@ function buildCard(s) {
         ${isReviewed ? '<span class="sbadge sbadge-ok">✔ Revisado</span>' : ''}
       </div>
       <span class="expand-icon">▼</span>
-    </div>
+    </div>`
     <div class="card-body" id="body-${s.id}">
       <div class="cb-section">
         <h4>📅 Semanas visitadas</h4>
