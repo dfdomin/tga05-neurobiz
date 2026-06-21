@@ -977,6 +977,7 @@ if (document.readyState === "loading") {
       if (el) el.style.display = (id === name) ? "block" : "none";
     });
   }
+  window.showStep = showStep;
 
   function showModal() {
     var overlay = document.getElementById("pt-overlay");
@@ -1055,7 +1056,7 @@ if (document.readyState === "loading") {
       nameEl.dataset.nombre  = found.name;
       nameEl.dataset.grupo   = found.grupo   || "";
       nameEl.dataset.horario = found.horario || "";
-      showStep("pt-step2a");
+      window.showStep("pt-step2a");
       var btn = document.getElementById("pt-modal-btn");
       if (btn) setTimeout(function(){ btn.focus(); }, 100);
       return;
@@ -1083,25 +1084,25 @@ if (document.readyState === "loading") {
             nameEl.dataset.nombre  = r.name;
             nameEl.dataset.grupo   = r.grupo   || "";
             nameEl.dataset.horario = r.horario || "";
-            showStep("pt-step2a");
+            window.showStep("pt-step2a");
           } else {
             var nombreInp = document.getElementById("pt-modal-nombre");
             if (nombreInp) nombreInp.dataset.cc = cc;
-            showStep("pt-step2b");
+            window.showStep("pt-step2b");
             if (nombreInp) setTimeout(function(){ nombreInp.focus(); }, 100);
           }
         }).catch(function(){
           if (errEl) errEl.textContent = "";
           var nombreInp = document.getElementById("pt-modal-nombre");
           if (nombreInp) nombreInp.dataset.cc = cc;
-          showStep("pt-step2b");
+          window.showStep("pt-step2b");
           if (nombreInp) setTimeout(function(){ nombreInp.focus(); }, 100);
         });
       return;
     }
     var nombreInp = document.getElementById("pt-modal-nombre");
     if (nombreInp) nombreInp.dataset.cc = cc;
-    showStep("pt-step2b");
+    window.showStep("pt-step2b");
     if (nombreInp) setTimeout(function(){ nombreInp.focus(); }, 100);
   };
 

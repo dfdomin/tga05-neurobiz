@@ -2359,18 +2359,18 @@ if (document.readyState === "loading") {
             nameEl.dataset.nombre  = r.name;
             nameEl.dataset.grupo   = r.grupo   || "";
             nameEl.dataset.horario = r.horario || "";
-            showStep("pt-step2a");
+            window.showStep("pt-step2a");
           } else {
             var nombreInp = document.getElementById("pt-modal-nombre");
             if (nombreInp) nombreInp.dataset.cc = cc;
-            showStep("pt-step2b");
+            window.showStep("pt-step2b");
             if (nombreInp) setTimeout(function(){ nombreInp.focus(); }, 100);
           }
         }).catch(function(){
           if (errEl) errEl.textContent = "";
           var nombreInp = document.getElementById("pt-modal-nombre");
           if (nombreInp) nombreInp.dataset.cc = cc;
-          showStep("pt-step2b");
+          window.showStep("pt-step2b");
           if (nombreInp) setTimeout(function(){ nombreInp.focus(); }, 100);
         });
       return;
