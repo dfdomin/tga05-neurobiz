@@ -109,6 +109,41 @@
     pt.__iubCloudDirect = true;
     global.PT = pt;
 
+    // ── Inject grade display into widget ────────────────────────
+    function ensureGradeDisplay() {
+      var container = document.getElementById("pt-grade");
+      if (container) return container;
+      var widget = document.getElementById("pt-widget");
+      if (!widget) return null;
+      var body = widget.querySelector("#pt-body, .pt-body, .pt-content");
+      if (!body) body = widget;
+      container = document.createElement("div");
+      container.id = "pt-grade";
+      container.style.cssText = "padding:.35rem .5rem;border-top:1px solid #DEDFE4;font-size:.78rem;color:#1E2843;display:flex;justify-content:space-between;align-items:center";
+      container.innerHTML = '<span>📊 Nota formativa: <strong id="pt-grade-value" style="font-size:.95rem">—</strong> / 5.0</span><span style="font-size:.68rem;opacity:.6">XP <span id="pt-grade-xp">0</span>/995</span>';
+      body.appendChild(container);
+      return container;
+    }
+    function updateGradeDisplay() {
+      var valEl = document.getElementById("pt-grade-value");
+      var xpEl = document.getElementById("pt-grade-xp");
+      if (!valEl || !xpEl) return;
+      if (typeof GamifSDK !== "object") return;
+      var cfg = GamifSDK.getConfig();
+      var txp = GamifSDK.totalXP(cfg);
+      var nota = GamifSDK.calcNotaSimple(txp, 995);
+      xpEl.textContent = txp;
+      valEl.textContent = nota.toFixed(2);
+      valEl.style.color = nota >= 3.0 ? "#2e7d32" : nota >= 2.0 ? "#e65100" : "#c62828";
+    }
+    ensureGradeDisplay();
+    updateGradeDisplay();
+    // Re-update on next tick (after async hydrate)
+    setTimeout(updateGradeDisplay, 300);
+    setTimeout(updateGradeDisplay, 1000);
+    // Live update every 3s for XP changes
+    setInterval(updateGradeDisplay, 3000);
+
     if (typeof pt.save === "function") {
       var origSave = pt.save;
       pt.save = function () {
@@ -170,6 +205,7 @@
 
   function exposeAndPatch() {
     exposePT();
+    renderIdenticonProfile();
     hideLegacyUi();
   }
 
@@ -201,7 +237,40 @@
   document.addEventListener("iub:profile-saved", function () {
     exposeAndPatch();
     hydrateFromCloud().then(pushToCloud);
+    renderIdenticonProfile();
   });
+
+  function renderIdenticonProfile() {
+    if (typeof makeIdenticon !== "function") return;
+    var container = document.getElementById("pt-profile");
+    if (!container) {
+      // Create the profile container inside the PT widget if missing
+      var widget = document.getElementById("pt-widget") || document.querySelector(".pt-widget");
+      var body = widget ? widget.querySelector(".pt-body, .pt-content, [class*='body']") : null;
+      if (!body && widget) body = widget;
+      if (!body) return;
+      container = document.createElement("div");
+      container.id = "pt-profile";
+      container.style.cssText = "padding:.3rem .5rem;border-top:1px solid #DEDFE4;margin-top:.3rem";
+      body.appendChild(container);
+    }
+    var profile = {};
+    try { profile = JSON.parse(localStorage.getItem(global.GAMIF_PREFIX + "_global") || "{}"); } catch(e) {}
+    try { var g = GamifSDK.loadProfile(); if (g && g.cc) profile = g; } catch(e) {}
+    if (!profile.cc || !profile.nombre) return;
+    container.innerHTML = "";
+    var el = makeIdenticon(profile.cc, profile.nombre, true);
+    if (el) container.appendChild(el);
+    // Add verification code
+    var code = window.getIdenticonCode ? window.getIdenticonCode(profile.cc) : "";
+    if (code && container) {
+      var codeSpan = document.createElement("span");
+      codeSpan.style.cssText = "display:inline-block;font-weight:800;font-family:monospace;background:#E9EAED;padding:.05rem .35rem;border-radius:4px;font-size:.72rem;color:#1E2843;margin-left:6px;vertical-align:middle";
+      codeSpan.textContent = code;
+      codeSpan.title = "Código de verificación (comparte con tu docente para confirmar tu identidad)";
+      container.appendChild(codeSpan);
+    }
+  }
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);

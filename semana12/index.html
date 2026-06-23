@@ -515,36 +515,37 @@ const PT = (function() {
     msg("⏳ Sincronizando…", "#fff9c4");
     let synced = false;
 
-    // ── Supabase (recomendado) ─────────────────────
+    // ── Supabase vía RPC ───────────────────────────
     if (sbUrl && sbKey) {
       try {
-        const res = await fetch(sbUrl + "/rest/v1/student_progress", {
+        const offering = localStorage.getItem("tga05_course_code") || "TGA05-2026-2";
+        const res = await fetch(sbUrl + "/rest/v1/rpc/upsert_weekly_progress", {
           method : "POST",
           headers: {
             "apikey"       : sbKey,
             "Authorization": "Bearer " + sbKey,
-            "Content-Type" : "application/json",
-            "Prefer"       : "resolution=merge-duplicates"
+            "Content-Type" : "application/json"
           },
           body: JSON.stringify({
-            student_name    : state.nombre         || "Anónimo",
-            student_id      : state.id_estudiante  || state.cc || "desconocido",
-            semana          : state.semana,
-            xp              : state.xp             || 0,
-            quiz_answers    : state.quiz_respuestas || {},
-            quiz_score      : state.quiz_puntaje    || 0,
-            hti_done        : !!state.hti_entregado,
-            activity_done   : !!state.actividad_completada,
-            grupo           : state.grupo          || "",
-            horario         : state.horario        || "",
-            updated_at      : new Date().toISOString()
+            p_offering_code: offering,
+            p_student_id   : state.id_estudiante || state.cc || "desconocido",
+            p_student_name : state.nombre         || "Anónimo",
+            p_semana       : state.semana,
+            p_xp           : state.xp             || 0,
+            p_quiz_answers : state.quiz_respuestas || {},
+            p_quiz_score   : state.quiz_puntaje    || 0,
+            p_hti_done     : !!(state.hti_entregado || state.hti_done),
+            p_activity_done: !!(state.actividad_completada || state.activity_done),
+            p_grupo        : state.grupo           || "",
+            p_horario      : state.horario         || ""
           })
         });
         if (res.ok || res.status === 201) {
           synced = true;
           msg("✅ Guardado en Supabase ☁️", "lightgreen");
         } else {
-          msg("❌ Supabase: error " + res.status, "salmon");
+          const t = await res.text();
+          msg("❌ Supabase: error " + res.status + " - " + t.substring(0,60), "salmon");
         }
       } catch(e) {
         msg("❌ Sin conexión (Supabase). Local guardado.", "salmon");
