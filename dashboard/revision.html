@@ -6,6 +6,7 @@
   <title>Revisión de Estudiantes — TGA05</title>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="../js/student-identicon.js"></script>
+  <script src="../js/supabase-config.js"></script>
   <style>
     :root {
       --navy:#1E2843; --navy2:#2d3a5e; --yellow:#FFDF2D;
@@ -277,7 +278,7 @@ async function loadStudents() {
   }
 
   try {
-    const r = await fetch(url + '/rest/v1/student_progress?select=*&order=student_name.asc', {
+    const r = await fetch(url + '/rest/v1/v_legacy_student_progress?select=*&order=student_name.asc', {
       headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
     });
     if (!r.ok) throw new Error('API error ' + r.status);
