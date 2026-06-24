@@ -677,7 +677,7 @@ blockquote {
     <button id="pt-toggle">▲</button>
   </div>
   <div id="pt-body">
-    <input id="pt-nombre" type="text" placeholder="Tu nombre completo…" oninput="ptSaveLocal()" />
+    <input id="pt-nombre" type="text" placeholder="Tu número de cédula…" oninput="ptSaveLocal()" />
     <div id="pt-xp-bar-wrap"><div id="pt-xp-bar" style="width:0%"></div></div>
     <div id="pt-xp-label"><span id="pt-semana-label">Semana —</span><span id="pt-xp-count">0 XP</span></div>
     <div id="pt-btns" style="display:flex;gap:5px;align-items:center">
@@ -1656,7 +1656,10 @@ const PT = (function() {
 
   let state = {
     nombre          : "",
+    cc              : "",
     id_estudiante   : "",
+    grupo           : "",
+    horario         : "",
     semana          : SEMANA,
     xp              : XP_BASE,
     quiz_respuestas : {},
@@ -1670,23 +1673,27 @@ const PT = (function() {
     try {
       const raw = localStorage.getItem(LS_KEY);
       if (raw) Object.assign(state, JSON.parse(raw));
+
+      // Cargar perfil global (nombre, cc, grupo, horario)
       const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
-      if (!state.nombre       && global.nombre)        state.nombre        = global.nombre;
-      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante;
+      if (!state.nombre        && global.nombre)        state.nombre        = global.nombre;
+      if (!state.cc            && global.cc)            state.cc            = global.cc;
+      if (!state.id_estudiante && global.id_estudiante) state.id_estudiante = global.id_estudiante || global.cc;
+      if (!state.grupo         && global.grupo)         state.grupo         = global.grupo;
+      if (!state.horario       && global.horario)       state.horario       = global.horario;
     } catch(e) { console.warn("PT load error:", e); }
   }
 
   function save() {
+    // Capturar cédula del input
     const inp = document.getElementById("pt-nombre");
     if (inp && inp.value.trim()) {
-      state.nombre = inp.value.trim();
-      if (!state.id_estudiante) {
-        state.id_estudiante = state.nombre.toLowerCase()
-          .replace(/\s+/g,"_").replace(/[^a-z0-9_]/g,"")
-          .substring(0,20) + "_" + Math.random().toString(36).substr(2,4);
-      }
+      const cc = inp.value.trim().replace(/\D/g, "");
+      state.cc = cc;
+      state.id_estudiante = cc;
+      // Guardar perfil global
       const global = JSON.parse(localStorage.getItem(LS_GLOBAL) || "{}");
-      global.nombre = state.nombre;
+      global.cc = state.cc;
       global.id_estudiante = state.id_estudiante;
       localStorage.setItem(LS_GLOBAL, JSON.stringify(global));
     }
@@ -1703,7 +1710,7 @@ const PT = (function() {
     if (xpBar)   xpBar.style.width   = Math.min(state.xp, XP_MAX) + "%";
     if (xpCount) xpCount.textContent = state.xp + " XP";
     if (semLbl)  semLbl.textContent  = "Semana " + SEMANA;
-    if (inp && !inp.value && state.nombre) inp.value = state.nombre;
+    if (inp && !inp.value && state.cc) inp.value = state.cc;
 
     document.querySelectorAll(".xp-fill,[data-target]").forEach(el => {
       el.style.width = Math.min(state.xp, XP_MAX) + "%";
@@ -1746,7 +1753,7 @@ const PT = (function() {
           body: JSON.stringify({
             p_offering_code: offering,
             p_student_id   : state.id_estudiante || state.cc || "desconocido",
-            p_student_name : state.nombre         || "Anónimo",
+            p_student_name : state.nombre         || state.cc || "Anónimo",
             p_semana       : state.semana,
             p_xp           : state.xp             || 0,
             p_quiz_answers : state.quiz_respuestas || {},
@@ -1905,12 +1912,12 @@ const PT = (function() {
       }
     });
 
-    const nombreInp = document.getElementById("pt-nombre");
-    if (nombreInp) {
-      nombreInp.addEventListener("blur", () => {
-        if (nombreInp.value.trim() && !state._nombre_xp) {
-          state._nombre_xp = true;
-          addXP(5, "Perfil configurado");
+    const ccInp = document.getElementById("pt-nombre");
+    if (ccInp) {
+      ccInp.addEventListener("blur", () => {
+        if (ccInp.value.trim() && !state._cc_xp) {
+          state._cc_xp = true;
+          addXP(5, "Cédula registrada");
         }
       });
     }
@@ -1985,18 +1992,14 @@ if (document.readyState === "loading") {
     <h2 id="pt-modal-title">👋 ¡Bienvenido a TGA05!</h2>
     <p class="sub">NeuroBiz S.A.S. · Estructura de Datos para los Negocios</p>
     <div class="field">
-      <label for="pt-modal-nombre">Tu nombre completo *</label>
-      <input id="pt-modal-nombre" type="text" placeholder="Ej: María García López"
-        autocomplete="name" autofocus
+      <label for="pt-modal-cc">Número de cédula / documento *</label>
+      <input id="pt-modal-cc" type="tel" inputmode="numeric" pattern="[0-9]*"
+        placeholder="Ej: 1043158867" autocomplete="off" autofocus
         onkeydown="if(event.key==='Enter')ptModalSetup()" />
-    </div>
-    <div class="field">
-      <label for="pt-modal-grupo">Grupo / Paralelo</label>
-      <input id="pt-modal-grupo" type="text" placeholder="Ej: GA-01" />
     </div>
     <button id="pt-modal-btn" onclick="ptModalSetup()">¡Empezar! 🚀</button>
     <div id="pt-modal-error"></div>
-    <p id="pt-modal-xp">⭐ Recibirás +5 XP por configurar tu perfil</p>
+    <p id="pt-modal-xp">🔒 Tu cédula identifica tu progreso — no se comparte. +5 XP al registrarla.</p>
   </div>
 </div>
 
@@ -2005,7 +2008,7 @@ if (document.readyState === "loading") {
   function shouldShowModal() {
     try {
       var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
-      return !g.nombre || g.nombre.trim().length < 2;
+      return !g.cc || String(g.cc).trim().length < 5;
     } catch(e) { return true; }
   }
 
@@ -2013,46 +2016,37 @@ if (document.readyState === "loading") {
     var overlay = document.getElementById("pt-overlay");
     if (overlay) {
       overlay.style.display = "flex";
-      var inp = document.getElementById("pt-modal-nombre");
+      var inp = document.getElementById("pt-modal-cc");
       try {
         var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
-        if (g.nombre && inp) inp.value = g.nombre;
-        var gInp = document.getElementById("pt-modal-grupo");
-        if (g.grupo && gInp) gInp.value = g.grupo;
+        if (g.cc && inp) inp.value = g.cc;
       } catch(e) {}
       if (inp) setTimeout(function(){ inp.focus(); }, 100);
     }
   }
 
   window.ptModalSetup = function() {
-    var nombreInp = document.getElementById("pt-modal-nombre");
-    var grupoInp  = document.getElementById("pt-modal-grupo");
-    var errEl     = document.getElementById("pt-modal-error");
-    var nombre    = nombreInp ? nombreInp.value.trim() : "";
-    var grupo     = grupoInp  ? grupoInp.value.trim()  : "";
+    var ccInp  = document.getElementById("pt-modal-cc");
+    var errEl  = document.getElementById("pt-modal-error");
+    var cc     = ccInp ? ccInp.value.trim().replace(/\D/g, "") : "";
 
-    if (!nombre || nombre.length < 3) {
-      if (errEl) errEl.textContent = "Por favor escribe tu nombre completo (mínimo 3 caracteres).";
-      if (nombreInp) nombreInp.focus();
+    if (!cc || cc.length < 5) {
+      if (errEl) errEl.textContent = "Ingresa un número de cédula válido (mínimo 5 dígitos).";
+      if (ccInp) ccInp.focus();
       return;
     }
 
     var profile = {};
     try { profile = JSON.parse(localStorage.getItem("tga05_global") || "{}"); } catch(e) {}
-    profile.nombre = nombre;
-    if (grupo) profile.grupo = grupo;
-    if (!profile.id_estudiante) {
-      profile.id_estudiante = nombre.toLowerCase()
-        .replace(/\s+/g, "_").replace(/[^a-z0-9_áéíóúñ]/g, "")
-        .substring(0, 22) + "_" + Math.random().toString(36).substr(2, 4);
-    }
+    profile.cc = cc;
+    profile.id_estudiante = cc;
     localStorage.setItem("tga05_global", JSON.stringify(profile));
 
     var ptInp = document.getElementById("pt-nombre");
-    if (ptInp) { ptInp.value = nombre; ptInp.dispatchEvent(new Event("input")); }
+    if (ptInp) { ptInp.value = cc; ptInp.dispatchEvent(new Event("input")); }
 
     if (typeof PT !== "undefined" && typeof PT.addXP === "function") {
-      PT.addXP(5, "Perfil configurado ✨");
+      PT.addXP(5, "Cédula registrada ✨");
     }
 
     var overlay = document.getElementById("pt-overlay");
@@ -2069,7 +2063,6 @@ if (document.readyState === "loading") {
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", function(){
-      // Si hay cc almacenada, verificar contra Supabase antes de mostrar modal
       try {
         var g = JSON.parse(localStorage.getItem("tga05_global") || "{}");
         if (g && g.cc && String(g.cc).trim().length >= 5) {
