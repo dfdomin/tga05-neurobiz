@@ -6,7 +6,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TGA05 Semana 4 - Colas (Queue) para lista de espera y equidad</title>
+  <title>TGA05 Semana 4 - Datos para reportes y Big Data inicial</title>
     <style>:root {
     --primary:   #1E2843;
     --primary-2: #2d3a5e;
@@ -620,6 +620,7 @@ blockquote {
   <script src="../js/academic-status-bar.js"></script>
   <script src="../js/gamification-sdk.js"></script>
   <script src="../js/celebration.js"></script>
+  <script src="../js/student-identicon.js"></script>
   <script src="../js/week-auto-sync.js"></script>
   <script src="../js/reading-tracker.js"></script>
   <script src="../js/reading-xp-policy.js"></script>
@@ -633,11 +634,11 @@ blockquote {
                 <span class="week-chip">Semana 4 de 14</span>
                 <span class="micro-chip">Rol activo: Analista de Datos Estratégico</span>
             </div>
-            <h1>Colas (Queue) para lista de espera y equidad</h1>
-            <p class="lead">Concepto FIFO, operaciones enqueue / dequeue / peek / isEmpty, representación y aplicaciones organizacionales usando la lista de espera de pacientes de NeuroBiz.</p>
+            <h1>Datos tabulares para reportes y decisiones</h1>
+            <p class="lead">Del dato operativo al reporte útil: tablas, CSV, limpieza básica, filtrado, agrupación y lectura de resultados con un caso NeuroBiz adaptado a Big Data inicial.</p>
             <div class="xp-shell">
                 <div class="xp-track"><div class="xp-fill" data-progress="50%"></div></div>
-                <div class="xp-label"><span>XP acumulada del módulo</span><span>750 / 1500 XP · Nivel Gestor de flujo</span></div>
+                <div class="xp-label"><span>XP acumulada del módulo</span><span>750 / 1500 XP · Nivel Gestor de datos</span></div>
             </div>
         </div>
     </header>
@@ -686,75 +687,77 @@ blockquote {
             <h2>Memorando NeuroBiz</h2>
             <p class="section-intro">Narrativa inmersiva para activar el caso transversal de la asignatura.</p>
             <div class="bloom-badge">Bloom visible de la semana: Recordar → Aplicar</div>
-            <div class="memo-box"><p><strong>Memorando interno NB-04.</strong> La coordinación operativa de NeuroBiz necesita mejorar la gestión de la lista de espera de pacientes. El criterio institucional es de equidad: <strong>quien se registra primero debe ser atendido primero</strong>, salvo que exista una política explícita de prioridad clínica.</p>
-<p>Tu rol como <strong>Analista de Datos Estratégico</strong> consiste en modelar ese flujo con una estructura que refleje el orden de llegada, permita atender pacientes sin alterar injustamente la secuencia y deje evidencia clara del estado de la espera en cada momento.</p>
-<div class="mini-grid">
-    <div class="info-box">
-        <strong>Problema de negocio:</strong>
-        <ul class="callout-list">
-            <li>Evitar saltos arbitrarios en la asignación de turnos.</li>
-            <li>Simular el proceso de llegada y atención en Python.</li>
-            <li>Traducir el principio FIFO a una justificación de equidad operativa.</li>
-        </ul>
-    </div>
-    <div class="info-box">
-        <strong>Pregunta guía:</strong>
-        <p>¿Qué estructura protege mejor la prioridad temporal de una lista de espera cuando el criterio principal es el orden de registro?</p>
-    </div>
-</div></div>
+            <div class="memo-box">
+              <p><strong>Memorando interno NB-04.</strong> La coordinación operativa de NeuroBiz necesita consolidar datos de solicitudes, citas y atenciones en una sola tabla de trabajo. Los registros llegan por canales distintos y con campos incompletos, lo que dificulta producir reportes consistentes para dirección.</p>
+              <p>Tu rol como <strong>Analista de Datos Estratégico</strong> consiste en ordenar esos registros, limpiar errores simples, identificar patrones y convertir la información en un resumen útil para la toma de decisiones.</p>
+              <div class="mini-grid">
+                <div class="info-box">
+                  <strong>Problema de negocio:</strong>
+                  <ul class="callout-list">
+                    <li>Unificar registros que vienen de fuentes distintas.</li>
+                    <li>Detectar vacíos, duplicados o etiquetas inconsistentes.</li>
+                    <li>Preparar una vista simple para reportar volumen y comportamiento.</li>
+                  </ul>
+                </div>
+                <div class="info-box">
+                  <strong>Pregunta guía:</strong>
+                  <p>¿Qué tipo de organización de datos permite pasar de registros dispersos a un reporte confiable y fácil de leer?</p>
+                </div>
+              </div>
+            </div>
             <div class="ods-box">
-                <strong>Conexión con ODS 7 y 13:</strong> Una cola bien gestionada reduce tiempos muertos, reprogramaciones innecesarias y desplazamientos improductivos de familias y terapeutas. Optimizar la asignación por orden de llegada aporta eficiencia operativa y menor impacto ambiental, en línea con ODS 7 y 13.
+                <strong>Conexión con ODS 9 y 16:</strong> Un flujo de datos claro ayuda a mejorar procesos, documentar decisiones y reducir reprocesos en la operación. Cuando la información está mejor organizada, el equipo puede responder con más rapidez y con mayor trazabilidad.
             </div>
             <div class="note-box">
-                <strong>Recuerda:</strong> Python se usa aquí como herramienta de Business Intelligence para modelar decisiones, inspeccionar estados de la estructura y comunicar hallazgos operativos; no se evalúa como fin aislado.
+                <strong>Recuerda:</strong> Python se usa aquí como herramienta para organizar, resumir y comunicar datos; no como fin aislado ni como curso técnico de algoritmos.
             </div>
             <h3>KPIs operativos que acompañan el caso</h3>
             <div class="kpi-grid">
         <div class="kpi-card">
-            <small>sesiones_asistidas</small>
+            <small>registros_recibidos</small>
             <div class="kpi-value">203</div>
-            <p>La capacidad de atención semanal condiciona cuántos pacientes salen de la cola.</p>
-            <div class="pill-row"><span class="pill">entero</span><span class="pill">atención</span><span class="pill">flujo</span></div>
+            <p>Total de solicitudes, citas o atenciones consolidadas en la tabla de trabajo.</p>
+            <div class="pill-row"><span class="pill">conteo</span><span class="pill">entrada</span><span class="pill">volumen</span></div>
         </div>
         
 
         <div class="kpi-card">
-            <small>sesiones_fallidas</small>
+            <small>campos_incompletos</small>
             <div class="kpi-value">18</div>
-            <p>Las inasistencias alteran la dinámica de la espera y pueden requerir reencolar decisiones.</p>
-            <div class="pill-row"><span class="pill">entero</span><span class="pill">reprogramación</span><span class="pill">riesgo</span></div>
+            <p>Registros que necesitan revisión antes de usarse para un reporte confiable.</p>
+            <div class="pill-row"><span class="pill">calidad</span><span class="pill">limpieza</span><span class="pill">riesgo</span></div>
         </div>
         
 
         <div class="kpi-card">
-            <small>tasa_retencion</small>
+            <small>tasa_completitud</small>
             <div class="kpi-value">0.86</div>
-            <p>Una espera mejor gestionada puede contribuir a sostener la permanencia de pacientes.</p>
-            <div class="pill-row"><span class="pill">float</span><span class="pill">retención</span><span class="pill">servicio</span></div>
+            <p>Proporción de registros que ya llegan completos y listos para analizar.</p>
+            <div class="pill-row"><span class="pill">porcentaje</span><span class="pill">calidad</span><span class="pill">dato</span></div>
         </div>
         
 
         <div class="kpi-card">
-            <small>indice_progreso</small>
+            <small>tiempo_respuesta</small>
             <div class="kpi-value">7.1</div>
-            <p>La continuidad del tratamiento puede afectarse si la cola no se atiende con oportunidad.</p>
-            <div class="pill-row"><span class="pill">float</span><span class="pill">continuidad</span><span class="pill">desempeño</span></div>
+            <p>Tiempo estimado para pasar del registro bruto a un reporte de trabajo.</p>
+            <div class="pill-row"><span class="pill">tiempo</span><span class="pill">proceso</span><span class="pill">servicio</span></div>
         </div>
         
 
         <div class="kpi-card">
-            <small>nivel_hiperfoco</small>
+            <small>duplicados_detectados</small>
             <div class="kpi-value">7.9</div>
-            <p>Dato clínico que podría justificar futuras colas con prioridad, pero no cambia la cola base FIFO.</p>
-            <div class="pill-row"><span class="pill">float</span><span class="pill">TDAH</span><span class="pill">criterio</span></div>
+            <p>Registros repetidos que deben revisarse antes del análisis final.</p>
+            <div class="pill-row"><span class="pill">control</span><span class="pill">calidad</span><span class="pill">limpieza</span></div>
         </div>
         
 
         <div class="kpi-card">
-            <small>reconocimiento_patrones</small>
+            <small>patrones_identificados</small>
             <div class="kpi-value">7.6</div>
-            <p>Sirve de contexto para comparar necesidades sin romper la regla general de llegada.</p>
-            <div class="pill-row"><span class="pill">float</span><span class="pill">TEA</span><span class="pill">contexto</span></div>
+            <p>Hallazgos simples que ayudan a comparar canales, servicios o períodos de atención.</p>
+            <div class="pill-row"><span class="pill">análisis</span><span class="pill">conteo</span><span class="pill">contexto</span></div>
         </div>
         </div>
             <div class="framework-box">
@@ -762,173 +765,137 @@ blockquote {
     <div class="week-map">
         <div class="map-card">
             <h4>Guiar</h4>
-            <p>La sesión se activa desde la noción de equidad: primero en registrarse, primero en ser atendido.</p>
+            <p>La sesión parte de una pregunta de negocio: cómo ordenar registros para producir un reporte útil.</p>
         </div>
         <div class="map-card">
             <h4>Articular</h4>
-            <p>La cola conecta estructura de datos, servicio al paciente, tiempos de espera y trazabilidad operativa.</p>
+            <p>La actividad conecta tabla, limpieza, filtrado y lectura de resultados con lenguaje administrativo.</p>
         </div>
         <div class="map-card">
             <h4>Motivar</h4>
-            <p>La misión consiste en simular la lista de espera real de NeuroBiz y ganar puntos por justicia, claridad y funcionalidad.</p>
+            <p>La misión consiste en construir un reporte pequeño que ayude a entender el comportamiento de los datos.</p>
         </div>
         <div class="map-card">
             <h4>Evaluar</h4>
-            <p>Se valora si el equipo mantiene el orden FIFO, ejecuta operaciones correctas y comunica el impacto en la asignación de terapeutas.</p>
+            <p>Se valora si el equipo organiza, limpia y resume los datos con claridad y sin perder trazabilidad.</p>
         </div>
     </div>
 </div>
         </section>
 
         <section id="teoria" class="card">
-            <h2>Teoría aplicada a negocios</h2>
-            <p class="section-intro">La teoría se construye con base en literatura clásica de estructuras de datos y se traduce al lenguaje operativo de NeuroBiz.</p>
-            <h3>1. Cola como estructura de servicio</h3>
-<p>Cairó Battistutti y Guardati Bueno (2006) presentan la cola como una estructura lineal donde la inserción ocurre en un extremo y la extracción en el otro. Esa separación de extremos refleja de manera natural procesos de espera. En lenguaje de negocios, la cola formaliza una regla de trato: <strong>primero en entrar, primero en salir</strong>.</p>
-<p>En NeuroBiz, la lista de espera de pacientes para asignación de terapeuta exige precisamente esa lógica. Cuando el criterio organizacional es la equidad temporal, la cola no es un detalle técnico sino una forma de traducir una política de servicio a una estructura operativa verificable.</p>
+            <h2>Teoría aplicada a datos</h2>
+            <p class="section-intro">La teoría se apoya en libros de programación y documentación oficial, pero se traduce a un lenguaje útil para gestión administrativa y Big Data inicial.</p>
+            <h3>1. Del registro suelto a la tabla de trabajo</h3>
+            <p>En los entornos de análisis de datos, el primer paso es transformar registros dispersos en una estructura clara y consistente. Los manuales de pandas describen precisamente ese tránsito: leer datos, organizarlos en tablas y operar sobre ellos con criterios explícitos de selección y resumen.</p>
+            <p>Para NeuroBiz, esto significa pasar de mensajes, formularios o listas manuales a una tabla que permita comparar servicios, canales y resultados sin perder trazabilidad.</p>
 
-<h3>2. FIFO y justicia de proceso</h3>
-<p>Joyanes Aguilar (2014) explica que la cola responde al patrón FIFO (<em>First In, First Out</em>). La relevancia didáctica está en que el estudiante compare este comportamiento con LIFO y entienda que la estructura depende del criterio del proceso. Aquí no importa lo más reciente, sino el orden de llegada.</p>
-<table>
-    <thead>
-        <tr><th>Concepto</th><th>En la cola</th><th>En NeuroBiz</th></tr>
-    </thead>
-    <tbody>
-        <tr><td>Frente</td><td>Primer elemento listo para salir</td><td>Paciente que debe ser atendido primero</td></tr>
-        <tr><td>Final</td><td>Extremo donde se agregan nuevos elementos</td><td>Nuevo paciente que acaba de registrarse</td></tr>
-        <tr><td>FIFO</td><td>First In, First Out</td><td>Respeto del orden de llegada</td></tr>
-    </tbody>
-</table>
+            <h3>2. Lectura, filtro y agrupación</h3>
+            <p>La documentación oficial de pandas muestra tres ideas muy útiles para este nivel: leer datos desde CSV, seleccionar filas con condiciones y agrupar información para obtener resúmenes. Esas tres operaciones son suficientes para preparar al estudiante para Big Data 1 sin obligarlo a aprender complejidad algorítmica avanzada.</p>
+            <table>
+                <thead>
+                    <tr><th>Concepto</th><th>En la tabla</th><th>En NeuroBiz</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>CSV</td><td>Archivo de datos tabulares</td><td>Archivo de solicitudes o atenciones</td></tr>
+                    <tr><td>Filtro</td><td>Elegir filas que cumplen una condición</td><td>Ver solo ciertos servicios, fechas o canales</td></tr>
+                    <tr><td>Agrupar</td><td>Reunir filas por categoría</td><td>Contar atenciones por servicio o canal</td></tr>
+                </tbody>
+            </table>
 
-<h3>3. Operaciones fundamentales y lectura organizacional</h3>
-<p>Las operaciones esenciales son <strong>enqueue</strong> (agregar al final), <strong>dequeue</strong> (retirar del frente), <strong>peek</strong> (consultar el frente sin extraer) e <strong>isEmpty</strong> (verificar si no hay elementos). Weiss (2014) destaca que estas operaciones modelan sistemas de atención y procesamiento de tareas, lo que las vuelve especialmente pertinentes en contextos administrativos.</p>
-<table>
-    <thead>
-        <tr><th>Operación</th><th>Sentido computacional</th><th>Traducción organizacional</th><th>Complejidad esperada</th></tr>
-    </thead>
-    <tbody>
-        <tr><td>enqueue</td><td>Agregar al final</td><td>Registrar un paciente en espera</td><td>O(1)</td></tr>
-        <tr><td>dequeue</td><td>Extraer del frente</td><td>Asignar el siguiente turno o terapeuta</td><td>O(1)</td></tr>
-        <tr><td>peek</td><td>Mirar el frente</td><td>Ver quién debe pasar primero</td><td>O(1)</td></tr>
-        <tr><td>isEmpty</td><td>Verificar ausencia de elementos</td><td>Saber si aún quedan pacientes por atender</td><td>O(1)</td></tr>
-    </tbody>
-</table>
+            <h3>3. Calidad del dato</h3>
+            <p>La documentación de pandas también insiste en trabajar con datos faltantes, tipos de datos y selección por posición o etiqueta. En un curso de gestión, esto se traduce en una idea sencilla: antes de reportar, hay que revisar que la información esté completa y bien clasificada.</p>
+            <table>
+                <thead>
+                    <tr><th>Práctica</th><th>Sentido técnico</th><th>Traducción administrativa</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Revisar datos faltantes</td><td>Detectar celdas vacías</td><td>Evitar reportes incompletos</td></tr>
+                    <tr><td>Seleccionar columnas</td><td>Elegir campos útiles</td><td>Quedarse solo con lo que aporta a la decisión</td></tr>
+                    <tr><td>Contar por categoría</td><td>Obtener frecuencias</td><td>Saber qué servicio o canal aparece más</td></tr>
+                </tbody>
+            </table>
 
-<h3>4. Representación práctica en Python con deque</h3>
-<p>La biblioteca estándar de Python ofrece <code>collections.deque</code>, una estructura de doble extremo eficiente para agregar y retirar elementos en ambos lados. Python Software Foundation (2024) documenta su uso como una herramienta adecuada para colas. En esta semana se utiliza <code>deque</code> para mantener el foco en la lógica FIFO sin distraer al estudiante con detalles de desplazamiento interno de listas.</p>
-<p>Desde la didáctica, esta decisión es importante: el lenguaje debe facilitar la comprensión del patrón organizacional, no convertirse en una barrera accidental. Aun así, el docente debe verbalizar que la estructura elegida representa la política de servicio, no simplemente una función conveniente del lenguaje.</p>
+            <h3>4. Python como apoyo analítico</h3>
+            <p>La documentación oficial de Python recomienda usar listas como cola cuando se necesita un ejemplo simple, y <code>collections.deque</code> cuando se desea una estructura eficiente para extremos. En este material, el punto pedagógico no es memorizar estructuras, sino comprender cómo una organización convierte datos brutos en información lista para análisis.</p>
+            <p>Por eso el curso usa Python como apoyo para leer, filtrar, contar y resumir, no para entrar de lleno en algoritmos avanzados.</p>
 
-<h3>5. Aplicaciones organizacionales y posibles extensiones</h3>
-<p>Una cola básica protege la equidad por llegada. Más adelante, si la institución define criterios de urgencia clínica, podrá migrarse hacia colas con prioridad. Sin embargo, conviene primero consolidar el caso FIFO puro. Moreno Pérez (2012) subraya que una buena solución parte de un problema claramente delimitado; mezclar reglas muy pronto puede confundir la comprensión base.</p>
-<blockquote>Cuando la decisión central es respetar turnos, la cola no solo organiza datos: hace visible la política de atención de la organización.</blockquote>
+            <h3>5. Lo que sí prepara para Big Data 1 y 2</h3>
+            <p>Lo importante para el siguiente nivel no es dominar jerga, sino construir hábitos de trabajo con datos: identificar campos, limpiar inconsistencias, resumir resultados y explicar hallazgos con claridad. Esa base es la que permitirá luego avanzar a pandas, visualización y flujos de integración con mayor confianza.</p>
+            <blockquote>Si el estudiante aprende a ordenar, limpiar y resumir datos con sentido de negocio, ya está entrando al mundo de Big Data por la puerta correcta.</blockquote>
         </section>
 
         <section id="python" class="card">
             <h2>Python como herramienta analítica (Google Colab)</h2>
-            <p class="section-intro">Ejecuta cada bloque en vivo con el motor Pyodice integrado, documenta el comportamiento observado y conecta la salida con una decisión de negocio.</p>
-            <blockquote>Antes de ejecutar, imagina quién debe quedar al frente de la cola. Si tu predicción no coincide con la salida, revisa si cambiaste accidentalmente la lógica FIFO.</blockquote>
+            <p class="section-intro">Ejecuta cada bloque en vivo, documenta el comportamiento observado y conecta la salida con una decisión de negocio.</p>
+            <blockquote>Antes de ejecutar, piensa qué registro deberías conservar, filtrar o agrupar. Si el resultado no coincide con tu predicción, revisa la condición o la columna que elegiste.</blockquote>
 
             <!-- Mini Cell 1: Cola básica con deque -->
             <div class="mini-cell">
                 <div class="mini-cell-header">
-                    <span class="mini-cell-label">Bloque 1: Cola básica con collections.deque</span>
+                    <span class="mini-cell-label">Bloque 1: Tabla inicial con listas de diccionarios</span>
                     <button class="mini-run-btn" onclick="runMiniCell(1)" id="mini-run-1">▶ Run</button>
                 </div>
-                <textarea id="mini-code-1" rows="11" spellcheck="false">from collections import deque
+                <textarea id="mini-code-1" rows="11" spellcheck="false">registros = [
+    {"paciente": "Samuel", "canal": "WhatsApp", "servicio": "Lenguaje"},
+    {"paciente": "Valentina", "canal": "Formulario", "servicio": "Sensorial"},
+    {"paciente": "Martín", "canal": "Llamada", "servicio": "TEA"},
+]
 
-cola_espera = deque()
-
-def registrar_paciente(cola, nombre, necesidad):
-    cola.append({"paciente": nombre, "necesidad": necesidad})
-    print(f"Ingresó {nombre}. Cola actual: {[item['paciente'] for item in cola]}")
-
-def atender_siguiente(cola):
-    if not cola:
-        print("No hay pacientes en espera")
-        return None
-    paciente = cola.popleft()
-    print(f"Se atiende a {paciente['paciente']}")
-    return paciente
-
-registrar_paciente(cola_espera, "Samuel", "Lenguaje")
-registrar_paciente(cola_espera, "Valentina", "Integración sensorial")
-registrar_paciente(cola_espera, "Martín", "Seguimiento TEA")
-
-print("\nPaciente al frente:", cola_espera[0])
-atender_siguiente(cola_espera)
-print("Cola restante:", [item['paciente'] for item in cola_espera])</textarea>
+print("Registros cargados:", len(registros))
+print("Primer registro:", registros[0])
+print("Canales:", [r["canal"] for r in registros])</textarea>
                 <div class="mini-output" id="mini-out-1"><pre></pre></div>
             </div>
             <div class="info-box">
-                <strong>Uso pedagógico:</strong> Muestra de forma inmediata cómo se registra y atiende una lista de espera preservando el orden de llegada.
+                <strong>Uso pedagógico:</strong> Muestra una tabla mínima para hablar de campos, categorías y organización de datos antes de pasar a operaciones de análisis.
             </div>
 
-            <!-- Mini Cell 2: Simulación de asignación -->
+            <!-- Mini Cell 2: Simulación de filtrado -->
             <div class="mini-cell">
                 <div class="mini-cell-header">
-                    <span class="mini-cell-label">Bloque 2: Simulación de asignación de terapeutas</span>
+                    <span class="mini-cell-label">Bloque 2: Filtrado de registros por condición</span>
                     <button class="mini-run-btn" onclick="runMiniCell(2)" id="mini-run-2">▶ Run</button>
                 </div>
-                <textarea id="mini-code-2" rows="11" spellcheck="false">from collections import deque
+                <textarea id="mini-code-2" rows="11" spellcheck="false">registros = [
+    {"paciente": "Samuel", "canal": "WhatsApp", "servicio": "Lenguaje"},
+    {"paciente": "Valentina", "canal": "Formulario", "servicio": "Sensorial"},
+    {"paciente": "Martín", "canal": "Llamada", "servicio": "TEA"},
+    {"paciente": "Lucía", "canal": "WhatsApp", "servicio": "Lenguaje"},
+]
 
-pacientes = deque([
-    {"paciente": "Samuel", "servicio": "Lenguaje"},
-    {"paciente": "Valentina", "servicio": "Sensorial"},
-    {"paciente": "Martín", "servicio": "TEA"},
-    {"paciente": "Lucía", "servicio": "TDAH"},
-])
-
-terapeutas_disponibles = ["Laura", "Carlos"]
-asignaciones = []
-
-while pacientes and terapeutas_disponibles:
-    paciente = pacientes.popleft()
-    terapeuta = terapeutas_disponibles.pop(0)
-    asignaciones.append((paciente["paciente"], terapeuta, paciente["servicio"]))
-    print(f"Asignado {paciente['paciente']} a {terapeuta}")
-
-print("\nAsignaciones del bloque:")
-for asignacion in asignaciones:
-    print(asignacion)
-
-print("Pacientes aún en cola:", [p["paciente"] for p in pacientes])</textarea>
+filtrados = [r for r in registros if r["canal"] == "WhatsApp"]
+print("Total de WhatsApp:", len(filtrados))
+print("Pacientes:", [r["paciente"] for r in filtrados])</textarea>
                 <div class="mini-output" id="mini-out-2"><pre></pre></div>
             </div>
             <div class="info-box">
-                <strong>Uso pedagógico:</strong> Integra la cola con una necesidad de negocio: asignar pacientes al siguiente recurso disponible.
+                <strong>Uso pedagógico:</strong> Ayuda a entender una de las operaciones más comunes en análisis de datos: quedarse solo con lo que cumple una condición.
             </div>
 
             <!-- Mini Cell 3: Panel operativo -->
             <div class="mini-cell">
                 <div class="mini-cell-header">
-                    <span class="mini-cell-label">Bloque 3: Panel operativo para inspeccionar la cola</span>
+                    <span class="mini-cell-label">Bloque 3: Resumen por categoría</span>
                     <button class="mini-run-btn" onclick="runMiniCell(3)" id="mini-run-3">▶ Run</button>
                 </div>
-                <textarea id="mini-code-3" rows="12" spellcheck="false">from collections import deque
+                <textarea id="mini-code-3" rows="12" spellcheck="false">registros = [
+    {"paciente": "Samuel", "servicio": "Lenguaje"},
+    {"paciente": "Valentina", "servicio": "Sensorial"},
+    {"paciente": "Martín", "servicio": "TEA"},
+    {"paciente": "Lucía", "servicio": "Lenguaje"},
+]
 
-cola = deque([
-    {"paciente": "Samuel", "espera_min": 12},
-    {"paciente": "Valentina", "espera_min": 18},
-    {"paciente": "Martín", "espera_min": 25},
-])
+resumen = {}
+for r in registros:
+    servicio = r["servicio"]
+    resumen[servicio] = resumen.get(servicio, 0) + 1
 
-def resumen_cola(cola_actual):
-    if not cola_actual:
-        return {"longitud": 0, "frente": None, "espera_promedio": 0}
-    espera_promedio = sum(item["espera_min"] for item in cola_actual) / len(cola_actual)
-    return {
-        "longitud": len(cola_actual),
-        "frente": cola_actual[0]["paciente"],
-        "espera_promedio": round(espera_promedio, 2),
-    }
-
-print(resumen_cola(cola))
-cola.popleft()
-print(resumen_cola(cola))</textarea>
+print("Resumen por servicio:", resumen)</textarea>
                 <div class="mini-output" id="mini-out-3"><pre></pre></div>
             </div>
             <div class="info-box">
-                <strong>Uso pedagógico:</strong> Ayuda a convertir la estructura en una salida legible para la toma de decisiones.
+                <strong>Uso pedagógico:</strong> Convierte una lista de registros en una salida breve y legible para la toma de decisiones.
             </div>
 
         </section>
@@ -938,7 +905,7 @@ print(resumen_cola(cola))</textarea>
         ══════════════════════════════════════════ -->
         <section id="interactivo" class="card">
             <h2>🧪 Ejercicios Interactivos</h2>
-            <p class="section-intro">Afianza tus habilidades con estos ejercicios interactivos. Ejecuta Python en vivo con el motor <strong>Pyodide</strong> (WebAssembly), completa los espacios en blanco, y clasifica operaciones. ¡Cada actividad te da XP!</p>
+            <p class="section-intro">Afianza tus habilidades con ejercicios que usan datos de negocio reales o simulados. Ejecuta Python en vivo, completa los espacios en blanco y clasifica operaciones de análisis. ¡Cada actividad te da XP!</p>
 
             <!-- ══════════════════════════════════════
                  GOOGLE COLAB INTERFACE (in-page)
@@ -946,138 +913,80 @@ print(resumen_cola(cola))</textarea>
             <div class="colab-section">
                 <h3>🐍 Google Colab — En Vivo en la Página</h3>
                 <div id="colab-status" class="colab-status">
-                    <span>⏳</span> Iniciando motor Python (Pyodide)...
+                    <span>⏳</span> Iniciando entorno Python para análisis tabular...
                 </div>
 
-                <!-- Cell 1: Queue class with collections.deque -->
+                <!-- Cell 1: Table creation -->
                 <div class="colab-cell" id="colab-cell-1">
                     <div class="colab-cell-header">
                         <span class="colab-cell-index">[1]</span>
                         <button class="colab-run-btn" onclick="runColabCell(1)" id="run-btn-1">▶ Run</button>
                     </div>
                     <div class="colab-cell-body" id="colab-body-1">
-                        <textarea id="colab-code-1" rows="16" spellcheck="false"># ── Clase Cola usando collections.deque ──
-from collections import deque
+                        <textarea id="colab-code-1" rows="16" spellcheck="false"># ── Tabla inicial de trabajo ──
+registros = [
+    {"paciente": "Samuel", "canal": "WhatsApp", "servicio": "Lenguaje"},
+    {"paciente": "Valentina", "canal": "Formulario", "servicio": "Sensorial"},
+    {"paciente": "Martín", "canal": "Llamada", "servicio": "TEA"},
+    {"paciente": "Lucía", "canal": "WhatsApp", "servicio": "Lenguaje"},
+]
 
-class ColaNeuroBiz:
-    """Cola FIFO para pacientes de NeuroBiz"""
-    def __init__(self):
-        self._elementos = deque()
-
-    def enqueue(self, paciente):
-        self._elementos.append(paciente)
-        print(f"➕ Encolado: {paciente['nombre']}")
-
-    def dequeue(self):
-        if self.is_empty():
-            print("⚠️ Underflow: cola vacía")
-            return None
-        p = self._elementos.popleft()
-        print(f"➖ Atendido: {p['nombre']}")
-        return p
-
-    def front(self):
-        if self.is_empty():
-            return None
-        return self._elementos[0]
-
-    def is_empty(self):
-        return len(self._elementos) == 0
-
-    def __len__(self):
-        return len(self._elementos)
-
-# Probar la cola
-cola = ColaNeuroBiz()
-cola.enqueue({"nombre": "Samuel", "terapia": "Lenguaje"})
-cola.enqueue({"nombre": "Valentina", "terapia": "Sensorial"})
-cola.enqueue({"nombre": "Martín", "terapia": "TEA"})
-
-print(f"\n👁️ Frente: {cola.front()['nombre']}")
-print(f"📏 Longitud: {len(cola)}")
-cola.dequeue()
-print(f"Nuevo frente: {cola.front()['nombre']}")</textarea>
+print("Registros totales:", len(registros))
+print("Campos disponibles:", list(registros[0].keys()))
+print("Primer registro:", registros[0])
+print("Pacientes:", [r["paciente"] for r in registros])</textarea>
                     </div>
                     <div class="colab-output" id="colab-out-1"><pre></pre></div>
                 </div>
 
-                <!-- Cell 2: Patient waiting list simulation -->
+                <!-- Cell 2: Filtering and counting -->
                 <div class="colab-cell" id="colab-cell-2">
                     <div class="colab-cell-header">
                         <span class="colab-cell-index">[2]</span>
                         <button class="colab-run-btn" onclick="runColabCell(2)" id="run-btn-2">▶ Run</button>
                     </div>
                     <div class="colab-cell-body" id="colab-body-2">
-                        <textarea id="colab-code-2" rows="16" spellcheck="false"># ── Simulación de lista de espera NeuroBiz ──
-from collections import deque
-
-cola_espera = deque()
-atendidos = []
-
-# Datos de pacientes
-pacientes_nuevos = [
-    {"nombre": "Samuel", "terapia": "Lenguaje", "urgencia": "baja"},
-    {"nombre": "Valentina", "terapia": "Sensorial", "urgencia": "media"},
-    {"nombre": "Martín", "terapia": "TEA", "urgencia": "alta"},
-    {"nombre": "Lucía", "terapia": "TDAH", "urgencia": "baja"},
-    {"nombre": "Felipe", "terapia": "Lenguaje", "urgencia": "media"},
+                        <textarea id="colab-code-2" rows="16" spellcheck="false"># ── Filtrado por canal de entrada ──
+registros = [
+    {"paciente": "Samuel", "canal": "WhatsApp", "servicio": "Lenguaje"},
+    {"paciente": "Valentina", "canal": "Formulario", "servicio": "Sensorial"},
+    {"paciente": "Martín", "canal": "Llamada", "servicio": "TEA"},
+    {"paciente": "Lucía", "canal": "WhatsApp", "servicio": "Lenguaje"},
+    {"paciente": "Felipe", "canal": "Formulario", "servicio": "Lenguaje"},
 ]
 
-# Encolar todos los pacientes
-for p in pacientes_nuevos:
-    cola_espera.append(p)
-    print(f"➕ {p['nombre']} registrado en espera")
+solo_whatsapp = [r for r in registros if r["canal"] == "WhatsApp"]
+servicios = {}
+for r in registros:
+    servicios[r["servicio"]] = servicios.get(r["servicio"], 0) + 1
 
-print(f"\n📏 Pacientes en cola: {len(cola_espera)}")
-
-# Atender los primeros 3
-for _ in range(3):
-    if cola_espera:
-        p = cola_espera.popleft()
-        atendidos.append(p)
-        print(f"➖ Atendido: {p['nombre']} ({p['terapia']})")
-
-print(f"\n✅ Atendidos: {[p['nombre'] for p in atendidos]}")
-print(f"⏳ En espera: {[p['nombre'] for p in cola_espera]}")</textarea>
+print("WhatsApp:", [r["paciente"] for r in solo_whatsapp])
+print("Conteo por servicio:", servicios)</textarea>
                     </div>
                     <div class="colab-output" id="colab-out-2"><pre></pre></div>
                 </div>
 
-                <!-- Cell 3: Priority queue concept -->
+                <!-- Cell 3: Missing data and summary -->
                 <div class="colab-cell" id="colab-cell-3">
                     <div class="colab-cell-header">
                         <span class="colab-cell-index">[3]</span>
                         <button class="colab-run-btn" onclick="runColabCell(3)" id="run-btn-3">▶ Run</button>
                     </div>
                     <div class="colab-cell-body" id="colab-body-3">
-                        <textarea id="colab-code-3" rows="16" spellcheck="false"># ── Comparación: Cola FIFO vs Cola con Prioridad ──
-from collections import deque
-import heapq
-
-# FIFO: orden de llegada
-pacientes_fifo = deque([
-    {"nombre": "Samuel", "urgencia": 1},
-    {"nombre": "Valentina", "urgencia": 3},
-    {"nombre": "Martín", "urgencia": 2},
-])
-print("=== FIFO (orden de llegada) ===")
-while pacientes_fifo:
-    p = pacientes_fifo.popleft()
-    print(f"  Atendido: {p['nombre']} (urgencia: {p['urgencia']})")
-
-# Prioridad: urgencia más alta primero
-pacientes_prio = [
-    (1, {"nombre": "Samuel", "urgencia": 1}),
-    (3, {"nombre": "Valentina", "urgencia": 3}),
-    (2, {"nombre": "Martín", "urgencia": 2}),
+                        <textarea id="colab-code-3" rows="16" spellcheck="false"># ── Resumen con dato faltante ──
+registros = [
+    {"paciente": "Samuel", "canal": "WhatsApp", "servicio": "Lenguaje"},
+    {"paciente": "Valentina", "canal": "", "servicio": "Sensorial"},
+    {"paciente": "Martín", "canal": "Llamada", "servicio": "TEA"},
+    {"paciente": "Lucía", "canal": "WhatsApp", "servicio": "Lenguaje"},
 ]
-heapq.heapify(pacientes_prio)
-print("\n=== Prioridad (urgencia más alta) ===")
-while pacientes_prio:
-    prio, p = heapq.heappop(pacientes_prio)
-    print(f"  Atendido: {p['nombre']} (prioridad: {prio})")
 
-print("\n💡 La cola con prioridad rompe FIFO pero refleja criterio clínico.")</textarea>
+faltantes = [r for r in registros if not r["canal"]]
+completos = [r for r in registros if r["canal"]]
+
+print("Registros completos:", len(completos))
+print("Registros con canal faltante:", len(faltantes))
+print("Servicios:", sorted({r["servicio"] for r in registros}))</textarea>
                     </div>
                     <div class="colab-output" id="colab-out-3"><pre></pre></div>
                 </div>
@@ -1090,9 +999,8 @@ print("\n💡 La cola con prioridad rompe FIFO pero refleja criterio clínico.")
                     </div>
                     <div class="colab-cell-body" id="colab-body-4">
                         <textarea id="colab-code-4" rows="8" spellcheck="false"># ── Tu espacio de experimentación ──
-# Crea tu propia simulación de cola para NeuroBiz.
-# Prueba diferentes escenarios: ¿qué pasa si hay más
-# pacientes que terapeutas? ¿Cómo afecta el orden?
+# Crea un mini reporte con datos de NeuroBiz.
+# Prueba: contar por canal, detectar faltantes o resumir por servicio.
 
 print("¡Escribe tu código arriba y presiona ▶ Run!")</textarea>
                     </div>
@@ -1100,7 +1008,7 @@ print("¡Escribe tu código arriba y presiona ▶ Run!")</textarea>
                 </div>
 
                 <div id="colab-fallback" style="display:none; padding:1rem; background:#fff8e1; border-radius:8px; margin-top:1rem; font-size:.88rem; color:#5d4037;">
-                    ⚠️ No se pudo cargar Pyodide. Puedes usar <a href="https://colab.research.google.com" target="_blank" style="color:var(--primary); font-weight:700;">Google Colab</a> directamente.
+                    ⚠️ No se pudo cargar el entorno Python. Puedes usar <a href="https://colab.research.google.com" target="_blank" style="color:var(--primary); font-weight:700;">Google Colab</a> directamente.
                 </div>
             </div>
 
@@ -1113,63 +1021,53 @@ print("¡Escribe tu código arriba y presiona ▶ Run!")</textarea>
 
             <!-- Exercise 1: Complete enqueue -->
             <div class="fib-exercise" id="fib-ex-1">
-                <h4>Ejercicio 1: Completa el enqueue</h4>
+                <h4>Ejercicio 1: Completa la lectura de CSV</h4>
                 <p style="font-size:.85rem; color:var(--muted); margin-bottom:.6rem;">
-                    Completa el método <code>enqueue</code> para agregar un paciente al <strong>final</strong> de la cola.
+                    Completa la llamada para leer un archivo CSV y convertirlo en una tabla de trabajo.
                 </p>
                 <div class="fib-code-block">
-                    <span style="color:#6c7086; font-style:italic;"># ── Método enqueue de la clase ColaNeuroBiz ──</span>
-class ColaNeuroBiz:
-    def __init__(self):
-        self._elementos = deque()
+                    <span style="color:#6c7086; font-style:italic;"># ── Lectura de datos tabulares ──</span>
+from io import StringIO
+import pandas as pd
 
-    def enqueue(self, paciente):
-        self._elementos.<span id="fib-b1-wrap"><input type="text" class="fib-input" id="fib-b1" placeholder="método?" maxlength="10" autocomplete="off"></span>(paciente)
+csv_text = """paciente,canal,servicio
+Samuel,WhatsApp,Lenguaje
+Valentina,Formulario,Sensorial
+Martín,Llamada,TEA
+"""
 
-    def dequeue(self):
-        if not self.is_empty():
-            return self._elementos.<span id="fib-b1b-wrap"><input type="text" class="fib-input" id="fib-b1b" placeholder="método?" maxlength="10" autocomplete="off"></span>()
-        return None
+df = pd.<span id="fib-b1-wrap"><input type="text" class="fib-input" id="fib-b1" placeholder="método?" maxlength="10" autocomplete="off"></span>(StringIO(csv_text))
+print(df.head())
                 </div>
                 <button class="fib-submit-btn" onclick="checkFib1()">✅ Verificar</button>
                 <div class="fib-feedback" id="fib-fb-1"></div>
             </div>
 
-            <!-- Exercise 2: Identify FIFO order -->
+            <!-- Exercise 2: Identify filter -->
             <div class="fib-exercise" id="fib-ex-2">
-                <h4>Ejercicio 2: Identifica el orden FIFO</h4>
+                <h4>Ejercicio 2: Identifica el filtro correcto</h4>
                 <p style="font-size:.85rem; color:var(--muted); margin-bottom:.6rem;">
-                    Después de 3 enqueues en este orden: <strong>Ana → Bruno → Carla</strong>, ¿quién está al frente de la cola?
+                    Después de crear una tabla con varias filas, ¿qué condición usarías para ver solo los registros de WhatsApp?
                 </p>
                 <div class="fib-code-block">
-                    <span style="color:#6c7086; font-style:italic;"># ── Orden de una cola después de 3 enqueues ──</span>
-cola = deque()
-cola.append("Ana")        # Primero en llegar
-cola.append("Bruno")      # Segundo en llegar
-cola.append("Carla")      # Tercero en llegar
-
-frente = cola[<span id="fib-b2-wrap"><input type="text" class="fib-input" id="fib-b2" placeholder="índice?" maxlength="5" autocomplete="off"></span>]  # ¿Qué índice?
-print(f"Frente: {frente}")  # Debe mostrar: <span id="fib-b2b-wrap"><input type="text" class="fib-input" id="fib-b2b" placeholder="nombre?" maxlength="10" autocomplete="off"></span>
+                    <span style="color:#6c7086; font-style:italic;"># ── Filtrado por condición ──</span>
+filtrados = df[<span id="fib-b2-wrap"><input type="text" class="fib-input" id="fib-b2" placeholder="condición?" maxlength="30" autocomplete="off"></span>]
+print(filtrados)
                 </div>
                 <button class="fib-submit-btn" onclick="checkFib2()">✅ Verificar</button>
                 <div class="fib-feedback" id="fib-fb-2"></div>
             </div>
 
-            <!-- Exercise 3: Complete underflow guard -->
+            <!-- Exercise 3: Complete groupby -->
             <div class="fib-exercise" id="fib-ex-3">
-                <h4>Ejercicio 3: Protección contra underflow</h4>
+                <h4>Ejercicio 3: Resumen por categoría</h4>
                 <p style="font-size:.85rem; color:var(--muted); margin-bottom:.6rem;">
-                    Completa la cláusula de guarda antes de hacer dequeue para evitar error en cola vacía.
+                    Completa la operación para contar registros por servicio.
                 </p>
                 <div class="fib-code-block">
-                    <span style="color:#6c7086; font-style:italic;"># ── Protección contra underflow ──</span>
-def atender_paciente(cola):
-    <span style="color:#cba6f7;font-weight:700;">if</span> <span id="fib-b3-wrap"><input type="text" class="fib-input" id="fib-b3" placeholder="condición?" maxlength="20" autocomplete="off"></span>:
-        print("⚠️ No hay pacientes en espera")
-        <span style="color:#cba6f7;font-weight:700;">return</span> <span style="color:#fab387;">None</span>
-    paciente = cola.popleft()
-    print(f"Atendido: {paciente}")
-    return paciente
+                    <span style="color:#6c7086; font-style:italic;"># ── Resumen por servicio ──</span>
+resumen = df.<span style="color:#cba6f7;font-weight:700;">groupby</span>(<span id="fib-b3-wrap"><input type="text" class="fib-input" id="fib-b3" placeholder="columna?" maxlength="20" autocomplete="off"></span>).size()
+print(resumen)
                 </div>
                 <button class="fib-submit-btn" onclick="checkFib3()">✅ Verificar</button>
                 <div class="fib-feedback" id="fib-fb-3"></div>
@@ -1178,50 +1076,50 @@ def atender_paciente(cola):
             <hr style="margin:2rem 0 1.5rem; border:none; border-top:1px solid #dde5f3;">
 
             <!-- ══════════════════════════════════════
-                 DRAG-AND-DROP: Pila vs Cola
+                 DRAG-AND-DROP: Flujo de datos
             ══════════════════════════════════════════ -->
-            <h3 style="color:var(--primary); margin-bottom:1rem;">🖱️ Pila vs Cola</h3>
+            <h3 style="color:var(--primary); margin-bottom:1rem;">🖱️ Flujo de datos</h3>
             <p style="font-size:.85rem; color:var(--muted); margin-bottom:.8rem;">
-                Arrastra cada operación a la columna correcta: ¿pertenece al mundo <strong>Pila (LIFO)</strong> o <strong>Cola (FIFO)</strong>?
+                Arrastra cada concepto a la columna correcta: ¿pertenece a <strong>Entrada</strong>, <strong>Proceso</strong> o <strong>Salida</strong>?
             </p>
             <div class="dnd-source">
-                <h4>📦 Operaciones para clasificar</h4>
+                <h4>📦 Conceptos para clasificar</h4>
                 <div id="dnd-items" style="display:flex; flex-wrap:wrap; gap:8px;">
-                    <div class="dnd-item" draggable="true" data-value="push" data-col="pila">push</div>
-                    <div class="dnd-item" draggable="true" data-value="enqueue" data-col="cola">enqueue</div>
-                    <div class="dnd-item" draggable="true" data-value="pop" data-col="pila">pop</div>
-                    <div class="dnd-item" draggable="true" data-value="dequeue" data-col="cola">dequeue</div>
-                    <div class="dnd-item" draggable="true" data-value="peek (top)" data-col="pila">peek (top)</div>
-                    <div class="dnd-item" draggable="true" data-value="front" data-col="cola">front</div>
-                    <div class="dnd-item" draggable="true" data-value="LIFO" data-col="pila">LIFO</div>
-                    <div class="dnd-item" draggable="true" data-value="FIFO" data-col="cola">FIFO</div>
-                    <div class="dnd-item" draggable="true" data-value="append (lista)" data-col="pila">append (lista)</div>
-                    <div class="dnd-item" draggable="true" data-value="popleft" data-col="cola">popleft</div>
+                    <div class="dnd-item" draggable="true" data-value="CSV" data-col="entrada">CSV</div>
+                    <div class="dnd-item" draggable="true" data-value="read_csv" data-col="entrada">read_csv</div>
+                    <div class="dnd-item" draggable="true" data-value="filtrar filas" data-col="proceso">filtrar filas</div>
+                    <div class="dnd-item" draggable="true" data-value="groupby" data-col="proceso">groupby</div>
+                    <div class="dnd-item" draggable="true" data-value="limpieza" data-col="proceso">limpieza</div>
+                    <div class="dnd-item" draggable="true" data-value="reporte" data-col="salida">reporte</div>
+                    <div class="dnd-item" draggable="true" data-value="dashboard" data-col="salida">dashboard</div>
+                    <div class="dnd-item" draggable="true" data-value="tabla" data-col="entrada">tabla</div>
+                    <div class="dnd-item" draggable="true" data-value="resumen" data-col="salida">resumen</div>
+                    <div class="dnd-item" draggable="true" data-value="dato faltante" data-col="proceso">dato faltante</div>
                 </div>
             </div>
             <div class="dnd-container">
-                <div class="dnd-column" id="dnd-col-pila" data-col="pila">
-                    <h4>📚 Pila (LIFO)</h4>
-                    <p style="font-size:.72rem; color:var(--muted); text-align:center;">Último en entrar, primero en salir</p>
-                    <div class="dnd-drop-zone" data-col="pila"><span class="dnd-drop-value"></span></div>
-                    <div class="dnd-drop-zone" data-col="pila"><span class="dnd-drop-value"></span></div>
-                    <div class="dnd-drop-zone" data-col="pila"><span class="dnd-drop-value"></span></div>
-                    <div class="dnd-drop-zone" data-col="pila"><span class="dnd-drop-value"></span></div>
-                    <div class="dnd-drop-zone" data-col="pila"><span class="dnd-drop-value"></span></div>
+                <div class="dnd-column" id="dnd-col-pila" data-col="entrada">
+                    <h4>📥 Entrada</h4>
+                    <p style="font-size:.72rem; color:var(--muted); text-align:center;">Datos que llegan desde una fuente</p>
+                    <div class="dnd-drop-zone" data-col="entrada"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="entrada"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="entrada"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="entrada"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="entrada"><span class="dnd-drop-value"></span></div>
                 </div>
-                <div class="dnd-column" id="dnd-col-cola" data-col="cola">
-                    <h4>🚶 Cola (FIFO)</h4>
-                    <p style="font-size:.72rem; color:var(--muted); text-align:center;">Primero en entrar, primero en salir</p>
-                    <div class="dnd-drop-zone" data-col="cola"><span class="dnd-drop-value"></span></div>
-                    <div class="dnd-drop-zone" data-col="cola"><span class="dnd-drop-value"></span></div>
-                    <div class="dnd-drop-zone" data-col="cola"><span class="dnd-drop-value"></span></div>
-                    <div class="dnd-drop-zone" data-col="cola"><span class="dnd-drop-value"></span></div>
-                    <div class="dnd-drop-zone" data-col="cola"><span class="dnd-drop-value"></span></div>
+                <div class="dnd-column" id="dnd-col-cola" data-col="proceso">
+                    <h4>⚙️ Proceso</h4>
+                    <p style="font-size:.72rem; color:var(--muted); text-align:center;">Operaciones que transforman la información</p>
+                    <div class="dnd-drop-zone" data-col="proceso"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="proceso"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="proceso"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="proceso"><span class="dnd-drop-value"></span></div>
+                    <div class="dnd-drop-zone" data-col="proceso"><span class="dnd-drop-value"></span></div>
                 </div>
                 <div class="dnd-column" id="dnd-col-ambas" data-col="ambas">
-                    <h4>🔄 Ambas</h4>
-                    <p style="font-size:.72rem; color:var(--muted); text-align:center;">Aplica a ambas estructuras</p>
-                    <div class="dnd-drop-zone" data-col="ambas"><span class="dnd-drop-value"></span></div>
+                    <h4>📤 Salida</h4>
+                    <p style="font-size:.72rem; color:var(--muted); text-align:center;">Resultados para interpretar o compartir</p>
+                    <div class="dnd-drop-zone" data-col="salida"><span class="dnd-drop-value"></span></div>
                 </div>
             </div>
             <div class="dnd-score">
@@ -1237,57 +1135,57 @@ def atender_paciente(cola):
             <p class="section-intro">Actividad central de la semana con verbo Bloom explícito, evidencias y puntos ClassDojo.</p>
             <div class="activity-shell">
     <div class="subcard">
-        <h3>Sistema de Lista de Espera NeuroBiz</h3>
-        <p><strong>Verbo Bloom explícito:</strong> <strong>Aplicar</strong> una cola para simular la asignación de terapeutas a pacientes según orden de llegada.</p>
-        <p><strong>Reto:</strong> cada equipo recibirá una secuencia de registros de pacientes y una disponibilidad parcial de terapeutas. Debe construir una simulación que preserve FIFO, atender ciertos pacientes y reportar quién queda en espera al finalizar.</p>
+        <h3>Sistema de Reporte NeuroBiz</h3>
+        <p><strong>Verbo Bloom explícito:</strong> <strong>Aplicar</strong> una organización de datos para generar un reporte simple de atenciones y solicitudes.</p>
+        <p><strong>Reto:</strong> cada equipo recibirá una secuencia de registros con campos incompletos o repetidos. Debe limpiarlos, agruparlos por categoría y reportar un resumen de negocio al finalizar.</p>
         <div class="mini-grid">
             <div class="subcard">
                 <span class="phase-label had">HAD · 120 min</span>
                 <ul>
-                    <li>Activación con filas físicas: estudiantes representan el frente y el final de la cola.</li>
-                    <li>Conceptualización de FIFO y comparación rápida con la pila de semanas anteriores.</li>
-                    <li>Demostración guiada en Colab con <code>collections.deque</code>.</li>
-                    <li>Discusión sobre equidad: qué se rompe si se atiende fuera de orden sin criterio explícito.</li>
+                    <li>Activación con tarjetas físicas: estudiantes representan registros con campos.</li>
+                    <li>Conceptualización de entrada, proceso y salida.</li>
+                    <li>Demostración guiada en Colab con listas, diccionarios y filtros simples.</li>
+                    <li>Discusión sobre calidad del dato: qué pasa si un campo llega vacío o mal escrito.</li>
                 </ul>
             </div>
             <div class="subcard">
                 <span class="phase-label hp">HP · 120 min</span>
                 <ul>
                     <li>Construcción del prototipo por equipos con datos del caso.</li>
-                    <li>Prueba con al menos 5 <em>enqueue</em> y 3 <em>dequeue</em>.</li>
-                    <li>Generación de un reporte sencillo: frente actual, longitud de la cola y pacientes pendientes.</li>
-                    <li>Socialización del criterio: por qué la cola responde al valor de equidad en la asignación.</li>
+                    <li>Prueba con al menos 5 registros, 2 filtros y 1 resumen por categoría.</li>
+                    <li>Generación de un reporte sencillo: total de registros, faltantes y conteo por servicio.</li>
+                    <li>Socialización del criterio: por qué la limpieza mejora la calidad del reporte.</li>
                 </ul>
             </div>
         </div>
         <h3>Entregables mínimos</h3>
         <ul>
-            <li>Simulación funcional de llegada y atención.</li>
-            <li>Registro de al menos una consulta al frente con <em>peek</em> o índice equivalente.</li>
-            <li>Explicación de cómo se preservó FIFO.</li>
-            <li>Conexión con el impacto en espera, retención o continuidad del servicio.</li>
+            <li>Tabla funcional con registros de NeuroBiz.</li>
+            <li>Registro de al menos un filtro y un resumen por categoría.</li>
+            <li>Explicación de cómo se limpiaron o seleccionaron los datos.</li>
+            <li>Conexión con el impacto en reportes, trazabilidad o toma de decisiones.</li>
         </ul>
         <table>
             <thead><tr><th>Criterio</th><th>Qué observar</th><th>Evidencia</th></tr></thead>
             <tbody>
-                <tr><td>Respeto de FIFO</td><td>El primer registrado es el primero atendido</td><td>Salida de ejecución</td></tr>
-                <tr><td>Uso de operaciones</td><td>Emplea enqueue, dequeue y verificación de vacío</td><td>Código comentado o explicado</td></tr>
-                <tr><td>Lectura organizacional</td><td>Justifica la cola como mecanismo de equidad</td><td>Explicación oral o escrita</td></tr>
-                <tr><td>Visualización del estado</td><td>Reporta frente y elementos pendientes</td><td>Panel o impresión final</td></tr>
+                <tr><td>Organización de datos</td><td>El equipo presenta registros claros y consistentes</td><td>Salida de ejecución</td></tr>
+                <tr><td>Uso de operaciones</td><td>Emplea filtrado, conteo y resumen</td><td>Código comentado o explicado</td></tr>
+                <tr><td>Lectura organizacional</td><td>Justifica la limpieza como apoyo a la decisión</td><td>Explicación oral o escrita</td></tr>
+                <tr><td>Visualización del estado</td><td>Reporta totales y categorías</td><td>Panel o impresión final</td></tr>
             </tbody>
         </table>
     </div>
     <aside class="dojo-panel">
         <h3>Panel ClassDojo</h3>
         <ul>
-            <li><strong>+2 puntos</strong> por representar correctamente el frente y el final de la cola.</li>
-            <li><strong>+2 puntos</strong> por mantener FIFO durante toda la simulación.</li>
-            <li><strong>+3 puntos</strong> por prototipo funcional con <code>deque</code>.</li>
-            <li><strong>+2 puntos</strong> por explicar el impacto de la cola en la equidad del servicio.</li>
+            <li><strong>+2 puntos</strong> por presentar una tabla de datos clara.</li>
+            <li><strong>+2 puntos</strong> por limpiar o filtrar correctamente los registros.</li>
+            <li><strong>+3 puntos</strong> por prototipo funcional con resumen por categoría.</li>
+            <li><strong>+2 puntos</strong> por explicar el impacto de la calidad del dato.</li>
             <li><strong>+1 punto</strong> por mostrar un pequeño resumen de estado o dashboard.</li>
         </ul>
         <p><strong>Total sugerido:</strong> 10 puntos.</p>
-        <p><strong>ODS:</strong> insistir en que una espera organizada evita desplazamientos improductivos y reprocesos administrativos.</p>
+        <p><strong>ODS:</strong> insistir en que una información mejor organizada evita reprocesos y mejora la trazabilidad administrativa.</p>
     </aside>
 </div>
 
@@ -1295,23 +1193,23 @@ def atender_paciente(cola):
                  QUEUE VISUALIZER
             ══════════════════════════════════════════ -->
             <hr style="margin:2rem 0 1.5rem; border:none; border-top:1px solid #dde5f3;">
-            <h3 style="color:var(--primary); margin-bottom:1rem;">👥 Visualizador de Cola — Lista de Espera NeuroBiz</h3>
-            <p style="font-size:.85rem; color:var(--muted);">Simula la lista de espera: encola pacientes, atiende al primero y consulta el frente sin remover. ¡Completa al menos 3 enqueues y 2 dequeues para ganar XP!</p>
+            <h3 style="color:var(--primary); margin-bottom:1rem;">👥 Visualizador de Flujo — Registros NeuroBiz</h3>
+            <p style="font-size:.85rem; color:var(--muted);">Simula el flujo de registros: agrega filas, retira una para revisión y consulta el siguiente elemento sin perder el orden de trabajo. ¡Completa al menos 3 registros y 2 revisiones para ganar XP!</p>
 
             <div class="queue-viz">
-                <div class="queue-label"><span>← FRENTE (primero en salir)</span><span>FINAL (último en llegar) →</span></div>
+                <div class="queue-label"><span>← PRIMERO EN REVISARSE</span><span>ÚLTIMO EN LLEGAR →</span></div>
                 <div class="queue-display" id="queue-display">
-                    <div style="color:#b0bec5;font-size:.82rem;padding:5px;">(cola vacía)</div>
+                    <div style="color:#b0bec5;font-size:.82rem;padding:5px;">(sin registros)</div>
                 </div>
                 <div class="queue-stats">
-                    <span>✅ Atendidos: <strong id="q-served">0</strong></span>
-                    <span>⏳ En espera: <strong id="q-waiting">0</strong></span>
-                    <span>📊 Total operaciones: <strong id="q-ops">0</strong></span>
+                    <span>✅ Revisados: <strong id="q-served">0</strong></span>
+                    <span>⏳ Pendientes: <strong id="q-waiting">0</strong></span>
+                    <span>📊 Total movimientos: <strong id="q-ops">0</strong></span>
                 </div>
                 <div class="queue-controls">
-                    <button class="queue-btn enqueue" onclick="queueEnqueue()">➕ Enqueue</button>
-                    <button class="queue-btn dequeue" onclick="queueDequeue()">➖ Dequeue</button>
-                    <button class="queue-btn peek" onclick="queuePeek()">👁️ Front</button>
+                    <button class="queue-btn enqueue" onclick="queueEnqueue()">➕ Registrar</button>
+                    <button class="queue-btn dequeue" onclick="queueDequeue()">➖ Revisar</button>
+                    <button class="queue-btn peek" onclick="queuePeek()">👁️ Siguiente</button>
                     <button class="queue-btn verificar" onclick="queueVerificar()">✅ Verificar</button>
                     <button class="queue-btn reset" onclick="queueReiniciar()">🔄 Reiniciar</button>
                 </div>
@@ -1326,44 +1224,41 @@ def atender_paciente(cola):
             <!-- HTI A: Interactiva con Code Editor -->
             <div class="scenario-a">
                 <h3>HTI Escenario A · Profundización (60-90 min, entrega digital)</h3>
-                <p><strong>Producto:</strong> agregar prioridades a la cola usando <code>heapq</code> para casos críticos.</p>
+                <p><strong>Producto:</strong> generar un resumen tabular con conteo por canal y por servicio usando datos de NeuroBiz.</p>
                 <ul>
-                    <li>Definir una prioridad numérica donde valores más bajos signifiquen atención más urgente.</li>
-                    <li>Registrar al menos 6 pacientes y mostrar cómo cambia el orden de atención.</li>
-                    <li>Explicar en 8 a 10 líneas por qué esta solución ya no es una cola FIFO pura.</li>
-                    <li>Entregar código, salida y breve comentario sobre criterios éticos de prioridad.</li>
+                    <li>Definir al menos 6 registros con campos completos y uno con un vacío.</li>
+                    <li>Mostrar cómo contar por canal y por servicio.</li>
+                    <li>Explicar en 8 a 10 líneas por qué limpiar datos mejora el resultado.</li>
+                    <li>Entregar código, salida y breve comentario sobre calidad del dato.</li>
                 </ul>
-                <p><strong>Énfasis Bloom:</strong> aplicar con extensión y comenzar a distinguir variantes de la estructura base.</p>
+                <p><strong>Énfasis Bloom:</strong> aplicar con extensión y comenzar a distinguir categorías y patrones.</p>
 
                 <!-- HTI A Code Editor -->
                 <div class="hti-code-editor">
                     <div class="hti-code-header">
-                        <span style="color:#6c7086;font-family:monospace;font-size:.78rem;">📝 hti_prioridad_pacientes.py</span>
+                        <span style="color:#6c7086;font-family:monospace;font-size:.78rem;">📝 hti_resumen_neurobiz.py</span>
                         <div>
                             <button class="hti-btn" onclick="runHtiA()" id="hti-a-run-btn" style="background:var(--primary);">▶ Run</button>
                         </div>
                     </div>
-                    <textarea id="hti-a-code" rows="14" spellcheck="false"># ── Cola con prioridad para pacientes urgentes ──
-import heapq
-
-# Define prioridad: menor número = más urgente
-pacientes = [
-    (2, "Samuel", "Lenguaje"),
-    (1, "Valentina", "Sensorial"),   # Urgente
-    (3, "Martín", "TEA"),
-    (1, "Lucía", "TDAH"),           # Urgente
-    (2, "Felipe", "Lenguaje"),
-    (3, "Diana", "Sensorial"),
+                    <textarea id="hti-a-code" rows="14" spellcheck="false"># ── Resumen por canal y servicio ──
+registros = [
+    {"paciente": "Samuel", "canal": "WhatsApp", "servicio": "Lenguaje"},
+    {"paciente": "Valentina", "canal": "Formulario", "servicio": "Sensorial"},
+    {"paciente": "Martín", "canal": "Llamada", "servicio": "TEA"},
+    {"paciente": "Lucía", "canal": "WhatsApp", "servicio": "Lenguaje"},
+    {"paciente": "Felipe", "canal": "Formulario", "servicio": "Lenguaje"},
+    {"paciente": "Diana", "canal": "", "servicio": "Sensorial"},
 ]
 
-heapq.heapify(pacientes)
-print("=== Atención por prioridad ===")
-while pacientes:
-    prio, nombre, terapia = heapq.heappop(pacientes)
-    print(f"  Prioridad {prio}: {nombre} - {terapia}")
+canales = {}
+servicios = {}
+for r in registros:
+    canales[r["canal"] or "Sin dato"] = canales.get(r["canal"] or "Sin dato", 0) + 1
+    servicios[r["servicio"]] = servicios.get(r["servicio"], 0) + 1
 
-print("\n💡 Esto ya NO es FIFO: la urgencia altera el orden de llegada.")
-print("   Se debe justificar éticamente el criterio de prioridad.")</textarea>
+print("Conteo por canal:", canales)
+print("Conteo por servicio:", servicios)</textarea>
                     <div class="hti-code-output" id="hti-a-output"><pre></pre></div>
                 </div>
                 <div style="display:flex; gap:10px; margin-top:.8rem; flex-wrap:wrap;">
@@ -1375,25 +1270,25 @@ print("   Se debe justificar éticamente el criterio de prioridad.")</textarea>
             <!-- HTI B: Fillable table -->
             <div class="scenario-b">
                 <h3>HTI Escenario B · Bajo umbral (20-30 min, cuaderno/papel)</h3>
-                <p><strong>Producto:</strong> elaborar un diagrama de una cola después de 5 operaciones <em>enqueue</em> y 3 <em>dequeue</em> con datos de pacientes NeuroBiz.</p>
+                <p><strong>Producto:</strong> elaborar un diagrama de una tabla después de 5 registros con datos de NeuroBiz.</p>
                 <ul>
-                    <li>Marcar frente y final después de cada paso.</li>
-                    <li>Indicar quién sería el siguiente en ser atendido.</li>
-                    <li>Escribir una frase final que explique por qué la estructura protege el orden de llegada.</li>
+                    <li>Marcar qué campos tiene cada fila.</li>
+                    <li>Indicar cómo cambia el total al añadir cada registro.</li>
+                    <li>Escribir una frase final que explique por qué una tabla ordenada mejora el reporte.</li>
                 </ul>
                 <p><strong>Importante:</strong> este escenario <strong>NO BLOQUEA la siguiente clase</strong> si no se realiza; se usa como refuerzo visual y de baja carga.</p>
 
                 <!-- HTI B Fillable Table -->
-                <p style="font-weight:700; margin-top:1rem;">📋 Completa la tabla de trazabilidad de la cola:</p>
-                <p style="font-size:.82rem; color:var(--muted);">Pacientes: Samuel, Valentina, Martín, Lucía, Felipe (en orden de llegada).</p>
+                <p style="font-weight:700; margin-top:1rem;">📋 Completa la tabla de trazabilidad de los registros:</p>
+                <p style="font-size:.82rem; color:var(--muted);">Registros: Samuel, Valentina, Martín, Lucía, Felipe (en orden de llegada).</p>
                 <table style="font-size:.85rem;">
-                    <thead><tr><th>Paso</th><th>Operación</th><th>Frente</th><th>Final</th><th>Longitud</th></tr></thead>
+                    <thead><tr><th>Paso</th><th>Operación</th><th>Paciente</th><th>Canal</th><th>Total</th></tr></thead>
                     <tbody>
-                        <tr><td>1</td><td>Enqueue Samuel</td><td><input class="hti-table-input" id="hti-b-val-1" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-1b" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-1c" placeholder="núm?" maxlength="3" style="width:60px;"></td></tr>
-                        <tr><td>2</td><td>Enqueue Valentina</td><td><input class="hti-table-input" id="hti-b-val-2" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-2b" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-2c" placeholder="núm?" maxlength="3" style="width:60px;"></td></tr>
-                        <tr><td>3</td><td>Enqueue Martín</td><td><input class="hti-table-input" id="hti-b-val-3" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-3b" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-3c" placeholder="núm?" maxlength="3" style="width:60px;"></td></tr>
-                        <tr><td>4</td><td>Dequeue (atender)</td><td><input class="hti-table-input" id="hti-b-val-4" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-4b" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-4c" placeholder="núm?" maxlength="3" style="width:60px;"></td></tr>
-                        <tr><td>5</td><td>Dequeue (atender)</td><td><input class="hti-table-input" id="hti-b-val-5" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-5b" placeholder="¿quién?" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-5c" placeholder="núm?" maxlength="3" style="width:60px;"></td></tr>
+                        <tr><td>1</td><td>Registro Samuel</td><td><input class="hti-table-input" id="hti-b-val-1" placeholder="nombre" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-1b" placeholder="canal" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-1c" placeholder="núm" maxlength="3" style="width:60px;"></td></tr>
+                        <tr><td>2</td><td>Registro Valentina</td><td><input class="hti-table-input" id="hti-b-val-2" placeholder="nombre" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-2b" placeholder="canal" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-2c" placeholder="núm" maxlength="3" style="width:60px;"></td></tr>
+                        <tr><td>3</td><td>Registro Martín</td><td><input class="hti-table-input" id="hti-b-val-3" placeholder="nombre" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-3b" placeholder="canal" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-3c" placeholder="núm" maxlength="3" style="width:60px;"></td></tr>
+                        <tr><td>4</td><td>Registro Lucía</td><td><input class="hti-table-input" id="hti-b-val-4" placeholder="nombre" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-4b" placeholder="canal" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-4c" placeholder="núm" maxlength="3" style="width:60px;"></td></tr>
+                        <tr><td>5</td><td>Registro Felipe</td><td><input class="hti-table-input" id="hti-b-val-5" placeholder="nombre" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-5b" placeholder="canal" maxlength="15"></td><td><input class="hti-table-input" id="hti-b-val-5c" placeholder="núm" maxlength="3" style="width:60px;"></td></tr>
                     </tbody>
                 </table>
                 <div style="display:flex; gap:10px; margin-top:.8rem; flex-wrap:wrap; align-items:center;">
@@ -1410,37 +1305,37 @@ print("   Se debe justificar éticamente el criterio de prioridad.")</textarea>
             <div class="quiz-shell">
             <article class="quiz-q">
                 <h3>Pregunta 1</h3>
-                <p><strong>¿Qué significa FIFO en una cola?</strong></p>
-                <ol><li>a) El último en entrar es el primero en salir</li><li>b) El primero en entrar es el primero en salir</li><li>c) Todos salen al mismo tiempo</li><li>d) No existe un orden de salida</li></ol>
-                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) El primero en entrar es el primero en salir</div>
+                <p><strong>¿Qué es un CSV?</strong></p>
+                <ol><li>a) Un gráfico de barras</li><li>b) Un archivo de datos separados por comas</li><li>c) Un lenguaje de programación</li><li>d) Un tipo de servidor</li></ol>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) Un archivo de datos separados por comas</div>
             </article>
 
             <article class="quiz-q">
                 <h3>Pregunta 2</h3>
-                <p><strong>¿Qué operación agrega un paciente al final de la cola?</strong></p>
-                <ol><li>a) pop</li><li>b) push</li><li>c) enqueue</li><li>d) peek</li></ol>
-                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> c) enqueue</div>
+                <p><strong>¿Qué hace un filtro por condición?</strong></p>
+                <ol><li>a) Cambia el orden del archivo</li><li>b) Selecciona solo filas que cumplen una regla</li><li>c) Borra la tabla completa</li><li>d) Convierte todo en gráfico</li></ol>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) Selecciona solo filas que cumplen una regla</div>
             </article>
 
             <article class="quiz-q">
                 <h3>Pregunta 3</h3>
-                <p><strong>En una cola, ¿qué elemento se atiende primero?</strong></p>
-                <ol><li>a) El que llegó más recientemente</li><li>b) El que está al frente</li><li>c) El que tenga nombre más corto</li><li>d) El que tenga mayor KPI</li></ol>
-                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) El que está al frente</div>
+                <p><strong>¿Qué operación ayuda a obtener un resumen por categoría?</strong></p>
+                <ol><li>a) groupby</li><li>b) append</li><li>c) pop</li><li>d) sort_index</li></ol>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> a) groupby</div>
             </article>
 
             <article class="quiz-q">
                 <h3>Pregunta 4</h3>
-                <p><strong>¿Qué estructura de Python es especialmente útil para colas eficientes?</strong></p>
-                <ol><li>a) set</li><li>b) tuple</li><li>c) collections.deque</li><li>d) dict</li></ol>
-                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> c) collections.deque</div>
+                <p><strong>¿Qué se debe revisar antes de reportar datos?</strong></p>
+                <ol><li>a) Solo el color de la tabla</li><li>b) Los campos faltantes o inconsistentes</li><li>c) El tamaño del monitor</li><li>d) El nombre del archivo solamente</li></ol>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) Los campos faltantes o inconsistentes</div>
             </article>
 
             <article class="quiz-q">
                 <h3>Pregunta 5</h3>
-                <p><strong>¿Por qué la cola se asocia con equidad en el caso base de NeuroBiz?</strong></p>
-                <ol><li>a) Porque prioriza siempre al último paciente</li><li>b) Porque respeta el orden de registro</li><li>c) Porque elimina la necesidad de datos</li><li>d) Porque siempre reduce la cola a cero</li></ol>
-                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) Porque respeta el orden de registro</div>
+                <p><strong>¿Por qué la calidad del dato importa en Big Data inicial?</strong></p>
+                <ol><li>a) Porque hace más difícil analizar</li><li>b) Porque mejora la confiabilidad del reporte</li><li>c) Porque elimina la necesidad de revisar</li><li>d) Porque no cambia nada</li></ol>
+                <div class="quiz-answer"><strong>✅ Respuesta correcta:</strong> b) Porque mejora la confiabilidad del reporte</div>
             </article>
             </div>
             <div class="quiz-controls">
@@ -1456,14 +1351,17 @@ print("   Se debe justificar éticamente el criterio de prioridad.")</textarea>
             <h2>Bibliografía base en formato APA</h2>
             <p class="section-intro">Fuentes base del módulo, usadas para fundamentar la conceptualización y la traducción al contexto organizacional.</p>
             <ol>
-    <li>Cairó Battistutti, O. &amp; Guardati Bueno, S. (2006). <em>Estructuras de datos</em>. McGraw-Hill.</li>
-    <li>Joyanes Aguilar, L. (2014). <em>Fundamentos de programación: algoritmos, estructura de datos y objetos</em> (3.ª ed.). McGraw-Hill. ISBN: 9786071508188.</li>
-    <li>Weiss, M. A. (2014). <em>Data Structures and Algorithm Analysis in Java</em> (3rd ed.). Pearson/Addison Wesley.</li>
-    <li>Python Software Foundation. (2024). <em>Built-in Types</em>. https://docs.python.org/3/library/stdtypes.html</li>
-    <li>Google Colaboratory. (2024). https://colab.research.google.com</li>
-    <li>Moreno Pérez, J. C. (2012). <em>Programación</em>. RA-MA Editorial. ISBN: 9788499640884.</li>
-</ol>
-            <p class="foot-ref">Las referencias impresas se interpretan de forma aplicada; las referencias digitales se emplean para validar la implementación en Python y la ejecución en entornos de notebook.</p>
+    <li>Cormen, T. H., Leiserson, C. E., Rivest, R. L., &amp; Stein, C. (2022). <em>Introduction to algorithms</em> (4th ed.). MIT Press. https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/</li>
+    <li>McKinney, W. (2017). <em>Python for data analysis: Data wrangling with pandas, NumPy, and IPython</em> (2nd ed.). O'Reilly Media.</li>
+    <li>Python Software Foundation. (2026). <em>collections — Container datatypes</em>. https://docs.python.org/3/library/collections.html</li>
+    <li>Python Software Foundation. (2026). <em>Data structures</em>. https://docs.python.org/3/tutorial/datastructures.html</li>
+    <li>Python Software Foundation. (2026). <em>queue — A synchronized queue class</em>. https://docs.python.org/3/library/queue.html</li>
+    <li>pandas Development Team. (2026). <em>User guide</em>. https://pandas.pydata.org/docs/user_guide/index.html</li>
+    <li>pandas Development Team. (2026). <em>pandas.read_csv</em>. https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html</li>
+    <li>pandas Development Team. (2026). <em>Indexing and selecting data</em>. https://pandas.pydata.org/docs/user_guide/indexing.html</li>
+    <li>Ward, J. S., &amp; Barker, A. (2013). Undefined by data: A survey of big data definitions. <em>arXiv</em>. https://arxiv.org/abs/1309.5821</li>
+            </ol>
+            <p class="foot-ref">Las referencias impresas se interpretan de forma aplicada; las referencias digitales se emplean para validar la implementación en Python y la ejecución en entornos de notebook. Esta bibliografía está pensada para consulta adicional, no solo para cumplimiento formal.</p>
         </section>
     </main>
 
@@ -2164,7 +2062,7 @@ function safeAddXP(pts, motivo) {
 
 <script>
 // ═══════════════════════════════════════════
-//  QUEUE VISUALIZER — FIFO Waiting List
+//  VISUALIZADOR DE FLUJO — Registros NeuroBiz
 // ═══════════════════════════════════════════
 (function() {
   var patientsQueue = [];
@@ -2174,8 +2072,8 @@ function safeAddXP(pts, motivo) {
   var verified = false;
 
   var nombres = ['Samuel', 'Valentina', 'Martín', 'Lucía', 'Felipe', 'Diana', 'Mateo', 'Isabella', 'Santiago', 'Emma'];
-  var terapias = ['Lenguaje', 'Sensorial', 'TEA', 'TDAH', 'Ocupacional', 'Cognitiva'];
-  var urgencias = ['baja', 'media', 'alta'];
+  var canales = ['WhatsApp', 'Formulario', 'Llamada', 'Email'];
+  var servicios = ['Lenguaje', 'Sensorial', 'TEA', 'TDAH', 'Ocupacional', 'Cognitiva'];
   var nameIdx = 0;
 
   function getRandomPatient() {
@@ -2183,8 +2081,8 @@ function safeAddXP(pts, motivo) {
     nameIdx++;
     return {
       nombre: name,
-      tipo_terapia: terapias[Math.floor(Math.random() * terapias.length)],
-      urgencia: urgencias[Math.floor(Math.random() * urgencias.length)]
+      canal: canales[Math.floor(Math.random() * canales.length)],
+      servicio: servicios[Math.floor(Math.random() * servicios.length)]
     };
   }
 
@@ -2194,14 +2092,14 @@ function safeAddXP(pts, motivo) {
     display.innerHTML = '';
 
     if (patientsQueue.length === 0) {
-      display.innerHTML = '<div style="color:#b0bec5;font-size:.82rem;padding:5px;">(cola vacía)</div>';
+      display.innerHTML = '<div style="color:#b0bec5;font-size:.82rem;padding:5px;">(sin registros)</div>';
     } else {
       patientsQueue.forEach(function(p, idx) {
         var div = document.createElement('div');
         div.className = 'queue-item';
         if (idx === 0) div.classList.add('front');
-        div.title = p.tipo_terapia + ' (urgencia: ' + p.urgencia + ')';
-        div.textContent = p.nombre;
+        div.title = 'Canal: ' + p.canal + ' · Servicio: ' + p.servicio;
+        div.textContent = p.nombre + ' · ' + p.canal;
         display.appendChild(div);
 
         if (idx < patientsQueue.length - 1) {
@@ -2224,14 +2122,14 @@ function safeAddXP(pts, motivo) {
     enqueueCount++;
     renderQueue();
     var msg = document.getElementById('queue-msg');
-    msg.textContent = '➕ ' + p.nombre + ' (' + p.tipo_terapia + ') agregado al final de la cola.';
+    msg.textContent = '➕ ' + p.nombre + ' (' + p.canal + ', ' + p.servicio + ') agregado al flujo de trabajo.';
     msg.style.color = '#89b4fa';
   };
 
   window.queueDequeue = function() {
     if (patientsQueue.length === 0) {
       var msg = document.getElementById('queue-msg');
-      msg.textContent = '⚠️ Underflow: la cola está vacía. No hay pacientes que atender.';
+      msg.textContent = '⚠️ No hay registros disponibles para revisar.';
       msg.style.color = '#f38ba8';
       return;
     }
@@ -2240,20 +2138,20 @@ function safeAddXP(pts, motivo) {
     servedCount++;
     renderQueue();
     var msg = document.getElementById('queue-msg');
-    msg.textContent = '➖ ' + p.nombre + ' ha sido atendido(a) y sale de la cola.';
+    msg.textContent = '➖ ' + p.nombre + ' ha sido revisado(a) y sale del buffer.';
     msg.style.color = '#a6e3a1';
   };
 
   window.queuePeek = function() {
     if (patientsQueue.length === 0) {
       var msg = document.getElementById('queue-msg');
-      msg.textContent = '👁️ La cola está vacía. No hay frente que consultar.';
+      msg.textContent = '👁️ No hay registros para consultar.';
       msg.style.color = '#f9e2af';
       return;
     }
     var p = patientsQueue[0];
     var msg = document.getElementById('queue-msg');
-    msg.textContent = '👁️ Frente: ' + p.nombre + ' (' + p.tipo_terapia + ', urgencia ' + p.urgencia + ')';
+    msg.textContent = '👁️ Siguiente registro: ' + p.nombre + ' (' + p.canal + ', ' + p.servicio + ')';
     msg.style.color = '#FFDF2D';
   };
 
@@ -2261,7 +2159,7 @@ function safeAddXP(pts, motivo) {
     if (enqueueCount >= 3 && dequeueCount >= 2) {
       if (!verified) {
         verified = true;
-        safeAddXP(10, 'Cola verificada (≥3 enqueues + ≥2 dequeues)');
+        safeAddXP(10, 'Flujo de registros verificado (≥3 registros + ≥2 revisiones)');
         try {
           if (typeof PT !== 'undefined' && PT.state) {
             PT.state.actividad_completada = true;
@@ -2270,11 +2168,11 @@ function safeAddXP(pts, motivo) {
         } catch(e) {}
       }
       var msg = document.getElementById('queue-msg');
-      msg.textContent = '✅ ¡Actividad completada! +10 XP. Has realizado ' + enqueueCount + ' enqueues y ' + dequeueCount + ' dequeues.';
+      msg.textContent = '✅ ¡Actividad completada! +10 XP. Has realizado ' + enqueueCount + ' registros y ' + dequeueCount + ' revisiones.';
       msg.style.color = '#a6e3a1';
     } else {
       var msg = document.getElementById('queue-msg');
-      msg.textContent = '⚠️ Debes hacer al menos 3 enqueues y 2 dequeues. Actual: ' + enqueueCount + ' enqueues, ' + dequeueCount + ' dequeues.';
+      msg.textContent = '⚠️ Debes hacer al menos 3 registros y 2 revisiones. Actual: ' + enqueueCount + ' registros, ' + dequeueCount + ' revisiones.';
       msg.style.color = '#ef6c00';
     }
   };
@@ -2288,7 +2186,7 @@ function safeAddXP(pts, motivo) {
     nameIdx = 0;
     renderQueue();
     var msg = document.getElementById('queue-msg');
-    msg.textContent = '🔄 Cola reiniciada. ¡Empieza de nuevo!';
+    msg.textContent = '🔄 Flujo reiniciado. ¡Empieza de nuevo!';
     msg.style.color = '#b0bec5';
   };
 
@@ -2307,7 +2205,7 @@ function safeAddXP(pts, motivo) {
 
 var fibCompleted = { ex1: false, ex2: false, ex3: false };
 
-// Exercise 1: Complete enqueue — "append" and "popleft"
+// Exercise 1: read_csv
 window.checkFib1 = function() {
   var b1 = document.getElementById('fib-b1');
   var b1b = document.getElementById('fib-b1b');
@@ -2317,15 +2215,15 @@ window.checkFib1 = function() {
   var v1 = (b1.value || '').trim();
   var v1b = (b1b.value || '').trim();
 
-  var correct1 = (v1 === 'append');
-  var correct1b = (v1b === 'popleft');
-  var correct = correct1 && correct1b;
+  var correct1 = (v1 === 'read_csv');
+  var correct1b = true;
+  var correct = correct1;
 
   b1.className = 'fib-input ' + (correct1 ? 'correct-input' : 'wrong-input');
-  b1b.className = 'fib-input ' + (correct1b ? 'correct-input' : 'wrong-input');
+  if (b1b) b1b.className = 'fib-input ' + (correct1b ? 'correct-input' : 'wrong-input');
 
   if (correct) {
-    showFibFeedback(fb, 'success', '✅ ¡Correcto! enqueue usa append() para agregar al final, y dequeue usa popleft() para extraer del frente.');
+    showFibFeedback(fb, 'success', '✅ ¡Correcto! read_csv() convierte el texto en una tabla para trabajar con datos.');
     ex.classList.add('correct'); ex.classList.remove('wrong');
     if (!fibCompleted.ex1) {
       fibCompleted.ex1 = true;
@@ -2333,16 +2231,12 @@ window.checkFib1 = function() {
       checkAllFibCompleted();
     }
   } else {
-    var hint = '';
-    if (!correct1 && !correct1b) hint = 'Ambos métodos son incorrectos.';
-    else if (!correct1) hint = 'El método para agregar al final es append().';
-    else if (!correct1b) hint = 'El método para extraer del frente es popleft().';
-    showFibFeedback(fb, 'error', '❌ ' + hint);
+    showFibFeedback(fb, 'error', '❌ El método correcto es read_csv().');
     ex.classList.add('wrong'); ex.classList.remove('correct');
   }
 };
 
-// Exercise 2: FIFO order — "0" and "Ana"
+// Exercise 2: filtering rows
 window.checkFib2 = function() {
   var b2 = document.getElementById('fib-b2');
   var b2b = document.getElementById('fib-b2b');
@@ -2352,15 +2246,21 @@ window.checkFib2 = function() {
   var v2 = (b2.value || '').trim();
   var v2b = (b2b.value || '').trim().toLowerCase();
 
-  var correct2 = (v2 === '0');
-  var correct2b = (v2b === 'ana');
-  var correct = correct2 && correct2b;
+  var normalized = v2.replace(/\s+/g, '').toLowerCase();
+  var correct2 = (
+    normalized === 'df["canal"]=="whatsapp"' ||
+    normalized === "df['canal']=='whatsapp'" ||
+    normalized === 'df[canal]=="whatsapp"' ||
+    normalized === "df[canal]=='whatsapp'"
+  );
+  var correct2b = true;
+  var correct = correct2;
 
   b2.className = 'fib-input ' + (correct2 ? 'correct-input' : 'wrong-input');
-  b2b.className = 'fib-input ' + (correct2b ? 'correct-input' : 'wrong-input');
+  if (b2b) b2b.className = 'fib-input ' + (correct2b ? 'correct-input' : 'wrong-input');
 
   if (correct) {
-    showFibFeedback(fb, 'success', '✅ ¡Correcto! El índice 0 apunta al frente. Ana fue la primera en llegar, por eso es el frente.');
+    showFibFeedback(fb, 'success', '✅ ¡Correcto! Ese filtro deja solo las filas de WhatsApp.');
     ex.classList.add('correct'); ex.classList.remove('wrong');
     if (!fibCompleted.ex2) {
       fibCompleted.ex2 = true;
@@ -2368,33 +2268,24 @@ window.checkFib2 = function() {
       checkAllFibCompleted();
     }
   } else {
-    var hint = '';
-    if (!correct2) hint = 'El frente siempre está en el índice 0.';
-    else if (!correct2b) hint = 'Ana fue la primera, así que está al frente.';
-    showFibFeedback(fb, 'error', '❌ ' + hint);
+    showFibFeedback(fb, 'error', '❌ Necesitas una condición sobre la columna canal para quedarte con WhatsApp.');
     ex.classList.add('wrong'); ex.classList.remove('correct');
   }
 };
 
-// Exercise 3: Underflow guard — "not cola" or "len(cola) == 0" etc.
+// Exercise 3: groupby column
 window.checkFib3 = function() {
   var b3 = document.getElementById('fib-b3');
   var fb  = document.getElementById('fib-fb-3');
   var ex  = document.getElementById('fib-ex-3');
 
   var v3 = (b3.value || '').trim();
-  var correct = (
-    v3 === 'not cola' || v3 === 'len(cola) == 0' ||
-    v3 === 'len(cola)==0' || v3 === 'cola.is_empty()' ||
-    v3 === 'not cola_espera' || v3 === 'len(cola_espera) == 0' ||
-    v3 === 'len(cola_espera)==0' || v3 === 'cola_espera.is_empty()' ||
-    v3 === 'not pacientes' || v3 === 'len(pacientes) == 0'
-  );
+  var correct = (v3 === 'servicio' || v3 === '"servicio"' || v3 === "'servicio'");
 
   b3.className = 'fib-input ' + (correct ? 'correct-input' : 'wrong-input');
 
   if (correct) {
-    showFibFeedback(fb, 'success', '✅ ¡Correcto! La guarda "if not cola:" protege contra underflow antes de hacer dequeue.');
+    showFibFeedback(fb, 'success', '✅ ¡Correcto! Agrupar por servicio permite contar cuántos registros hay en cada categoría.');
     ex.classList.add('correct'); ex.classList.remove('wrong');
     if (!fibCompleted.ex3) {
       fibCompleted.ex3 = true;
@@ -2402,7 +2293,7 @@ window.checkFib3 = function() {
       checkAllFibCompleted();
     }
   } else {
-    showFibFeedback(fb, 'error', '❌ Debes verificar si la cola está vacía: "not cola" o "len(cola) == 0".');
+    showFibFeedback(fb, 'error', '❌ La columna correcta para agrupar es servicio.');
     ex.classList.add('wrong'); ex.classList.remove('correct');
   }
 };
@@ -2422,7 +2313,7 @@ function checkAllFibCompleted() {
 
 <script>
 // ═══════════════════════════════════════════
-//  DRAG-AND-DROP: Pila vs Cola
+//  DRAG-AND-DROP: Flujo de datos
 // ═══════════════════════════════════════════
 (function() {
   var dndScore = 0;
@@ -2492,9 +2383,10 @@ function checkAllFibCompleted() {
 
           draggedItem.classList.add('placed');
         } else {
+          var dropZone = this;
           this.classList.add('wrong-drop');
           setTimeout(function() {
-            zone.classList.remove('wrong-drop');
+            dropZone.classList.remove('wrong-drop');
           }, 800);
 
           var fbEl = document.getElementById('dnd-feedback');
@@ -2508,7 +2400,7 @@ function checkAllFibCompleted() {
         if (dndScore >= dndTotal && !dndDone) {
           dndDone = true;
           var fbEl = document.getElementById('dnd-feedback');
-          fbEl.textContent = '🎉 ¡Perfecto! Has clasificado todas las operaciones correctamente.';
+          fbEl.textContent = '🎉 ¡Perfecto! Has clasificado todos los conceptos correctamente.';
           fbEl.style.color = '#1b5e20';
           safeAddXP(3, 'Drag & drop completado');
         }
@@ -2721,20 +2613,20 @@ window.marcarHtiA = function() {
 // ── HTI B: VERIFY TABLE ─────────────────────────────
 window.verificarHtiB = function() {
   // Expected answers for the fillable table
-  // Paso1 Enqueue Samuel: frente=Samuel final=Samuel long=1
-  // Paso2 Enqueue Valentina: frente=Samuel final=Valentina long=2
-  // Paso3 Enqueue Martín: frente=Samuel final=Martín long=3
-  // Paso4 Dequeue: frente=Valentina final=Martín long=2
-  // Paso5 Dequeue: frente=Martín final=Martín long=1
+  // Paso1 Registro Samuel: Samuel / WhatsApp / 1
+  // Paso2 Registro Valentina: Valentina / Formulario / 2
+  // Paso3 Registro Martín: Martín / Llamada / 3
+  // Paso4 Registro Lucía: Lucía / WhatsApp / 4
+  // Paso5 Registro Felipe: Felipe / Formulario / 5
   var correct = 0;
   var total = 5;
 
   var expected = [
-    {f: 'Samuel', r: 'Samuel', l: '1'},
-    {f: 'Samuel', r: 'Valentina', l: '2'},
-    {f: 'Samuel', r: 'Martín', l: '3'},
-    {f: 'Valentina', r: 'Martín', l: '2'},
-    {f: 'Martín', r: 'Martín', l: '1'}
+    {f: 'Samuel', r: 'WhatsApp', l: '1'},
+    {f: 'Valentina', r: 'Formulario', l: '2'},
+    {f: 'Martín', r: 'Llamada', l: '3'},
+    {f: 'Lucía', r: 'WhatsApp', l: '4'},
+    {f: 'Felipe', r: 'Formulario', l: '5'}
   ];
 
   for (var i = 1; i <= total; i++) {
@@ -2768,7 +2660,7 @@ window.verificarHtiB = function() {
       msgEl.textContent = '⚠️ ' + correct + '/5 correctas. Revisa las marcadas en rojo.';
       msgEl.style.color = '#f57f17';
     } else {
-      msgEl.textContent = '❌ Solo ' + correct + '/5 correctas. Repasa cómo funciona FIFO.';
+      msgEl.textContent = '❌ Solo ' + correct + '/5 correctas. Repasa el orden de los registros.';
       msgEl.style.color = '#c62828';
     }
   }
