@@ -904,13 +904,13 @@ blockquote {
 <p>Desde la perspectiva de negocio, no basta con saber el nombre de la operación; es necesario entender qué decisión habilita. <strong>push</strong> registra una nueva sesión, <strong>pop</strong> retira la más reciente, <strong>peek</strong> consulta sin eliminar y <strong>isEmpty</strong> previene errores cuando aún no existe historial cargado. El valor pedagógico está en vincular cada operación con una acción concreta del sistema.</p>
 <table>
     <thead>
-        <tr><th>Operación</th><th>Sentido computacional</th><th>Uso en NeuroBiz</th><th>Complejidad esperada</th></tr>
+        <tr><th>Operación</th><th>Sentido en el sistema</th><th>Uso en NeuroBiz</th><th>Velocidad de respuesta</th></tr>
     </thead>
     <tbody>
-        <tr><td>push</td><td>Inserta en la cima</td><td>Registrar una nueva sesión terapéutica</td><td>O(1) amortizado</td></tr>
-        <tr><td>pop</td><td>Extrae la cima</td><td>Deshacer la última carga errónea</td><td>O(1)</td></tr>
-        <tr><td>peek</td><td>Consulta la cima sin eliminar</td><td>Ver el último reporte antes de atender</td><td>O(1)</td></tr>
-        <tr><td>isEmpty</td><td>Verifica ausencia de datos</td><td>Evitar consulta a un expediente sin sesiones</td><td>O(1)</td></tr>
+        <tr><td>push</td><td>Inserta en la cima</td><td>Registrar una nueva sesión terapéutica</td><td>Instantánea</td></tr>
+        <tr><td>pop</td><td>Extrae la cima</td><td>Deshacer la última carga errónea</td><td>Instantánea</td></tr>
+        <tr><td>peek</td><td>Consulta la cima sin eliminar</td><td>Ver el último reporte antes de atender</td><td>Instantánea</td></tr>
+        <tr><td>isEmpty</td><td>Verifica ausencia de datos</td><td>Evitar consulta a un expediente sin sesiones</td><td>Instantánea</td></tr>
     </tbody>
 </table>
 
@@ -981,44 +981,31 @@ blockquote {
                     <span class="mini-code-title"><strong>Bloque 1:</strong> Pila básica con list de Python — colab_stack_list.py</span>
                     <button class="mini-run-btn" onclick="runMiniCell(1)" id="mini-run-1">▶ Run</button>
                 </div>
-                <textarea id="mini-code-1" rows="14" spellcheck="false"># Historial de sesiones de un paciente NeuroBiz usando list como stack
-sesiones_iniciales = [
-    {"fecha": "2026-02-03", "tipo": "Lenguaje", "indice_progreso": 6.8},
-    {"fecha": "2026-02-10", "tipo": "Integración sensorial", "indice_progreso": 7.1},
-    {"fecha": "2026-02-17", "tipo": "Seguimiento TDAH", "indice_progreso": 7.4},
-]
+                <textarea id="mini-code-1" rows="14" spellcheck="false"># ── Bloque 1 · Historial de sesiones NeuroBiz con lista ──
+# Una lista de Python se comporta como pila:
+#   append() → agrega una sesión al tope  (push)
+#   pop()    → retira la sesión del tope  (pop)
+#   [-1]     → consulta el tope sin borrar (peek)
 
 historial = []
 
-def push_sesion(stack, sesion):
-    stack.append(sesion)
-    print(f"Registrada: {sesion['tipo']} -> tamaño actual {len(stack)}")
+# 1. Registrar tres sesiones (push)
+historial.append({"fecha": "2026-02-03", "tipo": "Lenguaje",              "indice_progreso": 6.8})
+historial.append({"fecha": "2026-02-10", "tipo": "Integración sensorial", "indice_progreso": 7.1})
+historial.append({"fecha": "2026-02-17", "tipo": "Seguimiento TDAH",      "indice_progreso": 7.4})
+print("Sesiones registradas:", len(historial))
 
-def pop_sesion(stack):
-    if not stack:
-        print("Underflow: no hay sesiones para retirar")
-        return None
-    sesion = stack.pop()
-    print(f"Retirada: {sesion['tipo']} -> tamaño actual {len(stack)}")
-    return sesion
-
-def peek_sesion(stack):
-    if not stack:
-        print("La pila está vacía")
-        return None
-    return stack[-1]
-
-for sesion in sesiones_iniciales:
-    push_sesion(historial, sesion)
-
+# 2. Ver la sesión más reciente sin borrarla (peek)
 print("\nÚltima sesión visible para el terapeuta:")
-print(peek_sesion(historial))
+print(historial[-1]["tipo"])
 
-print("\nSe detecta una carga duplicada y se deshace:")
-pop_sesion(historial)
+# 3. El terapeuta detecta una carga duplicada y la deshace (pop)
+sesion_retirada = historial.pop()
+print(f"\nSe retira: {sesion_retirada['tipo']}")
 
-print("\nNueva cima después del ajuste:")
-print(peek_sesion(historial))</textarea>
+# 4. Nueva sesión al tope después del ajuste
+print("Nueva cima:", historial[-1]["tipo"])
+print("Sesiones restantes en el historial:", len(historial))</textarea>
                 <div class="mini-code-output" id="mini-out-1"><pre></pre></div>
             </div>
             <div class="info-box">
@@ -1026,75 +1013,14 @@ print(peek_sesion(historial))</textarea>
             </div>
             
             <!-- ══════════════════════════════════════════════════════
-                 MEJORA 3 · Bloque 1.5 — Puente cognitivo
-                 Clase Stack mínima, sin excepciones ni max_size
-                 ══════════════════════════════════════════════════════ -->
-            <div class="callout callout-bridge">
-              <h3>🌉 Bloque 1.5 · Mi primera clase <code>Stack</code> (versión mínima)</h3>
-              <p>
-                El Bloque 1 usó una <code>list</code> directamente. El Bloque 2 introduce
-                una clase completa con capacidad máxima y excepciones. Este bloque intermedio
-                hace el <strong>mismo trabajo que el Bloque 1</strong>, pero envuelto en una clase.
-                Compara los resultados: son idénticos.
-              </p>
-            </div>
-
-            <div class="code-block" id="bloque15">
-              <div class="code-header">
-                <span class="code-filename">colab_stack_minima.py</span>
-                <button class="run-btn" onclick="copyBlock('bloque15')">📋 Copiar</button>
-              </div>
-              <pre><code class="language-python"># ── Bloque 1.5 · Clase Stack mínima (sin límite, sin excepciones) ──
-# Propósito: ver la MISMA lógica del Bloque 1, pero dentro de una clase.
-# Compara: push = append, pop = pop, peek = [-1]. Nada nuevo aún.
-
-class Stack:
-    def __init__(self):
-        self._items = []        # lista interna; el prefijo _ indica "no tocar desde afuera"
-
-    def push(self, item):
-        self._items.append(item)
-
-    def pop(self):
-        if self._items:         # solo retira si hay algo
-            return self._items.pop()
-
-    def peek(self):
-        if self._items:
-            return self._items[-1]
-
-    def is_empty(self):
-        return len(self._items) == 0
-
-# ── Prueba con sesiones de NeuroBiz ──
-historial = Stack()
-
-historial.push("Lenguaje")
-historial.push("Integración sensorial")
-print("Cima actual:", historial.peek())   # → Integración sensorial
-
-historial.pop()
-print("Después de pop:", historial.peek()) # → Lenguaje
-
-print("¿Está vacía?", historial.is_empty()) # → False</code></pre>
-            </div>
-
-            <p class="code-note">
-              <strong>Compara con el Bloque 1:</strong> el resultado es idéntico. La diferencia es que ahora
-              <code>push</code>, <code>pop</code> y <code>peek</code> son <em>métodos</em> de un objeto,
-              no funciones sueltas. Eso es todo. El Bloque 2 agrega una sola idea nueva encima de esto:
-              la capacidad máxima y qué pasa cuando se supera.
-            </p>
-
-            <!-- ══════════════════════════════════════════════════════
                  MEJORA 4-A · Señal de dificultad creciente
                  ══════════════════════════════════════════════════════ -->
             <div class="callout callout-level">
               <span class="level-badge">⚡ Nivel +1</span>
               <p>
-                Este bloque introduce <strong>una sola idea nueva</strong> respecto al Bloque 1.5:
+                Este bloque introduce <strong>una sola idea nueva</strong> respecto al Bloque 1:
                 la pila ahora tiene una <em>capacidad máxima</em> definida por la empresa, y cuando se
-                supera, el sistema lanza una excepción (<code>OverflowError</code>). Si el Bloque 1.5
+                supera, el sistema avisa con un mensaje de overflow controlado. Si el Bloque 1
                 aún no te quedó claro, regresa antes de continuar.
               </p>
             </div>
@@ -1104,57 +1030,64 @@ print("¿Está vacía?", historial.is_empty()) # → False</code></pre>
                     <span class="mini-code-title"><strong>Bloque 2:</strong> Clase Stack con capacidad máxima — colab_stack_class.py</span>
                     <button class="mini-run-btn" onclick="runMiniCell(2)" id="mini-run-2">▶ Run</button>
                 </div>
-                <textarea id="mini-code-2" rows="16" spellcheck="false">class Stack:
+                <textarea id="mini-code-2" rows="16" spellcheck="false"># ── Bloque 2 · Clase Stack con capacidad máxima ──
+# Idea nueva respecto al Bloque 1: la empresa decide cuántas sesiones
+# puede mostrar el sistema a la vez (política de negocio = max_size).
+# Cuando se supera ese límite → aviso de overflow.
+# Cuando se intenta consultar una pila vacía → aviso de underflow.
+
+class Stack:
     def __init__(self, max_size=5):
-        self._items = []
-        self.max_size = max_size
+        self.items    = []          # lista interna donde se guardan las sesiones
+        self.max_size = max_size    # política de la empresa: máximo de sesiones visibles
 
-    def is_empty(self):
-        return len(self._items) == 0
+    def esta_vacia(self):
+        return len(self.items) == 0
 
-    def is_full(self):
-        return len(self._items) >= self.max_size
+    def esta_llena(self):
+        return len(self.items) >= self.max_size
 
-    def push(self, item):
-        if self.is_full():
-            raise OverflowError("Overflow: se alcanzó la capacidad visible del historial")
-        self._items.append(item)
+    def push(self, sesion):
+        if self.esta_llena():
+            print("⚠️  OVERFLOW: el historial visible ya alcanzó su capacidad máxima.")
+            print("    Política NeuroBiz: archive una sesión antes de registrar una nueva.")
+        else:
+            self.items.append(sesion)
+            print(f"✔  Registrada: {sesion['tipo']}  |  Sesiones en historial: {len(self.items)}")
 
     def pop(self):
-        if self.is_empty():
-            raise IndexError("Underflow: no existen sesiones para retirar")
-        return self._items.pop()
+        if self.esta_vacia():
+            print("⚠️  UNDERFLOW: no hay sesiones en el historial para retirar.")
+            return None
+        sesion = self.items.pop()
+        print(f"↩  Retirada: {sesion['tipo']}  |  Sesiones restantes: {len(self.items)}")
+        return sesion
 
     def peek(self):
-        if self.is_empty():
+        if self.esta_vacia():
+            print("El historial está vacío.")
             return None
-        return self._items[-1]
+        return self.items[-1]
 
-    def snapshot(self):
-        return list(self._items)
+    def mostrar(self):
+        return self.items   # devuelve la lista completa para inspección
 
-    def __len__(self):
-        return len(self._items)
-
+# ── Prueba con sesiones de NeuroBiz ──
 historial = Stack(max_size=3)
 
-for sesion in [
-    {"fecha": "2026-02-03", "tipo": "Lenguaje"},
-    {"fecha": "2026-02-10", "tipo": "TEA - patrones"},
-    {"fecha": "2026-02-17", "tipo": "TDAH - hiperfoco"},
-]:
-    historial.push(sesion)
+historial.push({"fecha": "2026-02-03", "tipo": "Lenguaje"})
+historial.push({"fecha": "2026-02-10", "tipo": "TEA - patrones"})
+historial.push({"fecha": "2026-02-17", "tipo": "TDAH - hiperfoco"})
 
-print("Estado inicial:", historial.snapshot())
-print("Cima actual:", historial.peek())
+print("\nEstado del historial:", [s["tipo"] for s in historial.mostrar()])
+print("Cima actual (última sesión):", historial.peek()["tipo"])
 
-try:
-    historial.push({"fecha": "2026-02-24", "tipo": "Acompañamiento familiar"})
-except OverflowError as error:
-    print(error)
+print("\n--- Intentamos agregar una cuarta sesión (overflow) ---")
+historial.push({"fecha": "2026-02-24", "tipo": "Acompañamiento familiar"})
 
-print("Sesión retirada:", historial.pop())
-print("Nueva cima:", historial.peek())</textarea>
+print("\n--- Retiramos la última sesión cargada ---")
+historial.pop()
+print("Nueva cima:", historial.peek()["tipo"])</textarea>
                 <div class="mini-code-output" id="mini-out-2"><pre></pre></div>
             </div>
             <div class="info-box">
@@ -1167,58 +1100,55 @@ print("Nueva cima:", historial.peek())</textarea>
                     <span class="mini-code-title"><strong>Bloque 3:</strong> Pila de acciones para función deshacer (undo) — colab_stack_undo.py</span>
                     <button class="mini-run-btn" onclick="runMiniCell(3)" id="mini-run-3">▶ Run</button>
                 </div>
-                <textarea id="mini-code-3" rows="16" spellcheck="false">class AgendaUndo:
-    def __init__(self):
-        self.historial_acciones = []
-        self.agenda = {
-            "paciente": "Camila",
-            "sesion_activa": "Lenguaje",
-            "terapeuta": "Laura Pérez",
-        }
+                <textarea id="mini-code-3" rows="16" spellcheck="false"># ── Bloque 3 · Deshacer (Undo) con pila — agenda NeuroBiz ──
+# Idea: cada vez que el terapeuta hace un cambio, guardamos
+# el estado ANTERIOR en una pila.  Si quiere deshacer,
+# recuperamos ese estado anterior directamente — como Ctrl+Z.
 
-    def registrar_accion(self, descripcion, cambios):
-        self.historial_acciones.append({
-            "descripcion": descripcion,
-            "cambios": cambios,
-        })
-        self.agenda.update(cambios)
+agenda_actual = {
+    "paciente":      "Camila",
+    "sesion_activa": "Lenguaje",
+    "terapeuta":     "Laura Pérez",
+}
 
-    def deshacer(self):
-        if not self.historial_acciones:
-            print("No hay acciones para deshacer")
-            return
-        ultima = self.historial_acciones.pop()
-        print(f"Se deshace: {ultima['descripcion']}")
-        # ── ¿Por qué reconstruimos desde cero? ──────────────────────────────
-        # Una pila solo guarda "qué hicimos", NO el estado anterior completo.
-        # Para "deshacer", volvemos al estado base (como borrar un borrador)
-        # y reaplicamos TODO excepto la última acción que acabamos de extraer.
-        # Es el mismo patrón que usaría un editor de texto con Ctrl+Z.
-        # ─────────────────────────────────────────────────────────────────────
-        self.agenda = {
-            "paciente": "Camila",
-            "sesion_activa": "Lenguaje",
-            "terapeuta": "Laura Pérez",
-        }
-        for accion in self.historial_acciones:
-            self.agenda.update(accion["cambios"])
+pila_deshacer = []   # cada elemento guarda el estado anterior completo
 
-    def estado(self):
-        return {
-            "agenda": dict(self.agenda),
-            "acciones_pendientes": len(self.historial_acciones),
-        }
+def registrar_cambio(descripcion, campo, valor_nuevo):
+    """Guarda el estado actual en la pila y aplica el cambio."""
+    pila_deshacer.append({
+        "descripcion":  descripcion,
+        "estado_previo": dict(agenda_actual),   # copia del estado antes del cambio
+    })
+    agenda_actual[campo] = valor_nuevo
+    print(f"✔  {descripcion}  →  {campo}: '{valor_nuevo}'")
 
-sistema = AgendaUndo()
-sistema.registrar_accion("Cambio de terapeuta", {"terapeuta": "Carlos Rojas"})
-sistema.registrar_accion("Cambio de sesión", {"sesion_activa": "Seguimiento TDAH"})
+def deshacer():
+    """Recupera el estado anterior desde la pila."""
+    if not pila_deshacer:
+        print("⚠️  No hay cambios para deshacer.")
+        return
+    registro = pila_deshacer.pop()
+    print(f"↩  Se deshace: {registro['descripcion']}")
+    agenda_actual.update(registro["estado_previo"])
 
-print("Antes de deshacer:")
-print(sistema.estado())
+def ver_agenda():
+    print("\n📋 Estado de la agenda:")
+    for clave, valor in agenda_actual.items():
+        print(f"   {clave}: {valor}")
+    print(f"   Cambios que se pueden deshacer: {len(pila_deshacer)}\n")
 
-sistema.deshacer()
-print("Después de deshacer una acción:")
-print(sistema.estado())</textarea>
+# ── Prueba ──
+ver_agenda()
+
+registrar_cambio("Reasignación de terapeuta", "terapeuta",     "Carlos Rojas")
+registrar_cambio("Cambio de tipo de sesión",  "sesion_activa", "Seguimiento TDAH")
+ver_agenda()
+
+deshacer()   # revierte el cambio de sesión
+ver_agenda()
+
+deshacer()   # revierte el cambio de terapeuta
+ver_agenda()</textarea>
                 <div class="mini-code-output" id="mini-out-3"><pre></pre></div>
             </div>
             <div class="info-box">
@@ -1333,40 +1263,40 @@ print(sistema.estado())</textarea>
                         <textarea id="colab-code-1" rows="14" spellcheck="false"># ── Clase Stack para historial NeuroBiz ──
 class Stack:
     def __init__(self, max_size=5):
-        self._items = []
+        self.items    = []
         self.max_size = max_size
 
-    def is_empty(self):
-        return len(self._items) == 0
+    def esta_vacia(self):
+        return len(self.items) == 0
 
-    def is_full(self):
-        return len(self._items) >= self.max_size
+    def esta_llena(self):
+        return len(self.items) >= self.max_size
 
-    def push(self, item):
-        if self.is_full():
-            raise OverflowError("Overflow: capacidad máxima alcanzada")
-        self._items.append(item)
+    def push(self, sesion):
+        if self.esta_llena():
+            print("⚠️  OVERFLOW: historial lleno. Retira una sesión antes de agregar.")
+        else:
+            self.items.append(sesion)
 
     def pop(self):
-        if self.is_empty():
-            raise IndexError("Underflow: pila vacía")
-        return self._items.pop()
+        if self.esta_vacia():
+            print("⚠️  UNDERFLOW: el historial está vacío.")
+            return None
+        return self.items.pop()
 
     def peek(self):
-        if self.is_empty():
+        if self.esta_vacia():
             return None
-        return self._items[-1]
+        return self.items[-1]
 
-    def __len__(self):
-        return len(self._items)
-
-    def __repr__(self):
-        return f"Stack({self._items})"
+    def mostrar(self):
+        return self.items
 
 # Crea tu pila aquí
 historial = Stack(max_size=4)
-print("Pila creada. Usa historial.push(), historial.pop() y historial.peek()")
-print("Tamaño actual:", len(historial))</textarea>
+print("Pila creada.")
+print("Operaciones disponibles: historial.push(), historial.pop(), historial.peek()")
+print("Sesiones en el historial:", len(historial.items))</textarea>
                     </div>
                     <div class="colab-output" id="colab-out-1"><pre></pre></div>
                 </div>
@@ -1386,9 +1316,9 @@ print("Tamaño actual:", len(historial))</textarea>
 # Retira una sesión con historial.pop()
 
 # Imprime el estado actual
-print("Pila actual:", historial)
+print("Pila actual:", historial.mostrar())
 print("Cima:", historial.peek())
-print("Tamaño:", len(historial))</textarea>
+print("Tamaño:", len(historial.items))</textarea>
                     </div>
                     <div class="colab-output" id="colab-out-2"><pre></pre></div>
                 </div>
@@ -1414,7 +1344,7 @@ for s in sesiones:
     print(f"Push: {s['tipo']}")
 
 print("\nCima actual:", historial_sesiones.peek()["tipo"])
-print("Tamaño:", len(historial_sesiones))
+print("Tamaño:", len(historial_sesiones.items))
 
 # Deshacer última carga
 eliminada = historial_sesiones.pop()
@@ -1585,7 +1515,7 @@ else:
         <li>Crear una clase <code>Stack</code> o reutilizar la diseñada en clase.</li>
         <li>Registrar al menos 5 acciones de agenda: cambio de terapeuta, reasignación de sesión, cancelación, corrección de KPI y nota clínica.</li>
         <li>Programar una operación <code>deshacer()</code> que revierta la última acción realizada.</li>
-        <li>Entregar captura del código, salida de ejecución y una explicación de 8 a 10 líneas donde se indique por qué una pila es adecuada para "deshacer".</li>
+        <li>Entregar captura del código, salida de ejecución y una explicación de 4 a 6 líneas donde se indique por qué una pila es adecuada para "deshacer".</li>
     </ul>
     <p><strong>Énfasis Bloom:</strong> aplicar y comenzar a transferir el concepto a un subproblema nuevo.</p>
 
@@ -1600,43 +1530,34 @@ else:
             <span style="color:#cdd6f4;font-family:monospace;font-size:.78rem;">📄 stack_undo_neurobiz.py</span>
             <button class="mini-run-btn" onclick="runHtiA()" id="hti-a-run-btn">▶ Run</button>
         </div>
-        <textarea id="hti-a-code" rows="12" spellcheck="false"># ── Sistema de Deshacer para Agenda NeuroBiz ──
-class Stack:
-    def __init__(self):
-        self._items = []
+        <textarea id="hti-a-code" rows="12" spellcheck="false"># ── HTI A · Tu turno: sistema de deshacer para NeuroBiz ──
+# Usa una lista como pila de acciones.
+# Cada acción registrada se agrega al tope.
+# Deshacer = retirar la última acción del tope.
 
-    def push(self, item):
-        self._items.append(item)
+pila_acciones = []   # tu pila de acciones
 
-    def pop(self):
-        if not self._items:
-            return None
-        return self._items.pop()
+# 1. Registra al menos 3 acciones de la agenda de NeuroBiz
+pila_acciones.append("Cambio de terapeuta: Laura → Carlos")
+pila_acciones.append("Reasignación de sesión: Lenguaje → Seguimiento TDAH")
+pila_acciones.append("Cancelación de cita 15-mar")
 
-    def peek(self):
-        if not self._items:
-            return None
-        return self._items[-1]
+print("Acciones registradas:", len(pila_acciones))
+print("Acción más reciente (cima):", pila_acciones[-1])
 
-    def __len__(self):
-        return len(self._items)
+# 2. Deshacer la última acción
+if pila_acciones:
+    deshecha = pila_acciones.pop()
+    print(f"\n↩  Se deshace: {deshecha}")
+else:
+    print("⚠️  No hay acciones para deshacer.")
 
-# Prueba tu implementación
-acciones = Stack()
-acciones.push("Cambio de terapeuta: Laura -> Carlos")
-acciones.push("Reasignación de sesión: Lenguaje -> TDAH")
-acciones.push("Cancelación de cita del 15-mar")
-acciones.push("Corrección KPI: índice_progreso = 7.2")
-acciones.push("Nota clínica: paciente responde bien")
+print("Nueva cima:", pila_acciones[-1] if pila_acciones else "historial vacío")
+print("Acciones restantes:", len(pila_acciones))
 
-print("Acciones registradas:", len(acciones))
-print("Última acción (cima):", acciones.peek())
-
-# Deshacer la última acción
-deshecha = acciones.pop()
-print(f"\nDeshacer: {deshecha}")
-print("Nueva cima:", acciones.peek())
-print("Acciones restantes:", len(acciones))</textarea>
+# 3. Tu tarea: agrega dos acciones más y deshace una.
+#    Luego escribe 4–6 líneas explicando por qué una pila
+#    es adecuada para este tipo de operación de deshacer.</textarea>
         <div class="hti-code-output" id="hti-a-output"><pre></pre></div>
     </div>
 
