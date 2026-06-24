@@ -613,6 +613,14 @@ blockquote {
 #pt-quiz-panel .pq button.correct{ background:#2e7d32; border-color:#43a047; }
 #pt-quiz-panel .pq button.wrong  { background:#c62828; border-color:#e57373; }
 #pt-quiz-panel .pq button:disabled{ opacity:.7; cursor:default; }
+
+/* ── Callout boxes for Pila/Cola theory ── */
+.callout { border-radius:16px; padding:1.2rem 1.4rem; margin:1rem 0; }
+.callout.good { background:#e8f5e9; border:1px solid #a5d6a7; }
+.callout.warn { background:#fff3e0; border:1px solid #ffcc80; }
+.callout h3 { margin-top:0; font-size:1.05rem; }
+.callout.good h3 { color:#2e7d32; }
+.callout.warn h3 { color:#e65100; }
 </style>
 
   <script src="../js/supabase-config.js"></script>
@@ -652,6 +660,10 @@ blockquote {
             <a href="#actividad">Actividad presencial</a>
             <a href="#hti">HTI</a>
             <a href="#quiz">Quizizz</a>
+            <a href="#pila">Pila</a>
+            <a href="#terminos">Términos</a>
+            <a href="#actividad-sin-codigo">Actividad sin código</a>
+            <a href="#quiz-pila">Quiz Pila</a>
             <a href="#bibliografia">Bibliografía</a>
         </div>
     </nav>
@@ -1345,6 +1357,259 @@ print("Conteo por servicio:", servicios)</textarea>
             <div class="quiz-score-display" id="quiz-score-display">
                 📊 Puntaje: <strong id="quiz-score-text">0</strong> / 5 correctas
             </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════
+             PILA + COLA · Organización de datos administrativos
+             Conceptos complementarios para Big Data inicial
+        ═══════════════════════════════════════════════ -->
+
+        <section class="card" id="pila">
+          <h2>Pila: lo último que entra es lo primero que se consulta</h2>
+          <p class="section-intro">
+            En gestión administrativa, muchas veces no hace falta revisar todo el historial completo.
+            Lo más útil es mirar primero lo más reciente para continuar una atención, tomar una decisión
+            operativa o revisar qué pasó al final de una sesión.
+          </p>
+
+          <div class="info-box">
+            <strong>Idea central:</strong> la pila funciona con la regla <strong>LIFO</strong>, que significa:
+            <strong>lo último que entra es lo primero que se consulta</strong>.
+          </div>
+
+          <div class="grid-2">
+            <div class="memo-box">
+              <h3>Conceptos clave en lenguaje simple</h3>
+              <ul>
+                <li><strong>Base:</strong> el primer registro que quedó guardado.</li>
+                <li><strong>Cima:</strong> el registro más reciente, el que quedó arriba.</li>
+                <li><strong>Recencia:</strong> indica qué tan nuevo es un dato o una acción.</li>
+                <li><strong>Deshacer:</strong> volver sobre la última acción realizada.</li>
+                <li><strong>Overflow:</strong> ocurre cuando ya no cabe otro registro en la pila.</li>
+                <li><strong>Underflow:</strong> ocurre cuando se intenta retirar algo de una pila vacía.</li>
+              </ul>
+            </div>
+
+            <div class="framework-box">
+              <h3>Aplicación administrativa</h3>
+              <p>
+                Imagina un historial de sesiones de atención. Cada nueva interacción se coloca arriba.
+                Si el usuario vuelve a escribir, el equipo consulta primero la última gestión para dar
+                continuidad al servicio sin perder el avance previo.
+              </p>
+              <p>
+                Esta lógica también sirve para revisar solicitudes recientes, respaldar decisiones operativas
+                y revertir la última acción cuando hay un error.
+              </p>
+            </div>
+          </div>
+
+          <div class="note-box">
+            <h3>Contexto formativo general</h3>
+            <p>
+              Este tema forma parte de una ruta más amplia del programa que más adelante se relaciona con
+              <strong>big data, machine learning y minería de datos</strong>. Por ahora, la meta es comprender
+              la organización de la información y su utilidad en situaciones administrativas reales.
+            </p>
+          </div>
+        </section>
+
+        <section class="card" id="terminos">
+          <h2>1. Términos demasiado técnicos que conviene reemplazar</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Término técnico</th>
+                <th>Mejor forma de decirlo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>LIFO</td><td>Lo último que entra es lo primero que se consulta</td></tr>
+              <tr><td>stack / pila técnica</td><td>Pila de atención, pila de registros o pila de decisiones</td></tr>
+              <tr><td>push</td><td>Agregar, registrar o poner arriba</td></tr>
+              <tr><td>pop</td><td>Retirar, consultar y sacar</td></tr>
+              <tr><td>peek</td><td>Revisar el último</td></tr>
+              <tr><td>overflow</td><td>La pila llegó a su límite</td></tr>
+              <tr><td>underflow</td><td>Se intentó retirar algo de una pila vacía</td></tr>
+              <tr><td>cima</td><td>Parte superior</td></tr>
+              <tr><td>base</td><td>Parte inferior</td></tr>
+              <tr><td>recencia</td><td>Más reciente</td></tr>
+              <tr><td>deshacer</td><td>Revertir la última acción</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card" id="seccion-principal">
+          <h2>2. Versión reescrita de la sección principal</h2>
+          <div class="grid-2">
+            <div class="callout good">
+              <h3>La pila en un entorno administrativo</h3>
+              <p>
+                Una pila organiza información según su orden de llegada, pero privilegiando lo más reciente.
+                Esto quiere decir que, cuando entra un nuevo registro, queda en la parte superior y es el primero
+                que se consulta si hace falta actuar rápido.
+              </p>
+              <p>
+                En administración esto resulta útil para revisar el historial de sesiones, seguir un caso en curso,
+                mantener la continuidad del servicio y tomar decisiones con base en la información más nueva.
+              </p>
+            </div>
+
+            <div class="callout warn">
+              <h3>Ejemplo de negocio</h3>
+              <p>
+                Una oficina recibe varias novedades durante el día. Si el supervisor necesita resolver una situación,
+                revisa primero la última actualización, no la primera. Así se evita perder tiempo y se conserva el
+                contexto más actual del caso.
+              </p>
+              <p>
+                Si el último cambio fue incorrecto, se puede usar la idea de <strong>deshacer</strong> para volver
+                al estado anterior.
+              </p>
+            </div>
+          </div>
+
+          <div class="info-box">
+            <p>
+              <strong>Resumen simple:</strong> la base guarda lo primero que llegó, la cima guarda lo último,
+              y la lógica de la pila permite consultar con prioridad lo más reciente.
+            </p>
+          </div>
+        </section>
+
+        <section class="card" id="actividad-sin-codigo">
+          <h2>3. Actividad práctica sin código</h2>
+          <p class="section-intro">
+            Analiza un caso de negocio y organiza la información de forma manual.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <h3>Caso</h3>
+              <p>
+                Un sistema de atención interna registra estos eventos en este orden:
+              </p>
+              <ol>
+                <li>Apertura del caso</li>
+                <li>Actualización de datos</li>
+                <li>Cambio de prioridad</li>
+                <li>Nota del supervisor</li>
+                <li>Cierre provisional</li>
+              </ol>
+            </div>
+
+            <div class="callout">
+              <h3>Trabajo del estudiante</h3>
+              <ul>
+                <li>Ubica cuál evento queda en la base y cuál queda en la cima.</li>
+                <li>Identifica cuál sería el primero en consultarse si el caso se reactiva.</li>
+                <li>Explica cuál sería el último movimiento que podría deshacerse.</li>
+                <li>Responde qué pasaría si la pila ya no tuviera espacio para otro registro.</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>Tabla para completar</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Orden</th>
+                <th>Evento</th>
+                <th>¿Base o cima?</th>
+                <th>¿Qué significa en el caso?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Apertura del caso</td><td></td><td></td></tr>
+              <tr><td>2</td><td>Actualización de datos</td><td></td><td></td></tr>
+              <tr><td>3</td><td>Cambio de prioridad</td><td></td><td></td></tr>
+              <tr><td>4</td><td>Nota del supervisor</td><td></td><td></td></tr>
+              <tr><td>5</td><td>Cierre provisional</td><td></td><td></td></tr>
+            </tbody>
+          </table>
+
+          <div class="note-box">
+            <h3>Pregunta de reflexión</h3>
+            <p>
+              ¿Por qué, en un proceso administrativo, revisar primero lo más reciente puede mejorar la continuidad
+              del servicio y la toma de decisiones?
+            </p>
+          </div>
+        </section>
+
+        <section class="card" id="quiz-pila">
+          <h2>4. Quiz o preguntas de verificación</h2>
+          <p class="section-intro">
+            Lee cada pregunta y selecciona la opción correcta.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <h3>Pregunta 1</h3>
+              <p><strong>¿Qué significa LIFO?</strong></p>
+              <ol>
+                <li>A. Lo primero que entra es lo primero que se consulta</li>
+                <li>B. Lo último que entra es lo primero que se consulta</li>
+                <li>C. Todo se consulta al mismo tiempo</li>
+                <li>D. Solo se guarda información vieja</li>
+              </ol>
+            </div>
+
+            <div class="callout">
+              <h3>Pregunta 2</h3>
+              <p><strong>¿Qué representa la cima?</strong></p>
+              <ol>
+                <li>A. El primer elemento que llegó</li>
+                <li>B. El elemento más reciente</li>
+                <li>C. El elemento eliminado</li>
+                <li>D. El dato más antiguo</li>
+              </ol>
+            </div>
+
+            <div class="callout">
+              <h3>Pregunta 3</h3>
+              <p><strong>¿Para qué sirve deshacer?</strong></p>
+              <ol>
+                <li>A. Para borrar toda la información</li>
+                <li>B. Para revertir la última acción</li>
+                <li>C. Para mezclar todos los registros</li>
+                <li>D. Para duplicar la pila</li>
+              </ol>
+            </div>
+
+            <div class="callout">
+              <h3>Pregunta 4</h3>
+              <p><strong>¿Qué ocurre con overflow?</strong></p>
+              <ol>
+                <li>A. La pila queda vacía</li>
+                <li>B. Se intenta retirar algo que no existe</li>
+                <li>C. La pila llega a su capacidad máxima</li>
+                <li>D. Se consulta el dato más reciente</li>
+              </ol>
+            </div>
+
+            <div class="callout">
+              <h3>Pregunta 5</h3>
+              <p><strong>¿Qué ocurre con underflow?</strong></p>
+              <ol>
+                <li>A. Se intenta retirar algo de una pila vacía</li>
+                <li>B. La pila se llena demasiado</li>
+                <li>C. Se agrega un nuevo registro</li>
+                <li>D. Se ordenan los datos por fecha</li>
+              </ol>
+            </div>
+
+            <div class="callout">
+              <h3>Pregunta 6</h3>
+              <p><strong>¿En qué situación administrativa puede ser útil una pila?</strong></p>
+              <ol>
+                <li>A. Para priorizar la información más reciente</li>
+                <li>B. Para evitar toda trazabilidad</li>
+                <li>C. Para perder el historial completo</li>
+                <li>D. Para mezclar registros sin orden</li>
+              </ol>
+            </div>
+          </div>
         </section>
 
         <section id="bibliografia" class="card">
